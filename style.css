@@ -41,3 +41,53 @@ body {
     margin: 0;
     padding-top: 70px;
 }
+
+.title-screen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    background-color: #f4f4f4;
+    height: calc(100vh - 70px);
+}
+
+.title-screen-left {
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.title-screen-left h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+}
+
+.title-screen-left p {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}
+
+.title-screen-register {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background-color: #144922;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    width: fit-content;
+}
+
+.title-screen-register:hover {
+    background-color: #0e341a;
+}
+
+.title-screen-right {
+    flex: 1;
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    max-width: 50%;
+}
