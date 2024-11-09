@@ -207,3 +207,45 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+.countdown-container {
+    text-align: center;
+    padding: 2rem;
+    background-color: #f4f4f4;
+}
+
+.countdown-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.countdown h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    font-family: Arial, sans-serif;
+}
+
+.time {
+    background-color: #e4e4e4;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 100px;
+    text-align: center;
+}
+
+.time span {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.time p {
+    font-size: 1rem;
+    margin: 0;
+    color: #555;
+}

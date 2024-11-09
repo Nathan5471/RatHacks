@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="eng">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RVGS Hacks Registration</title>
+    <link rel="stylesheet" href="styles/register.css">
+</head>
+
+<body>
+    <header>
+        <h1>RVGS Hacks Registration</h1>
+        <h1><a href="./">Back</a></h1>
+    </header>
+    <section class="registration-form">
+        <form>
+            <h3>Your Information</h3>
+            <label for="firstname">First name:</label>
+            <input type="text" id="firstname" name="firstname" required>
+            <label for="lastname">Last name:</label>
+            <input type="text" id="lastname" name="lastname" required><br>
+            <label for="school-division">School Division:</label>
+            <select id="school-division" name="school-division" required>
+                <option value="" selected disabled hidden>Select your school division</option>
+                <option value="rvgs">Roanoke Valley Govenor's School</option>
+                <option value="bedford">Bedford County</option>
+                <option value="botetourt">Botetourt County</option>
+                <option value="craig">Craig County</option>
+                <option value="floyd">Floyd County</option>
+                <option value="franklin">Franklin County</option>
+                <option value="roanoke-city">Roanoke City</option>
+                <option value="roanoke-county">Roanoke County</option>
+                <option value="salem">Salem City</option>
+            </select><br>
+            <label for="grade">Grade Level:</label>
+            <select id="grade" name="grade" required>
+                <option value="" selected disabled hidden>Select your grade</option>
+                <option value="9">9th Grade</option>
+                <option value="10">10th Grade</option>
+                <option value="11">11th Grade</option>
+                <option value="12">12th Grade</option>
+            </select><br>
+            <label for="skill-level">Skill Level:</label>
+            <select id="skill-level" name="skill-level" required>
+                <option value="" selected disabled hidden>Select your skill level</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="confirm-email">Confirm Email:</label>
+            <input type="email" id="confirm-email" name="confirm-email" required><br>
+            <label for="school-laptop">Do you need to borrow a laptop?</label>
+            <input type="radio" id="school-laptop-yes" name="school-laptop" value="yes" required>
+            <label for="school-laptop-yes">Yes</label>
+            <input type="radio" id="school-laptop-no" name="school-laptop" value="no" required>
+            <label for="school-laptop-no">No</label><br>
+            <label for="dietary-restrictions">Dietary Restrictions/Allergies:</label>
+            <input type="text" id="dietary-restrictions" name="dietary-restrictions"><br>
+            <label for="theme-ideas">Theme Ideas (optional):</label>
+            <input type="text" id="theme-ideas" name="theme-ideas"><br>
+
+            <h3>Parent/Guardian Information</h3>
+            <label for="parent-firstname">First name:</label>
+            <input type="text" id="parent-firstname" name="parent-firstname" required>
+            <label for="parent-lastname">Last name:</label>
+            <input type="text" id="parent-lastname" name="parent-lastname" required><br>
+            <label for="parent-email">Email:</label>
+            <input type="email" id="parent-email" name="parent-email" required>
+            <label for="confirm-parent-email">Confirm Email:</label>
+            <input type="email" id="confirm-parent-email" name="confirm-parent-email" required><br>
+            <label for="parent-phone">Phone Number:</label>
+            <input type="tel" id="parent-phone" name="parent-phone" required>
+            <label for="confirm-parent-phone">Confirm Phone Number:</label>
+            <input type="tel" id="confirm-parent-phone" name="confirm-parent-phone" required><br>
+
+            <h3>Emergency Contact</h3>
+            <p>This is incase the parent/gaurian does not answer</p>
+            <label for="emergency-contact-firstname">First name:</label>
+            <input type="text" id="emergency-contact-firstname" name="emergency-contact-firstname" required>
+            <label for="emergency-contact-lastname">Last name:</label>
+            <input type="text" id="emergency-contact-lastname" name="emergency-contact-lastname" required><br>
+            <label for="emergency-contact-phone">Phone Number:</label>
+            <input type="tel" id="emergency-contact-phone" name="emergency-contact-phone" required>
+            <label for="confirm-emergency-contact-phone">Confirm Phone Number:</label>
+            <input type="tel" id="confirm-emergency-contact-phone" name="confirm-emergency-contact-phone" required><br>
+            <label for="relationship-emergency-contact">Relationship:</label>
+            <input type="text" id="relationship-emergency-contact" name="relationship-emergency-contact" required><br>
+
+        </form>
+    </section>
+</body>
+
+</html>
