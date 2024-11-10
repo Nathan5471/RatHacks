@@ -14,7 +14,7 @@
         <h1><a href="./">Back</a></h1>
     </header>
     <section class="registration-form">
-        <form>
+        <form onsubmit="return validateForm();">
             <h3>Your Information</h3>
             <label for="firstname">First name:</label>
             <input type="text" id="firstname" name="firstname" required>
@@ -52,7 +52,7 @@
             <input type="email" id="email" name="email" required>
             <label for="confirm-email">Confirm Email:</label>
             <input type="email" id="confirm-email" name="confirm-email" required>
-            <span class="error-message" id="emailError"></span>
+            <span class="error-message" id="email-error"></span>
             <label for="school-laptop">Do you need to borrow a laptop?</label>
             <input type="radio" id="school-laptop-yes" name="school-laptop" value="yes" required>
             <label for="school-laptop-yes">Yes</label>
@@ -72,10 +72,12 @@
             <input type="email" id="parent-email" name="parent-email" required>
             <label for="confirm-parent-email">Confirm Email:</label>
             <input type="email" id="confirm-parent-email" name="confirm-parent-email" required>
+            <span class="error-message" id="parent-email-error"></span>
             <label for="parent-phone">Phone Number:</label>
             <input type="tel" id="parent-phone" name="parent-phone" required>
             <label for="confirm-parent-phone">Confirm Phone Number:</label>
             <input type="tel" id="confirm-parent-phone" name="confirm-parent-phone" required>
+            <span class="error-message" id="parent-phone-error"></span>
 
             <h3>Emergency Contact</h3>
             <label for="emergency-contact-firstname">First name:</label>
@@ -86,6 +88,7 @@
             <input type="tel" id="emergency-contact-phone" name="emergency-contact-phone" required>
             <label for="confirm-emergency-contact-phone">Confirm Phone Number:</label>
             <input type="tel" id="confirm-emergency-contact-phone" name="confirm-emergency-contact-phone" required>
+            <span class="error-message" id="contact-phone-error"></span>
             <label for="relationship-emergency-contact">Relationship:</label>
             <input type="text" id="relationship-emergency-contact" name="relationship-emergency-contact" required>
             <input type="submit" value="Register">
