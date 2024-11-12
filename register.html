@@ -17,12 +17,12 @@
         <form action="https://form.nathanc.me/process.php" method="post" onsubmit="return validateForm();">
             <input type="hidden" name="form_tools_form_id" value="2" />
             <h3>Your Information</h3>
-            <label for="firstname">First name:</label>
-            <input type="text" id="firstname" name="firstname" required>
-            <label for="lastname">Last name:</label>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required>
+            <label for="lastname">Last Name:</label>
             <input type="text" id="lastname" name="lastname" required>
-            <label for="school-division">School Division:</label>
-            <select id="school-division" name="school-division" required>
+            <label for="schoolDivision">School Division:</label>
+            <select id="schoolDivision" name="schoolDivision" required>
                 <option value="" selected disabled hidden>Select your school division</option>
                 <option value="rvgs">Roanoke Valley Govenor's School</option>
                 <option value="bedford">Bedford County</option>
@@ -30,8 +30,8 @@
                 <option value="craig">Craig County</option>
                 <option value="floyd">Floyd County</option>
                 <option value="franklin">Franklin County</option>
-                <option value="roanoke-city">Roanoke City</option>
-                <option value="roanoke-county">Roanoke County</option>
+                <option value="roanokeCity">Roanoke City</option>
+                <option value="roanokeCounty">Roanoke County</option>
                 <option value="salem">Salem City</option>
             </select>
             <label for="grade">Grade Level:</label>
@@ -42,8 +42,8 @@
                 <option value="11">11th Grade</option>
                 <option value="12">12th Grade</option>
             </select>
-            <label for="skill-level">Skill Level:</label>
-            <select id="skill-level" name="skill-level" required>
+            <label for="skillLevel">Skill Level:</label>
+            <select id="skillLevel" name="skillLevel" required>
                 <option value="" selected disabled hidden>Select your skill level</option>
                 <option value="beginner">Beginner</option>
                 <option value="intermediate">Intermediate</option>
@@ -51,47 +51,47 @@
             </select>
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
-            <label for="confirm-email">Confirm Email:</label>
-            <input type="email" id="confirm-email" name="confirm-email" required>
+            <label for="confirmEmail">Confirm Email:</label>
+            <input type="email" id="confirmEmail" name="confirmEmail" required>
             <span class="error-message" id="email-error"></span>
-            <label for="school-laptop">Do you need to borrow a laptop?</label>
-            <input type="radio" id="school-laptop-yes" name="school-laptop" value="yes" required>
-            <label for="school-laptop-yes">Yes</label>
-            <input type="radio" id="school-laptop-no" name="school-laptop" value="no" required>
-            <label for="school-laptop-no">No</label>
-            <label for="dietary-restrictions">Dietary Restrictions/Allergies:</label>
-            <input type="text" id="dietary-restrictions" name="dietary-restrictions">
-            <label for="theme-ideas">Theme Ideas (optional):</label>
-            <input type="text" id="theme-ideas" name="theme-ideas">
+            <label for="schoolLaptop">Do you need to borrow a laptop?</label>
+            <input type="radio" id="schoolLaptopYes" name="schoolLaptop" value="yes" required>
+            <label for="schoolLaptopYes">Yes</label>
+            <input type="radio" id="schoolLaptopNo" name="schoolLaptop" value="no" required>
+            <label for="schoolLaptopNo">No</label>
+            <label for="dietaryRestrictions">Dietary Restrictions/Allergies:</label>
+            <input type="text" id="dietaryRestrictions" name="dietaryRestrictions">
+            <label for="specialNeeds">Special Needs/Health Issues:</label>
+            <input type="text" id="specialNeeds" name="specialNeeds">
 
             <h3>Parent/Guardian Information</h3>
-            <label for="parent-firstname">First name:</label>
-            <input type="text" id="parent-firstname" name="parent-firstname" required>
-            <label for="parent-lastname">Last name:</label>
-            <input type="text" id="parent-lastname" name="parent-lastname" required>
-            <label for="parent-email">Email:</label>
-            <input type="email" id="parent-email" name="parent-email" required>
-            <label for="confirm-parent-email">Confirm Email:</label>
-            <input type="email" id="confirm-parent-email" name="confirm-parent-email" required>
+            <label for="parentFirstName">First name:</label>
+            <input type="text" id="parentFirstName" name="parentFirstName" required>
+            <label for="parentLastName">Last name:</label>
+            <input type="text" id="parentLastName" name="parentLastName" required>
+            <label for="parentEmail">Email:</label>
+            <input type="email" id="parentEmail" name="parentEmail" required>
+            <label for="confirmParentEmail">Confirm Email:</label>
+            <input type="email" id="confirmParentEmail" name="confirmParentEmail" required>
             <span class="error-message" id="parent-email-error"></span>
             <label for="parent-phone">Phone Number:</label>
-            <input type="tel" id="parent-phone" name="parent-phone" required>
-            <label for="confirm-parent-phone">Confirm Phone Number:</label>
-            <input type="tel" id="confirm-parent-phone" name="confirm-parent-phone" required>
+            <input type="tel" id="parentEmail" name="parentEmail" required>
+            <label for="confirmParentEmail">Confirm Phone Number:</label>
+            <input type="tel" id="confirmParentEmail" name="confirmParentEmail" required>
             <span class="error-message" id="parent-phone-error"></span>
 
             <h3>Emergency Contact</h3>
-            <label for="emergency-contact-firstname">First name:</label>
-            <input type="text" id="emergency-contact-firstname" name="emergency-contact-firstname" required>
-            <label for="emergency-contact-lastname">Last name:</label>
-            <input type="text" id="emergency-contact-lastname" name="emergency-contact-lastname" required>
-            <label for="emergency-contact-phone">Phone Number:</label>
-            <input type="tel" id="emergency-contact-phone" name="emergency-contact-phone" required>
-            <label for="confirm-emergency-contact-phone">Confirm Phone Number:</label>
-            <input type="tel" id="confirm-emergency-contact-phone" name="confirm-emergency-contact-phone" required>
+            <label for="emergencyContactFirstName">First name:</label>
+            <input type="text" id="emergencyContactFirstName" name="emergencyContactFirstName" required>
+            <label for="emergencyContactLastName">Last name:</label>
+            <input type="text" id="emergencyContactLastName" name="emergencyContactLastName" required>
+            <label for="emergencyContactPhone">Phone Number:</label>
+            <input type="tel" id="emergencyContactPhone" name="emergencyContactPhone" required>
+            <label for="confirmEmergencyContactPhone">Confirm Phone Number:</label>
+            <input type="tel" id="confirmEmergencyContactPhone" name="confirmEmergencyContactPhone" required>
             <span class="error-message" id="contact-phone-error"></span>
-            <label for="relationship-emergency-contact">Relationship:</label>
-            <input type="text" id="relationship-emergency-contact" name="relationship-emergency-contact" required>
+            <label for="relationshipEmergencyContact">Relationship:</label>
+            <input type="text" id="relationshipEmergencyContact" name="relationshipEmergencyContact" required>
             <input type="submit" value="Register">
         </form>
     </section>

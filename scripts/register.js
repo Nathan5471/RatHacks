@@ -8,35 +8,35 @@ function validateForm() {
     let isFirstInvalid = null;
 
     const email = document.getElementById("email").value;
-    const comfirmEmail = document.getElementById("confirm-email").value;
+    const comfirmEmail = document.getElementById("confirmEmail").value;
     if (email !== comfirmEmail) {
         document.getElementById("email-error").innerText = "Emails do not match";
         isValid = false;
         isFirstInvalid = isFirstInvalid || "email";
     }
 
-    const parentEmail = document.getElementById("parent-email").value;
-    const comfirmParentEmail = document.getElementById("confirm-parent-email").value;
+    const parentEmail = document.getElementById("parentEmail").value;
+    const comfirmParentEmail = document.getElementById("confirmParentEmail").value;
     if (parentEmail !== comfirmParentEmail) {
         document.getElementById("parent-email-error").innerText = "Emails do not match";
         isValid = false;
-        isFirstInvalid = isFirstInvalid || "parent-email";
+        isFirstInvalid = isFirstInvalid || "parentEmail";
     }
 
-    const parentPhone = document.getElementById("parent-phone").value;
-    const comfirmParentPhone = document.getElementById("confirm-parent-phone").value;
+    const parentPhone = document.getElementById("parentPhone").value;
+    const comfirmParentPhone = document.getElementById("confirmParentPhone").value;
     if (parentPhone !== comfirmParentPhone) {
         document.getElementById("parent-phone-error").innerText = "Phone numbers do not match";
         isValid = false;
-        isFirstInvalid = isFirstInvalid || "parent-phone";
+        isFirstInvalid = isFirstInvalid || "parentPhone";
     }
 
-    const contactPhone = document.getElementById("emergency-contact-phone").value;
-    const comfirmContactPhone = document.getElementById("confirm-emergency-contact-phone").value;
+    const contactPhone = document.getElementById("emergencyContactPhone").value;
+    const comfirmContactPhone = document.getElementById("confirmEmergencyContactPhone").value;
     if (contactPhone !== comfirmContactPhone) {
         document.getElementById("contact-phone-error").innerText = "Phone numbers do not match";
         isValid = false;
-        isFirstInvalid = isFirstInvalid || "emergency-contact-phone";
+        isFirstInvalid = isFirstInvalid || "emergencyContactPhone";
     }
 
     if (!isValid) {
