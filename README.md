@@ -1,2 +1,2 @@
-# RVGSHacks
-Website for the RVGS Hackathon
+# Rat Hacks
+Website for the Rat Hacks
