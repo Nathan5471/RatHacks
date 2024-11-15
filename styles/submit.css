@@ -17,6 +17,7 @@ header {
 
 header h1 {
     margin: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 header h1 a {
@@ -30,12 +31,20 @@ body {
     padding-top: 70px;
 }
 
+h2 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+p {
+    font-family: 'Open Sans', sans-serif;
+}
+
 .thanks {
     display: block;
     justify-content: center;
     align-items: center;
     text-align: center;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 75px);
     background-color: #f4f4f4;
 }
 
@@ -65,7 +74,6 @@ body {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    font-family: Arial, sans-serif;
 }
 
 .time {
@@ -74,6 +82,7 @@ body {
     border-radius: 8px;
     width: 100px;
     text-align: center;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .time span {

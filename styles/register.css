@@ -13,6 +13,7 @@ header {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
 }
 
 header h1 {
@@ -39,7 +40,7 @@ body {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-family: Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .registration-form h3 {
@@ -69,6 +70,12 @@ body {
     border-radius: 4px;
     font-size: 1rem;
     box-sizing: border-box;
+}
+
+.radio-container {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
 }
 
 .registration-form select {
@@ -101,4 +108,8 @@ body {
     font-size: 0.9rem;
     margin-top: 0.2rem;
     display: block;
+}
+
+#schoolDivisionOther {
+    display: none;
 }

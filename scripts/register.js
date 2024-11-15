@@ -45,3 +45,15 @@ function validateForm() {
 
     return isValid;
 }
+
+function showTextbox() {
+    const selectBox = document.getElementById("schoolDivision");
+    const textBox = document.getElementById("schoolDivisionOther");
+    if (selectBox.value === "other") {
+        textBox.style.display = "block";
+        textBox.setAttribute("required", "required");
+    } else {
+        textBox.style.display = "none";
+        textBox.removeAttribute("required");
+    }
+}
