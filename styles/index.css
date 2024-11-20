@@ -107,7 +107,7 @@ body {
 
 .about-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 1rem;
     text-align: center;
 }
@@ -120,34 +120,15 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
-.team-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1rem;
-    text-align: center;
-}
-
-.team-grid-box {
-    padding: 1rem;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    font-family: 'Open Sans', sans-serif;
-}
-
-.team-grid-box img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-}
-
+.team-grid,
 .judge-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     text-align: center;
 }
 
+.team-grid-box,
 .judge-grid-box {
     padding: 1rem;
     background-color: white;
@@ -156,6 +137,7 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
+.team-grid-box img,
 .judge-grid-box img {
     width: 100%;
     height: auto;
@@ -175,7 +157,7 @@ body {
 
 .faq-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 1rem;
 }
 
@@ -249,4 +231,35 @@ body {
     font-size: 1rem;
     margin: 0;
     color: #555;
+}
+
+@media (min-width: 768px) {
+    .title-screen {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: calc(100vh - 70px);
+    }
+
+    .title-screen-left,
+    .title-screen-right {
+        max-width: 50%;
+    }
+
+    .about-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .team-grid,
+    .judge-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .faq-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .countdown {
+        flex-direction: row;
+    }
 }
