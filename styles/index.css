@@ -233,6 +233,33 @@ body {
     color: #555;
 }
 
+footer {
+    background-color: #144922;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.social-buttons {
+    gap: 1rem;
+}
+
+.social-buttons a {
+    width: 40px;
+    height: 40px;
+}
+
+.social-buttons img {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.social-buttons img:hover {
+    transform: scale(1.1);
+}
+
 @media (min-width: 768px) {
     .title-screen {
         flex-direction: row;
