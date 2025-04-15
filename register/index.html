@@ -59,18 +59,34 @@
                 <option value="intermediate">Intermediate</option>
                 <option value="advanced">Advanced</option>
             </select>
-            <label for="email">Email:</label>
+            <label for="email">Email (Please use a personal email):</label>
             <input type="email" id="email" name="email" required>
             <label for="confirmEmail">Confirm Email:</label>
             <input type="email" id="confirmEmail" name="confirmEmail" required>
             <span class="error-message" id="email-error"></span>
             <label for="schoolLaptop">Do you need to borrow a laptop?</label>
-            <div class="radio-container">
-                <input type="radio" id="schoolLaptopYes" name="schoolLaptop" value="yes" required>
-                <label for="schoolLaptopYes">Yes</label>
-                <input type="radio" id="schoolLaptopNo" name="schoolLaptop" value="no" required>
-                <label for="schoolLaptopNo">No</label>
+            <select id="schoolLaptop" name="schoolLaptop" required>
+                <option value="" selected disabled hidden>Select an option</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <label for="team">Do you want to work in a team?</label>
+            <select id="team" name="team" onchange="showTeamTextbox();" required>
+                <option value="" selected disabled hidden>Select an option</option>
+                <option value="yes">Yes, please select a team for me</option>
+                <option value="teamSelect">Yes, I already have a team</option>
+                <option value="no">No</option>
+            </select>
+            <div id="teammateNamesDiv">
+                <label for="teammateNames">Please enter the names of the people you would like to work with:</label>
+                <input type="text" id="teammateNames" name="teammateNames" placeholder="Please enter their names">
             </div>
+            <label for="previousHackathon">Have you attended a hackathon before?</label>
+            <select id="previousHackathon" name="previousHackathon" required>
+                <option value="" selected disabled hidden>Select an option</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
             <label for="questions">Questions/Comments:</label>
             <input type="text" id="questions" name="questions">
             <label for="dietaryRestrictions">Dietary Restrictions/Allergies:</label>
@@ -95,6 +111,7 @@
             <span class="error-message" id="parent-phone-error"></span>
 
             <h3>Emergency Contact</h3>
+            <p>This is in case your parent/gaurdian is unreachable, so please use someone differnet than above.</p>
             <label for="emergencyContactFirstName">First name:</label>
             <input type="text" id="emergencyContactFirstName" name="emergencyContactFirstName" required>
             <label for="emergencyContactLastName">Last name:</label>

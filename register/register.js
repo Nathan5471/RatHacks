@@ -46,6 +46,19 @@ function validateForm() {
     return isValid;
 }
 
+function showTeamTextbox() {
+    const selectBox = document.getElementById("team");
+    const textBox = document.getElementById("teammateNames");
+    const textDiv = document.getElementById("teammateNamesDiv");
+    if (selectBox.value === "teamSelect") {
+        textDiv.style.display = "block";
+        textBox.setAttribute("required", "required");
+    } else {
+        textDiv.style.display = "none";
+        textBox.removeAttribute("required");
+    }
+}
+
 function showTextbox() {
     const selectBox = document.getElementById("schoolDivision");
     const textBox = document.getElementById("schoolDivisionOther");
