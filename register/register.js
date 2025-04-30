@@ -48,14 +48,24 @@ function validateForm() {
 
 function showTeamTextbox() {
     const selectBox = document.getElementById("team");
-    const textBox = document.getElementById("teammateNames");
-    const textDiv = document.getElementById("teammateNamesDiv");
+    const textBox1 = document.getElementById("teammateNames");
+    const textDiv1 = document.getElementById("teammateNamesDiv");
+    const textBox2 = document.getElementById("techStackInformation");
+    const textDiv2 = document.getElementById("extraTeamInfoDiv");
     if (selectBox.value === "teamSelect") {
-        textDiv.style.display = "block";
-        textBox.setAttribute("required", "required");
+        textDiv1.style.display = "block";
+        textBox1.setAttribute("required", "required");
     } else {
-        textDiv.style.display = "none";
-        textBox.removeAttribute("required");
+        textDiv1.style.display = "none";
+        textBox1.removeAttribute("required");
+    }
+    if (selectBox.value === "yes") {
+        textDiv2.style.display = "block";
+        textBox2.setAttribute("required", "required");
+    }
+    else {
+        textDiv2.style.display = "none";
+        textBox2.removeAttribute("required");
     }
 }
 
