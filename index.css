@@ -145,6 +145,32 @@ body {
     border-radius: 5px;
 }
 
+.schedule {
+    padding: 2rem;
+    background-color: #f4f4f4;
+}
+
+.schedule h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.schedule-table-box {
+    margin-top: .5rem;
+    padding: .5rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: 'Open Sans', sans-serif;
+}
+
 .faq {
     padding: 2rem;
     background-color: #f4f4f4;
