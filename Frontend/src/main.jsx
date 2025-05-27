@@ -12,9 +12,9 @@ const matomoInstance = createInstance({
 })
 
 createRoot(document.getElementById('root')).render(
-  <MatomoProvider value={matomoInstance}>
   <StrictMode>
+    <MatomoProvider value={matomoInstance}>
     <App />
+    </MatomoProvider>
   </StrictMode>
-  </MatomoProvider>
 )
