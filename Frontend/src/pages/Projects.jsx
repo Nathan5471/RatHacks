@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import data from '../data/projects.json';
 import ProjectCard from '../components/ProjectCard.jsx';
+import { Link } from 'react-router-dom';
 
 export default function Projects() {
     const [projects, setProjects] = useState([]);
@@ -16,8 +16,10 @@ export default function Projects() {
 
     return (
         <div className="flex flex-col min-h-screen min-w-screen bg-[#121212] text-white">
-            <div className="min-h-15 min-w-screen bg-[#282828] shadow-lg">
+            <div className="flex justify-between min-h-15 min-w-screen bg-[#282828] shadow-lg">
+                <div></div>
                 <h1 className="text-3xl font-bold text-center p-4">Rat Hacks</h1>
+                <Link to="/" className="text-2xl font-bold text-center p-4">Home</Link>
             </div>
             <h2 className="text-4xl font-semibold text-center p-5">Rat Hacks Projects</h2>
             { projects.length > 0 ? (

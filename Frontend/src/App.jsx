@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import Projects from './pages/Projects.jsx';
+import ProjectView from './pages/ProjectView.jsx';
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/projects" element={<Projects />} />
-      <Route path="/projects/:id" element={<div>Project Details Page</div>} />
+      <Route path="/projects/:id" element={<ProjectView />} />
     </Routes>
     </Router>
   );
