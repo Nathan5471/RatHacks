@@ -9,7 +9,7 @@ export default function Home() {
             </div>
             <h2 className="text-4xl font-semibold text-center p-5">A look back at Rat Hacks 2025</h2>
             <p className="text-2xl text-center p-5">
-                Rat Hacks 2025 brought together high school hackers from multiple schools to collaborate on projects around the theme of "Education Tools"
+                Rat Hacks brought together high school hackers from multiple schools to collaborate on projects around the theme of "Education Tools"
             </p>
             <div className="grid grid-cols-3 gap-4 p-10">
                 <div className="bg-[#282828] p-4 rounded-lg shadow-lg">

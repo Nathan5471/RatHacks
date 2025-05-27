@@ -1,0 +1,95 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "title": "Scholarships Scraper",
+      "hackers": [
+        "Wesley Owen"
+      ],
+      "codeLink": "https://drive.google.com/drive/folders/1aPGJLjesxIe_Omy9txtxg07n-iUQ5KBO?usp=drive_link",
+      "videoLink": "https://server.rathacks.com/videos/ScholarShipsScraper",
+      "description": "It uses a a python to scrape a website for scholarships",
+      "teachnologies": "I used python and html (idk how to use html so i skidded it :sob:) i used it because i have made scrapers in the past",
+      "other": ""
+    },
+    {
+      "id": "2",
+      "title": "FlashLearn",
+      "hackers": [
+        "Alpin Singh",
+        "Anish Suryapeta",
+        "Jiachen (Hade) Guo"
+      ],
+      "codeLink": "https://drive.google.com/drive/folders/1-SMN5rk7Zvak6tzL0Sg-NbI1C6f4VY7Z?usp=sharing",
+      "videoLink": "https://server.rathacks.com/videos/FlashLearn.mp4",
+      "description": "We created a website for students to create flashcards based on any subject they need help with. As another feature, they can create questions and quizzes themselves to help strengthen their knowledge of the topic.",
+      "technologies": "We used three programming languages: HTML, CSS, and JavaScript. We chose these three languages because they are the simplest for website development and are very easy to learn. Since this is our first time making a website, we thought these languages would be best to use, due to their simplicity and functionality.",
+      "other": ""
+    },
+    {
+      "id": "3",
+      "title": "Digital Task List",
+      "hackers": [
+        "Eli Peters",
+        "Demiana Iskandar"
+      ],
+      "codeLink": "https://drive.google.com/file/d/1C4kJrkEVpmqamEPfper41jDPDGde9bik/view?usp=sharing",
+      "videoLink": "https://server.rathacks.com/videos/DigitalTaskList.mp4",
+      "description": "This project allows students to input their upcoming tasks using the add task button, with information such as task name and due date being asked for. The code then sorts their tasks by date and puts this week's tasks in a weekly calendar. These tasks can by checked off in the upcoming tasks column or all of them being removed via the reset task list button. There is a dark and light mode coded into the program for one's preferences.",
+      "technologies": "We used the Python programming language due to its readability and being the only language we knew. It was accessed via VSCode and a virtual environment. We also used the StreamLit library of Python because it has a good web development tool for Python.",
+      "other": ""
+    },
+    {
+      "id": "4",
+      "title": "Ultimate Review Helper",
+      "hackers": [
+        "Elena D'Elicio",
+        "Nathan Bulla"
+      ],
+      "codeLink": "https://drive.google.com/file/d/1Guk8UfOtqZvxIELl-GJsBJ7oq3t6mCif/view?usp=drivesdk",
+      "videoLink": "https://server.rathacks.com/videos/UltimateReviewHelper.mp4",
+      "description": "Tool that allows teachers to enter test grade + question categories so students can have info on what to review",
+      "technologies": "Python because it would be easier to turn into a website (although that didn’t pan out)",
+      "other": "partly unfinished, but all included code works (if it isn’t commented out)"
+    },
+    {
+      "id": "5",
+      "title": "Wrong Answer Tracker",
+      "hackers": [
+        "Adrian Ma"
+      ],
+      "codeLink": "https://drive.google.com/drive/folders/1TaXRtgYXZQjFHr3wySvzCNcKKXnH8m5p?usp=drive_link",
+      "videoLink": "https://server.rathacks.com/videos/WrongAnswerTracker.mp4",
+      "description": "It helps you review the questions you missed.",
+      "technologies": "C++, it's the language I most fimilar with.",
+      "other": "There are still some glitches, and I do not have time to add remove function"
+    },
+    {
+      "id": "6",
+      "title": "Flash Royale",
+      "hackers": [
+        "Caleb Wang",
+        "Bear Tyree"
+      ],
+      "codeLink": "https://roco-my.sharepoint.com/:u:/g/personal/ttyree0589_student_rcps_us/EW0k_VkidxNGlTQW-y7u2W4B8hR7AWoNiQygGFCBil9OTA?e=wAx54L",
+      "videoLink": "https://server.rathacks.com/videos/FlashRoyale.mp4",
+      "description": "A flash card combat game",
+      "technologies": "SocketIO, NodeJS, Vanilla Javascript, HTML, CSS. These are what we knew how to use.",
+      "other": ""
+    },
+    {
+      "id": "7",
+      "title": "Big Jim's Canvas",
+      "hackers": [
+        "Jayden Wainwright",
+        "Sam Srivastava",
+        "Mattox Jalbert"
+      ],
+      "codeLink": "https://drive.google.com/file/d/1jRgXARV1yCAGAPnlr4NoCnGoc0U6z75k/view?usp=sharingL",
+      "videoLink": "https://server.rathacks.com/videos/BigJimsCanvas.mp4",
+      "description": "Our project is a website that allows teachers to create and assign online assignments to students. Students can enter codes to see assignments and complete them. ",
+      "technologies": "We used Python, an entry level programming language, and Streamlit, a Python extension which allow for the easy creation of websites.",
+      "other": "The title reflects the intersections of rural and technological themes."
+    }
+  ]
+}
