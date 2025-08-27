@@ -10,7 +10,7 @@ const app = express();
 const corsOptions = {
   origin: true,
   credentials: true,
-}; // IMPORTANT REMINDER: Change before releasing
+}; // PLEASE REMEMBER TO CHANGE BEFORE RELEASING
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
