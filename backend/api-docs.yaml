@@ -1,0 +1,126 @@
+openapi: 3.1.1
+info:
+  title: Rat Hacks API
+  version: 1.0.0
+  description: API documentation for Rat Hacks
+
+servers:
+  - url: https://rathacks.com
+    description: Rat Hacks Server
+
+paths:
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                  pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,16}$'
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+              required:
+                - email
+                - password
+                - firstName
+                - lastName
+      responses:
+        201:
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User registered successfully
+                required:
+                  - message
+        400:
+          description: Bad requestBody
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All fields are required
+                required:
+                  - message
+  /api/auth/login:
+    post:
+      summary: Login a user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        200:
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successful
+                  token:
+                    type: string
+                    example: yourToken123
+                    format: jwt
+              required:
+                - message
+                - token
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email and password are required
+              required:
+                - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid email or password
+                required:
+                  - message

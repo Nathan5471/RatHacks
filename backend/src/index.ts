@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import authRouter from "./routes/authRouter";
+import YAML from "yamljs";
+import swaggerUi from "swagger-ui-express";
 
 dotenv.config();
 
@@ -14,6 +17,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+// API Routes
+app.use("/api/auth", authRouter);
+
+// SwaggerUI Docs
+const swaggerDocument = YAML.load("./api-docs.yaml");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const MONGODB_URL = process.env.MONGODB_URL;
 if (!MONGODB_URL) {

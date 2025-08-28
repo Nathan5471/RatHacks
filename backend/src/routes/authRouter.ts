@@ -1,8 +1,9 @@
 import express from "express";
+import { register, login } from "../controllers/authController";
 
 const router = express.Router();
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const { email, password, firstName, lastName } = req.body as {
     email: string;
     password: string;
@@ -25,10 +26,10 @@ router.post("/register", (req, res) => {
     });
   }
 
-  // TODO: Implement register function
+  await register(req, res);
 });
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body as {
     email: string;
     password: string;
@@ -38,7 +39,7 @@ router.post("/login", (req, res) => {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
-  // TODO: Implement login function
+  await login(req, res);
 });
 
 export default router;
