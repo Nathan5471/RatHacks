@@ -1,5 +1,6 @@
 import express from "express";
 import { register, login } from "../controllers/authController";
+import authenticate from "../middleware/authenticate";
 
 const router = express.Router();
 
@@ -40,6 +41,16 @@ router.post("/login", async (req, res) => {
   }
 
   await login(req, res);
+});
+
+router.get("/current-user", authenticate, (req: any, res: any) => {
+  const user = {
+    _id: req.user._id,
+    email: req.user.email,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+  };
+  res.status(200).json(user);
 });
 
 export default router;

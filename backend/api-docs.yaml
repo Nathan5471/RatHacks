@@ -97,9 +97,9 @@ paths:
                     type: string
                     example: yourToken123
                     format: jwt
-              required:
-                - message
-                - token
+                required:
+                  - message
+                  - token
         400:
           description: Bad request
           content:
@@ -110,8 +110,8 @@ paths:
                   message:
                     type: string
                     example: Email and password are required
-              required:
-                - message
+                required:
+                  - message
         401:
           description: Unauthorized
           content:
@@ -124,3 +124,75 @@ paths:
                     example: Invalid email or password
                 required:
                   - message
+  /api/auth/current-user:
+    get:
+      summary: Get the currently logged in user
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: successfully got the current user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                required:
+                  - _id
+                  - email
+                  - firstName
+                  - lastName
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal Server Error
+                required:
+                  - message
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
