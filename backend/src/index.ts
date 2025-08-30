@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRouter";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 dotenv.config();
 
@@ -24,6 +25,12 @@ app.use("/api/auth", authRouter);
 // SwaggerUI Docs
 const swaggerDocument = YAML.load("./api-docs.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Frontend
+app.use(
+  "/",
+  createProxyMiddleware({ target: "http://localhost:5173", changeOrigin: true })
+);
 
 const MONGODB_URL = process.env.MONGODB_URL;
 if (!MONGODB_URL) {

@@ -2,12 +2,15 @@ import { createContext, useState, useContext } from "react";
 import { getCurrentUser } from "../utils/AuthAPIHandler";
 
 interface AuthContextType {
-  user: {
-    _id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-  } | null;
+  user:
+    | {
+        _id: string;
+        email: string;
+        firstName: string;
+        lastName: string;
+      }
+    | null
+    | undefined;
   getUser: () => void;
   logout: () => void;
 }
@@ -17,7 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<AuthContextType["user"]>(null);
+  const [user, setUser] = useState<AuthContextType["user"]>(undefined);
 
   const getUser = async () => {
     try {
@@ -31,7 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const logout = async () => {
     // TODO: Implement logout function to backend
-    setUser(null);
+    setUser(undefined);
   };
 
   const contextValue = {
@@ -45,6 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {

@@ -17,13 +17,14 @@ router.post("/register", async (req, res) => {
   }
   if (
     password.length < 8 ||
+    !/[a-z]/.test(password) ||
     !/[A-Z]/.test(password) ||
     !/[0-9]/.test(password) ||
     !/[!@#$%^&*]/.test(password)
   ) {
     return res.status(400).json({
       message:
-        "Password must be at least 8 characters long and include at least one uppercase letter, one number, and one special character (!@#$%^&*)",
+        "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)",
     });
   }
 
