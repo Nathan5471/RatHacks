@@ -62,6 +62,50 @@ paths:
                     example: All fields are required
                 required:
                   - message
+  /api/auth/verify-email:
+    post:
+      summary: Verify a user's email
+      tags:
+        - Auth
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema:
+            type: string
+            format: email
+          description: User's Email
+        - name: token
+          in: token
+          required: true
+          schema:
+            type: string
+          description: User's token to verify email
+      responses:
+        200:
+          description: Email successfully verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email verified successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid email or token
+                required:
+                  - message
   /api/auth/login:
     post:
       summary: Login a user

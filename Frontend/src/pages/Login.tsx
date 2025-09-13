@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { login } from "../utils/AuthAPIHandler";
 import { IoEye, IoEyeOff } from "react-icons/io5";
@@ -94,6 +94,12 @@ export default function Login() {
         >
           Login
         </button>
+        <p className="mt-2 text-center text-gray-200">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-primary-a1 hover:underline">
+            Register here.
+          </Link>
+        </p>
       </form>
     </div>
   );

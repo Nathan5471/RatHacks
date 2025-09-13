@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { register } from "../utils/AuthAPIHandler";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
@@ -39,7 +39,10 @@ export default function Register() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-screen bg-surface-a0 text-white">
-      <form className="flex flex-col w-80 bg-surface-a1 p-4 m-4 rounded-lg">
+      <form
+        className="flex flex-col w-80 bg-surface-a1 p-4 m-4 rounded-lg"
+        onSubmit={(e) => handleRegister(e)}
+      >
         <h1 className="text-primary-a0 text-4xl font-bold text-center mb-4">
           Register
         </h1>
@@ -136,11 +139,17 @@ export default function Register() {
         </div>
         {error && <p className="text-red-500">{error}</p>}
         <button
-          onClick={handleRegister}
+          type="submit"
           className="bg-surface-a2 p-2 rounded-lg mt-4 hover:bg-surface-a3"
         >
           Register
         </button>
+        <p className="mt-2 text-center text-gray-200">
+          Already have an account?{" "}
+          <Link to="/login" className="text-primary-a1 hover:underline">
+            Login here.
+          </Link>
+        </p>
       </form>
     </div>
   );

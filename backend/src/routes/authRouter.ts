@@ -1,5 +1,5 @@
 import express from "express";
-import { register, login } from "../controllers/authController";
+import { register, verifyEmail, login } from "../controllers/authController";
 import authenticate from "../middleware/authenticate";
 
 const router = express.Router();
@@ -29,6 +29,15 @@ router.post("/register", async (req, res) => {
   }
 
   await register(req, res);
+});
+
+router.post("/verify-email", async (req, res) => {
+  const { email, token } = req.query as { email: string; token: string };
+
+  if (!email || !token) {
+    return res.status(400).json({ message: "Email and token are required" });
+  }
+  verifyEmail(req, res);
 });
 
 router.post("/login", async (req, res) => {
