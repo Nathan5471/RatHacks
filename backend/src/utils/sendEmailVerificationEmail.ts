@@ -33,7 +33,7 @@ export default async function sendEmailVerificationEmail({
         transactionalId: LOOPS_EMAIL_VERIFICATION_TEMPLATE_ID,
         dataVariables: {
           firstName,
-          verificationLink: `${FRONTEND_URL}/api/auth/verify-email?email=${encodeURIComponent(
+          verificationLink: `${FRONTEND_URL}/verify-email?email=${encodeURIComponent(
             email
           )}&token=${encodeURIComponent(token)}`,
         },

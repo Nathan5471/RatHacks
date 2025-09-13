@@ -33,6 +33,13 @@ export const login = async (credentials: {
   return response.data;
 };
 
+export const verifyEmail = async (email: string, token: string) => {
+  const response = await api.post("/verify-email", null, {
+    params: { email, token },
+  });
+  return response.data;
+};
+
 export const getCurrentUser = async () => {
   const response = await api.get("/current-user");
   return response.data;

@@ -37,25 +37,6 @@ export const register = async (req: any, res: any) => {
   return res.status(201).json({ message: "User registered successfully" });
 };
 
-export const verifyEmail = async (req: any, res: any) => {
-  const { email, token } = req.query as { email: string; token: string };
-
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.status(400).json({ message: "Invalid email or token" });
-  }
-  if (user.emailVerified) {
-    return res.status(400).json({ message: "Email already verified" });
-  }
-  if (user.emailToken !== token) {
-    return res.status(400).json({ message: "Invalid email or token" });
-  }
-
-  user.emailVerified = true;
-  await user.save();
-  return res.status(200).json({ message: "Email verified successfully" });
-};
-
 export const login = async (req: any, res: any) => {
   const { email, password } = req.body as {
     email: string;
@@ -80,4 +61,23 @@ export const login = async (req: any, res: any) => {
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   });
   return res.status(200).json({ message: "Login successful" });
+};
+
+export const verifyEmail = async (req: any, res: any) => {
+  const { email, token } = req.query as { email: string; token: string };
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({ message: "Invalid email or token" });
+  }
+  if (user.emailVerified) {
+    return res.status(400).json({ message: "Email already verified" });
+  }
+  if (user.emailToken !== token) {
+    return res.status(400).json({ message: "Invalid email or token" });
+  }
+
+  user.emailVerified = true;
+  await user.save();
+  return res.status(200).json({ message: "Email verified successfully" });
 };

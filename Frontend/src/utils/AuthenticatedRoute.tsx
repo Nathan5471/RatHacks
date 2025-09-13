@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 const AuthenticatedRoute: React.FC = () => {
   const { user } = useAuth();
+  console.log(user);
   if (user === undefined) {
     return null;
   }

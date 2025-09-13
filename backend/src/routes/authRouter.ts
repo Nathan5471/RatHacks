@@ -31,15 +31,6 @@ router.post("/register", async (req, res) => {
   await register(req, res);
 });
 
-router.post("/verify-email", async (req, res) => {
-  const { email, token } = req.query as { email: string; token: string };
-
-  if (!email || !token) {
-    return res.status(400).json({ message: "Email and token are required" });
-  }
-  verifyEmail(req, res);
-});
-
 router.post("/login", async (req, res) => {
   const { email, password } = req.body as {
     email: string;
@@ -51,6 +42,15 @@ router.post("/login", async (req, res) => {
   }
 
   await login(req, res);
+});
+
+router.post("/verify-email", async (req, res) => {
+  const { email, token } = req.query as { email: string; token: string };
+
+  if (!email || !token) {
+    return res.status(400).json({ message: "Email and token are required" });
+  }
+  verifyEmail(req, res);
 });
 
 router.get("/current-user", authenticate, (req: any, res: any) => {

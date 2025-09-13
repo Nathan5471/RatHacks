@@ -24,7 +24,7 @@ export default function Login() {
     }
     try {
       await login({ email, password });
-      getUser();
+      await getUser();
       navigate("/");
     } catch (error: unknown) {
       console.error("Login error:", error);
