@@ -13,7 +13,7 @@ export default function Home() {
         </h1>
         <Link
           to={user ? "/app" : "/login"}
-          className="text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center ml-auto m-4 p-2 w-1/3"
+          className="text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center font-bold ml-auto m-4 p-2 w-1/3"
         >
           {user ? "Go to App" : "Login"}
         </Link>
