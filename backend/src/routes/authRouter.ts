@@ -1,10 +1,15 @@
 import express from "express";
-import { register, verifyEmail, login } from "../controllers/authController";
+import {
+  register,
+  verifyEmail,
+  login,
+  logout,
+} from "../controllers/authController";
 import authenticate from "../middleware/authenticate";
 
 const router = express.Router();
 
-router.post("/register", async (req, res) => {
+router.post("/register", async (req: any, res: any) => {
   const {
     email,
     password,
@@ -19,7 +24,7 @@ router.post("/register", async (req, res) => {
     firstName: string;
     lastName: string;
     schoolDivision: string;
-    gradeLevel: 9 | 10 | 11 | 12;
+    gradeLevel: "9" | "10" | "11" | "12";
     isGovSchool: boolean;
   };
 
@@ -46,7 +51,7 @@ router.post("/register", async (req, res) => {
         "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)",
     });
   }
-  if (![9, 10, 11, 12].includes(gradeLevel)) {
+  if (!["9", "10", "11", "12"].includes(gradeLevel)) {
     return res
       .status(400)
       .json({ message: "Grade level must be 9, 10, 11, or 12" });
@@ -54,7 +59,7 @@ router.post("/register", async (req, res) => {
   await register(req, res);
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req: any, res: any) => {
   const { email, password } = req.body as {
     email: string;
     password: string;
@@ -67,7 +72,7 @@ router.post("/login", async (req, res) => {
   await login(req, res);
 });
 
-router.post("/verify-email", async (req, res) => {
+router.post("/verify-email", async (req: any, res: any) => {
   const { email, token } = req.query as { email: string; token: string };
 
   if (!email || !token) {
@@ -76,12 +81,18 @@ router.post("/verify-email", async (req, res) => {
   verifyEmail(req, res);
 });
 
+router.post("/logout", authenticate, logout);
+
 router.get("/current-user", authenticate, (req: any, res: any) => {
   const user = {
     _id: req.user._id,
     email: req.user.email,
+    isEmailVerified: req.user.isEmailVerified,
     firstName: req.user.firstName,
     lastName: req.user.lastName,
+    schoolDivision: req.user.schoolDivision,
+    gradeLevel: req.user.gradeLevel,
+    isGovSchool: req.user.isGovSchool,
   };
   res.status(200).json(user);
 });

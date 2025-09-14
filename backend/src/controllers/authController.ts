@@ -19,7 +19,7 @@ export const register = async (req: any, res: any) => {
     firstName: string;
     lastName: string;
     schoolDivision: string;
-    gradeLevel: 9 | 10 | 11 | 12;
+    gradeLevel: "9" | "10" | "11" | "12";
     isGovSchool: boolean;
   };
 

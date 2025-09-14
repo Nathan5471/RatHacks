@@ -198,15 +198,28 @@ paths:
                   email:
                     type: string
                     format: email
+                  isEmailVerified:
+                    type: boolean
                   firstName:
                     type: string
                   lastName:
                     type: string
+                  schoolDivision:
+                    type: string
+                  gradeLevel:
+                    type: integer
+                    enum: [9, 10, 11, 12]
+                  isGovSchool:
+                    type: boolean
                 required:
                   - _id
                   - email
+                  - isEmailVerified
                   - firstName
                   - lastName
+                  - schoolDivision
+                  - gradeLevel
+                  - isGovSchool
         401:
           description: Unauthorized
           content:

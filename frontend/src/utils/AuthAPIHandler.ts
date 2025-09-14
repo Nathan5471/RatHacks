@@ -21,7 +21,7 @@ export const register = async (userData: {
   firstName: string;
   lastName: string;
   schoolDivision: string;
-  gradeLevel: 9 | 10 | 11 | 12;
+  gradeLevel: "9" | "10" | "11" | "12";
   isGovSchool: boolean;
 }) => {
   const response = await api.post("/register", userData);
@@ -40,6 +40,11 @@ export const verifyEmail = async (email: string, token: string) => {
   const response = await api.post("/verify-email", null, {
     params: { email, token },
   });
+  return response.data;
+};
+
+export const logoutUser = async () => {
+  const response = await api.post("/logout");
   return response.data;
 };
 

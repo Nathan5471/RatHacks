@@ -24,7 +24,9 @@ export default function Register() {
     | "";
   const [schoolDivision, setSchoolDivision] = useState<SchoolDivision>("");
   const [schoolDivisionOther, setSchoolDivisionOther] = useState("");
-  const [gradeLevel, setGradeLevel] = useState<9 | 10 | 11 | 12 | "">("");
+  const [gradeLevel, setGradeLevel] = useState<"9" | "10" | "11" | "12" | "">(
+    ""
+  );
   const [isGovSchool, setIsGovSchool] = useState<boolean | "">("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ export default function Register() {
         lastName,
         schoolDivision:
           schoolDivision === "other" ? schoolDivisionOther : schoolDivision,
-        gradeLevel: gradeLevel as 9 | 10 | 11 | 12,
+        gradeLevel: gradeLevel as "9" | "10" | "11" | "12",
         isGovSchool: isGovSchool as boolean,
       });
       navigate("/login");
@@ -205,7 +207,7 @@ export default function Register() {
           name="gradeLevel"
           value={gradeLevel}
           onChange={(e) =>
-            setGradeLevel(e.target.value as 9 | 10 | 11 | 12 | "")
+            setGradeLevel(e.target.value as "9" | "10" | "11" | "12" | "")
           }
           className="bg-surface-a2 p-2 rounded-lg w-full"
           required
@@ -213,10 +215,10 @@ export default function Register() {
           <option value="" disabled>
             Select your grade level
           </option>
-          <option value={9}>9</option>
-          <option value={10}>10</option>
-          <option value={11}>11</option>
-          <option value={12}>12</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
         </select>
         <label htmlFor="isGovSchool" className="text-2xl mt-2">
           Do you attend RVGS?

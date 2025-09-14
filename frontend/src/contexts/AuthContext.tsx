@@ -6,8 +6,12 @@ interface AuthContextType {
     | {
         _id: string;
         email: string;
+        isEmailVerified: boolean;
         firstName: string;
         lastName: string;
+        schoolDivision: string;
+        gradeLevel: 9 | 10 | 11 | 12;
+        isGovSchool: boolean;
       }
     | null
     | undefined;

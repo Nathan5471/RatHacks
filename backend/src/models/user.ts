@@ -10,7 +10,7 @@ interface UserModel extends mongoose.Document {
   firstName: string;
   lastName: string;
   schoolDivision: string;
-  gradeLevel: 9 | 10 | 11 | 12;
+  gradeLevel: "9" | "10" | "11" | "12";
   isGovSchool: boolean;
   skillLevel: "beginner" | "intermediate" | "advanced";
   techStack: string;
@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema<UserModel>({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   schoolDivision: { type: String, required: true },
-  gradeLevel: { type: Number, enum: [9, 10, 11, 12], required: true },
+  gradeLevel: { type: String, enum: ["9", "10", "11", "12"], required: true },
   isGovSchool: { type: Boolean, required: true },
   validRefreshTokens: { type: [String], default: [] },
 });

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAuth } from "./contexts/AuthContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthenticatedRoute from "./utils/AuthenticatedRoute";
+import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import ProjectView from "./pages/ProjectView";
@@ -21,7 +22,7 @@ function App() {
     <Router>
       <Routes>
         <Route element={<AuthenticatedRoute />}>
-          // Protected routes go here
+          <Route path="/app" element={<Dashboard />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />
