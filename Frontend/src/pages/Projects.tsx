@@ -7,21 +7,21 @@ export default function Projects() {
 
   return (
     <div className="flex flex-col min-h-screen w-screen bg-surface-a0 text-white">
-      <div className="grid grid-cols-3 min-h-15 w-screen bg-surface-a1 shadow-lg">
-        <div></div>
-        <h1 className="text-3xl font-bold text-center text-primary-a0 p-4">
+      <div className="grid grid-cols-4 md:grid-cols-3 min-h-15 min-w-screen bg-surface-a1 shadow-lg">
+        <div className="hidden md:block"></div>
+        <h1 className="text-3xl col-span-3 md:col-span-1 font-bold text-center text-primary-a0 p-4">
           Rat Hacks
         </h1>
         <Link
           to="/"
-          className="bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center font-bold ml-auto m-4 p-2 w-1/3 text-xl"
+          className="text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center font-bold ml-auto m-4 p-2 w-11/12 md:w-1/3"
         >
           Home
         </Link>
       </div>
       <h2 className="text-4xl font-semibold text-center p-5">Rat Hacks</h2>
       {projects.length > 0 ? (
-        <div className="grid grid-cols-3 gap-4 p-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
