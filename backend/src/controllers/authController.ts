@@ -5,11 +5,22 @@ import generateRefreshToken from "../utils/generateRefreshToken";
 import sendEmailVerificationEmail from "../utils/sendEmailVerificationEmail";
 
 export const register = async (req: any, res: any) => {
-  const { email, password, firstName, lastName } = req.body as {
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    schoolDivision,
+    gradeLevel,
+    isGovSchool,
+  } = req.body as {
     email: string;
     password: string;
     firstName: string;
     lastName: string;
+    schoolDivision: string;
+    gradeLevel: 9 | 10 | 11 | 12;
+    isGovSchool: boolean;
   };
 
   const existingEmail = await User.findOne({ email });
@@ -30,6 +41,9 @@ export const register = async (req: any, res: any) => {
     password: hashedPassword,
     firstName,
     lastName,
+    schoolDivision,
+    gradeLevel,
+    isGovSchool,
   });
 
   await sendEmailVerificationEmail({ email, token: emailToken, firstName });

@@ -32,11 +32,21 @@ paths:
                   type: string
                 lastName:
                   type: string
+                homeSchool:
+                  type: string
+                gradeLevel:
+                  type: integer
+                  enum: [9, 10, 11, 12]
+                isGovSchool:
+                  type: boolean
               required:
                 - email
                 - password
                 - firstName
                 - lastName
+                - homeSchool
+                - gradeLevel
+                - isGovSchool
       responses:
         201:
           description: User registered successfully

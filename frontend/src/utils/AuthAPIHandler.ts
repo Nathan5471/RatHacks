@@ -20,6 +20,9 @@ export const register = async (userData: {
   password: string;
   firstName: string;
   lastName: string;
+  schoolDivision: string;
+  gradeLevel: 9 | 10 | 11 | 12;
+  isGovSchool: boolean;
 }) => {
   const response = await api.post("/register", userData);
   return response.data;

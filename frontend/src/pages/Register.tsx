@@ -11,6 +11,21 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  type SchoolDivision =
+    | "Bedford County"
+    | "Botetourt County"
+    | "Craig County"
+    | "Floyd County"
+    | "Franklin County"
+    | "Roanoke City"
+    | "Roanoke County"
+    | "Salem City"
+    | "other"
+    | "";
+  const [schoolDivision, setSchoolDivision] = useState<SchoolDivision>("");
+  const [schoolDivisionOther, setSchoolDivisionOther] = useState("");
+  const [gradeLevel, setGradeLevel] = useState<9 | 10 | 11 | 12 | "">("");
+  const [isGovSchool, setIsGovSchool] = useState<boolean | "">("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -22,7 +37,16 @@ export default function Register() {
       return;
     }
     try {
-      await register({ email, password, firstName, lastName });
+      await register({
+        email,
+        password,
+        firstName,
+        lastName,
+        schoolDivision:
+          schoolDivision === "other" ? schoolDivisionOther : schoolDivision,
+        gradeLevel: gradeLevel as 9 | 10 | 11 | 12,
+        isGovSchool: isGovSchool as boolean,
+      });
       navigate("/login");
     } catch (error) {
       console.error("Registration error:", error);
@@ -135,6 +159,92 @@ export default function Register() {
             ) : (
               <IoEye className="text-xl" />
             )}
+          </button>
+        </div>
+        <label htmlFor="schoolDivision" className="text-2xl mt-2">
+          School Division
+        </label>
+        <select
+          id="schoolDivision"
+          name="schoolDivision"
+          value={schoolDivision}
+          onChange={(e) => setSchoolDivision(e.target.value as SchoolDivision)}
+          className="bg-surface-a2 p-2 rounded-lg w-full"
+          required
+        >
+          <option value="" disabled>
+            Select your school divsion
+          </option>
+          <option value="Bedford County">Bedford County</option>
+          <option value="Botetourt County">Botetourt County</option>
+          <option value="Craig County">Craig County</option>
+          <option value="Floyd County">Floyd County</option>
+          <option value="Franklin County">Franklin County</option>
+          <option value="Roanoke City">Roanoke City</option>
+          <option value="Roanoke County">Roanoke County</option>
+          <option value="Salem City">Salem City</option>
+          <option value="other">Other</option>
+        </select>
+        {schoolDivision === "other" && (
+          <input
+            type="text"
+            id="schoolDivisionOther"
+            name="schoolDivisionOther"
+            value={schoolDivisionOther}
+            onChange={(e) => setSchoolDivisionOther(e.target.value)}
+            className="bg-surface-a2 p-2 rounded-lg mt-1"
+            placeholder="Enter your school division"
+            required
+          />
+        )}
+        <label htmlFor="gradeLevel" className="text-2xl mt-2">
+          Grade Level
+        </label>
+        <select
+          id="gradeLevel"
+          name="gradeLevel"
+          value={gradeLevel}
+          onChange={(e) =>
+            setGradeLevel(e.target.value as 9 | 10 | 11 | 12 | "")
+          }
+          className="bg-surface-a2 p-2 rounded-lg w-full"
+          required
+        >
+          <option value="" disabled>
+            Select your grade level
+          </option>
+          <option value={9}>9</option>
+          <option value={10}>10</option>
+          <option value={11}>11</option>
+          <option value={12}>12</option>
+        </select>
+        <label htmlFor="isGovSchool" className="text-2xl mt-2">
+          Do you attend RVGS?
+        </label>
+        <div className="flex flex-row w-full mt-1">
+          <button
+            type="button"
+            onClick={() => setIsGovSchool(true)}
+            className={`${
+              isGovSchool ? "bg-primary-a1" : "bg-surface-a2"
+            } p-2 rounded-lg w-1/2 mr-1 ${
+              isGovSchool ? "hover:bg-primary-a2" : "hover:bg-surface-a3"
+            }`}
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsGovSchool(false)}
+            className={`${
+              isGovSchool === false ? "bg-primary-a1" : "bg-surface-a2"
+            } p-2 rounded-lg w-1/2 ${
+              isGovSchool === false
+                ? "hover:bg-primary-a2"
+                : "hover:bg-surface-a3"
+            }`}
+          >
+            No
           </button>
         </div>
         {error && <p className="text-red-500">{error}</p>}

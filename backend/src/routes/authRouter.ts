@@ -5,14 +5,33 @@ import authenticate from "../middleware/authenticate";
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
-  const { email, password, firstName, lastName } = req.body as {
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    schoolDivision,
+    gradeLevel,
+    isGovSchool,
+  } = req.body as {
     email: string;
     password: string;
     firstName: string;
     lastName: string;
+    schoolDivision: string;
+    gradeLevel: 9 | 10 | 11 | 12;
+    isGovSchool: boolean;
   };
 
-  if (!email || !password || !firstName || !lastName) {
+  if (
+    !email ||
+    !password ||
+    !firstName ||
+    !lastName ||
+    !schoolDivision ||
+    !gradeLevel ||
+    isGovSchool === undefined
+  ) {
     return res.status(400).json({ message: "All fields are required" });
   }
   if (
@@ -27,7 +46,11 @@ router.post("/register", async (req, res) => {
         "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)",
     });
   }
-
+  if (![9, 10, 11, 12].includes(gradeLevel)) {
+    return res
+      .status(400)
+      .json({ message: "Grade level must be 9, 10, 11, or 12" });
+  }
   await register(req, res);
 });
 
