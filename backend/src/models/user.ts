@@ -8,6 +8,7 @@ interface UserModel extends mongoose.Document {
   password: string;
   firstName: string;
   lastName: string;
+  validRefreshTokens?: string[];
 }
 
 const userSchema = new mongoose.Schema<UserModel>({
@@ -17,6 +18,7 @@ const userSchema = new mongoose.Schema<UserModel>({
   password: { type: String, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
+  validRefreshTokens: { type: [String], default: [] },
 });
 
 const User = mongoose.model<UserModel>("User", userSchema);

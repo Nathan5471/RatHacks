@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/user";
 import generateToken from "../utils/generateToken";
+import generateRefreshToken from "../utils/generateRefreshToken";
 import sendEmailVerificationEmail from "../utils/sendEmailVerificationEmail";
 
 export const register = async (req: any, res: any) => {
@@ -53,12 +54,22 @@ export const login = async (req: any, res: any) => {
     return res.status(401).json({ message: "Invalid email or password" });
   }
 
+  const refreshToken = generateRefreshToken(user._id.toString());
+  user.validRefreshTokens = user.validRefreshTokens?.concat(refreshToken) || [
+    refreshToken,
+  ];
   const token = generateToken(user._id.toString());
+  await user.save();
 
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    sameSite: "strict",
+    maxAge: 90 * 24 * 60 * 60 * 1000, // 90 days
+  });
   res.cookie("token", token, {
     httpOnly: true,
     sameSite: "strict",
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    maxAge: 6 * 60 * 60 * 1000, // 6 hours
   });
   return res.status(200).json({ message: "Login successful" });
 };
@@ -71,7 +82,7 @@ export const verifyEmail = async (req: any, res: any) => {
     return res.status(400).json({ message: "Invalid email or token" });
   }
   if (user.emailVerified) {
-    return res.status(400).json({ message: "Email already verified" });
+    return res.status(200).json({ message: "Email already verified" });
   }
   if (user.emailToken !== token) {
     return res.status(400).json({ message: "Invalid email or token" });
@@ -80,4 +91,18 @@ export const verifyEmail = async (req: any, res: any) => {
   user.emailVerified = true;
   await user.save();
   return res.status(200).json({ message: "Email verified successfully" });
+};
+
+export const logout = async (req: any, res: any) => {
+  const refreshToken = req.cookies.refreshToken;
+  const user = req.user;
+  if (user && refreshToken) {
+    user.validRefreshTokens = user.validRefreshTokens?.filter(
+      (token: string) => token !== refreshToken
+    );
+    await user.save();
+  }
+  res.clearCookie("token");
+  res.clearCookie("refreshToken");
+  return res.status(200).json({ message: "Logout successful" });
 };

@@ -6,7 +6,9 @@ const generateToken = (id: string) => {
     throw new Error("JWT_SECRET is not defined");
   }
 
-  const token = jwt.sign({ id }, JWT_SECRET, { expiresIn: "30d" });
+  const token = jwt.sign({ id, type: "access" }, JWT_SECRET, {
+    expiresIn: "6h",
+  });
   return token;
 };
 
