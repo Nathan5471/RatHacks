@@ -116,6 +116,74 @@ paths:
                     example: Invalid email or token
                 required:
                   - message
+  /api/auth/resend-verification:
+    post:
+      summary: Resend the verification email
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Resent the verification email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Verification email resent
+                required:
+                  - message
+        400:
+          description: Email is already verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email is already verified
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
+        429:
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You can only request a new verification email every 15 minutes
+                required:
+                  - message
   /api/auth/login:
     post:
       summary: Login a user
@@ -178,6 +246,50 @@ paths:
                     example: Invalid email or password
                 required:
                   - message
+  /api/auth/logout:
+    post:
+      summary: Logout the current user
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: User logged out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout successful
+                required:
+                  - message
+        401:
+          desciption: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
   /api/auth/current-user:
     get:
       summary: Get the currently logged in user
@@ -198,7 +310,7 @@ paths:
                   email:
                     type: string
                     format: email
-                  isEmailVerified:
+                  emailVerified:
                     type: boolean
                   firstName:
                     type: string

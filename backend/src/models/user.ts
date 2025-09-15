@@ -5,6 +5,7 @@ interface UserModel extends mongoose.Document {
   email: string;
   emailToken: string;
   emailVerified: boolean;
+  lastResendEmailRequest?: Date;
   accountType: "student" | "judge" | "organizer";
   password: string;
   firstName: string;
@@ -22,6 +23,7 @@ const userSchema = new mongoose.Schema<UserModel>({
   email: { type: String, required: true, unique: true },
   emailToken: { type: String, required: true },
   emailVerified: { type: Boolean, default: false },
+  lastResendEmailRequest: { type: Date },
   accountType: {
     type: String,
     enum: ["student", "judge", "organizer"],

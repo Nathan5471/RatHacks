@@ -6,7 +6,7 @@ interface AuthContextType {
     | {
         _id: string;
         email: string;
-        isEmailVerified: boolean;
+        emailVerified: boolean;
         firstName: string;
         lastName: string;
         schoolDivision: string;

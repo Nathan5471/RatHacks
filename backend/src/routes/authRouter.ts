@@ -1,8 +1,9 @@
 import express from "express";
 import {
   register,
-  verifyEmail,
   login,
+  verifyEmail,
+  resendVerificationEmail,
   logout,
 } from "../controllers/authController";
 import authenticate from "../middleware/authenticate";
@@ -81,13 +82,34 @@ router.post("/verify-email", async (req: any, res: any) => {
   verifyEmail(req, res);
 });
 
+router.post(
+  "/resend-verification",
+  authenticate,
+  async (req: any, res: any) => {
+    if (req.user.emailVerified) {
+      return res.status(400).json({ message: "Email is already verified" });
+    }
+    const now = new Date();
+    if (
+      req.user.lastResendEmailRequest &&
+      now.getTime() - req.user.lastResendEmailRequest.getTime() < 15 * 60 * 1000
+    ) {
+      return res.status(429).json({
+        message:
+          "You can only request a new verification email every 15 minutes",
+      });
+    }
+    await resendVerificationEmail(req, res);
+  }
+);
+
 router.post("/logout", authenticate, logout);
 
 router.get("/current-user", authenticate, (req: any, res: any) => {
   const user = {
     _id: req.user._id,
     email: req.user.email,
-    isEmailVerified: req.user.isEmailVerified,
+    emailVerified: req.user.emailVerified,
     firstName: req.user.firstName,
     lastName: req.user.lastName,
     schoolDivision: req.user.schoolDivision,

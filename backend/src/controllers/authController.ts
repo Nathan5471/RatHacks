@@ -107,6 +107,25 @@ export const verifyEmail = async (req: any, res: any) => {
   return res.status(200).json({ message: "Email verified successfully" });
 };
 
+export const resendVerificationEmail = async (req: any, res: any) => {
+  const user = req.user;
+  try {
+    await sendEmailVerificationEmail({
+      email: user.email,
+      token: user.emailToken,
+      firstName: user.firstName,
+    });
+    user.lastResendEmailRequest = new Date();
+    await user.save();
+    return res.status(200).json({ message: "Verification email resent" });
+  } catch (error) {
+    console.error("Error resending verification email:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to resend verification email" });
+  }
+};
+
 export const logout = async (req: any, res: any) => {
   const refreshToken = req.cookies.refreshToken;
   const user = req.user;
