@@ -3,6 +3,7 @@ import { useAuth } from "./contexts/AuthContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthenticatedRoute from "./utils/AuthenticatedRoute";
 import Dashboard from "./pages/Dashboard";
+import Settings from "./pages/Settings";
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import ProjectView from "./pages/ProjectView";
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route element={<AuthenticatedRoute />}>
           <Route path="/app" element={<Dashboard />} />
+          <Route path="/app/settings" element={<Settings />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />

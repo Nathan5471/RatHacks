@@ -54,7 +54,7 @@ export default function Dashboard() {
               <span className="text-3xl text-primary-a0">NOT</span> been
               verified
             </h2>
-            <p className="text-center mt-2">
+            <p className="text-center mt-2 text-lg">
               Please check your inbox for a verification email from
               nathan@rathacks.com. If you do not see it, please check your spam
               folder. If you still don't see it, you can request a new one
@@ -72,6 +72,13 @@ export default function Dashboard() {
             </button>
           </div>
         )}
+        <div className="flex flex-col mt-6 p-4 w-2/3 bg-surface-a1 rounded-lg items-center">
+          <h2 className="text-2xl font-bold text-center">Rat Hacks!</h2>
+          <p className="text-center mt-2 text-lg">
+            There will be more information about the next Rat Hacks Hackathon
+            soon! Check back later for more details.
+          </p>
+        </div>
       </div>
     </div>
   );
