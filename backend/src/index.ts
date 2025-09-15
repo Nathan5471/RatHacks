@@ -6,7 +6,6 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRouter";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
-import { createProxyMiddleware } from "http-proxy-middleware";
 
 dotenv.config();
 
@@ -27,10 +26,15 @@ const swaggerDocument = YAML.load("./api-docs.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Frontend
-app.use(
-  "/",
-  createProxyMiddleware({ target: "http://localhost:5173", changeOrigin: true })
-);
+app.use(express.static("public"));
+app.use((req: any, res: any) => {
+  res.sendFile("./public/index.html", { root: "." }, (error: any) => {
+    if (error) {
+      console.error("Error sending index file:", error);
+      res.status(500).send("Page not found");
+    }
+  });
+});
 
 const MONGODB_URL = process.env.MONGODB_URL;
 if (!MONGODB_URL) {

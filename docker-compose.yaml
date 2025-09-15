@@ -1,0 +1,26 @@
+services:
+  rathacks:
+    image: nathan5471/rathacks:latest
+    container_name: rathacks
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URL=mongodb://mongo:27017/rathacks
+      - JWT_SECRET=
+      - FRONTEND_URL=
+      - LOOPS_API_KEY=
+      - LOOPS_EMAIL_VERIFICATION_TEMPLATE_ID=
+    depends_on:
+      - mongo
+    restart: unless-stopped
+  mongo:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
