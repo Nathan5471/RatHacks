@@ -139,3 +139,22 @@ export const logout = async (req: any, res: any) => {
   res.clearCookie("refreshToken");
   return res.status(200).json({ message: "Logout successful" });
 };
+
+export const updateUser = async (req: any, res: any) => {
+  const user = req.user;
+  const { firstName, lastName, schoolDivision, gradeLevel, isGovSchool } =
+    req.body as {
+      firstName: string;
+      lastName: string;
+      schoolDivision: string;
+      gradeLevel: "9" | "10" | "11" | "12";
+      isGovSchool: boolean;
+    };
+  user.firstName = firstName;
+  user.lastName = lastName;
+  user.schoolDivision = schoolDivision;
+  user.gradeLevel = gradeLevel;
+  user.isGovSchool = isGovSchool;
+  await user.save();
+  return res.status(200).json({ message: "User updated successfully" });
+};

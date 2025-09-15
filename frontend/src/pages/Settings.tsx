@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
+import { updateUser } from "../utils/AuthAPIHandler";
 import AppNavbar from "../components/AppNavbar";
 
 export default function Settings() {
@@ -32,9 +34,23 @@ export default function Settings() {
   const [gradeLevel, setGradeLevel] = useState(user?.gradeLevel || "");
   const [isGovSchool, setIsGovSchool] = useState(user?.isGovSchool || false);
 
-  const handleSaveUserInfo = (e: FormEvent) => {
+  const handleSaveUserInfo = async (e: FormEvent) => {
     e.preventDefault();
-    // TODO: Add save logic
+    const finalSchoolDivision =
+      schoolDivision === "other" ? schoolDivisionOther : schoolDivision;
+    try {
+      await updateUser({
+        firstName,
+        lastName,
+        schoolDivision: finalSchoolDivision,
+        gradeLevel: gradeLevel as "9" | "10" | "11" | "12",
+        isGovSchool,
+      });
+      toast.success("User information updated successfully!");
+    } catch (error) {
+      console.error("Failed to update user info:", error);
+      toast.error("Failed to update user information.");
+    }
   };
 
   return (
@@ -164,6 +180,12 @@ export default function Settings() {
           </button>
         </form>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        theme="dark"
+        pauseOnHover={false}
+      />
     </div>
   );
 }

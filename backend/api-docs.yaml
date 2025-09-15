@@ -368,6 +368,86 @@ paths:
                     example: Internal Server Error
                 required:
                   - message
+  /api/auth/update:
+    put:
+      summary: Update the current user's information
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                schoolDivision:
+                  type: string
+                gradeLevel:
+                  type: string
+                  enum: ["9", "10", "11", "12"]
+                isGovSchool:
+                  type: boolean
+              required:
+                - firstName
+                - lastName
+                - schoolDivision
+                - gradeLevel
+                - isGovSchool
+      responses:
+        200:
+          description: User information updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User information updated successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All fields are required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
 
 components:
   securitySchemes:

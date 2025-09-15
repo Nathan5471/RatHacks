@@ -5,6 +5,7 @@ import {
   verifyEmail,
   resendVerificationEmail,
   logout,
+  updateUser,
 } from "../controllers/authController";
 import authenticate from "../middleware/authenticate";
 
@@ -79,7 +80,7 @@ router.post("/verify-email", async (req: any, res: any) => {
   if (!email || !token) {
     return res.status(400).json({ message: "Email and token are required" });
   }
-  verifyEmail(req, res);
+  await verifyEmail(req, res);
 });
 
 router.post(
@@ -117,6 +118,32 @@ router.get("/current-user", authenticate, (req: any, res: any) => {
     isGovSchool: req.user.isGovSchool,
   };
   res.status(200).json(user);
+});
+
+router.put("/update", authenticate, async (req: any, res: any) => {
+  const { firstName, lastName, schoolDivision, gradeLevel, isGovSchool } =
+    req.body as {
+      firstName: string;
+      lastName: string;
+      schoolDivision: string;
+      gradeLevel: "9" | "10" | "11" | "12";
+      isGovSchool: boolean;
+    };
+  if (
+    !firstName ||
+    !lastName ||
+    !schoolDivision ||
+    !gradeLevel ||
+    isGovSchool === undefined
+  ) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+  if (!["9", "10", "11", "12"].includes(gradeLevel)) {
+    return res
+      .status(400)
+      .json({ message: "Grade level must be 9, 10, 11, or 12" });
+  }
+  await updateUser(req, res);
 });
 
 export default router;

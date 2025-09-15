@@ -57,3 +57,14 @@ export const getCurrentUser = async () => {
   const response = await api.get("/current-user");
   return response.data;
 };
+
+export const updateUser = async (userData: {
+  firstName: string;
+  lastName: string;
+  schoolDivision: string;
+  gradeLevel: "9" | "10" | "11" | "12";
+  isGovSchool: boolean;
+}) => {
+  const response = await api.put("/update", userData);
+  return response.data;
+};
