@@ -43,7 +43,7 @@ export default function Settings() {
         firstName,
         lastName,
         schoolDivision: finalSchoolDivision,
-        gradeLevel: gradeLevel as "9" | "10" | "11" | "12",
+        gradeLevel: gradeLevel as "nine" | "ten" | "eleven" | "twelve",
         isGovSchool,
       });
       toast.success("User information updated successfully!");
@@ -138,10 +138,10 @@ export default function Settings() {
             <option value="" disabled>
               Select your grade level
             </option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
+            <option value="nine">9</option>
+            <option value="ten">10</option>
+            <option value="eleven">11</option>
+            <option value="twelve">12</option>
           </select>
           <label htmlFor="isGovSchool" className="text-2xl mt-2">
             Do you attend RVGS?

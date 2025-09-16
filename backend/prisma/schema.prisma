@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -15,10 +14,10 @@ enum AccountType {
 }
 
 enum GradeLevel {
-  nine   @map("9")
-  ten    @map("10")
-  eleven @map("11")
-  twelve @map("12")
+  nine
+  ten
+  eleven
+  twelve
 }
 
 model User {

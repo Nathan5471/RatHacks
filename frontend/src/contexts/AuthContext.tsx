@@ -10,7 +10,7 @@ interface AuthContextType {
         firstName: string;
         lastName: string;
         schoolDivision: string;
-        gradeLevel: 9 | 10 | 11 | 12;
+        gradeLevel: "nine" | "ten" | "eleven" | "twelve";
         isGovSchool: boolean;
       }
     | null

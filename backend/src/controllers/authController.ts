@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import User from "../models/user";
+import prisma from "../prisma/client";
 import generateToken from "../utils/generateToken";
 import generateRefreshToken from "../utils/generateRefreshToken";
 import sendEmailVerificationEmail from "../utils/sendEmailVerificationEmail";
@@ -19,11 +19,13 @@ export const register = async (req: any, res: any) => {
     firstName: string;
     lastName: string;
     schoolDivision: string;
-    gradeLevel: "9" | "10" | "11" | "12";
+    gradeLevel: "nine" | "ten" | "eleven" | "twelve";
     isGovSchool: boolean;
   };
 
-  const existingEmail = await User.findOne({ email });
+  const existingEmail = await prisma.user.findUnique({
+    where: { email },
+  });
   if (existingEmail) {
     return res.status(400).json({ message: "Email already in use" });
   }
@@ -34,21 +36,21 @@ export const register = async (req: any, res: any) => {
     Math.random().toString(36).substring(2, 15) +
     Math.random().toString(36).substring(2, 15);
 
-  const newUser = new User({
-    email,
-    emailToken,
-    emailVerified: false,
-    password: hashedPassword,
-    firstName,
-    lastName,
-    schoolDivision,
-    gradeLevel,
-    isGovSchool,
+  await prisma.user.create({
+    data: {
+      email,
+      emailToken,
+      emailVerified: false,
+      password: hashedPassword,
+      firstName,
+      lastName,
+      schoolDivision,
+      gradeLevel,
+      isGovSchool,
+    },
   });
-
   await sendEmailVerificationEmail({ email, token: emailToken, firstName });
 
-  await newUser.save();
   return res.status(201).json({ message: "User registered successfully" });
 };
 
@@ -58,7 +60,9 @@ export const login = async (req: any, res: any) => {
     password: string;
   };
 
-  const user = await User.findOne({ email });
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
   if (!user) {
     return res.status(401).json({ message: "Invalid email or password" });
   }
@@ -68,12 +72,16 @@ export const login = async (req: any, res: any) => {
     return res.status(401).json({ message: "Invalid email or password" });
   }
 
-  const refreshToken = generateRefreshToken(user._id.toString());
-  user.validRefreshTokens = user.validRefreshTokens?.concat(refreshToken) || [
-    refreshToken,
-  ];
-  const token = generateToken(user._id.toString());
-  await user.save();
+  const refreshToken = generateRefreshToken(user.id.toString());
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      validRefreshTokens: user.validRefreshTokens?.concat(refreshToken) || [
+        refreshToken,
+      ],
+    },
+  });
+  const token = generateToken(user.id.toString());
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -91,7 +99,9 @@ export const login = async (req: any, res: any) => {
 export const verifyEmail = async (req: any, res: any) => {
   const { email, token } = req.query as { email: string; token: string };
 
-  const user = await User.findOne({ email });
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
   if (!user) {
     return res.status(400).json({ message: "Invalid email or token" });
   }
@@ -102,8 +112,12 @@ export const verifyEmail = async (req: any, res: any) => {
     return res.status(400).json({ message: "Invalid email or token" });
   }
 
-  user.emailVerified = true;
-  await user.save();
+  await prisma.user.update({
+    where: { email },
+    data: {
+      emailVerified: true,
+    },
+  });
   return res.status(200).json({ message: "Email verified successfully" });
 };
 
@@ -115,8 +129,12 @@ export const resendVerificationEmail = async (req: any, res: any) => {
       token: user.emailToken,
       firstName: user.firstName,
     });
-    user.lastResendEmailRequest = new Date();
-    await user.save();
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        lastResendEmailRequest: new Date(),
+      },
+    });
     return res.status(200).json({ message: "Verification email resent" });
   } catch (error) {
     console.error("Error resending verification email:", error);
@@ -130,10 +148,14 @@ export const logout = async (req: any, res: any) => {
   const refreshToken = req.cookies.refreshToken;
   const user = req.user;
   if (user && refreshToken) {
-    user.validRefreshTokens = user.validRefreshTokens?.filter(
-      (token: string) => token !== refreshToken
-    );
-    await user.save();
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        validRefreshTokens: user.validRefreshTokens?.filter(
+          (token: string) => token !== refreshToken
+        ),
+      },
+    });
   }
   res.clearCookie("token");
   res.clearCookie("refreshToken");
@@ -147,14 +169,18 @@ export const updateUser = async (req: any, res: any) => {
       firstName: string;
       lastName: string;
       schoolDivision: string;
-      gradeLevel: "9" | "10" | "11" | "12";
+      gradeLevel: "nine" | "ten" | "eleven" | "twelve";
       isGovSchool: boolean;
     };
-  user.firstName = firstName;
-  user.lastName = lastName;
-  user.schoolDivision = schoolDivision;
-  user.gradeLevel = gradeLevel;
-  user.isGovSchool = isGovSchool;
-  await user.save();
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      firstName,
+      lastName,
+      schoolDivision,
+      gradeLevel,
+      isGovSchool,
+    },
+  });
   return res.status(200).json({ message: "User updated successfully" });
 };

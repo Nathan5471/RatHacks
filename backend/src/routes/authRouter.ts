@@ -26,7 +26,7 @@ router.post("/register", async (req: any, res: any) => {
     firstName: string;
     lastName: string;
     schoolDivision: string;
-    gradeLevel: "9" | "10" | "11" | "12";
+    gradeLevel: "nine" | "ten" | "eleven" | "twelve";
     isGovSchool: boolean;
   };
 
@@ -53,10 +53,10 @@ router.post("/register", async (req: any, res: any) => {
         "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)",
     });
   }
-  if (!["9", "10", "11", "12"].includes(gradeLevel)) {
+  if (!["nine", "ten", "eleven", "twelve"].includes(gradeLevel)) {
     return res
       .status(400)
-      .json({ message: "Grade level must be 9, 10, 11, or 12" });
+      .json({ message: "Grade level must be nine, ten, eleven, or twelve" });
   }
   await register(req, res);
 });
@@ -108,7 +108,7 @@ router.post("/logout", authenticate, logout);
 
 router.get("/current-user", authenticate, (req: any, res: any) => {
   const user = {
-    _id: req.user._id,
+    id: req.user.id,
     email: req.user.email,
     emailVerified: req.user.emailVerified,
     firstName: req.user.firstName,
@@ -126,7 +126,7 @@ router.put("/update", authenticate, async (req: any, res: any) => {
       firstName: string;
       lastName: string;
       schoolDivision: string;
-      gradeLevel: "9" | "10" | "11" | "12";
+      gradeLevel: "nine" | "ten" | "eleven" | "twelve";
       isGovSchool: boolean;
     };
   if (
@@ -138,10 +138,10 @@ router.put("/update", authenticate, async (req: any, res: any) => {
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }
-  if (!["9", "10", "11", "12"].includes(gradeLevel)) {
+  if (!["nine", "ten", "eleven", "twelve"].includes(gradeLevel)) {
     return res
       .status(400)
-      .json({ message: "Grade level must be 9, 10, 11, or 12" });
+      .json({ message: "Grade level must be nine, ten, eleven, or twelve" });
   }
   await updateUser(req, res);
 });

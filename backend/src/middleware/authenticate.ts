@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user";
+import prisma from "../prisma/client";
 import generateToken from "../utils/generateToken";
 import generateRefreshToken from "../utils/generateRefreshToken";
 
@@ -22,7 +22,9 @@ const authenticate = async (req: any, res: any, next: any) => {
       res.clearCookie("token");
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const user = await User.findById(decoded.id);
+    const user = await prisma.user.findUnique({
+      where: { id: Number(decoded.id) },
+    });
     if (!user) {
       res.clearCookie("token");
       return res.status(404).json({ message: "User not found" });
@@ -42,7 +44,9 @@ const authenticate = async (req: any, res: any, next: any) => {
           res.clearCookie("refreshToken");
           return res.status(401).json({ message: "Unauthorized" });
         }
-        const user = await User.findById(decoded.id);
+        const user = await prisma.user.findUnique({
+          where: { id: Number(decoded.id) },
+        });
         if (!user) {
           res.clearCookie("refreshToken");
           return res.status(404).json({ message: "User not found" });
@@ -51,12 +55,16 @@ const authenticate = async (req: any, res: any, next: any) => {
           res.clearCookie("refreshToken");
           return res.status(401).json({ message: "Unauthorized" });
         }
-        const newToken = generateToken(user._id.toString());
-        const newRefreshToken = generateRefreshToken(user._id.toString());
-        user.validRefreshTokens = user.validRefreshTokens?.concat(
-          newRefreshToken
-        ) || [newRefreshToken];
-        await user.save();
+        const newToken = generateToken(user.id.toString());
+        const newRefreshToken = generateRefreshToken(user.id.toString());
+        const updatedUser = await prisma.user.update({
+          where: { id: Number(decoded.id) },
+          data: {
+            validRefreshTokens: user.validRefreshTokens?.concat(
+              newRefreshToken
+            ) || [newRefreshToken],
+          },
+        });
         res.cookie("token", newToken, {
           httpOnly: true,
           sameSite: "strict",
@@ -67,7 +75,7 @@ const authenticate = async (req: any, res: any, next: any) => {
           sameSite: "strict",
           maxAge: 90 * 24 * 60 * 60 * 1000, // 90 days
         });
-        req.user = user;
+        req.user = updatedUser;
         return next();
       } catch (error) {
         res.clearCookie("refreshToken");

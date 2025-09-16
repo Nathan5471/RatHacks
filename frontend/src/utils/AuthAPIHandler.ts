@@ -21,7 +21,7 @@ export const register = async (userData: {
   firstName: string;
   lastName: string;
   schoolDivision: string;
-  gradeLevel: "9" | "10" | "11" | "12";
+  gradeLevel: "nine" | "ten" | "eleven" | "twelve";
   isGovSchool: boolean;
 }) => {
   const response = await api.post("/register", userData);
@@ -62,7 +62,7 @@ export const updateUser = async (userData: {
   firstName: string;
   lastName: string;
   schoolDivision: string;
-  gradeLevel: "9" | "10" | "11" | "12";
+  gradeLevel: "nine" | "ten" | "eleven" | "twelve";
   isGovSchool: boolean;
 }) => {
   const response = await api.put("/update", userData);
