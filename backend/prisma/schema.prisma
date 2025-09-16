@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountType {
+  student
+  judge
+  organizer
+}
+
+enum GradeLevel {
+  nine   @map("9")
+  ten    @map("10")
+  eleven @map("11")
+  twelve @map("12")
+}
+
+model User {
+  id                     Int         @id @default(autoincrement())
+  email                  String      @unique
+  emailToken             String
+  emailVerified          Boolean     @default(false)
+  lastResendEmailRequest DateTime?
+  accountType            AccountType @default(student)
+  password               String
+  firstName              String
+  lastName               String
+  schoolDivision         String
+  gradeLevel             GradeLevel
+  isGovSchool            Boolean
+  validRefreshTokens     String[]
+  createdAt              DateTime    @default(now())
+}
