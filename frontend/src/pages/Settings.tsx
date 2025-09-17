@@ -1,12 +1,15 @@
 import { useState } from "react";
-import type { FormEvent } from "react";
+import type { FormEvent, MouseEvent } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
+import { useOverlay } from "../contexts/OverlayContext";
 import { updateUser } from "../utils/AuthAPIHandler";
 import AppNavbar from "../components/AppNavbar";
+import ChangePassword from "../components/ChangePassword";
 
 export default function Settings() {
   const { user } = useAuth();
+  const { openOverlay } = useOverlay();
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
   const schoolDivisions = [
@@ -51,6 +54,11 @@ export default function Settings() {
       console.error("Failed to update user info:", error);
       toast.error("Failed to update user information.");
     }
+  };
+
+  const handleOpenChangePassword = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    openOverlay(<ChangePassword />);
   };
 
   return (
@@ -179,6 +187,20 @@ export default function Settings() {
             Save Changes
           </button>
         </form>
+        <div className="flex flex-col w-1/2 bg-surface-a1 p-4 m-4 rounded-lg">
+          <h3 className="text-2xl mb-4 text-center font-bold text-red-500">
+            Danger Zone
+          </h3>
+          <button
+            className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1"
+            onClick={(e) => handleOpenChangePassword(e)}
+          >
+            Change Password
+          </button>
+          <button className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1">
+            Delete Account
+          </button>
+        </div>
       </div>
       <ToastContainer
         position="top-right"

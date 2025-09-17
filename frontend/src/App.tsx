@@ -10,6 +10,7 @@ import ProjectView from "./pages/ProjectView";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
+import Overlay from "./components/Overlay";
 
 function App() {
   const { user, getUser } = useAuth();
@@ -33,6 +34,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
       </Routes>
+      <Overlay />
     </Router>
   );
 }
