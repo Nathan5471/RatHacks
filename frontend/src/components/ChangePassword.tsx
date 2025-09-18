@@ -90,6 +90,21 @@ export default function ChangePassword() {
             )}
           </button>
         </div>
+        <div className="flex flex-row w-full">
+          <button
+            type="submit"
+            className="mt-4 bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full"
+          >
+            Change Password
+          </button>
+          <button
+            type="button"
+            onClick={closeOverlay}
+            className="mt-4 ml-2 bg-surface-a1 hover:bg-surface-a2 p-2 rounded-lg w-full"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

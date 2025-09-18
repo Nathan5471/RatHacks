@@ -6,6 +6,7 @@ import { useOverlay } from "../contexts/OverlayContext";
 import { updateUser } from "../utils/AuthAPIHandler";
 import AppNavbar from "../components/AppNavbar";
 import ChangePassword from "../components/ChangePassword";
+import DeleteAccount from "../components/DeleteAccount";
 
 export default function Settings() {
   const { user } = useAuth();
@@ -59,6 +60,11 @@ export default function Settings() {
   const handleOpenChangePassword = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<ChangePassword />);
+  };
+
+  const handleOpenDeleteAccount = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    openOverlay(<DeleteAccount />);
   };
 
   return (
@@ -197,7 +203,10 @@ export default function Settings() {
           >
             Change Password
           </button>
-          <button className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1">
+          <button
+            className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1"
+            onClick={(e) => handleOpenDeleteAccount(e)}
+          >
             Delete Account
           </button>
         </div>
