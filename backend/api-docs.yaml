@@ -35,8 +35,8 @@ paths:
                 homeSchool:
                   type: string
                 gradeLevel:
-                  type: integer
-                  enum: [9, 10, 11, 12]
+                  type: string
+                  enum: ["nine", "ten", "eleven", "twelve"]
                 isGovSchool:
                   type: boolean
               required:
@@ -319,8 +319,8 @@ paths:
                   schoolDivision:
                     type: string
                   gradeLevel:
-                    type: integer
-                    enum: [9, 10, 11, 12]
+                    type: string
+                    enum: ["nine", "ten", "eleven", "twelve"]
                   isGovSchool:
                     type: boolean
                 required:
@@ -390,7 +390,7 @@ paths:
                   type: string
                 gradeLevel:
                   type: string
-                  enum: ["9", "10", "11", "12"]
+                  enum: ["nine", "ten", "eleven", "twelve"]
                 isGovSchool:
                   type: boolean
               required:
