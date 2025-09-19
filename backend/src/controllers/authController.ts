@@ -184,3 +184,32 @@ export const updateUser = async (req: any, res: any) => {
   });
   return res.status(200).json({ message: "User updated successfully" });
 };
+
+export const updatePassword = async (req: any, res: any) => {
+  const user = req.user;
+  const { newPassword } = req.body as {
+    newPassword: string;
+  };
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      password: hashedPassword,
+      validRefreshTokens: [],
+    },
+  });
+
+  res.status(200).json({ message: "Password updated successfully" });
+};
+
+export const deleteUser = async (req: any, res: any) => {
+  const user = req.user;
+
+  await prisma.user.delete({
+    where: { id: user.id },
+  });
+  res.clearCookie("token");
+  res.clearCookie("refreshToken");
+  return res.status(200).json({ message: "User deleted successfully" });
+};

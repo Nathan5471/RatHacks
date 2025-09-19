@@ -68,3 +68,15 @@ export const updateUser = async (userData: {
   const response = await api.put("/update", userData);
   return response.data;
 };
+
+export const updatePassword = async (newPassword: string) => {
+  const response = await api.put("/update-password", {
+    newPassword,
+  });
+  return response.data;
+};
+
+export const deleteUser = async () => {
+  const response = await api.delete("/delete");
+  return response.data;
+};

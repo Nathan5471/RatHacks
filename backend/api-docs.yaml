@@ -448,6 +448,119 @@ paths:
                     example: User not found
                 required:
                   - message
+  /api/auth/update-password:
+    put:
+      summary: Update the current user's password
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newPassword:
+                  type: string
+                  minLength: 8
+                  pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,16}$'
+              required:
+                - newPassword
+      responses:
+        200:
+          description: Password updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: password updated successfully
+                required:
+                  - message
+          400:
+            description: Bad request
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: New password is required
+                  required:
+                    - message
+          401:
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  proeprties:
+                    message:
+                      type: string
+                      example: Unauthorized'
+                  required:
+                    - message
+          404:
+            description: User not found
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: User not found
+                  required:
+                    - message
+  /api/auth/delete:
+    delete:
+      summary: Delete the current user's account
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: User account deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User account deleted successfully
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mesasge:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
 
 components:
   securitySchemes:

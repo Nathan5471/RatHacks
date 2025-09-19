@@ -6,6 +6,8 @@ import {
   resendVerificationEmail,
   logout,
   updateUser,
+  updatePassword,
+  deleteUser,
 } from "../controllers/authController";
 import authenticate from "../middleware/authenticate";
 
@@ -145,5 +147,31 @@ router.put("/update", authenticate, async (req: any, res: any) => {
   }
   await updateUser(req, res);
 });
+
+router.put("/update-password", authenticate, async (req: any, res: any) => {
+  const { newPassword } = req.body as {
+    newPassword: string;
+  };
+
+  if (!newPassword) {
+    return res.status(400).json({ message: "New password is required" });
+  }
+  if (
+    newPassword.length < 8 ||
+    !/[a-z]/.test(newPassword) ||
+    !/[A-Z]/.test(newPassword) ||
+    !/[0-9]/.test(newPassword) ||
+    !/[!@#$%^&*]/.test(newPassword)
+  ) {
+    return res.status(400).json({
+      message:
+        "New password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)",
+    });
+  }
+
+  await updatePassword(req, res);
+});
+
+router.delete("/delete", authenticate, deleteUser);
 
 export default router;

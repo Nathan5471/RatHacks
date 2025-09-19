@@ -1,45 +1,43 @@
 import { useState } from "react";
 import { useOverlay } from "../contexts/OverlayContext";
+import { updatePassword } from "../utils/AuthAPIHandler";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
 export default function ChangePassword() {
   const { closeOverlay } = useOverlay();
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (newPassword !== confirmNewPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    try {
+      await updatePassword(newPassword);
+      closeOverlay();
+    } catch (error: unknown) {
+      console.error("Change password error:", error);
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unknown error occurred";
+      setError(errorMessage);
+    }
+  };
 
   return (
     <div className="flex flex-col w-80">
       <h1 className="text-2xl font-bold text-center">Change Password</h1>
-      <form className="flex flex-col">
-        <label htmlFor="password" className="text-2xl mt-2">
-          Current Password
-        </label>
-        <div className="flex flex-row w-full mt-1">
-          <input
-            type={showPassword ? "text" : "password"}
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="p-2 rounded-lg text-lg bg-surface-a1 w-full"
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="ml-2 bg-surface-a1 rounded-lg hover:bg-surface-a2 p-2"
-          >
-            {showPassword ? (
-              <IoEyeOff className="text-xl" />
-            ) : (
-              <IoEye className="text-xl" />
-            )}
-          </button>
-        </div>
+      <form className="flex flex-col" onSubmit={handleUpdatePassword}>
         <label htmlFor="newPassword" className="text-2xl mt-2">
           New Password
         </label>
@@ -90,6 +88,7 @@ export default function ChangePassword() {
             )}
           </button>
         </div>
+        {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
         <div className="flex flex-row w-full">
           <button
             type="submit"

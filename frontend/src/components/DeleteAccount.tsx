@@ -1,51 +1,41 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useOverlay } from "../contexts/OverlayContext";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import { deleteUser } from "../utils/AuthAPIHandler";
 
 export default function DeleteAccount() {
   const { closeOverlay } = useOverlay();
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
 
-  const preventEnterSubmit = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
+  const handleDeleteUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await deleteUser();
+      closeOverlay();
+      navigate("/");
+    } catch (error: unknown) {
+      console.error("Delete account error:", error);
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unknown error occurred";
+      setError(errorMessage);
     }
   };
 
   return (
     <div className="flex flex-col w-80">
       <h1 className="text-2xl font-bold text-center">Delete Account</h1>
-      <form className="flex flex-col" onKeyDown={preventEnterSubmit}>
+      <form className="flex flex-col" onSubmit={handleDeleteUser}>
         <p className="text-lg mt-2 text-center text-red-500 font-bold">
           Are you sure you want to delete your account? This action is permanent
           and can't be undone.
         </p>
-        <label htmlFor="password" className="text-2xl mt-2">
-          Password
-        </label>
-        <div className="flex flex-row w-full mt-1">
-          <input
-            type={showPassword ? "text" : "password"}
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="p-2 rounded-lg text-lg bg-surface-a1 w-full"
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="ml-2 bg-surface-a1 rounded-lg hover:bg-surface-a2 p-2"
-          >
-            {showPassword ? (
-              <IoEyeOff className="text-xl" />
-            ) : (
-              <IoEye className="text-xl" />
-            )}
-          </button>
-        </div>
+        {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
         <div className="flex flex-row w-full mt-2">
           <button
             type="submit"
