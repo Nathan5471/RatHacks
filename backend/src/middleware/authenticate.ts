@@ -29,6 +29,10 @@ const authenticate = async (req: any, res: any, next: any) => {
       res.clearCookie("token");
       return res.status(404).json({ message: "User not found" });
     }
+    if (!user.validAccessTokens?.includes(token)) {
+      res.clearCookie("token");
+      throw new Error("Token not valid");
+    }
     req.user = user;
     next();
   } catch (error) {
@@ -60,6 +64,9 @@ const authenticate = async (req: any, res: any, next: any) => {
         const updatedUser = await prisma.user.update({
           where: { id: Number(decoded.id) },
           data: {
+            validAccessTokens: user.validAccessTokens?.concat(newToken) || [
+              newToken,
+            ],
             validRefreshTokens: user.validRefreshTokens?.concat(
               newRefreshToken
             ) || [newRefreshToken],

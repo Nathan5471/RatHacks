@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useOverlay } from "../contexts/OverlayContext";
 import { updateUser } from "../utils/AuthAPIHandler";
 import AppNavbar from "../components/AppNavbar";
+import LogoutAllDevices from "../components/LogoutAllDevices";
 import ChangePassword from "../components/ChangePassword";
 import DeleteAccount from "../components/DeleteAccount";
 
@@ -55,6 +56,11 @@ export default function Settings() {
       console.error("Failed to update user info:", error);
       toast.error("Failed to update user information.");
     }
+  };
+
+  const handleOpenLogoutAll = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    openOverlay(<LogoutAllDevices />);
   };
 
   const handleOpenChangePassword = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -197,6 +203,12 @@ export default function Settings() {
           <h3 className="text-2xl mb-4 text-center font-bold text-red-500">
             Danger Zone
           </h3>
+          <button
+            className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1"
+            onClick={(e) => handleOpenLogoutAll(e)}
+          >
+            Logout All Devices
+          </button>
           <button
             className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1"
             onClick={(e) => handleOpenChangePassword(e)}

@@ -53,6 +53,11 @@ export const logoutUser = async () => {
   return response.data;
 };
 
+export const logoutAll = async () => {
+  const response = await api.post("/logout-all");
+  return response.data;
+};
+
 export const getCurrentUser = async () => {
   const response = await api.get("/current-user");
   return response.data;

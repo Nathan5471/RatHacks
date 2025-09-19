@@ -5,6 +5,7 @@ import {
   verifyEmail,
   resendVerificationEmail,
   logout,
+  logoutAll,
   updateUser,
   updatePassword,
   deleteUser,
@@ -107,6 +108,8 @@ router.post(
 );
 
 router.post("/logout", authenticate, logout);
+
+router.post("/logout-all", authenticate, logoutAll);
 
 router.get("/current-user", authenticate, (req: any, res: any) => {
   const user = {

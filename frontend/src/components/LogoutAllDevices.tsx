@@ -1,24 +1,24 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { logoutAll } from "../utils/AuthAPIHandler";
 import { useOverlay } from "../contexts/OverlayContext";
 import { useAuth } from "../contexts/AuthContext";
-import { deleteUser } from "../utils/AuthAPIHandler";
 
-export default function DeleteAccount() {
+export default function LogoutAllDevices() {
   const { closeOverlay } = useOverlay();
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
-  const handleDeleteUser = async (e: React.FormEvent) => {
+  const handleLogoutAll = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await deleteUser();
+      await logoutAll();
       logout();
       closeOverlay();
       navigate("/");
     } catch (error: unknown) {
-      console.error("Delete account error:", error);
+      console.error("Logout all devices error:", error);
       const errorMessage =
         typeof error === "object" &&
         error !== null &&
@@ -32,23 +32,26 @@ export default function DeleteAccount() {
 
   return (
     <div className="flex flex-col w-80">
-      <h1 className="text-2xl font-bold text-center">Delete Account</h1>
-      <form className="flex flex-col" onSubmit={handleDeleteUser}>
-        <p className="text-lg mt-2 text-center text-red-500 font-bold">
-          Are you sure you want to delete your account? This action is permanent
-          and can't be undone.
+      <h1 className="text-2xl font-bold text-center">Logout All Devices</h1>
+      <form className="flex flex-col" onSubmit={handleLogoutAll}>
+        <p className="text-center mt-4">
+          Are you sure you want to logout from all devices?
         </p>
-        {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
-        <div className="flex flex-row w-full mt-2">
+        {error && (
+          <p className="text-lg mt-2 text-center text-red-500 font-bold">
+            {error}
+          </p>
+        )}
+        <div className="flex flex-row w-full mt-4">
           <button
             type="submit"
-            className="bg-red-500 hover:bg-red-600 p-2 rounded-lg w-full"
+            className="bg-red-500 hover:bg-red-600 font-bold p-2 rounded-lg w-full"
           >
-            Delete Account
+            Logout All
           </button>
           <button
             type="button"
-            className="bg-surface-a1 hover:bg-surface-a2 p-2 rounded-lg ml-2 w-full"
+            className="bg-surface-a1 hover:bg-surface-a2 font-bold p-2 rounded-lg w-full ml-2"
             onClick={closeOverlay}
           >
             Cancel

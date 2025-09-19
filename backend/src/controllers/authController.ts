@@ -72,16 +72,17 @@ export const login = async (req: any, res: any) => {
     return res.status(401).json({ message: "Invalid email or password" });
   }
 
+  const token = generateToken(user.id.toString());
   const refreshToken = generateRefreshToken(user.id.toString());
   await prisma.user.update({
     where: { id: user.id },
     data: {
+      validAccessTokens: user.validAccessTokens?.concat(token) || [token],
       validRefreshTokens: user.validRefreshTokens?.concat(refreshToken) || [
         refreshToken,
       ],
     },
   });
-  const token = generateToken(user.id.toString());
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
@@ -145,12 +146,16 @@ export const resendVerificationEmail = async (req: any, res: any) => {
 };
 
 export const logout = async (req: any, res: any) => {
+  const accessToken = req.cookies.token;
   const refreshToken = req.cookies.refreshToken;
   const user = req.user;
   if (user && refreshToken) {
     await prisma.user.update({
       where: { id: user.id },
       data: {
+        validAccessTokens: user.validAccessTokens?.filter(
+          (token: string) => token !== accessToken
+        ),
         validRefreshTokens: user.validRefreshTokens?.filter(
           (token: string) => token !== refreshToken
         ),
@@ -160,6 +165,20 @@ export const logout = async (req: any, res: any) => {
   res.clearCookie("token");
   res.clearCookie("refreshToken");
   return res.status(200).json({ message: "Logout successful" });
+};
+
+export const logoutAll = async (req: any, res: any) => {
+  const user = req.user;
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      validAccessTokens: [],
+      validRefreshTokens: [],
+    },
+  });
+  res.clearCookie("token");
+  res.clearCookie("refreshToken");
+  return res.status(200).json({ message: "Logged out from all devices" });
 };
 
 export const updateUser = async (req: any, res: any) => {
@@ -196,6 +215,7 @@ export const updatePassword = async (req: any, res: any) => {
     where: { id: user.id },
     data: {
       password: hashedPassword,
+      validAccessTokens: [],
       validRefreshTokens: [],
     },
   });

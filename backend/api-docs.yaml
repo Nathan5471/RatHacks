@@ -290,6 +290,50 @@ paths:
                     example: User not found
                 required:
                   - message
+  /api/auth/logout-all:
+    post:
+      summary: Logout the current user from all devices
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: User logged out from all devices successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout from all devices
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
   /api/auth/current-user:
     get:
       summary: Get the currently logged in user
