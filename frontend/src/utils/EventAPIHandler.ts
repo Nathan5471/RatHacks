@@ -18,6 +18,7 @@ api.interceptors.response.use(
 export const createEvent = async (eventData: {
   name: string;
   description: string;
+  location: string;
   startDate: string;
   endDate: string;
   submissionDeadline: string;

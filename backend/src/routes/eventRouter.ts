@@ -9,19 +9,33 @@ import authenticate from "../middleware/authenticate";
 const router = express.Router();
 
 router.post("/create", authenticate, async (req: any, res: any) => {
-  const { name, description, startDate, endDate, submissionDeadline } =
-    req.body as {
-      name: string;
-      description: string;
-      startDate: string;
-      endDate: string;
-      submissionDeadline: string;
-    };
+  const {
+    name,
+    description,
+    location,
+    startDate,
+    endDate,
+    submissionDeadline,
+  } = req.body as {
+    name: string;
+    description: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    submissionDeadline: string;
+  };
 
-  if (!name || !description || !startDate || !endDate || !submissionDeadline) {
+  if (
+    !name ||
+    !description ||
+    !location ||
+    !startDate ||
+    !endDate ||
+    !submissionDeadline
+  ) {
     return res.status(400).json({
       message:
-        "Name, description, start date, end date, and submission deadline are required",
+        "Name, description, location, start date, end date, and submission deadline are required",
     });
   }
   const now = new Date();
@@ -36,7 +50,10 @@ router.post("/create", authenticate, async (req: any, res: any) => {
   ) {
     return res
       .status(400)
-      .json({ message: "End date and submission deadline must be after " });
+      .json({
+        message:
+          "End date and submission deadline must be after the start date",
+      });
   }
 
   await createEvent(req, res);

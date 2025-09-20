@@ -45,6 +45,7 @@ model Event {
   id                 String   @id @default(uuid())
   name               String
   description        String
+  location           String
   startDate          DateTime
   endDate            DateTime
   submissionDeadline DateTime

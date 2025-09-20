@@ -24,6 +24,7 @@ export default function OrganizerEvents() {
     id: string;
     name: string;
     description: string;
+    location: string;
     startDate: Date;
     endDate: Date;
     submissionDeadline: Date;
@@ -43,6 +44,7 @@ export default function OrganizerEvents() {
           id: string;
           name: string;
           description: string;
+          location: string;
           startDate: string;
           endDate: string;
           submissionDeadline: string;
@@ -54,6 +56,7 @@ export default function OrganizerEvents() {
           id: event.id,
           name: event.name,
           description: event.description,
+          location: event.location,
           startDate: new Date(event.startDate),
           endDate: new Date(event.endDate),
           submissionDeadline: new Date(event.submissionDeadline),
@@ -189,6 +192,7 @@ export default function OrganizerEvents() {
                   </div>
                 </div>
                 <div className="flex flex-col w-1/3 ml-2">
+                  <span className="font-bold">Location:</span> {event.location}
                   <span className="font-bold">Start Date:</span>{" "}
                   {formatDate(event.startDate, "EEEE, MMMM d yyyy hh:mm a")}
                   <span className="font-bold">End Date:</span>{" "}

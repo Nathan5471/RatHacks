@@ -633,6 +633,8 @@ paths:
                   type: string
                 description:
                   type: string
+                location:
+                  type: string
                 startDate:
                   type: string
                   format: date-time
@@ -645,6 +647,7 @@ paths:
               required:
                 - name
                 - description
+                - location
                 - startDate
                 - endDate
                 - submissionDeadline
@@ -674,7 +677,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Name, description, start date, end date, and submission deadline are required
+                    example: Name, description, location, start date, end date, and submission deadline are required
                 required:
                   - message
         401:
@@ -739,6 +742,8 @@ paths:
                           type: string
                         description:
                           type: string
+                        location:
+                          type: string
                         startDate:
                           type: string
                           format: date-time
@@ -755,6 +760,7 @@ paths:
                         - id
                         - name
                         - description
+                        - location
                         - startDate
                         - endDate
                         - submissionDeadline
@@ -815,6 +821,8 @@ paths:
                         name:
                           type: string
                         description:
+                          type: string
+                        location:
                           type: string
                         startDate:
                           type: string
@@ -883,7 +891,8 @@ paths:
                       required:
                         - id
                         - name
-                        - desciption
+                        - description
+                        - location
                         - startDate
                         - endDate
                         - submissionDeadline

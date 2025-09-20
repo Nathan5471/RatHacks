@@ -8,6 +8,7 @@ export default function CreateEvent() {
   const { closeOverlay } = useOverlay();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [submissionDeadline, setSubmissionDeadline] = useState("");
@@ -20,6 +21,7 @@ export default function CreateEvent() {
       const response = await createEvent({
         name,
         description,
+        location,
         startDate,
         endDate,
         submissionDeadline,
@@ -62,6 +64,18 @@ export default function CreateEvent() {
           name="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
+          required
+        />
+        <label htmlFor="location" className="text-2xl mt-2">
+          Location
+        </label>
+        <input
+          type="text"
+          id="location"
+          name="location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
           className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
           required
         />

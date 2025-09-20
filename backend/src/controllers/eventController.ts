@@ -2,14 +2,21 @@ import { User } from "@prisma/client";
 import prisma from "../prisma/client";
 
 export const createEvent = async (req: any, res: any) => {
-  const { name, description, startDate, endDate, submissionDeadline } =
-    req.body as {
-      name: string;
-      description: string;
-      startDate: string;
-      endDate: string;
-      submissionDeadline: string;
-    };
+  const {
+    name,
+    description,
+    location,
+    startDate,
+    endDate,
+    submissionDeadline,
+  } = req.body as {
+    name: string;
+    description: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    submissionDeadline: string;
+  };
   const user = req.user as User;
 
   if (user.accountType !== "organizer") {
@@ -20,6 +27,7 @@ export const createEvent = async (req: any, res: any) => {
     data: {
       name,
       description,
+      location,
       startDate: new Date(startDate),
       endDate: new Date(endDate),
       submissionDeadline: new Date(submissionDeadline),
@@ -36,6 +44,7 @@ export const getAllEvents = async (req: any, res: any) => {
     id: event.id,
     name: event.name,
     description: event.description,
+    location: event.location,
     startDate: event.startDate,
     endDate: event.endDate,
     submissionDeadline: event.submissionDeadline,
@@ -79,6 +88,7 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
         id: event.id,
         name: event.name,
         description: event.description,
+        location: event.location,
         startDate: event.startDate,
         endDate: event.endDate,
         submissionDeadline: event.submissionDeadline,
