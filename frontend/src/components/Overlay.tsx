@@ -11,7 +11,7 @@ export default function Overlay() {
       onClick={closeOverlay}
     >
       <div
-        className="bg-surface-a0 p-6 rounded-lg text-white"
+        className="bg-surface-a1 p-6 rounded-lg text-white max-h-11/12 overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {overlayContent}

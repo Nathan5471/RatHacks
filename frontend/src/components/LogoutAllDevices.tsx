@@ -51,7 +51,7 @@ export default function LogoutAllDevices() {
           </button>
           <button
             type="button"
-            className="bg-surface-a1 hover:bg-surface-a2 font-bold p-2 rounded-lg w-full ml-2"
+            className="bg-surface-a2 hover:bg-surface-a3 font-bold p-2 rounded-lg w-full ml-2"
             onClick={closeOverlay}
           >
             Cancel

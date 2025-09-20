@@ -48,7 +48,7 @@ export default function DeleteAccount() {
           </button>
           <button
             type="button"
-            className="bg-surface-a1 hover:bg-surface-a2 p-2 rounded-lg ml-2 w-full"
+            className="bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg ml-2 w-full"
             onClick={closeOverlay}
           >
             Cancel

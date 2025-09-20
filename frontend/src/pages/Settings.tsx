@@ -58,17 +58,17 @@ export default function Settings() {
     }
   };
 
-  const handleOpenLogoutAll = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleOpenLogoutAll = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<LogoutAllDevices />);
   };
 
-  const handleOpenChangePassword = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleOpenChangePassword = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<ChangePassword />);
   };
 
-  const handleOpenDeleteAccount = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleOpenDeleteAccount = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<DeleteAccount />);
   };

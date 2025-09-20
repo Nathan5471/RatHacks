@@ -3,7 +3,7 @@ import prisma from "../prisma/client";
 
 export const createEvent = async (req: any, res: any) => {
   const { name, description, startDate, endDate, submissionDeadline } =
-    req.bobdy as {
+    req.body as {
       name: string;
       description: string;
       startDate: string;

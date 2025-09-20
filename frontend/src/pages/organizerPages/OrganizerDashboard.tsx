@@ -1,4 +1,4 @@
-import OrganizerNavbar from "../components/OrganizerNavbar";
+import OrganizerNavbar from "../../components/OrganizerNavbar";
 
 export default function OrganizerDashboard() {
   return (

@@ -48,13 +48,13 @@ export default function ChangePassword() {
             name="newPassword"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="p-2 rounded-lg text-lg bg-surface-a1 w-full"
+            className="p-2 rounded-lg text-lg bg-surface-a2 w-full"
             required
           />
           <button
             type="button"
             onClick={() => setShowNewPassword(!showNewPassword)}
-            className="ml-2 bg-surface-a1 rounded-lg hover:bg-surface-a2 p-2"
+            className="ml-2 bg-surface-a2 rounded-lg hover:bg-surface-a3 p-2"
           >
             {showNewPassword ? (
               <IoEyeOff className="text-lg" />
@@ -73,13 +73,13 @@ export default function ChangePassword() {
             name="confirmNewPassword"
             value={confirmNewPassword}
             onChange={(e) => setConfirmNewPassword(e.target.value)}
-            className="p-2 rounded-lg text-lg bg-surface-a1 w-full"
+            className="p-2 rounded-lg text-lg bg-surface-a2 w-full"
             required
           />
           <button
             type="button"
             onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
-            className="ml-2 bg-surface-a1 rounded-lg hover:bg-surface-a2 p-2"
+            className="ml-2 bg-surface-a2 rounded-lg hover:bg-surface-a3 p-2"
           >
             {showConfirmNewPassword ? (
               <IoEyeOff className="text-lg" />
@@ -99,7 +99,7 @@ export default function ChangePassword() {
           <button
             type="button"
             onClick={closeOverlay}
-            className="mt-4 ml-2 bg-surface-a1 hover:bg-surface-a2 p-2 rounded-lg w-full"
+            className="mt-4 ml-2 bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg w-full"
           >
             Cancel
           </button>

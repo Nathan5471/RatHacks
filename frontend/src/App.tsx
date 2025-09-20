@@ -5,7 +5,8 @@ import AuthenticatedRoute from "./utils/AuthenticatedRoute";
 import OrganizerRoute from "./utils/OrganizerRoute";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
-import OrganizerDashboard from "./pages/OrganizerDashboard";
+import OrganizerDashboard from "./pages/organizerPages/OrganizerDashboard";
+import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import ProjectView from "./pages/ProjectView";
@@ -31,6 +32,7 @@ function App() {
         </Route>
         <Route element={<OrganizerRoute />}>
           <Route path="/app/organizer" element={<OrganizerDashboard />} />
+          <Route path="/app/organizer/events" element={<OrganizerEvents />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />
