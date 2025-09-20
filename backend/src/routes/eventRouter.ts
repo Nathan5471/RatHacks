@@ -1,5 +1,9 @@
 import express from "express";
-import { createEvent } from "../controllers/eventController";
+import {
+  createEvent,
+  getAllEvents,
+  organizerGetAllEvents,
+} from "../controllers/eventController";
 import authenticate from "../middleware/authenticate";
 
 const router = express.Router();
@@ -37,5 +41,9 @@ router.post("/create", authenticate, async (req: any, res: any) => {
 
   await createEvent(req, res);
 });
+
+router.get("/all", authenticate, getAllEvents);
+
+router.get("/organizerAll", authenticate, organizerGetAllEvents);
 
 export default router;

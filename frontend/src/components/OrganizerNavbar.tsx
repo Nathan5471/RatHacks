@@ -18,7 +18,7 @@ export default function OrganizerNavbar() {
       </Link>
       <Link
         to="/app/organizer/users"
-        className={`p-3 mt-4 m-2 rounded-lg text-xl text-center font-bold ${
+        className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/organizer/users" ? "text-primary-a1" : "text-white"
         } bg-surface-a2 hover:bg-surface-a3 hover:text-primary-a1`}
       >
@@ -26,7 +26,7 @@ export default function OrganizerNavbar() {
       </Link>
       <Link
         to="/app/organizer/events"
-        className={`p-3 mt-4 m-2 rounded-lg text-xl text-center font-bold ${
+        className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/organizer/events" ? "text-primary-a1" : "text-white"
         } bg-surface-a2 hover:bg-surface-a3 hover:text-primary-a1`}
       >

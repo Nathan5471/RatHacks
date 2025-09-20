@@ -61,7 +61,7 @@ paths:
                 required:
                   - message
         400:
-          description: Bad requestBody
+          description: Bad request
           content:
             application/json:
               schema:
@@ -349,8 +349,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  _id:
+                  id:
                     type: string
+                    format: uuid
                   email:
                     type: string
                     format: email
@@ -375,7 +376,7 @@ paths:
                     items:
                       type: string
                 required:
-                  - _id
+                  - id
                   - email
                   - isEmailVerified
                   - accountType
@@ -660,6 +661,7 @@ paths:
                     example: Event created successfully
                   id:
                     type: string
+                    format: uuid
                 required:
                   - message
                   - id
@@ -707,6 +709,217 @@ paths:
                   message:
                     type: string
                     example: User not Found
+  /api/event/all:
+    get:
+      summary: Get all events
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Events successfully fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Events loaded successfully
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        startDate:
+                          type: string
+                          format: date-time
+                        endDate:
+                          type: string
+                          format: date-time
+                        submissionDeadline:
+                          type: string
+                          format: date-time
+                        participantCount:
+                          type: number
+                          min: 0
+                      required:
+                        - id
+                        - name
+                        - description
+                        - startDate
+                        - endDate
+                        - submissionDeadline
+                        - participantCount
+                required:
+                  - message
+                  - events
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - mesasge
+  /api/event/organizerAll:
+    get:
+      summary: Organizer's get all events with more data
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          desciption: Events fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Events loaded successfully
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        startDate:
+                          type: string
+                          format: date-time
+                        endDate:
+                          type: string
+                          format: date-time
+                        submissionDeadline:
+                          type: string
+                          format: date-time
+                        participants:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                              email:
+                                type: string
+                                format: email
+                              emailVerified:
+                                type: boolean
+                              accountType:
+                                type: string
+                                enum: ["student", "organizer", "judge"]
+                              firstName:
+                                type: string
+                              lastName:
+                                type: string
+                              schoolDivision:
+                                type: string
+                              gradeLevel:
+                                type: string
+                                enum:
+                                  [
+                                    "nine",
+                                    "ten",
+                                    "eleven",
+                                    "twelve",
+                                    "organizer",
+                                    "judge",
+                                  ]
+                              isGovSchool:
+                                type: boolean
+                              createdAt:
+                                type: string
+                                format: date-time
+                            required:
+                              - id
+                              - email
+                              - emailVerified
+                              - accountType
+                              - firstName
+                              - lastName
+                              - schoolDivision
+                              - gradeLevel
+                              - isGovSchool
+                              - createdAt
+                        createdBy:
+                          type: string
+                          format: uuid
+                        createdAt:
+                          type: string
+                          format: date-time
+                      required:
+                        - id
+                        - name
+                        - desciption
+                        - startDate
+                        - endDate
+                        - submissionDeadline
+                        - participants
+                        - createdBy
+                        - createdAt
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        404:
+          description: User not found
+          contetn:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
 
 components:
   securitySchemes:
