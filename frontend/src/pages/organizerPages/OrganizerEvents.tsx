@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useOverlay } from "../../contexts/OverlayContext";
 import { organizerGetAllEvents } from "../../utils/EventAPIHandler";
+import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CreateEvent from "../../components/CreateEvent";
 
@@ -48,7 +50,7 @@ export default function OrganizerEvents() {
           createdBy: string;
           createdAt: string;
         }
-        const datedEvents = fetchedEvents.map((event: FetchedEvent) => ({
+        const datedEvents = fetchedEvents.events.map((event: FetchedEvent) => ({
           id: event.id,
           name: event.name,
           description: event.description,
@@ -108,6 +110,40 @@ export default function OrganizerEvents() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
+        <div className="w-1/6 h-full">
+          <OrganizerNavbar />
+        </div>
+        <div className="w-5/6 h-full flex flex-col items-center">
+          <div className="grid grid-cols-3 w-full h-[calc(10%)] p-2">
+            <div />
+            <div className="flex items-center justify-center text-center">
+              <h1 className="text-4xl font-bold">Events</h1>
+            </div>
+            <div className="flex items-center">
+              <button
+                className="ml-auto p-2 rounded-lg text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+                onClick={handleOpenCreateEvent}
+              >
+                Add Event
+              </button>
+            </div>
+          </div>
+          <div className="w-full h-full flex flex-col">
+            <div className="flex flex-col bg-surface-a1 mx-16 my-6 p-4 rounded-lg">
+              <h2 className="text-4xl text-center">
+                An error occured while fetching the events:
+              </h2>
+              <p className="text-2xl text-red-500 mt-2">{error}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
       <div className="w-1/6 h-full">
@@ -133,7 +169,37 @@ export default function OrganizerEvents() {
         ) : (
           <div className="w-full h-full flex flex-col">
             {events.map((event) => (
-              <div className="bg-surface-a1"></div> // TODO: Finish adding events
+              <div className="flex flex-row bg-surface-a1 mx-16 mt-6 p-4 rounded-lg ">
+                <div className="flex flex-col w-2/3">
+                  <h2 className="text-3xl">{event.name}</h2>
+                  <p>{event.description}</p>
+                  <div className="flex flex-row w-full mt-auto">
+                    <Link
+                      to={`/app/organizer/event/${event.id}`}
+                      className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center w-full"
+                    >
+                      Open
+                    </Link>
+                    <button className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full">
+                      Edit
+                    </button>
+                    <button className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                <div className="flex flex-col w-1/3 ml-2">
+                  <span className="font-bold">Start Date:</span>{" "}
+                  {formatDate(event.startDate, "EEEE, MMMM d yyyy hh:mm a")}
+                  <span className="font-bold">End Date:</span>{" "}
+                  {formatDate(event.endDate, "EEEE, MMMM d yyyy hh:mm a")}
+                  <span className="font-bold">Submission Deadline:</span>{" "}
+                  {formatDate(
+                    event.submissionDeadline,
+                    "EEEE, MMMM d yyyy hh:mm a"
+                  )}
+                </div>
+              </div>
             ))}
           </div>
         )}

@@ -42,13 +42,13 @@ export default function DeleteAccount() {
         <div className="flex flex-row w-full mt-2">
           <button
             type="submit"
-            className="bg-red-500 hover:bg-red-600 p-2 rounded-lg w-full"
+            className="bg-red-500 hover:bg-red-600 p-2 rounded-lg w-full font-bold"
           >
             Delete Account
           </button>
           <button
             type="button"
-            className="bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg ml-2 w-full"
+            className="bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg ml-2 w-full font-bold"
             onClick={closeOverlay}
           >
             Cancel

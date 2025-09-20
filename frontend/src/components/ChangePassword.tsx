@@ -92,14 +92,14 @@ export default function ChangePassword() {
         <div className="flex flex-row w-full">
           <button
             type="submit"
-            className="mt-4 bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full"
+            className="mt-4 bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full font-bold"
           >
             Change Password
           </button>
           <button
             type="button"
             onClick={closeOverlay}
-            className="mt-4 ml-2 bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg w-full"
+            className="mt-4 ml-2 bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg w-full font-bold"
           >
             Cancel
           </button>

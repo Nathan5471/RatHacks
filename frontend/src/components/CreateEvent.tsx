@@ -105,14 +105,14 @@ export default function CreateEvent() {
         <div className="w-full flex flex-row mt-4">
           <button
             type="submit"
-            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full"
+            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full font-bold"
           >
             Create
           </button>
           <button
             type="button"
             onClick={closeOverlay}
-            className="bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg ml-2 w-full"
+            className="bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg ml-2 w-full font-bold"
           >
             Close
           </button>
