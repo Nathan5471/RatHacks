@@ -38,6 +38,16 @@ export default function AppNavbar() {
       >
         Settings
       </Link>
+      {user?.accountType === "organizer" && (
+        <Link
+          to="/app/organizer"
+          className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
+            path === "/app/organizer" ? "text-primary-a1" : "text-white"
+          } bg-surface-a2 hover:bg-surface-a3 hover:text-primary-a1`}
+        >
+          Organizer
+        </Link>
+      )}
       <button
         className="mt-auto p-3 m-2 rounded-lg text-xl text-center font-bold text-white bg-surface-a2 hover:bg-surface-a3 hover:text-primary-a1"
         onClick={() => handleLogout()}

@@ -23,7 +23,7 @@ export const createEvent = async (req: any, res: any) => {
       startDate: new Date(startDate),
       endDate: new Date(endDate),
       submissionDeadline: new Date(submissionDeadline),
-      participants: {},
+      participants: [],
       createdBy: user.id,
     },
   });

@@ -356,6 +356,9 @@ paths:
                     format: email
                   emailVerified:
                     type: boolean
+                  accountType:
+                    type: string
+                    enum: ["student", "organizer", "judge"]
                   firstName:
                     type: string
                   lastName:
@@ -367,15 +370,21 @@ paths:
                     enum: ["nine", "ten", "eleven", "twelve"]
                   isGovSchool:
                     type: boolean
+                  events:
+                    type: array
+                    items:
+                      type: string
                 required:
                   - _id
                   - email
                   - isEmailVerified
+                  - accountType
                   - firstName
                   - lastName
                   - schoolDivision
                   - gradeLevel
                   - isGovSchool
+                  - events
         401:
           description: Unauthorized
           content:

@@ -11,6 +11,7 @@ import {
   deleteUser,
 } from "../controllers/authController";
 import authenticate from "../middleware/authenticate";
+import { User } from "@prisma/client";
 
 const router = express.Router();
 
@@ -112,15 +113,18 @@ router.post("/logout", authenticate, logout);
 router.post("/logout-all", authenticate, logoutAll);
 
 router.get("/current-user", authenticate, (req: any, res: any) => {
+  const reqUser = req.user as User;
   const user = {
-    id: req.user.id,
-    email: req.user.email,
-    emailVerified: req.user.emailVerified,
-    firstName: req.user.firstName,
-    lastName: req.user.lastName,
-    schoolDivision: req.user.schoolDivision,
-    gradeLevel: req.user.gradeLevel,
-    isGovSchool: req.user.isGovSchool,
+    id: reqUser.id,
+    email: reqUser.email,
+    emailVerified: reqUser.emailVerified,
+    accountType: reqUser.accountType,
+    firstName: reqUser.firstName,
+    lastName: reqUser.lastName,
+    schoolDivision: reqUser.schoolDivision,
+    gradeLevel: reqUser.gradeLevel,
+    isGovSchool: reqUser.isGovSchool,
+    events: reqUser.events,
   };
   res.status(200).json(user);
 });

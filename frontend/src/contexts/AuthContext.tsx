@@ -7,11 +7,13 @@ interface AuthContextType {
         _id: string;
         email: string;
         emailVerified: boolean;
+        accountType: "student" | "organizer" | "judge";
         firstName: string;
         lastName: string;
         schoolDivision: string;
         gradeLevel: "nine" | "ten" | "eleven" | "twelve";
         isGovSchool: boolean;
+        events: string[];
       }
     | null
     | undefined;

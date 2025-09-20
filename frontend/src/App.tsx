@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import { useAuth } from "./contexts/AuthContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthenticatedRoute from "./utils/AuthenticatedRoute";
+import OrganizerRoute from "./utils/OrganizerRoute";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
+import OrganizerDashboard from "./pages/OrganizerDashboard";
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import ProjectView from "./pages/ProjectView";
@@ -26,6 +28,9 @@ function App() {
         <Route element={<AuthenticatedRoute />}>
           <Route path="/app" element={<Dashboard />} />
           <Route path="/app/settings" element={<Settings />} />
+        </Route>
+        <Route element={<OrganizerRoute />}>
+          <Route path="/app/organizer" element={<OrganizerDashboard />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />

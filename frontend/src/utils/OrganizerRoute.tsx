@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-const AuthenticatedRoute: React.FC = () => {
+const OrganizerRoute: React.FC = () => {
   const { user } = useAuth();
 
   if (user === undefined) {
@@ -9,8 +9,11 @@ const AuthenticatedRoute: React.FC = () => {
   }
   if (!user) {
     return <Navigate to="/login" />;
+  } else if (user.accountType !== "organizer") {
+    return <Navigate to="/app" />;
+  } else {
+    return <Outlet />;
   }
-  return <Outlet />;
 };
 
-export default AuthenticatedRoute;
+export default OrganizerRoute;

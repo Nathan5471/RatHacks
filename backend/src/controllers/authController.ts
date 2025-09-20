@@ -47,6 +47,9 @@ export const register = async (req: any, res: any) => {
       schoolDivision,
       gradeLevel,
       isGovSchool,
+      events: [],
+      validAccessTokens: [],
+      validRefreshTokens: [],
     },
   });
   await sendEmailVerificationEmail({ email, token: emailToken, firstName });

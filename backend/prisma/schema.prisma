@@ -35,7 +35,7 @@ model User {
   schoolDivision         String
   gradeLevel             GradeLevel
   isGovSchool            Boolean
-  events                 Event[]     @relation("Participant")
+  events                 String[] // Event Ids
   validAccessTokens      String[]
   validRefreshTokens     String[]
   createdAt              DateTime    @default(now())
@@ -48,7 +48,7 @@ model Event {
   startDate          DateTime
   endDate            DateTime
   submissionDeadline DateTime
-  participants       User[]   @relation("Participant")
+  participants       String[] // User Ids
   createdBy          String // Organizer Id
   createdAt          DateTime @default(now())
 }
