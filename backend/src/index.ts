@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRouter";
+import eventRouter from "./routes/eventRouter";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 // API Routes
 app.use("/api/auth", authRouter);
+app.use("/api/event", eventRouter);
 
 // SwaggerUI Docs
 const swaggerDocument = YAML.load("./api-docs.yaml");

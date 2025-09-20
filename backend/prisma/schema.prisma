@@ -18,10 +18,12 @@ enum GradeLevel {
   ten
   eleven
   twelve
+  organizer
+  judge
 }
 
 model User {
-  id                     Int         @id @default(autoincrement())
+  id                     String      @id @default(uuid())
   email                  String      @unique
   emailToken             String
   emailVerified          Boolean     @default(false)
@@ -33,7 +35,20 @@ model User {
   schoolDivision         String
   gradeLevel             GradeLevel
   isGovSchool            Boolean
+  events                 Event[]     @relation("Participant")
   validAccessTokens      String[]
   validRefreshTokens     String[]
   createdAt              DateTime    @default(now())
+}
+
+model Event {
+  id                 String   @id @default(uuid())
+  name               String
+  description        String
+  startDate          DateTime
+  endDate            DateTime
+  submissionDeadline DateTime
+  participants       User[]   @relation("Participant")
+  createdBy          String // Organizer Id
+  createdAt          DateTime @default(now())
 }

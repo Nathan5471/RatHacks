@@ -23,7 +23,7 @@ const authenticate = async (req: any, res: any, next: any) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
     const user = await prisma.user.findUnique({
-      where: { id: Number(decoded.id) },
+      where: { id: decoded.id },
     });
     if (!user) {
       res.clearCookie("token");
@@ -49,7 +49,7 @@ const authenticate = async (req: any, res: any, next: any) => {
           return res.status(401).json({ message: "Unauthorized" });
         }
         const user = await prisma.user.findUnique({
-          where: { id: Number(decoded.id) },
+          where: { id: decoded.id },
         });
         if (!user) {
           res.clearCookie("refreshToken");
@@ -62,7 +62,7 @@ const authenticate = async (req: any, res: any, next: any) => {
         const newToken = generateToken(user.id.toString());
         const newRefreshToken = generateRefreshToken(user.id.toString());
         const updatedUser = await prisma.user.update({
-          where: { id: Number(decoded.id) },
+          where: { id: decoded.id },
           data: {
             validAccessTokens: user.validAccessTokens?.concat(newToken) || [
               newToken,
