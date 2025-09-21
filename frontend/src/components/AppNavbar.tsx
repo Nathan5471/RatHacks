@@ -31,6 +31,14 @@ export default function AppNavbar() {
         Dashboard
       </Link>
       <Link
+        to="/app/events"
+        className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
+          path === "/app/events" ? "text-primary-a1" : "text-white"
+        } bg-surface-a2 hover:bg-surface-a3 hover:text-primary-a1`}
+      >
+        Events
+      </Link>
+      <Link
         to="/app/settings"
         className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/settings" ? "text-primary-a1" : "text-white"
