@@ -1029,7 +1029,7 @@ paths:
   /api/event/get/{eventId}:
     get:
       summary: Get event by id
-      tag:
+      tags:
         - Events
       security:
         - cookieAUth: []
@@ -1121,7 +1121,7 @@ paths:
   /api/event/organizer/{eventId}:
     get:
       summary: Organizer's get event by id with more data
-      tag:
+      tags:
         - Events
       security:
         - cookieAuth: []
@@ -1262,6 +1262,71 @@ paths:
                     example: Unauthorized
         404:
           description: Event or User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event not found
+  /api/event/delete/{eventId}:
+    delete:
+      summary: Delete an event
+      tags:
+        - Event
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Event deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event deleted successfully
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event ID is required
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        404:
+          description: Event or user not found
           content:
             application/json:
               schema:

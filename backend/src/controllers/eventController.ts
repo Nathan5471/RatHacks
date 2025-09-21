@@ -222,3 +222,23 @@ export const organizerGetEventById = async (req: any, res: any) => {
     .status(200)
     .json({ message: "Event loaded successfully", event: userFilledEvent });
 };
+
+export const deleteEvent = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  const event = await prisma.event.findUnique({
+    where: { id },
+  });
+  if (!event) {
+    return res.status(404).json({ message: "Event not found" });
+  }
+  await prisma.event.delete({
+    where: { id },
+  });
+  return res.status(200).json({ message: "Event deleted successfully" });
+};

@@ -6,6 +6,7 @@ import {
   organizerGetAllEvents,
   getEventById,
   organizerGetEventById,
+  deleteEvent,
 } from "../controllers/eventController";
 import authenticate from "../middleware/authenticate";
 
@@ -131,6 +132,16 @@ router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
   }
 
   await organizerGetEventById(req, res);
+});
+
+router.delete("/delete/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Event ID is required" });
+  }
+
+  await deleteEvent(req, res);
 });
 
 export default router;

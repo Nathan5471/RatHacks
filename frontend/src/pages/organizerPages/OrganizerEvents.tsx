@@ -6,6 +6,7 @@ import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CreateEvent from "../../components/CreateEvent";
 import EditEvent from "../../components/EditEvent";
+import DeleteEvent from "../../components/DeleteEvent";
 
 export default function OrganizerEvents() {
   const { openOverlay } = useOverlay();
@@ -94,6 +95,22 @@ export default function OrganizerEvents() {
   ) => {
     e.preventDefault();
     openOverlay(<EditEvent eventId={eventId} setReload={setReload} />);
+  };
+
+  const handleOpenDeleteEvent = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    eventId: string,
+    eventName: string
+  ) => {
+    e.preventDefault();
+    openOverlay(
+      <DeleteEvent
+        eventId={eventId}
+        eventName={eventName}
+        currentPage="events"
+        setReload={setReload}
+      />
+    );
   };
 
   if (loading) {
@@ -199,7 +216,12 @@ export default function OrganizerEvents() {
                     >
                       Edit
                     </button>
-                    <button className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full">
+                    <button
+                      className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
+                      onClick={(e) =>
+                        handleOpenDeleteEvent(e, event.id, event.name)
+                      }
+                    >
                       Delete
                     </button>
                   </div>

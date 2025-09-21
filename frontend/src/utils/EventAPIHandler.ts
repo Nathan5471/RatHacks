@@ -61,3 +61,8 @@ export const organizerGetEventById = async (eventId: string) => {
   const response = await api.get(`/organizer/${eventId}`);
   return response.data;
 };
+
+export const deleteEvent = async (eventId: string) => {
+  const response = await api.delete(`/delete/${eventId}`);
+  return response.data;
+};
