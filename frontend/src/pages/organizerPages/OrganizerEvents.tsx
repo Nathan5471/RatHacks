@@ -199,7 +199,10 @@ export default function OrganizerEvents() {
         ) : (
           <div className="w-full h-full flex flex-col">
             {events.map((event) => (
-              <div className="flex flex-row bg-surface-a1 mx-16 mt-6 p-4 rounded-lg ">
+              <div
+                key={event.id}
+                className="flex flex-row bg-surface-a1 mx-16 mt-6 p-4 rounded-lg "
+              >
                 <div className="flex flex-col w-2/3">
                   <h2 className="text-3xl">{event.name}</h2>
                   <p>{event.description}</p>

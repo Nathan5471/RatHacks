@@ -27,6 +27,16 @@ export const createEvent = async (eventData: {
   return response.data;
 };
 
+export const joinEvent = async (eventId: string) => {
+  const response = await api.post(`/join/${eventId}`);
+  return response.data;
+};
+
+export const leaveEvent = async (eventId: string) => {
+  const response = await api.post(`/leave/${eventId}`);
+  return response.data;
+};
+
 export const updateEvent = async (
   id: string,
   eventData: {

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthenticatedRoute from "./utils/AuthenticatedRoute";
 import OrganizerRoute from "./utils/OrganizerRoute";
 import Dashboard from "./pages/Dashboard";
+import Events from "./pages/Events";
 import Settings from "./pages/Settings";
 import OrganizerDashboard from "./pages/organizerPages/OrganizerDashboard";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
@@ -28,6 +29,7 @@ function App() {
       <Routes>
         <Route element={<AuthenticatedRoute />}>
           <Route path="/app" element={<Dashboard />} />
+          <Route path="/app/events" element={<Events />} />
           <Route path="/app/settings" element={<Settings />} />
         </Route>
         <Route element={<OrganizerRoute />}>
