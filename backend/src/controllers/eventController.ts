@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { AccountType, User } from "@prisma/client";
 import prisma from "../prisma/client";
 
 export const createEvent = async (req: any, res: any) => {
@@ -101,4 +101,81 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
   res
     .status(200)
     .json({ message: "Events loaded successfully", events: userFilledEvents });
+};
+
+export const getEventById = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  const event = await prisma.event.findUnique({
+    where: { id },
+  });
+  if (!event) {
+    return res.status(404).json({ message: "Event not found" });
+  }
+
+  res.status(200).json({
+    message: "Event loaded successfully",
+    event: {
+      id: event.id,
+      name: event.name,
+      description: event.description,
+      location: event.location,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      submissionDeadline: event.submissionDeadline,
+      participantCount: event.participants.length,
+    },
+  });
+};
+
+export const organizerGetEventById = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  const event = await prisma.event.findUnique({
+    where: { id },
+  });
+  if (!event) {
+    return res.status(404).json({ message: "Event not found" });
+  }
+  const populatedParticipants = await Promise.all(
+    event.participants.map(async (user) => {
+      const userData = await prisma.user.findUnique({
+        where: { id: user },
+      });
+      return userData;
+    })
+  );
+  const filteredUsers = populatedParticipants.filter((user) => user !== null);
+  const removedUneccesaryFieldsUsers = filteredUsers.map((user) => ({
+    id: user.id,
+    email: user.email,
+    emailVerfied: user.emailVerified,
+    AccountType: user.accountType,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    schoolDivision: user.schoolDivision,
+    gradeLevel: user.gradeLevel,
+    isGovSchool: user.isGovSchool,
+    createdAt: user.createdAt,
+  }));
+  const userFilledEvent = {
+    id: event.id,
+    name: event.name,
+    description: event.description,
+    location: event.location,
+    startDate: event.startDate,
+    endDate: event.endDate,
+    submissionDeadline: event.submissionDeadline,
+    participants: removedUneccesaryFieldsUsers,
+    createdBy: event.createdBy,
+    createdAt: event.createdAt,
+  };
+  res
+    .status(200)
+    .json({ message: "Event loaded successfully", event: userFilledEvent });
 };

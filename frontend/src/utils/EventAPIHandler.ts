@@ -33,6 +33,16 @@ export const getAllEvents = async () => {
 };
 
 export const organizerGetAllEvents = async () => {
-  const response = await api.get("/organizerAll");
+  const response = await api.get("/organizer-all");
+  return response.data;
+};
+
+export const getEventById = async (eventId: string) => {
+  const response = await api.get(`/get/${eventId}`);
+  return response.data;
+};
+
+export const organizerGetEventById = async (eventId: string) => {
+  const response = await api.get(`/organizer/${eventId}`);
   return response.data;
 };

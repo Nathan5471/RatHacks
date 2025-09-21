@@ -3,6 +3,8 @@ import {
   createEvent,
   getAllEvents,
   organizerGetAllEvents,
+  getEventById,
+  organizerGetEventById,
 } from "../controllers/eventController";
 import authenticate from "../middleware/authenticate";
 
@@ -48,12 +50,9 @@ router.post("/create", authenticate, async (req: any, res: any) => {
     new Date(startDate).getTime() > new Date(endDate).getTime() ||
     new Date(startDate).getTime() > new Date(submissionDeadline).getTime()
   ) {
-    return res
-      .status(400)
-      .json({
-        message:
-          "End date and submission deadline must be after the start date",
-      });
+    return res.status(400).json({
+      message: "End date and submission deadline must be after the start date",
+    });
   }
 
   await createEvent(req, res);
@@ -61,6 +60,26 @@ router.post("/create", authenticate, async (req: any, res: any) => {
 
 router.get("/all", authenticate, getAllEvents);
 
-router.get("/organizerAll", authenticate, organizerGetAllEvents);
+router.get("/organizer-all", authenticate, organizerGetAllEvents);
+
+router.get("/get/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Event ID is required" });
+  }
+
+  await getEventById(req, res);
+});
+
+router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Event ID is required" });
+  }
+
+  await organizerGetEventById(req, res);
+});
 
 export default router;
