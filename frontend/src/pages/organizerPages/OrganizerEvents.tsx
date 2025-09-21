@@ -5,9 +5,11 @@ import { organizerGetAllEvents } from "../../utils/EventAPIHandler";
 import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CreateEvent from "../../components/CreateEvent";
+import EditEvent from "../../components/EditEvent";
 
 export default function OrganizerEvents() {
   const { openOverlay } = useOverlay();
+  const [reload, setReload] = useState(false);
   interface Participant {
     id: string;
     email: string;
@@ -79,11 +81,19 @@ export default function OrganizerEvents() {
       }
     };
     fetchEvents();
-  }, []);
+  }, [reload]);
 
   const handleOpenCreateEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<CreateEvent />);
+  };
+
+  const handleOpenEditEvent = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    eventId: string
+  ) => {
+    e.preventDefault();
+    openOverlay(<EditEvent eventId={eventId} setReload={setReload} />);
   };
 
   if (loading) {
@@ -183,7 +193,10 @@ export default function OrganizerEvents() {
                     >
                       Open
                     </Link>
-                    <button className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full">
+                    <button
+                      className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
+                      onClick={(e) => handleOpenEditEvent(e, event.id)}
+                    >
                       Edit
                     </button>
                     <button className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full">
@@ -194,13 +207,13 @@ export default function OrganizerEvents() {
                 <div className="flex flex-col w-1/3 ml-2">
                   <span className="font-bold">Location:</span> {event.location}
                   <span className="font-bold">Start Date:</span>{" "}
-                  {formatDate(event.startDate, "EEEE, MMMM d yyyy hh:mm a")}
+                  {formatDate(event.startDate, "EEEE, MMMM d yyyy h:mm a")}
                   <span className="font-bold">End Date:</span>{" "}
-                  {formatDate(event.endDate, "EEEE, MMMM d yyyy hh:mm a")}
+                  {formatDate(event.endDate, "EEEE, MMMM d yyyy h:mm a")}
                   <span className="font-bold">Submission Deadline:</span>{" "}
                   {formatDate(
                     event.submissionDeadline,
-                    "EEEE, MMMM d yyyy hh:mm a"
+                    "EEEE, MMMM d yyyy h:mm a"
                   )}
                 </div>
               </div>

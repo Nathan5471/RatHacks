@@ -5,7 +5,8 @@ import generateRefreshToken from "../utils/generateRefreshToken";
 
 const authenticate = async (req: any, res: any, next: any) => {
   const token = req.cookies.token;
-  if (!token) {
+  const refreshToken = req.cookies.refreshToken;
+  if (!token && !refreshToken) {
     return res.status(401).json({ message: "Unauthorized" });
   }
   const JWT_SECRET = process.env.JWT_SECRET;
@@ -14,6 +15,9 @@ const authenticate = async (req: any, res: any, next: any) => {
     return res.status(500).json({ message: "Internal server error" });
   }
   try {
+    if (!token) {
+      throw new Error("No token found");
+    }
     const decoded = jwt.verify(token, JWT_SECRET) as {
       id: string;
       type: string;

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createEvent,
+  updateEvent,
   getAllEvents,
   organizerGetAllEvents,
   getEventById,
@@ -58,7 +59,7 @@ router.post("/create", authenticate, async (req: any, res: any) => {
   await createEvent(req, res);
 });
 
-router.put("/update/{id}", authenticate, (req: any, res: any) => {
+router.put("/update/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };
   const {
     name,
@@ -105,7 +106,7 @@ router.put("/update/{id}", authenticate, (req: any, res: any) => {
     });
   }
 
-  // TODO: Add updating events
+  await updateEvent(req, res);
 });
 
 router.get("/all", authenticate, getAllEvents);

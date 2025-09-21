@@ -1,10 +1,14 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useOverlay } from "../contexts/OverlayContext";
-import { createEvent } from "../utils/EventAPIHandler";
+import { organizerGetEventById, updateEvent } from "../utils/EventAPIHandler";
 
-export default function CreateEvent() {
-  const navigate = useNavigate();
+export default function EditEvent({
+  eventId,
+  setReload,
+}: {
+  eventId: string;
+  setReload: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { closeOverlay } = useOverlay();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -12,13 +16,57 @@ export default function CreateEvent() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [submissionDeadline, setSubmissionDeadline] = useState("");
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const handleCreateEvent = async (e: React.FormEvent) => {
+  const formatDateForInput = (dateString: string) => {
+    const date = new Date(dateString);
+    const offset = date.getTimezoneOffset();
+    const localDate = new Date(date.getTime() - offset * 60000);
+    return localDate.toISOString().slice(0, 16);
+  };
+
+  useEffect(() => {
+    const fetchEventData = async () => {
+      setError("");
+      try {
+        interface EventData {
+          name: string;
+          description: string;
+          location: string;
+          startDate: string;
+          endDate: string;
+          submissionDeadline: string;
+        }
+        const response = await organizerGetEventById(eventId);
+        const event = response.event as EventData;
+        setName(event.name);
+        setDescription(event.description);
+        setLocation(event.location);
+        setStartDate(formatDateForInput(event.startDate));
+        setEndDate(formatDateForInput(event.endDate));
+        setSubmissionDeadline(formatDateForInput(event.submissionDeadline));
+      } catch (error: unknown) {
+        const errorMessage =
+          typeof error === "object" &&
+          error !== null &&
+          "message" in error &&
+          typeof error.message === "string"
+            ? error.message
+            : "An unknown error occured";
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEventData();
+  }, [eventId]);
+
+  const handleUpdateEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     try {
-      const response = await createEvent({
+      await updateEvent(eventId, {
         name,
         description,
         location,
@@ -26,8 +74,8 @@ export default function CreateEvent() {
         endDate,
         submissionDeadline,
       });
+      setReload((prev) => !prev);
       closeOverlay();
-      navigate(`/app/organizer/event/${response.id}`);
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" &&
@@ -40,10 +88,19 @@ export default function CreateEvent() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex flex-col w-100">
+        <h1 className="text-2xl font-bold text-center">Edit Event</h1>
+        <p>Loading data...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col w-100">
-      <h1 className="text-2xl font-bold text-center">Create Event</h1>
-      <form className="flex flex-col" onSubmit={handleCreateEvent}>
+      <h1 className="text-2xl font-bold text-center">Edit Event</h1>
+      <form className="flex flex-col" onSubmit={handleUpdateEvent}>
         <label htmlFor="name" className="text-2xl mt-2">
           Event Name
         </label>
@@ -112,7 +169,7 @@ export default function CreateEvent() {
           name="submissionDeadline"
           value={submissionDeadline}
           onChange={(e) => setSubmissionDeadline(e.target.value)}
-          className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
+          className="p-2 roudned-lg text-lg bg-surface-a2 w-full mt-1"
           required
         />
         {error && <p className="text-red-500 text-lg mt-2">{error}</p>}
@@ -121,12 +178,12 @@ export default function CreateEvent() {
             type="submit"
             className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full font-bold"
           >
-            Create
+            Update
           </button>
           <button
             type="button"
             onClick={closeOverlay}
-            className="bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg ml-2 w-full font-bold"
+            className="bg-surface-a2 hover:bg-surface-a2 p-2 rounded-lg ml-2 w-full font-bold"
           >
             Cancel
           </button>
