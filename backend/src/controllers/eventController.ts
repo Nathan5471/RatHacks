@@ -38,6 +38,49 @@ export const createEvent = async (req: any, res: any) => {
   res.status(201).json({ message: "Event created successfully", id: event.id });
 };
 
+export const updateEvent = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const {
+    name,
+    description,
+    location,
+    startDate,
+    endDate,
+    submissionDeadline,
+  } = req.body as {
+    name: string;
+    description: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    submissionDeadline: string;
+  };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  const event = await prisma.event.findUnique({
+    where: { id },
+  });
+  if (!event) {
+    return res.status(404).json({ message: "Event not found" });
+  }
+  await prisma.event.update({
+    where: { id },
+    data: {
+      name,
+      description,
+      location,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      submissionDeadline: new Date(submissionDeadline),
+    },
+  });
+  res.status(200).json({ message: "Event updated successfully" });
+};
+
 export const getAllEvents = async (req: any, res: any) => {
   const allEvents = await prisma.event.findMany();
   const events = allEvents.map((event) => ({
