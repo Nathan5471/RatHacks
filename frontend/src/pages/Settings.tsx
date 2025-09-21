@@ -1,16 +1,17 @@
 import { useState } from "react";
-import type { FormEvent, MouseEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useOverlay } from "../contexts/OverlayContext";
-import { updateUser } from "../utils/AuthAPIHandler";
+import { updateUser, logoutUser } from "../utils/AuthAPIHandler";
 import AppNavbar from "../components/AppNavbar";
 import LogoutAllDevices from "../components/LogoutAllDevices";
 import ChangePassword from "../components/ChangePassword";
 import DeleteAccount from "../components/DeleteAccount";
 
 export default function Settings() {
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const { openOverlay } = useOverlay();
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
@@ -39,7 +40,7 @@ export default function Settings() {
   const [gradeLevel, setGradeLevel] = useState(user?.gradeLevel || "");
   const [isGovSchool, setIsGovSchool] = useState(user?.isGovSchool || false);
 
-  const handleSaveUserInfo = async (e: FormEvent) => {
+  const handleSaveUserInfo = async (e: React.FormEvent) => {
     e.preventDefault();
     const finalSchoolDivision =
       schoolDivision === "other" ? schoolDivisionOther : schoolDivision;
@@ -58,17 +59,28 @@ export default function Settings() {
     }
   };
 
-  const handleOpenLogoutAll = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      await logoutUser();
+    } catch (error) {
+      console.error("Failed to logout:", error);
+    }
+    logout();
+    navigate("/");
+  };
+
+  const handleOpenLogoutAll = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<LogoutAllDevices />);
   };
 
-  const handleOpenChangePassword = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleOpenChangePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<ChangePassword />);
   };
 
-  const handleOpenDeleteAccount = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleOpenDeleteAccount = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<DeleteAccount />);
   };
@@ -205,19 +217,25 @@ export default function Settings() {
           </h3>
           <button
             className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1"
-            onClick={(e) => handleOpenLogoutAll(e)}
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+          <button
+            className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1"
+            onClick={handleOpenLogoutAll}
           >
             Logout All Devices
           </button>
           <button
             className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1"
-            onClick={(e) => handleOpenChangePassword(e)}
+            onClick={handleOpenChangePassword}
           >
             Change Password
           </button>
           <button
             className="p-2 rounded-lg text-lg bg-red-500 hover:bg-red-600 mt-1"
-            onClick={(e) => handleOpenDeleteAccount(e)}
+            onClick={handleOpenDeleteAccount}
           >
             Delete Account
           </button>

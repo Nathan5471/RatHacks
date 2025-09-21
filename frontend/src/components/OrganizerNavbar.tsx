@@ -11,22 +11,22 @@ export default function OrganizerNavbar() {
       <Link
         to="/app/organizer"
         className={`p-3 mt-4 m-2 rounded-lg text-xl text-center font-bold ${
-          path === "/app/organizer" ? "text-primary-a1" : "text-white"
-        } bg-surface-a2 hover:bg-surface-a3 hover:text-primary-a1`}
+          path === "/app/organizer" ? "text-primary-a1" : ""
+        } bg-surface-a2 hover:bg-surface-a3`}
       >
         Dashboard
       </Link>
       <Link
         to="/app/organizer/events"
         className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
-          path === "/app/organizer/events" ? "text-primary-a1" : "text-white"
-        } bg-surface-a2 hover:bg-surface-a3 hover:text-primary-a1`}
+          path === "/app/organizer/events" ? "text-primary-a1" : ""
+        } bg-surface-a2 hover:bg-surface-a3`}
       >
         Events
       </Link>
       <Link
         to="/app"
-        className="mt-auto p-3 m-2 rounded-lg text-xl text-center font-bold text-white bg-surface-a2 hover:bg-surface-a3 hover:text-primary-a1"
+        className="mt-auto p-3 m-2 rounded-lg text-xl text-center font-bold text-white bg-surface-a2 hover:bg-surface-a3"
       >
         Back to app
       </Link>
