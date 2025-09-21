@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import prisma from "../prisma/client";
+import { User } from "@prisma/client";
 import generateToken from "../utils/generateToken";
 import generateRefreshToken from "../utils/generateRefreshToken";
 import sendEmailVerificationEmail from "../utils/sendEmailVerificationEmail";
@@ -126,7 +127,7 @@ export const verifyEmail = async (req: any, res: any) => {
 };
 
 export const resendVerificationEmail = async (req: any, res: any) => {
-  const user = req.user;
+  const user = req.user as User;
   try {
     await sendEmailVerificationEmail({
       email: user.email,
@@ -149,9 +150,9 @@ export const resendVerificationEmail = async (req: any, res: any) => {
 };
 
 export const logout = async (req: any, res: any) => {
-  const accessToken = req.cookies.token;
-  const refreshToken = req.cookies.refreshToken;
-  const user = req.user;
+  const accessToken = req.cookies.token as string;
+  const refreshToken = req.cookies.refreshToken as string;
+  const user = req.user as User;
   if (user && refreshToken) {
     await prisma.user.update({
       where: { id: user.id },
@@ -171,7 +172,7 @@ export const logout = async (req: any, res: any) => {
 };
 
 export const logoutAll = async (req: any, res: any) => {
-  const user = req.user;
+  const user = req.user as User;
   await prisma.user.update({
     where: { id: user.id },
     data: {
@@ -185,7 +186,7 @@ export const logoutAll = async (req: any, res: any) => {
 };
 
 export const updateUser = async (req: any, res: any) => {
-  const user = req.user;
+  const user = req.user as User;
   const { firstName, lastName, schoolDivision, gradeLevel, isGovSchool } =
     req.body as {
       firstName: string;
@@ -208,7 +209,7 @@ export const updateUser = async (req: any, res: any) => {
 };
 
 export const updatePassword = async (req: any, res: any) => {
-  const user = req.user;
+  const user = req.user as User;
   const { newPassword } = req.body as {
     newPassword: string;
   };
@@ -227,8 +228,22 @@ export const updatePassword = async (req: any, res: any) => {
 };
 
 export const deleteUser = async (req: any, res: any) => {
-  const user = req.user;
+  const user = req.user as User;
 
+  await user.events.forEach(async (eventId) => {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+    });
+    if (!event) {
+      return;
+    }
+    await prisma.event.update({
+      where: { id: eventId },
+      data: {
+        participants: event.participants.filter((userId) => userId !== user.id),
+      },
+    });
+  });
   await prisma.user.delete({
     where: { id: user.id },
   });

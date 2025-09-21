@@ -1,6 +1,8 @@
 import express from "express";
 import {
   createEvent,
+  joinEvent,
+  leaveEvent,
   updateEvent,
   getAllEvents,
   organizerGetAllEvents,
@@ -58,6 +60,26 @@ router.post("/create", authenticate, async (req: any, res: any) => {
   }
 
   await createEvent(req, res);
+});
+
+router.post("/join/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Event ID is required" });
+  }
+
+  await joinEvent(req, res);
+});
+
+router.post("/leave/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Event ID is requried" });
+  }
+
+  await leaveEvent(req, res);
 });
 
 router.put("/update/:id", authenticate, async (req: any, res: any) => {

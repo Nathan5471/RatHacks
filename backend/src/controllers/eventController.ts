@@ -38,6 +38,64 @@ export const createEvent = async (req: any, res: any) => {
   res.status(201).json({ message: "Event created successfully", id: event.id });
 };
 
+export const joinEvent = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  const event = await prisma.event.findUnique({
+    where: { id },
+  });
+  if (!event) {
+    return res.status(404).json({ message: "Event not found" });
+  }
+  if (event.participants.includes(user.id)) {
+    return res.status(200).json({ message: "User already joined event" });
+  }
+
+  await prisma.event.update({
+    where: { id },
+    data: {
+      participants: event.participants?.concat(user.id) || [user.id],
+    },
+  });
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      events: user.events?.concat(id) || [id],
+    },
+  });
+  res.status(200).json({ message: "Joined event successfully" });
+};
+
+export const leaveEvent = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  const event = await prisma.event.findUnique({
+    where: { id },
+  });
+  if (!event) {
+    return res.status(404).json({ message: "Event not found" });
+  }
+  if (!event.participants.includes(user.id)) {
+    return res.status(200).json({ message: "User has not joined event" });
+  }
+
+  await prisma.event.update({
+    where: { id },
+    data: {
+      participants: event.participants?.filter((userId) => userId !== user.id),
+    },
+  });
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      events: user.events.filter((eventId) => eventId !== id),
+    },
+  });
+  res.status(200).json({ message: "Left event successfully" });
+};
+
 export const updateEvent = async (req: any, res: any) => {
   const { id } = req.params as { id: string };
   const {
@@ -237,6 +295,21 @@ export const deleteEvent = async (req: any, res: any) => {
   if (!event) {
     return res.status(404).json({ message: "Event not found" });
   }
+
+  await event.participants.forEach(async (partcipant) => {
+    const user = await prisma.user.findUnique({
+      where: { id: partcipant },
+    });
+    if (!user) {
+      return;
+    }
+    await prisma.user.update({
+      where: { id: partcipant },
+      data: {
+        events: user.events.filter((eventId) => eventId !== id),
+      },
+    });
+  });
   await prisma.event.delete({
     where: { id },
   });

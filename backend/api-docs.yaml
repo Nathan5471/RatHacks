@@ -267,7 +267,7 @@ paths:
                 required:
                   - message
         401:
-          desciption: Unauthorized
+          description: Unauthorized
           content:
             application/json:
               schema:
@@ -712,13 +712,146 @@ paths:
                   message:
                     type: string
                     example: User not Found
-  /api/event/update/{id}:
+  /api/event/join/{eventId}:
+    post:
+      summary: Join an event
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Joined event successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Joined event successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Event or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event not found
+              required:
+                - message
+  /api/event/leave/{eventId}:
+    post:
+      summary: Leave an event
+      tags:
+        - Events
+      secuirty:
+        - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Left event successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Joined event successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Event or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event not found
+                required:
+                  - message
+  /api/event/update/{eventId}:
     put:
       summary: Update an event
       tags:
         - Events
       secuirty:
         - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -898,7 +1031,7 @@ paths:
         - cookieAuth: []
       responses:
         200:
-          desciption: Events fetched successfully
+          description: Events fetched successfully
           content:
             application/json:
               schema:
