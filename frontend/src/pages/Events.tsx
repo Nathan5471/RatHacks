@@ -97,7 +97,7 @@ export default function Events() {
         <AppNavbar />
       </div>
       <div className="w-5/6 h-full flex flex-col p-4 items-center overflow-y-auto">
-        <h1 className="text-4xl text-center">Events</h1>
+        <h1 className="text-4xl text-center font-bold">Events</h1>
         {events.length === 0 ? (
           <p className="mt-4 text-lg">No events available.</p>
         ) : (
@@ -108,7 +108,7 @@ export default function Events() {
                 className="flex flex-row bg-surface-a1 mx-16 mt-6 p-4 rounded-lg"
               >
                 <div className="flex flex-col w-2/3">
-                  <h2 className="text-3xl">{event.name}</h2>
+                  <h2 className="text-3xl font-bold">{event.name}</h2>
                   <p>{event.description}</p>
                   <div className="flex flex-row w-full mt-auto">
                     <Link

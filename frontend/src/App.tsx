@@ -5,6 +5,7 @@ import AuthenticatedRoute from "./utils/AuthenticatedRoute";
 import OrganizerRoute from "./utils/OrganizerRoute";
 import Dashboard from "./pages/Dashboard";
 import Events from "./pages/Events";
+import Event from "./pages/Event";
 import Settings from "./pages/Settings";
 import OrganizerDashboard from "./pages/organizerPages/OrganizerDashboard";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
@@ -30,6 +31,7 @@ function App() {
         <Route element={<AuthenticatedRoute />}>
           <Route path="/app" element={<Dashboard />} />
           <Route path="/app/events" element={<Events />} />
+          <Route path="/app/event/:eventId" element={<Event />} />
           <Route path="/app/settings" element={<Settings />} />
         </Route>
         <Route element={<OrganizerRoute />}>
