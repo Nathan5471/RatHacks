@@ -11,7 +11,11 @@ COPY backend/package*.json ./
 RUN npm install
 COPY backend/ ./
 COPY --from=frontend /frontend/dist ./public
+COPY entrypoint.sh ./
+RUN chmod +x ./entrypoint.sh
+RUN apt-get update && apt-get install -y netcat-openbsd
+RUN npx prisma generate
 RUN npm run build
 
 EXPOSE 3000
-CMD ["node", "dist/index.js"]
+ENTRYPOINT ["./entrypoint.sh"]
