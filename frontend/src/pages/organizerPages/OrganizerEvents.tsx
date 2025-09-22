@@ -21,19 +21,19 @@ export default function OrganizerEvents() {
     schoolDivision: string;
     gradeLevel: "nine" | "ten" | "eleven" | "twelve" | "organizer" | "judge";
     isGovSchool: boolean;
-    createdAt: Date;
+    createdAt: string;
   }
   interface Event {
     id: string;
     name: string;
     description: string;
     location: string;
-    startDate: Date;
-    endDate: Date;
-    submissionDeadline: Date;
+    startDate: string;
+    endDate: string;
+    submissionDeadline: string;
     participants: Participant[];
     createdBy: string;
-    createdAt: Date;
+    createdAt: string;
   }
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,31 +43,7 @@ export default function OrganizerEvents() {
     const fetchEvents = async () => {
       try {
         const fetchedEvents = await organizerGetAllEvents();
-        interface FetchedEvent {
-          id: string;
-          name: string;
-          description: string;
-          location: string;
-          startDate: string;
-          endDate: string;
-          submissionDeadline: string;
-          participants: Participant[];
-          createdBy: string;
-          createdAt: string;
-        }
-        const datedEvents = fetchedEvents.events.map((event: FetchedEvent) => ({
-          id: event.id,
-          name: event.name,
-          description: event.description,
-          location: event.location,
-          startDate: new Date(event.startDate),
-          endDate: new Date(event.endDate),
-          submissionDeadline: new Date(event.submissionDeadline),
-          participants: event.participants,
-          createdBy: event.createdBy,
-          createdAt: new Date(event.createdAt),
-        }));
-        setEvents(datedEvents);
+        setEvents(fetchedEvents.events as Event[]);
       } catch (error: unknown) {
         const errorMessage =
           typeof error === "object" &&
@@ -240,6 +216,10 @@ export default function OrganizerEvents() {
                     event.submissionDeadline,
                     "EEEE, MMMM d yyyy h:mm a"
                   )}
+                  <p>
+                    <span className="font-bold">Participants:</span>{" "}
+                    {event.participants.length}
+                  </p>
                 </div>
               </div>
             ))}

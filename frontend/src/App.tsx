@@ -9,6 +9,7 @@ import Event from "./pages/Event";
 import Settings from "./pages/Settings";
 import OrganizerDashboard from "./pages/organizerPages/OrganizerDashboard";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
+import OrganizerEvent from "./pages/organizerPages/OrganizerEvent";
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import ProjectView from "./pages/ProjectView";
@@ -37,6 +38,10 @@ function App() {
         <Route element={<OrganizerRoute />}>
           <Route path="/app/organizer" element={<OrganizerDashboard />} />
           <Route path="/app/organizer/events" element={<OrganizerEvents />} />
+          <Route
+            path="/app/organizer/event/:eventId"
+            element={<OrganizerEvent />}
+          />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />

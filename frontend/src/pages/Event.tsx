@@ -59,6 +59,7 @@ export default function Event() {
 
       return { days, hours, minutes, seconds };
     };
+
     const updateTimeRemaining = setInterval(() => {
       setTimeRemaining(calculateTimeRemaining());
     }, 1000);
@@ -189,7 +190,14 @@ export default function Event() {
         ) : (
           <div className="w-2/3 flex flex-col">
             <h1 className="text-4xl font-bold mb-4">Event not found</h1>
-            <div className="flex flex-row w-full mt-auto"></div>
+            <div className="flex w-full justify-center">
+              <Link
+                to="/app/events"
+                className="bg-primary-a0 hover:bg-primary-a1 font-bold p-2 rounded-lg"
+              >
+                Back to Events
+              </Link>
+            </div>
           </div>
         )}
       </div>
