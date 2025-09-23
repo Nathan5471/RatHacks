@@ -10,12 +10,18 @@ Participants get to have an account that manages signing up for events. They als
 
 ## Demo
 
-You can test this out yourself at <https://demo.rathacks.com> by using the following credentials:
+You can test this out yourself at <https://rathacks.com> by using the following credentials:
+
 Organizer:
+
 email - <e0bg3a@hack.af>
+
 password - Organizer@123
+
 Student:
+
 email - <e9do1a@hack.af>
+
 password - Student@123
 
 ## Technologies
