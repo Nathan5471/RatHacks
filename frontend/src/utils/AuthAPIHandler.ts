@@ -23,6 +23,12 @@ export const register = async (userData: {
   schoolDivision: string;
   gradeLevel: "nine" | "ten" | "eleven" | "twelve";
   isGovSchool: boolean;
+  techStack: string;
+  previousHackathon: boolean;
+  parentFirstName: string;
+  parentLastName: string;
+  parentEmail: string;
+  parentPhoneNumber: string;
 }) => {
   const response = await api.post("/register", userData);
   return response.data;
@@ -69,6 +75,12 @@ export const updateUser = async (userData: {
   schoolDivision: string;
   gradeLevel: "nine" | "ten" | "eleven" | "twelve";
   isGovSchool: boolean;
+  techStack: string;
+  previousHackathon: boolean;
+  parentFirstName: string;
+  parentLastName: string;
+  parentEmail: string;
+  parentPhoneNumber: string;
 }) => {
   const response = await api.put("/update", userData);
   return response.data;

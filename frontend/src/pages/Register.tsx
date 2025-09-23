@@ -28,6 +28,12 @@ export default function Register() {
     "nine" | "ten" | "eleven" | "twelve" | ""
   >("");
   const [isGovSchool, setIsGovSchool] = useState<boolean | "">("");
+  const [techStack, setTechStack] = useState("");
+  const [previousHackathon, setPreviousHackathon] = useState<boolean | "">("");
+  const [parentFirstName, setParentFirstName] = useState("");
+  const [parentLastName, setParentLastName] = useState("");
+  const [parentEmail, setParentEmail] = useState("");
+  const [parentPhoneNumber, setParentPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -48,6 +54,12 @@ export default function Register() {
           schoolDivision === "other" ? schoolDivisionOther : schoolDivision,
         gradeLevel: gradeLevel as "nine" | "ten" | "eleven" | "twelve",
         isGovSchool: isGovSchool as boolean,
+        techStack,
+        previousHackathon: previousHackathon as boolean,
+        parentFirstName,
+        parentLastName,
+        parentEmail,
+        parentPhoneNumber,
       });
       navigate("/login");
     } catch (error) {
@@ -66,7 +78,7 @@ export default function Register() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-screen bg-surface-a0 text-white">
       <form
-        className="flex flex-col w-80 bg-surface-a1 p-4 m-4 rounded-lg"
+        className="flex flex-col w-80 sm:w-100 bg-surface-a1 p-4 m-4 rounded-lg"
         onSubmit={(e) => handleRegister(e)}
       >
         <h1 className="text-primary-a0 text-4xl font-bold text-center mb-4">
@@ -85,32 +97,38 @@ export default function Register() {
           placeholder="Enter your email"
           required
         />
-        <label htmlFor="firstName" className="text-2xl mt-2">
-          First Name
-        </label>
-        <input
-          type="text"
-          id="firstName"
-          name="lastName"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          className="bg-surface-a2 p-2 rounded-lg mt-1"
-          placeholder="Enter your first name"
-          required
-        />
-        <label htmlFor="lastName" className="text-2xl mt-2">
-          Last Name
-        </label>
-        <input
-          type="text"
-          id="lastName"
-          name="lastName"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          className="bg-surface-a2 p-2 rounded-lg mt-1"
-          placeholder="Enter your last name"
-          required
-        />
+        <div className="flex flex-row w-full mt-2">
+          <div className="flex flex-col w-1/2">
+            <label htmlFor="firstName" className="text-2xl mt-2">
+              First Name
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              name="lastName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="bg-surface-a2 p-2 rounded-lg mt-1"
+              placeholder="Enter your first name"
+              required
+            />
+          </div>
+          <div className="flex flex-col w-1/2 ml-2">
+            <label htmlFor="lastName" className="text-2xl mt-2">
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="bg-surface-a2 p-2 rounded-lg mt-1"
+              placeholder="Enter your last name"
+              required
+            />
+          </div>
+        </div>
         <label htmlFor="password" className="text-2xl mt-2">
           Password
         </label>
@@ -251,6 +269,107 @@ export default function Register() {
             No
           </button>
         </div>
+        <label htmlFor="techStack" className="text-2xl mt-2">
+          What coding languages/technologies do you know/use?
+        </label>
+        <input
+          type="text"
+          id="techStack"
+          name="techStack"
+          value={techStack}
+          onChange={(e) => setTechStack(e.target.value)}
+          className="bg-surface-a2 p-2 rounded-lg mt-1"
+          placeholder="e.g. Python, JavaScript, React, etc."
+          required
+        />
+        <label htmlFor="previousHackathon" className="text-2xl mt-2">
+          Have you attended a hackathon before?
+        </label>
+        <div className="flex flex-row w-full mt-1">
+          <button
+            type="button"
+            onClick={() => setPreviousHackathon(true)}
+            className={`${
+              previousHackathon === true
+                ? "bg-primary-a1 hover:bg-primary-a2"
+                : "bg-surface-a2 hover:bg-surface-a3"
+            } p-2 rounded-lg w-1/2 mr-1`}
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            onClick={() => setPreviousHackathon(false)}
+            className={`${
+              previousHackathon === false
+                ? "bg-primary-a1 hover:bg-primary-a2"
+                : "bg-surface-a2 hover:bg-surface-a3"
+            } p-2 rounded-lg w-1/2 mr-1`}
+          >
+            No
+          </button>
+        </div>
+        <p className="text-center text-3xl font-bold mt-4">
+          Parent/Guardian's Information
+        </p>
+        <div className="flex flex-row w-full mt-2">
+          <div className="flex flex-col w-1/2">
+            <label htmlFor="parentFirstName" className="text-2xl mt-2">
+              First Name
+            </label>
+            <input
+              type="text"
+              id="parentFirstName"
+              name="parentFirstName"
+              value={parentFirstName}
+              onChange={(e) => setParentFirstName(e.target.value)}
+              className="bg-surface-a2 p-2 rounded-lg mt-1"
+              placeholder="Enter your parent's first name"
+              required
+            />
+          </div>
+          <div className="flex flex-col w-1/2 ml-2">
+            <label htmlFor="parentLastName" className="text-2xl mt-2">
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="parentLastName"
+              name="parentLastName"
+              value={parentLastName}
+              onChange={(e) => setParentLastName(e.target.value)}
+              className="bg-surface-a2 p-2 rounded-lg mt-1"
+              placeholder="Enter your parent's last name"
+              required
+            />
+          </div>
+        </div>
+        <label htmlFor="parentEmail" className="text-2xl mt-2">
+          Email
+        </label>
+        <input
+          type="email"
+          id="parentEmail"
+          name="parentEmail"
+          value={parentEmail}
+          onChange={(e) => setParentEmail(e.target.value)}
+          className="bg-surface-a2 p-2 rounded-lg mt-1"
+          placeholder="Enter your parent's email"
+          required
+        />
+        <label htmlFor="parentPhoneNumber" className="text-2xl mt-2">
+          Phone Number
+        </label>
+        <input
+          type="tel"
+          id="parentPhoneNumber"
+          name="parentPhoneNumber"
+          value={parentPhoneNumber}
+          onChange={(e) => setParentPhoneNumber(e.target.value)}
+          className="bg-surface-a2 p-2 rounded-lg mt-1"
+          placeholder="Enter your parent's phone number"
+          required
+        />
         {error && <p className="text-red-500">{error}</p>}
         <button
           type="submit"

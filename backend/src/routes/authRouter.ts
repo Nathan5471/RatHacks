@@ -24,6 +24,12 @@ router.post("/register", async (req: any, res: any) => {
     schoolDivision,
     gradeLevel,
     isGovSchool,
+    techStack,
+    previousHackathon,
+    parentFirstName,
+    parentLastName,
+    parentEmail,
+    parentPhoneNumber,
   } = req.body as {
     email: string;
     password: string;
@@ -32,6 +38,12 @@ router.post("/register", async (req: any, res: any) => {
     schoolDivision: string;
     gradeLevel: "nine" | "ten" | "eleven" | "twelve";
     isGovSchool: boolean;
+    techStack: string;
+    previousHackathon: boolean;
+    parentFirstName: string;
+    parentLastName: string;
+    parentEmail: string;
+    parentPhoneNumber: string;
   };
 
   if (
@@ -41,7 +53,13 @@ router.post("/register", async (req: any, res: any) => {
     !lastName ||
     !schoolDivision ||
     !gradeLevel ||
-    isGovSchool === undefined
+    isGovSchool === undefined ||
+    !techStack ||
+    previousHackathon === undefined ||
+    !parentFirstName ||
+    !parentLastName ||
+    !parentEmail ||
+    !parentPhoneNumber
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -124,26 +142,55 @@ router.get("/current-user", authenticate, (req: any, res: any) => {
     schoolDivision: reqUser.schoolDivision,
     gradeLevel: reqUser.gradeLevel,
     isGovSchool: reqUser.isGovSchool,
+    techStack: reqUser.techStack,
+    previousHackathon: reqUser.previousHackathon,
+    parentFirstName: reqUser.parentFirstName,
+    parentLastName: reqUser.parentLastName,
+    parentEmail: reqUser.parentEmail,
+    parentPhoneNumber: reqUser.parentPhoneNumber,
     events: reqUser.events,
   };
   res.status(200).json(user);
 });
 
 router.put("/update", authenticate, async (req: any, res: any) => {
-  const { firstName, lastName, schoolDivision, gradeLevel, isGovSchool } =
-    req.body as {
-      firstName: string;
-      lastName: string;
-      schoolDivision: string;
-      gradeLevel: "nine" | "ten" | "eleven" | "twelve";
-      isGovSchool: boolean;
-    };
+  const {
+    firstName,
+    lastName,
+    schoolDivision,
+    gradeLevel,
+    isGovSchool,
+    techStack,
+    previousHackathon,
+    parentFirstName,
+    parentLastName,
+    parentEmail,
+    parentPhoneNumber,
+  } = req.body as {
+    firstName: string;
+    lastName: string;
+    schoolDivision: string;
+    gradeLevel: "nine" | "ten" | "eleven" | "twelve";
+    isGovSchool: boolean;
+    techStack: string;
+    previousHackathon: boolean;
+    parentFirstName: string;
+    parentLastName: string;
+    parentEmail: string;
+    parentPhoneNumber: string;
+  };
   if (
     !firstName ||
     !lastName ||
     !schoolDivision ||
     !gradeLevel ||
-    isGovSchool === undefined
+    isGovSchool === undefined ||
+    !techStack ||
+    previousHackathon === undefined ||
+    !parentFirstName ||
+    !parentLastName ||
+    !parentEmail ||
+    !parentPhoneNumber
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }

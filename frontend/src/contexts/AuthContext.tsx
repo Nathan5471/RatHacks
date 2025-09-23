@@ -13,6 +13,12 @@ interface AuthContextType {
         schoolDivision: string;
         gradeLevel: "nine" | "ten" | "eleven" | "twelve";
         isGovSchool: boolean;
+        techStack: string;
+        previousHackathon: boolean;
+        parentFirstName: string;
+        parentLastName: string;
+        parentEmail: string;
+        parentPhoneNumber: string;
         events: string[];
       }
     | null

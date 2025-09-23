@@ -39,6 +39,20 @@ paths:
                   enum: ["nine", "ten", "eleven", "twelve"]
                 isGovSchool:
                   type: boolean
+                techStacK:
+                  type: string
+                previousHackathon:
+                  type: boolean
+                parentFirstName:
+                  type: string
+                parentLastName:
+                  type: string
+                parentEmail:
+                  type: string
+                  format: email
+                parentPhoneNumber:
+                  type: string
+                  example: 5408531056
               required:
                 - email
                 - password
@@ -47,6 +61,12 @@ paths:
                 - homeSchool
                 - gradeLevel
                 - isGovSchool
+                - techStacK
+                - previousHackathon
+                - parentFirstName
+                - parentLastName
+                - parentEmail
+                - parentPhoneNumber
       responses:
         201:
           description: User registered successfully
@@ -447,12 +467,32 @@ paths:
                   enum: ["nine", "ten", "eleven", "twelve"]
                 isGovSchool:
                   type: boolean
+                techStack:
+                  type: string
+                previousHackathon:
+                  type: boolean
+                parentFirstName:
+                  type: string
+                parentLastName:
+                  type: string
+                parentEmail:
+                  type: string
+                  format: email
+                parentPhoneNumber:
+                  type: string
+                  example: 5408531056
               required:
                 - firstName
                 - lastName
                 - schoolDivision
                 - gradeLevel
                 - isGovSchool
+                - techStack
+                - previousHackathon
+                - parentFirstName
+                - parentLastName
+                - parentEmail
+                - parentPhoneNumber
       responses:
         200:
           description: User information updated successfully

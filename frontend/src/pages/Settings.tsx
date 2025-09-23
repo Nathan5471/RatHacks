@@ -39,6 +39,20 @@ export default function Settings() {
   );
   const [gradeLevel, setGradeLevel] = useState(user?.gradeLevel || "");
   const [isGovSchool, setIsGovSchool] = useState(user?.isGovSchool || false);
+  const [techStack, setTechStack] = useState(user?.techStack || "");
+  const [previousHackathon, setPreviousHackathon] = useState(
+    user?.previousHackathon || false
+  );
+  const [parentFirstName, setParentFirstName] = useState(
+    user?.parentFirstName || ""
+  );
+  const [parentLastName, setParentLastName] = useState(
+    user?.parentLastName || ""
+  );
+  const [parentEmail, setParentEmail] = useState(user?.parentEmail || "");
+  const [parentPhoneNumber, setParentPhoneNumber] = useState(
+    user?.parentPhoneNumber || ""
+  );
 
   const handleSaveUserInfo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +65,12 @@ export default function Settings() {
         schoolDivision: finalSchoolDivision,
         gradeLevel: gradeLevel as "nine" | "ten" | "eleven" | "twelve",
         isGovSchool,
+        techStack,
+        previousHackathon,
+        parentFirstName,
+        parentLastName,
+        parentEmail,
+        parentPhoneNumber,
       });
       toast.success("User information updated successfully!");
     } catch (error) {
@@ -99,30 +119,36 @@ export default function Settings() {
           <h3 className="text-2xl mb-4 text-center font-bold">
             User Information
           </h3>
-          <label htmlFor="firstName" className="text-2xl mt-2">
-            First Name
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="p-2 rounded-lg text-lg bg-surface-a2 mt-1"
-            required
-          />
-          <label htmlFor="lastName" className="text-2xl mt-2">
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="p-2 rounded-lg text-lg bg-surface-a2 mt-2"
-            required
-          />
+          <div className="flex flex-row w-full mt-2">
+            <div className="flex flex-col w-1/2">
+              <label htmlFor="firstName" className="text-2xl mt-2">
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="p-2 rounded-lg text-lg bg-surface-a2 mt-1"
+                required
+              />
+            </div>
+            <div className="flex flex-col w-1/2 ml-2">
+              <label htmlFor="lastName" className="text-2xl mt-2">
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="p-2 rounded-lg text-lg bg-surface-a2 mt-1"
+                required
+              />
+            </div>
+          </div>
           <label htmlFor="schoolDivision" className="text-2xl mt-1">
             School Division
           </label>
@@ -183,10 +209,10 @@ export default function Settings() {
               type="button"
               onClick={() => setIsGovSchool(true)}
               className={`${
-                isGovSchool ? "bg-primary-a1" : "bg-surface-a2"
-              } p-2 rounded-lg w-1/2 mr-1 ${
-                isGovSchool ? "hover:bg-primary-a2" : "hover:bg-surface-a3"
-              }`}
+                isGovSchool
+                  ? "bg-primary-a1 hover:bg-primary-a2"
+                  : "bg-surface-a2 hover:bg-surface-3"
+              } p-2 rounded-lg w-1/2 mr-1`}
             >
               Yes
             </button>
@@ -194,16 +220,111 @@ export default function Settings() {
               type="button"
               onClick={() => setIsGovSchool(false)}
               className={`${
-                isGovSchool === false ? "bg-primary-a1" : "bg-surface-a2"
-              } p-2 rounded-lg w-1/2 ${
                 isGovSchool === false
-                  ? "hover:bg-primary-a2"
-                  : "hover:bg-surface-a3"
-              }`}
+                  ? "bg-primary-a1 hover:bg-primary-a2"
+                  : "bg-surface-a2 hover:bg-surface-a3"
+              } p-2 rounded-lg w-1/2`}
             >
               No
             </button>
           </div>
+          <label htmlFor="techStack" className="text-2xl mt-2">
+            What coding languages/technologies do you know/use?
+          </label>
+          <input
+            type="text"
+            id="techStack"
+            name="techStack"
+            value={techStack}
+            onChange={(e) => setTechStack(e.target.value)}
+            className="p-2 rounded-lg text-lg bg-surface-a2 mt-1"
+            placeholder="e.g. Python, JavaScript, React, etc."
+            required
+          />
+          <label htmlFor="previousHackathon" className="text-2xl mt-2">
+            Have you attended a hackathon before?
+          </label>
+          <div className="flex flex-row w-full mt-1">
+            <button
+              type="button"
+              onClick={() => setPreviousHackathon(true)}
+              className={`${
+                previousHackathon === true
+                  ? "bg-primary-a1 hover:bg-primary-a2"
+                  : "bg-surface-a2 hover:bg-surface-a3"
+              } p-2 rounded-lg w-1/2 mr-1`}
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              onClick={() => setPreviousHackathon(false)}
+              className={`${
+                previousHackathon === false
+                  ? "bg-primary-a1 hover:bg-primary-a2"
+                  : "bg-surface-a2 hover:bg-surface-a3"
+              } p-2 rounded-lg w-1/2`}
+            >
+              No
+            </button>
+          </div>
+          <p className="text-2xl text-center mt-4 font-bold">
+            Parent/Guardian's Information
+          </p>
+          <div className="flex flex-row w-full mt-2">
+            <div className="flex flex-col w-1/2">
+              <label htmlFor="parentFirstName" className="text-2xl mt-2">
+                First Name
+              </label>
+              <input
+                type="text"
+                id="parentFirstName"
+                name="parentFirstName"
+                value={parentFirstName}
+                onChange={(e) => setParentFirstName(e.target.value)}
+                className="bg-surface-a2 p-2 rounded-lg mt-1"
+                required
+              />
+            </div>
+            <div className="flex flex-col w-1/2 ml-2">
+              <label htmlFor="parentLastName" className="text-2xl mt-2">
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="parentLastName"
+                name="parentLastName"
+                value={parentLastName}
+                onChange={(e) => setParentLastName(e.target.value)}
+                className="bg-surface-a2 p-2 rounded-lg mt-1"
+                required
+              />
+            </div>
+          </div>
+          <label htmlFor="parentEmail" className="text-2xl mt-2">
+            Email
+          </label>
+          <input
+            type="email"
+            id="parentEmail"
+            name="parentEmail"
+            value={parentEmail}
+            onChange={(e) => setParentEmail(e.target.value)}
+            className="bg-surface-a2 p-2 rounded-lg mt-1"
+            required
+          />
+          <label htmlFor="parentPhoneNumber" className="text-2xl mt-2">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            id="parentPhoneNumber"
+            name="parentPhoneNumber"
+            value={parentPhoneNumber}
+            onChange={(e) => setParentPhoneNumber(e.target.value)}
+            className="bg-surface-a2 p-2 rounded-lg mt-1"
+            required
+          />
           <button
             type="submit"
             className="mt-4 p-2 bg-primary-a0 hover:bg-primary-a1 rounded-lg text-xl font-bold"

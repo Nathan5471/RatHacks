@@ -14,6 +14,12 @@ export const register = async (req: any, res: any) => {
     schoolDivision,
     gradeLevel,
     isGovSchool,
+    techStack,
+    previousHackathon,
+    parentFirstName,
+    parentLastName,
+    parentEmail,
+    parentPhoneNumber,
   } = req.body as {
     email: string;
     password: string;
@@ -22,6 +28,12 @@ export const register = async (req: any, res: any) => {
     schoolDivision: string;
     gradeLevel: "nine" | "ten" | "eleven" | "twelve";
     isGovSchool: boolean;
+    techStack: string;
+    previousHackathon: boolean;
+    parentFirstName: string;
+    parentLastName: string;
+    parentEmail: string;
+    parentPhoneNumber: string;
   };
 
   const existingEmail = await prisma.user.findUnique({
@@ -48,6 +60,12 @@ export const register = async (req: any, res: any) => {
       schoolDivision,
       gradeLevel,
       isGovSchool,
+      techStack,
+      previousHackathon,
+      parentFirstName,
+      parentLastName,
+      parentEmail,
+      parentPhoneNumber,
       events: [],
       validAccessTokens: [],
       validRefreshTokens: [],
@@ -187,14 +205,31 @@ export const logoutAll = async (req: any, res: any) => {
 
 export const updateUser = async (req: any, res: any) => {
   const user = req.user as User;
-  const { firstName, lastName, schoolDivision, gradeLevel, isGovSchool } =
-    req.body as {
-      firstName: string;
-      lastName: string;
-      schoolDivision: string;
-      gradeLevel: "nine" | "ten" | "eleven" | "twelve";
-      isGovSchool: boolean;
-    };
+  const {
+    firstName,
+    lastName,
+    schoolDivision,
+    gradeLevel,
+    isGovSchool,
+    techStack,
+    previousHackathon,
+    parentFirstName,
+    parentLastName,
+    parentEmail,
+    parentPhoneNumber,
+  } = req.body as {
+    firstName: string;
+    lastName: string;
+    schoolDivision: string;
+    gradeLevel: "nine" | "ten" | "eleven" | "twelve";
+    isGovSchool: boolean;
+    techStack: string;
+    previousHackathon: boolean;
+    parentFirstName: string;
+    parentLastName: string;
+    parentEmail: string;
+    parentPhoneNumber: string;
+  };
   await prisma.user.update({
     where: { id: user.id },
     data: {
@@ -203,6 +238,12 @@ export const updateUser = async (req: any, res: any) => {
       schoolDivision,
       gradeLevel,
       isGovSchool,
+      techStack,
+      previousHackathon,
+      parentFirstName,
+      parentLastName,
+      parentEmail,
+      parentPhoneNumber,
     },
   });
   return res.status(200).json({ message: "User updated successfully" });
