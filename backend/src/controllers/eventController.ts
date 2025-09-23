@@ -255,8 +255,8 @@ export const organizerGetEventById = async (req: any, res: any) => {
   const removedUneccesaryFieldsUsers = filteredUsers.map((user) => ({
     id: user.id,
     email: user.email,
-    emailVerfied: user.emailVerified,
-    AccountType: user.accountType,
+    emailVerified: user.emailVerified,
+    accountType: user.accountType,
     firstName: user.firstName,
     lastName: user.lastName,
     schoolDivision: user.schoolDivision,

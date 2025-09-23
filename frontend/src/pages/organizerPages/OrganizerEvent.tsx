@@ -35,6 +35,14 @@ export default function OrganizerEvent() {
     createdBy: string;
     createdAt: string;
   }
+  const gradeMap = {
+    nine: "9",
+    ten: "10",
+    eleven: "11",
+    twelve: "12",
+    organizer: "Organizer",
+    judge: "Judge",
+  };
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRemaining, setTimeRemaining] = useState<{
@@ -126,7 +134,7 @@ export default function OrganizerEvent() {
       </div>
       <div className="w-5/6 h-full flex flex-col items-center overflow-y-auto">
         {event ? (
-          <div className="mx-16 mt-5 flex flex-col">
+          <div className="mx-16 mt-5 flex flex-col mb-2">
             <h1 className="text-4xl font-bold text-center mb-4">
               {event.name}
             </h1>
@@ -209,6 +217,97 @@ export default function OrganizerEvent() {
                     <span className="text-xl text-center">Seconds</span>
                   </div>
                 </div>
+              )}
+            </div>
+            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+              <h2 className="text-2xl font-bold text-center mb-2">
+                Registered Participants
+              </h2>
+              {event.participants.length > 0 ? (
+                <table className="min-w-full bg-surface-a2 rounded-lg overflow-x-auto">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Name
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Email
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Email Verified
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Account Type
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        School Division
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Grade Level
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Is RVGS
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {event.participants.map((participant, index) => (
+                      <tr key={participant.id}>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.firstName} {participant.lastName}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.email}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.emailVerified ? "Yes" : "No"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.accountType}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.schoolDivision}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {gradeMap[participant.gradeLevel]}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.isGovSchool ? "Yes" : "No"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-center">No participants registered yet.</p>
               )}
             </div>
           </div>
