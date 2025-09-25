@@ -183,6 +183,12 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
         schoolDivision: user.schoolDivision,
         gradeLevel: user.gradeLevel,
         isGovSchool: user.isGovSchool,
+        techStack: user.techStack,
+        previousHackathon: user.previousHackathon,
+        parentFirstName: user.parentFirstName,
+        parentLastName: user.parentLastName,
+        parentEmail: user.parentEmail,
+        parentPhoneNumber: user.parentPhoneNumber,
         createdAt: user.createdAt,
       }));
       return {
@@ -262,6 +268,12 @@ export const organizerGetEventById = async (req: any, res: any) => {
     schoolDivision: user.schoolDivision,
     gradeLevel: user.gradeLevel,
     isGovSchool: user.isGovSchool,
+    techStack: user.techStack,
+    previousHackathon: user.previousHackathon,
+    parentFirstName: user.parentFirstName,
+    parentLastName: user.parentLastName,
+    parentEmail: user.parentEmail,
+    parentPhoneNumber: user.parentPhoneNumber,
     createdAt: user.createdAt,
   }));
   const userFilledEvent = {

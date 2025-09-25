@@ -6,6 +6,7 @@ import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditEvent from "../../components/EditEvent";
 import DeleteEvent from "../../components/DeleteEvent";
+import OrganizerUserView from "../../components/OrganizerUserView";
 
 export default function OrganizerEvent() {
   const { openOverlay } = useOverlay();
@@ -21,6 +22,12 @@ export default function OrganizerEvent() {
     schoolDivision: string;
     gradeLevel: "nine" | "ten" | "eleven" | "twelve" | "organizer" | "judge";
     isGovSchool: boolean;
+    techStack: string;
+    previousHackathon: boolean;
+    parentFirstName: string;
+    parentLastName: string;
+    parentEmail: string;
+    parentPhoneNumber: string;
     createdAt: string;
   }
   interface Event {
@@ -111,6 +118,16 @@ export default function OrganizerEvent() {
           setReload={undefined}
         />
       );
+    }
+  };
+
+  const handleOpenOrganizerUserView = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    e.preventDefault();
+    if (eventId && event) {
+      openOverlay(<OrganizerUserView user={event.participants[index]} />);
     }
   };
 
@@ -248,6 +265,7 @@ export default function OrganizerEvent() {
                       <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
                         Is RVGS
                       </th>
+                      <th className="py-2 px-4 border-b border-surface-a1 text-left"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -301,6 +319,20 @@ export default function OrganizerEvent() {
                           }`}
                         >
                           {participant.isGovSchool ? "Yes" : "No"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          <button
+                            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
+                            onClick={(e) =>
+                              handleOpenOrganizerUserView(e, index)
+                            }
+                          >
+                            View
+                          </button>
                         </td>
                       </tr>
                     ))}

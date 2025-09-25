@@ -1138,6 +1138,20 @@ paths:
                                   ]
                               isGovSchool:
                                 type: boolean
+                              techStack:
+                                type: string
+                              previousHackathon:
+                                type: boolean
+                              parentFirstName:
+                                type: string
+                              parentLastName:
+                                type: string
+                              parentEmail:
+                                type: string
+                                format: email
+                              parentPhoneNumber:
+                                type: string
+                                example: 5408531056
                               createdAt:
                                 type: string
                                 format: date-time
@@ -1151,6 +1165,12 @@ paths:
                               - schoolDivision
                               - gradeLevel
                               - isGovSchool
+                              - techStack
+                              - previousHackathon
+                              - parentFirstName
+                              - parentLastName
+                              - parentEmail
+                              - parentPhoneNumber
                               - createdAt
                         createdBy:
                           type: string
@@ -1372,6 +1392,20 @@ paths:
                                 ]
                             isGovSchool:
                               type: boolean
+                            techStack:
+                              type: string
+                            previousHackathon:
+                              type: boolean
+                            parentFirstName:
+                              type: string
+                            parentLastName:
+                              type: string
+                            parentEmail:
+                              type: string
+                              format: email
+                            parentPhoneNumber:
+                              type: string
+                              example: 5408531056
                             createdAt:
                               type: string
                               format: date-time
@@ -1385,6 +1419,12 @@ paths:
                             - schoolDivision
                             - gradeLevel
                             - isGovSchool
+                            - techStack
+                            - previousHackathon
+                            - parentFirstName
+                            - parentLastName
+                            - parentEmail
+                            - parentPhoneNumber
                             - createdAt
                       createdBy:
                         type: string
