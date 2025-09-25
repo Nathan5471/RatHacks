@@ -1,5 +1,9 @@
 import express from "express";
-import { createWorkshop } from "../controllers/workshopController";
+import {
+  createWorkshop,
+  getAllWorkshops,
+  organizerGetAllWorkshops,
+} from "../controllers/workshopController";
 import authenticate from "../middleware/authenticate";
 
 const router = express.Router();
@@ -29,5 +33,9 @@ router.post("/create", authenticate, async (req: any, res: any) => {
 
   await createWorkshop(req, res);
 });
+
+router.get("/all", authenticate, getAllWorkshops);
+
+router.get("/organizer-all", authenticate, organizerGetAllWorkshops);
 
 export default router;
