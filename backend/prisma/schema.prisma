@@ -40,6 +40,7 @@ model User {
   parentEmail            String?
   parentPhoneNumber      String?
   events                 String[] // Event Ids
+  workshops              String[] // Workshop Ids
   validAccessTokens      String[]
   validRefreshTokens     String[]
   createdAt              DateTime    @default(now())
@@ -56,4 +57,16 @@ model Event {
   participants       String[] // User Ids
   createdBy          String // Organizer Id
   createdAt          DateTime @default(now())
+}
+
+model Workshop {
+  id            String   @id @default(uuid())
+  name          String
+  description   String
+  googleMeetURL String?
+  startDate     DateTime
+  endDate       DateTime
+  participants  String[] // User Ids
+  organizer     String // Organizer Id
+  createdAt     DateTime @default(now())
 }
