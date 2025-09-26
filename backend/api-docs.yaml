@@ -1805,6 +1805,273 @@ paths:
                               createdAt:
                                 type: string
                                 format: date-time
+  /api/workshop/get/{workshopId}:
+    get:
+      summary: Get workshop by id
+      tags:
+        - Workshops
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: workshopId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Workshop fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop loaded successfully
+                  workshop:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      googleMeetURL:
+                        type: string
+                        format: uri
+                      startDate:
+                        type: string
+                        format: date-time
+                      endDate:
+                        type: string
+                        format: date-time
+                      participantCount:
+                        type: number
+                        min: 0
+                    required:
+                      - id
+                      - name
+                      - description
+                      - googleMeetURL
+                      - startDate
+                      - endDate
+                      - participantCount
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Workshop or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop not found
+                required:
+                  - message
+  /api/workshop/organizer/{workshopId}:
+    get:
+      description: Organizer's get workshop by id with more data
+      tags:
+        - Workshops
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: workshopId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Workshop fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop loaded successfully
+                  workshop:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      googleMeetURL:
+                        type: string
+                        format: uri
+                      startDate:
+                        type: string
+                        format: date-time
+                      endDate:
+                        type: string
+                        format: date-time
+                      participants:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            email:
+                              type: string
+                              format: email
+                            emailVerified:
+                              type: boolean
+                            accountType:
+                              type: string
+                              enum: ["student", "organizer", "judge"]
+                            firstName:
+                              type: string
+                            lastName:
+                              type: string
+                            schoolDivision:
+                              type: string
+                            gradeLevel:
+                              type: string
+                              enum:
+                                [
+                                  "nine",
+                                  "ten",
+                                  "eleven",
+                                  "twelve",
+                                  "organizer",
+                                  "judge",
+                                ]
+                            isGovSchool:
+                              type: boolean
+                            techStack:
+                              type: string
+                            previousHackathon:
+                              type: boolean
+                            parentFirstName:
+                              type: string
+                            parentLastName:
+                              type: string
+                            parentEmail:
+                              type: string
+                              format: email
+                            parentPhoneNumber:
+                              type: string
+                              example: 5408531056
+                            createdAt:
+                              type: string
+                              format: date-time
+                          required:
+                            - id
+                            - email
+                            - emailVerified
+                            - accountType
+                            - firstName
+                            - lastName
+                            - schoolDivision
+                            - gradeLevel
+                            - isGovSchool
+                            - techStack
+                            - previousHackathon
+                            - parentFirstName
+                            - parentLastName
+                            - parentEmail
+                            - parentPhoneNumber
+                            - createdAt
+                      organizer:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date-time
+                    required:
+                      - id
+                      - name
+                      - description
+                      - googleMeetURL
+                      - startDate
+                      - endDate
+                      - participants
+                      - organizer
+                      - createdAt
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                proeprties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Workshop or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop not found
+                required:
+                  - message
 
 components:
   securitySchemes:

@@ -3,6 +3,8 @@ import {
   createWorkshop,
   getAllWorkshops,
   organizerGetAllWorkshops,
+  getWorkshopById,
+  organizerGetWorkshopById,
 } from "../controllers/workshopController";
 import authenticate from "../middleware/authenticate";
 
@@ -37,5 +39,25 @@ router.post("/create", authenticate, async (req: any, res: any) => {
 router.get("/all", authenticate, getAllWorkshops);
 
 router.get("/organizer-all", authenticate, organizerGetAllWorkshops);
+
+router.get("/get/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Workshop ID is required" });
+  }
+
+  await getWorkshopById(req, res);
+});
+
+router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Workshop ID is required" });
+  }
+
+  await organizerGetWorkshopById(req, res);
+});
 
 export default router;

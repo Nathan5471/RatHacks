@@ -107,3 +107,100 @@ export const organizerGetAllWorkshops = async (req: any, res: any) => {
   );
   res.status(200).json({ message: "Workshops loaded successfully", workshops });
 };
+
+export const getWorkshopById = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  const workshopData = await prisma.workshop.findUnique({
+    where: { id },
+  });
+  if (!workshopData) {
+    return res.status(404).json({ message: "Workshop not found" });
+  }
+
+  const organizer = await prisma.user.findUnique({
+    where: { id: workshopData.organizer },
+  });
+
+  const workshop = {
+    id: workshopData.id,
+    name: workshopData.name,
+    description: workshopData.description,
+    googleMeetURL: workshopData.googleMeetURL,
+    startDate: workshopData.startDate,
+    endDate: workshopData.endDate,
+    participantCount: workshopData.participants.length,
+    organizer: organizer
+      ? `${organizer.firstName} ${organizer.lastName}`
+      : "Unknown Organizer",
+  };
+  res.status(200).json({ message: "Workshop loaded successfully", workshop });
+};
+
+export const organizerGetWorkshopById = async (req: any, res: any) => {
+  const user = req.user as User;
+  const { id } = req.params as { id: string };
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  const workshopData = await prisma.workshop.findUnique({
+    where: { id },
+  });
+  if (!workshopData) {
+    return res.status(404).json({ message: "Workshop not found" });
+  }
+
+  const participants = await Promise.all(
+    workshopData.participants.map(async (participantId) => {
+      const participantData = await prisma.user.findUnique({
+        where: { id: participantId },
+      });
+      if (participantData === null) {
+        return null;
+      }
+      const participant = {
+        id: participantData.id,
+        email: participantData.email,
+        emailVerified: participantData.emailVerified,
+        accountType: participantData.accountType,
+        firstName: participantData.firstName,
+        lastName: participantData.lastName,
+        schoolDivision: participantData.schoolDivision,
+        gradeLevel: participantData.gradeLevel,
+        isGovSchool: participantData.isGovSchool,
+        techStack: participantData.techStack,
+        previousHackathon: participantData.previousHackathon,
+        parentFirstName: participantData.parentFirstName,
+        parentLastName: participantData.parentLastName,
+        parentEmail: participantData.parentEmail,
+        parentPhoneNumber: participantData.parentPhoneNumber,
+        createdAt: participantData.createdAt,
+      };
+      return participant;
+    })
+  );
+  const filteredParticipants = participants.filter(
+    (participant) => participant !== null
+  );
+
+  const organizer = await prisma.user.findUnique({
+    where: { id: workshopData.organizer },
+  });
+
+  const workshop = {
+    id: workshopData.id,
+    name: workshopData.name,
+    description: workshopData.description,
+    googleMeetURL: workshopData.googleMeetURL,
+    startDate: workshopData.startDate,
+    endDate: workshopData.endDate,
+    participants: filteredParticipants,
+    organizer: organizer
+      ? `${organizer.firstName} ${organizer.lastName}`
+      : "Unknown Organizer",
+    createdAt: workshopData.createdAt,
+  };
+  res.status(200).json({ message: "Workshop loaded successfully", workshop });
+};
