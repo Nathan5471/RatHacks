@@ -238,7 +238,7 @@ export default function OrganizerEvent() {
             </div>
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">
-                Registered Participants
+                Registered Participants ({event.participants.length})
               </h2>
               {event.participants.length > 0 ? (
                 <table className="min-w-full bg-surface-a2 rounded-lg overflow-x-auto">

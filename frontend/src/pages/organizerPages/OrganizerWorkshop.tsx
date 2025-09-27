@@ -9,6 +9,7 @@ import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditWorkshop from "../../components/EditWorkshop";
 import DeleteWorkshop from "../../components/DeleteWorkshop";
+import OrganizerUserView from "../../components/OrganizerUserView";
 
 export default function OrganizerWorkshop() {
   const { openOverlay } = useOverlay();
@@ -140,6 +141,16 @@ export default function OrganizerWorkshop() {
     }
   };
 
+  const handleOpenUserView = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    e.preventDefault();
+    if (workshopId && workshop) {
+      openOverlay(<OrganizerUserView user={workshop?.participants[index]} />);
+    }
+  };
+
   if (loading) {
     return (
       <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
@@ -212,7 +223,7 @@ export default function OrganizerWorkshop() {
                   href={workshop.googleMeetURL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary-a0 text-center hover:underline break-all"
+                  className="text-primary-a0 text-center text-lg hover:underline break-all"
                 >
                   {workshop.googleMeetURL}
                 </a>
@@ -273,6 +284,110 @@ export default function OrganizerWorkshop() {
                 </form>
               </div>
             )}
+            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+              <h2 className="text-2xl font-bold text-center mb-2">
+                Registered Participants ({workshop.participants.length})
+              </h2>
+              {workshop.participants.length > 0 ? (
+                <table className="min-w-full bg-surface-a2 rounded-lg overflow-x-auto">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Name
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Email
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Email Verified
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Account Type
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        School Division
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Grade Level
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Is RVGS
+                      </th>
+                      <th className="py-2 px-4 border-b border-surface-a1 text-left"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {workshop.participants.map((participant, index) => (
+                      <tr key={participant.id}>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.firstName} {participant.lastName}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.email}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.emailVerified ? "Yes" : "No"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.accountType}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.schoolDivision}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {gradeMap[participant.gradeLevel]}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.isGovSchool ? "Yes" : "No"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          <button
+                            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
+                            onClick={(e) => handleOpenUserView(e, index)}
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-center">No participants registered yet.</p>
+              )}
+            </div>
           </div>
         ) : (
           <div className="flex flex-col">
