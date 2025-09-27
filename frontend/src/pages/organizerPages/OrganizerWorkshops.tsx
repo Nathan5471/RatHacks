@@ -129,6 +129,47 @@ export default function OrganizerWorkshops() {
             </button>
           </div>
         </div>
+        {workshops.length === 0 ? (
+          <p className="text-2xl mt-8">No workshops yet</p>
+        ) : (
+          <div className="w-full h-full flex flex-col">
+            {workshops.map((workshop) => (
+              <div
+                key={workshop.id}
+                className="flex flex-row bg-surface-a1 mx-16 mt-6 p-4 rounded-lg"
+              >
+                <div className="flex flex-col w-2/3">
+                  <h2 className="text-3xl font-bold">{workshop.name}</h2>
+                  <p className="text-lg mb-2">{workshop.description}</p>
+                  <div className="flex flex-row mt-auto">
+                    <Link
+                      to={`/app/organizer/workshop/${workshop.id}`}
+                      className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center w-full"
+                    >
+                      Open
+                    </Link>
+                    <button className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center w-full">
+                      Edit
+                    </button>
+                    <button className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                <div className="flex flex-col w-1/3 ml-2">
+                  <span className="font-bold">Start Date:</span>{" "}
+                  {formatDate(workshop.startDate, "EEEE, MMMM d yyyy h:mm a")}
+                  <span className="font-bold">End Date:</span>{" "}
+                  {formatDate(workshop.endDate, "EEEE, MMMM d yyyy h:mm a")}
+                  <p>
+                    <span className="font-bold">Participants:</span>{" "}
+                    {workshop.participants.length}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -181,7 +181,7 @@ export default function OrganizerEvents() {
               >
                 <div className="flex flex-col w-2/3">
                   <h2 className="text-3xl font-bold">{event.name}</h2>
-                  <p>{event.description}</p>
+                  <p className="text-lg mb-2">{event.description}</p>
                   <div className="flex flex-row w-full mt-auto">
                     <Link
                       to={`/app/organizer/event/${event.id}`}
