@@ -92,6 +92,18 @@ paths:
                     example: All fields are required
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to register user
+                required:
+                  - message
   /api/auth/verify-email:
     post:
       summary: Verify a user's email
@@ -134,6 +146,18 @@ paths:
                   message:
                     type: string
                     example: Invalid email or token
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to verify email
                 required:
                   - message
   /api/auth/resend-verification:
@@ -204,6 +228,18 @@ paths:
                     example: You can only request a new verification email every 15 minutes
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to resend verification email
+                required:
+                  - message
   /api/auth/login:
     post:
       summary: Login a user
@@ -266,6 +302,18 @@ paths:
                     example: Invalid email or password
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to login user
+                required:
+                  - message
   /api/auth/logout:
     post:
       summary: Logout the current user
@@ -310,6 +358,18 @@ paths:
                     example: User not found
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properites:
+                  message:
+                    type: string
+                    example: Failed to logout user
+                required:
+                  - message
   /api/auth/logout-all:
     post:
       summary: Logout the current user from all devices
@@ -352,6 +412,18 @@ paths:
                   message:
                     type: string
                     example: User not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to logout user from all devices
                 required:
                   - message
   /api/auth/current-user:
@@ -542,6 +614,18 @@ paths:
                     example: User not found
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to update user
+                required:
+                  - message
   /api/auth/update-password:
     put:
       summary: Update the current user's password
@@ -611,6 +695,18 @@ paths:
                       example: User not found
                   required:
                     - message
+          500:
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Failed to update password
+                  required:
+                    - message
   /api/auth/delete:
     delete:
       summary: Delete the current user's account
@@ -653,6 +749,18 @@ paths:
                   message:
                     type: string
                     example: User not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to delete user
                 required:
                   - message
   /api/event/create:
@@ -752,6 +860,18 @@ paths:
                   message:
                     type: string
                     example: User not Found
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to create event
+                required:
+                  - message
   /api/event/join/{eventId}:
     post:
       summary: Join an event
@@ -813,14 +933,26 @@ paths:
                   message:
                     type: string
                     example: Event not found
-              required:
-                - message
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to join event
+                required:
+                  - message
   /api/event/leave/{eventId}:
     post:
       summary: Leave an event
       tags:
         - Events
-      secuirty:
+      security:
         - cookieAuth: []
       parameters:
         - name: eventId
@@ -878,12 +1010,22 @@ paths:
                     example: Event not found
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to leave event
   /api/event/update/{eventId}:
     put:
       summary: Update an event
       tags:
         - Events
-      secuirty:
+      security:
         - cookieAuth: []
       parameters:
         - name: eventId
@@ -982,6 +1124,18 @@ paths:
                     example: Event not found
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to update event
+                required:
+                  - message
   /api/event/all:
     get:
       summary: Get all events
@@ -1062,6 +1216,18 @@ paths:
                     example: User not found
                 required:
                   - mesasge
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch events
+                required:
+                  - message
   /api/event/organizer-all:
     get:
       summary: Organizer's get all events with more data
@@ -1189,6 +1355,9 @@ paths:
                         - participants
                         - createdBy
                         - createdAt
+                required:
+                  - message
+                  - events
         401:
           description: Unauthorized
           content:
@@ -1199,6 +1368,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+                required:
+                  - message
         403:
           description: Unauthorized
           content:
@@ -1209,6 +1380,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+                required:
+                  - message
         404:
           description: User not found
           content:
@@ -1219,6 +1392,18 @@ paths:
                   message:
                     type: string
                     example: User not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch events
   /api/event/get/{eventId}:
     get:
       summary: Get event by id
@@ -1277,6 +1462,9 @@ paths:
                       - endDate
                       - submissionDeadline
                       - participantCount
+                required:
+                  - message
+                  - event
         400:
           description: Bad request
           content:
@@ -1311,6 +1499,16 @@ paths:
                   message:
                     type: string
                     example: Event not found
+        500:
+          description: Intenral Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch event
   /api/event/organizer/{eventId}:
     get:
       summary: Organizer's get event by id with more data
@@ -1443,6 +1641,9 @@ paths:
                       - participants
                       - createdBy
                       - createdAt
+                required:
+                  - message
+                  - event
         400:
           description: Bad request
           content:
@@ -1453,6 +1654,8 @@ paths:
                   message:
                     type: string
                     example: Event ID is required
+                required:
+                  - message
         401:
           description: Unauthorized
           content:
@@ -1463,6 +1666,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+                required:
+                  - message
         403:
           description: Unauthorized
           content:
@@ -1473,6 +1678,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+                required:
+                  - message
         404:
           description: Event or User not found
           content:
@@ -1483,6 +1690,20 @@ paths:
                   message:
                     type: string
                     example: Event not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch event
+                required:
+                  - message
   /api/event/delete/{eventId}:
     delete:
       summary: Delete an event
@@ -1508,6 +1729,8 @@ paths:
                   message:
                     type: string
                     example: Event deleted successfully
+                required:
+                  - message
         400:
           description: Bad request
           content:
@@ -1518,6 +1741,8 @@ paths:
                   message:
                     type: string
                     example: Event ID is required
+                required:
+                  - message
         401:
           description: Unauthorized
           content:
@@ -1528,6 +1753,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+                required:
+                  - message
         403:
           description: Unauthorized
           content:
@@ -1538,6 +1765,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+                required:
+                  - message
         404:
           description: Event or user not found
           content:
@@ -1548,6 +1777,18 @@ paths:
                   message:
                     type: string
                     example: Event not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to delete event
   /api/workshop/create:
     post:
       summary: Create a workshop
@@ -1642,6 +1883,18 @@ paths:
                     example: User not found
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to create Workshop
+                required:
+                  - message
   /api/workshop/join/{workshopId}:
     post:
       summary: Join a workshop
@@ -1705,6 +1958,18 @@ paths:
                     example: Workshop not found
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to join workshop
+                required:
+                  - message
   /api/workshop/leave/{workshopId}:
     post:
       summary: Leave a workshop
@@ -1756,18 +2021,6 @@ paths:
                       example: Unauthorized
                   required:
                     - message
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Unauthorized
-                required:
-                  - message
         404:
           description: Workshop or user not found
           content:
@@ -1780,12 +2033,24 @@ paths:
                     example: Workshop not found
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to leave workshop
+                required:
+                  - message
   /api/workshop/all:
     get:
       summary: Get all Workshops
       tags:
         - Workshops
-      secuirty:
+      security:
         - cookieAuth: []
       responses:
         200:
@@ -1860,12 +2125,24 @@ paths:
                     example: User not found
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch workshops
+                required:
+                  - message
   /api/workshop/organizer-all:
     get:
       summary: Organizer's get all workshops with more data
       tags:
         - Workshops
-      secuirty:
+      security:
         - cookieAuth: []
       responses:
         200:
@@ -2026,6 +2303,18 @@ paths:
                     example: User not found
                 required:
                   - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch Workshops
+                required:
+                  - message
   /api/workshop/get/{workshopId}:
     get:
       summary: Get workshop by id
@@ -2081,6 +2370,9 @@ paths:
                       - startDate
                       - endDate
                       - participantCount
+                required:
+                  - message
+                  - workshop
         400:
           description: Bad request
           content:
@@ -2115,6 +2407,18 @@ paths:
                   message:
                     type: string
                     example: Workshop not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch workshop
                 required:
                   - message
   /api/workshop/organizer/{workshopId}:
@@ -2245,6 +2549,9 @@ paths:
                       - participants
                       - organizer
                       - createdAt
+                required:
+                  - message
+                  - workshop
         400:
           description: Bad request
           content:
@@ -2291,6 +2598,18 @@ paths:
                   message:
                     type: string
                     example: Workshop not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch workshop
                 required:
                   - message
 
