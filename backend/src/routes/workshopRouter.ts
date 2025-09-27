@@ -3,6 +3,7 @@ import {
   createWorkshop,
   joinWorkshop,
   leaveWorkshop,
+  addGoogleMeetURL,
   updateWorkshop,
   getAllWorkshops,
   organizerGetAllWorkshops,
@@ -59,6 +60,23 @@ router.post("/leave/:id", authenticate, async (req: any, res: any) => {
 
   await leaveWorkshop(req, res);
 });
+
+router.post(
+  "/add-google-meet-url/:id",
+  authenticate,
+  async (req: any, res: any) => {
+    const { id } = req.params as { id: string };
+    const { googleMeetURL } = req.body as { googleMeetURL: string };
+
+    if (!id || !googleMeetURL) {
+      return res
+        .status(400)
+        .json({ message: "Event ID and Google Meet URL are required" });
+    }
+
+    await addGoogleMeetURL(req, res);
+  }
+);
 
 router.put("/update/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };

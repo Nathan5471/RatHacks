@@ -169,7 +169,7 @@ export default function EditEvent({
           name="submissionDeadline"
           value={submissionDeadline}
           onChange={(e) => setSubmissionDeadline(e.target.value)}
-          className="p-2 roudned-lg text-lg bg-surface-a2 w-full mt-1"
+          className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
           required
         />
         {error && <p className="text-red-500 text-lg mt-2">{error}</p>}
@@ -183,7 +183,7 @@ export default function EditEvent({
           <button
             type="button"
             onClick={closeOverlay}
-            className="bg-surface-a2 hover:bg-surface-a2 p-2 rounded-lg ml-2 w-full font-bold"
+            className="bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg ml-2 w-full font-bold"
           >
             Cancel
           </button>

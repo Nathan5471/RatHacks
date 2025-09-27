@@ -2045,6 +2045,105 @@ paths:
                     example: Failed to leave workshop
                 required:
                   - message
+  /api/workshop/add-google-meet-url/{workshopId}:
+    post:
+      summary: Add Google Meet URL to a workshop
+      tags:
+        - Workshops
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: workshopId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                googleMeetURL:
+                  type: string
+                  format: uri
+              required:
+                - googleMeetURL
+      responses:
+        200:
+          description: Google Meet URL added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Google Meet URL added successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop ID and Google Meet URL are required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Workshop or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to add Google Meet URL
+                required:
+                  - message
   /api/workshop/update/{workshopId}:
     put:
       summary: Update a workshop

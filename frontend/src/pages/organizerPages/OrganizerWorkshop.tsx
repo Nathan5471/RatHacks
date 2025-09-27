@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useOverlay } from "../../contexts/OverlayContext";
-import { organizerGetWorkshopById } from "../../utils/WorkshopAPIHandler";
+import {
+  organizerGetWorkshopById,
+  addGoogleMeetURL,
+} from "../../utils/WorkshopAPIHandler";
 import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditWorkshop from "../../components/EditWorkshop";
@@ -50,7 +53,14 @@ export default function OrganizerWorkshop() {
     judge: "Judge",
   };
   const [workshop, setWorkshop] = useState<Workshop | null>(null);
+  const [googleMeetURL, setGoogleMeetURL] = useState("");
   const [loading, setLoading] = useState(true);
+  const [timeRemaining, setTimeRemaining] = useState<{
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(null);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -67,6 +77,31 @@ export default function OrganizerWorkshop() {
     };
     fetchEvent();
   }, [workshopId, reload]);
+
+  useEffect(() => {
+    const calculateTimeRemaining = () => {
+      if (!workshop) return null;
+      if (workshop.googleMeetURL) return null;
+      const now = new Date();
+      const startDate = new Date(workshop.startDate);
+      const difference = startDate.getTime() - now.getTime();
+
+      if (difference <= 0) return null;
+
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((difference / (1000 * 60)) % 60);
+      const seconds = Math.floor((difference / 1000) % 60);
+
+      return { days, hours, minutes, seconds };
+    };
+
+    const updateTimeRemaining = setInterval(() => {
+      setTimeRemaining(calculateTimeRemaining());
+    }, 1000);
+
+    return () => clearInterval(updateTimeRemaining);
+  }, [workshop]);
 
   const handleOpenEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -88,6 +123,20 @@ export default function OrganizerWorkshop() {
           setReload={undefined}
         />
       );
+    }
+  };
+
+  const handleAddGoogleMeetURL = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    if (!workshopId) return;
+    try {
+      await addGoogleMeetURL(workshopId, googleMeetURL);
+      setGoogleMeetURL("");
+      setReload(!reload);
+    } catch (error) {
+      console.error("Error adding Google Meet URL:", error);
     }
   };
 
@@ -115,7 +164,7 @@ export default function OrganizerWorkshop() {
             <h1 className="text-4xl font-bold text-center mb-4">
               {workshop.name}
             </h1>
-            <div className="flex flex-row bg-surface-a1 p-4 rounded-lg mb-4">
+            <div className="flex flex-row bg-surface-a1 p-4 rounded-lg">
               <div className="flex flex-col w-2/3">
                 <p className="text-lg mb-2">{workshop.description}</p>
                 <div className="flex flex-row w-full mt-auto">
@@ -154,6 +203,76 @@ export default function OrganizerWorkshop() {
                 </p>
               </div>
             </div>
+            {workshop.googleMeetURL ? (
+              <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+                <h2 className="text-2xl font-bold text-center mb-2">
+                  Workshop is live! Join now:
+                </h2>
+                <a
+                  href={workshop.googleMeetURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary-a0 text-center hover:underline break-all"
+                >
+                  {workshop.googleMeetURL}
+                </a>
+              </div>
+            ) : (
+              <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+                <h2 className="text-2xl font-bold text-center mb-2">
+                  {workshop.name} Countdown
+                </h2>
+                <div className="flex flex-row justify-center">
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
+                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                      {timeRemaining?.days || 0}
+                    </span>
+                    <span className="text-xl text-center">Days</span>
+                  </div>
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
+                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                      {timeRemaining?.hours || 0}
+                    </span>
+                    <span className="text-xl text-center">Hours</span>
+                  </div>
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
+                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                      {timeRemaining?.minutes || 0}
+                    </span>
+                    <span className="text-xl text-center">Minutes</span>
+                  </div>
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
+                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                      {timeRemaining?.seconds || 0}
+                    </span>
+                    <span className="text-xl text-center">Seconds</span>
+                  </div>
+                </div>
+                <form onSubmit={handleAddGoogleMeetURL} className="mt-4">
+                  <label htmlFor="googleMeetURL" className="font-bold">
+                    Google Meet URL:
+                  </label>
+                  <div className="flex flex-row mt-2">
+                    <input
+                      type="url"
+                      id="googleMeetURL"
+                      name="googleMeetURL"
+                      value={googleMeetURL}
+                      onChange={(e) => setGoogleMeetURL(e.target.value)}
+                      placeholder="Enter Google Meet URL"
+                      className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
+                      required
+                    />
+                    <button
+                      type="submit"
+                      className="bg-primary-a0 hover:bg-primary-a1 px-8 py-2 ml-2 rounded-lg font-bold"
+                    >
+                      Start
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex flex-col">

@@ -109,6 +109,39 @@ export const leaveWorkshop = async (req: any, res: any) => {
   }
 };
 
+export const addGoogleMeetURL = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const { googleMeetURL } = req.body as { googleMeetURL: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const workshop = await prisma.workshop.findUnique({
+      where: { id },
+    });
+    if (!workshop) {
+      return res.status(404).json({ message: "Workshop not found" });
+    }
+    if (workshop.googleMeetURL !== null) {
+      return res.status(400).json({ message: "Google Meet URL already set" });
+    }
+
+    await prisma.workshop.update({
+      where: { id },
+      data: { googleMeetURL },
+    });
+    return res
+      .status(200)
+      .json({ message: "Google Meet URL added successfully" });
+  } catch (error) {
+    console.error("Error adding Google Meet URL:", error);
+    return res.status(500).json({ message: "Failed to add Google Meet URL" });
+  }
+};
+
 export const updateWorkshop = async (req: any, res: any) => {
   const { id } = req.params as { id: string };
   const { name, description, startDate, endDate } = req.body as {
