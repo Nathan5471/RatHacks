@@ -214,6 +214,10 @@ export default function OrganizerWorkshops() {
                     <span className="font-bold">Participants:</span>{" "}
                     {workshop.participants.length}
                   </p>
+                  <p>
+                    <span className="font-bold">Organizer:</span>{" "}
+                    {workshop.organizer}
+                  </p>
                 </div>
               </div>
             ))}

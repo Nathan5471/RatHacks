@@ -155,7 +155,7 @@ export default function OrganizerEvent() {
             <h1 className="text-4xl font-bold text-center mb-4">
               {event.name}
             </h1>
-            <div className="flex flex-row bg-surface-a1 p-4 rounded-lg mb-4">
+            <div className="flex flex-row bg-surface-a1 p-4 rounded-lg">
               <div className="flex flex-col w-2/3">
                 <p className="text-lg mb-2">{event.description}</p>
                 <div className="flex flex-row w-full mt-auto">
