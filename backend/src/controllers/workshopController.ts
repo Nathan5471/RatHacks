@@ -22,6 +22,70 @@ export const createWorkshop = async (req: any, res: any) => {
     .json({ message: "Workshop created successfully", id: workshop.id });
 };
 
+export const joinWorkshop = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  const workshop = await prisma.workshop.findUnique({
+    where: { id },
+  });
+  if (!workshop) {
+    return res.status(404).json({ message: "Workshop not found" });
+  }
+
+  if (workshop.participants.includes(user.id)) {
+    return res.status(200).json({ message: "Already joined this workshop" });
+  }
+
+  await prisma.workshop.update({
+    where: { id },
+    data: { participants: workshop.participants.concat([user.id]) },
+  });
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { workshops: user.workshops.concat([workshop.id]) },
+  });
+
+  res.status(200).json({ message: "Successfully joined the workshop" });
+};
+
+export const leaveWorkshop = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  const workshop = await prisma.workshop.findUnique({
+    where: { id },
+  });
+  if (!workshop) {
+    return res.status(404).json({ message: "Workshop not found" });
+  }
+
+  if (!workshop.participants.includes(user.id)) {
+    return res
+      .status(200)
+      .json({ message: "You have not joined this workshop" });
+  }
+
+  await prisma.workshop.update({
+    where: { id },
+    data: {
+      participants: workshop.participants.filter(
+        (participantId) => participantId !== user.id
+      ),
+    },
+  });
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      workshops: user.workshops.filter(
+        (workshopId) => workshopId !== workshop.id
+      ),
+    },
+  });
+
+  res.status(200).json({ message: "Successfully left the workshop" });
+};
+
 export const getAllWorkshops = async (req: any, res: any) => {
   const allWorkshops = await prisma.workshop.findMany();
   const workshops = await Promise.all(

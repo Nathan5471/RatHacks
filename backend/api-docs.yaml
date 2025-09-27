@@ -1604,6 +1604,8 @@ paths:
                   message:
                     type: string
                     example: All fields are required
+                required:
+                  - message
         401:
           description: Unauthorized
           content:
@@ -1614,6 +1616,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+                required:
+                  - message
         403:
           description: Unauthorized
           content:
@@ -1624,6 +1628,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+                required:
+                  - message
         404:
           description: User not found
           content:
@@ -1634,6 +1640,146 @@ paths:
                   message:
                     type: string
                     example: User not found
+                required:
+                  - message
+  /api/workshop/join/{workshopId}:
+    post:
+      summary: Join a workshop
+      tags:
+        - Workshops
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: workshopId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Joined workshop successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Joined workshop successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Workshop or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop not found
+                required:
+                  - message
+  /api/workshop/leave/{workshopId}:
+    post:
+      summary: Leave a workshop
+      tags:
+        - Workshops
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: workshopId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Left workshop successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Left workshop successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop ID is required
+                required:
+                  - message
+          401:
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Unauthorized
+                  required:
+                    - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Workshop or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop not found
+                required:
+                  - message
   /api/workshop/all:
     get:
       summary: Get all Workshops

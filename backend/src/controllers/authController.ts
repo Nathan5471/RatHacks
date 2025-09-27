@@ -285,6 +285,23 @@ export const deleteUser = async (req: any, res: any) => {
       },
     });
   });
+  await user.workshops.forEach(async (workshopId) => {
+    const workshop = await prisma.workshop.findUnique({
+      where: { id: workshopId },
+    });
+    if (!workshop) {
+      return;
+    }
+    await prisma.workshop.update({
+      where: { id: workshopId },
+      data: {
+        participants: workshop.participants.filter(
+          (userId) => userId !== user.id
+        ),
+      },
+    });
+  });
+
   await prisma.user.delete({
     where: { id: user.id },
   });

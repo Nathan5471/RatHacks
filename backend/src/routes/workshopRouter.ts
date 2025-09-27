@@ -1,6 +1,8 @@
 import express from "express";
 import {
   createWorkshop,
+  joinWorkshop,
+  leaveWorkshop,
   getAllWorkshops,
   organizerGetAllWorkshops,
   getWorkshopById,
@@ -34,6 +36,26 @@ router.post("/create", authenticate, async (req: any, res: any) => {
   }
 
   await createWorkshop(req, res);
+});
+
+router.post("/join/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Workshop ID is required" });
+  }
+
+  await joinWorkshop(req, res);
+});
+
+router.post("/leave/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Workshop ID is required" });
+  }
+
+  await leaveWorkshop(req, res);
 });
 
 router.get("/all", authenticate, getAllWorkshops);
