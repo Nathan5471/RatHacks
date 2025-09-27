@@ -8,6 +8,7 @@ import Events from "./pages/Events";
 import Event from "./pages/Event";
 import Settings from "./pages/Settings";
 import OrganizerDashboard from "./pages/organizerPages/OrganizerDashboard";
+import OrganizerWorkshops from "./pages/organizerPages/OrganizerWorkshops";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
 import OrganizerEvent from "./pages/organizerPages/OrganizerEvent";
 import Home from "./pages/Home";
@@ -37,6 +38,10 @@ function App() {
         </Route>
         <Route element={<OrganizerRoute />}>
           <Route path="/app/organizer" element={<OrganizerDashboard />} />
+          <Route
+            path="/app/organizer/workshops"
+            element={<OrganizerWorkshops />}
+          />
           <Route path="/app/organizer/events" element={<OrganizerEvents />} />
           <Route
             path="/app/organizer/event/:eventId"

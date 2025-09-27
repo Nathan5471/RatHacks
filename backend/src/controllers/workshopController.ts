@@ -108,7 +108,7 @@ export const getAllWorkshops = async (req: any, res: any) => {
       };
     })
   );
-  res.status(200).json({ message: "Workshops succesfully loaded", workshops });
+  res.status(200).json({ message: "Workshops successfully loaded", workshops });
 };
 
 export const organizerGetAllWorkshops = async (req: any, res: any) => {
@@ -165,6 +165,7 @@ export const organizerGetAllWorkshops = async (req: any, res: any) => {
         organizer: organizer
           ? `${organizer.firstName} ${organizer.lastName}`
           : "Unknown Organizer",
+        organizerId: workshop.organizer,
         createdAt: workshop.createdAt,
       };
     })

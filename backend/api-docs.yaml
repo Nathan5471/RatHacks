@@ -1951,6 +1951,81 @@ paths:
                               createdAt:
                                 type: string
                                 format: date-time
+                            required:
+                              - id
+                              - email
+                              - emailVerified
+                              - accountType
+                              - firstName
+                              - lastName
+                              - schoolDivision
+                              - gradeLevel
+                              - isGovSchool
+                              - techStack
+                              - previousHackathon
+                              - parentFirstName
+                              - parentLastName
+                              - parentEmail
+                              - parentPhoneNumber
+                              - createdAt
+                        organizer:
+                          type: string
+                        organizerId:
+                          type: string
+                          format: uuid
+                        createdAt:
+                          type: string
+                          format: date-time
+                      required:
+                        - id
+                        - name
+                        - description
+                        - googleMeetURL
+                        - startDate
+                        - endDate
+                        - participants
+                        - organizer
+                        - organizerId
+                        - createdAt
+                required:
+                  - message
+                  - workshops
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
   /api/workshop/get/{workshopId}:
     get:
       summary: Get workshop by id
