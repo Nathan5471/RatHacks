@@ -3,6 +3,7 @@ import {
   createWorkshop,
   joinWorkshop,
   leaveWorkshop,
+  updateWorkshop,
   getAllWorkshops,
   organizerGetAllWorkshops,
   getWorkshopById,
@@ -56,6 +57,33 @@ router.post("/leave/:id", authenticate, async (req: any, res: any) => {
   }
 
   await leaveWorkshop(req, res);
+});
+
+router.put("/update/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const { name, description, startDate, endDate } = req.body as {
+    name: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+  };
+
+  if (!id || !name || !description || !startDate || !endDate) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+  const now = new Date();
+  if (now.getTime() > new Date(startDate).getTime()) {
+    return res
+      .status(400)
+      .json({ message: "Start date should not be in the past" });
+  }
+  if (new Date(startDate).getTime() > new Date(endDate).getTime()) {
+    return res
+      .status(400)
+      .json({ message: "The end date must be after the start date" });
+  }
+
+  await updateWorkshop(req, res);
 });
 
 router.get("/all", authenticate, getAllWorkshops);

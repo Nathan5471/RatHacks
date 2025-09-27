@@ -109,6 +109,44 @@ export const leaveWorkshop = async (req: any, res: any) => {
   }
 };
 
+export const updateWorkshop = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const { name, description, startDate, endDate } = req.body as {
+    name: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+  };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const workshop = await prisma.workshop.findUnique({
+      where: { id },
+    });
+    if (!workshop) {
+      return res.status(404).json({ message: "Workshop not found" });
+    }
+
+    await prisma.workshop.update({
+      where: { id },
+      data: {
+        name,
+        description,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+      },
+    });
+    return res.status(200).json({ message: "Workshop updated successfully" });
+  } catch (error) {
+    console.error("Error updating workshop:", error);
+    return res.status(500).json({ message: "Failed to update workshop" });
+  }
+};
+
 export const getAllWorkshops = async (req: any, res: any) => {
   try {
     const allWorkshops = await prisma.workshop.findMany();

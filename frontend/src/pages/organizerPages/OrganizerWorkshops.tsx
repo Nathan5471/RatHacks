@@ -5,6 +5,7 @@ import { organizerGetAllWorkshops } from "../../utils/WorkshopAPIHandler";
 import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CreateWorkshop from "../../components/CreateWorkshop";
+import EditWorkshop from "../../components/EditWorkshop";
 
 export default function OrganizerWorkshops() {
   const { openOverlay } = useOverlay();
@@ -61,6 +62,14 @@ export default function OrganizerWorkshops() {
   const handleOpenCreateWorkshop = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<CreateWorkshop />);
+  };
+
+  const handleOpenEditWorkshop = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    workshopId: string
+  ) => {
+    e.preventDefault();
+    openOverlay(<EditWorkshop workshopId={workshopId} setReload={setReload} />);
   };
 
   if (loading) {
@@ -163,7 +172,10 @@ export default function OrganizerWorkshops() {
                     >
                       Open
                     </Link>
-                    <button className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold text-center w-full">
+                    <button
+                      className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold text-center w-full"
+                      onClick={(e) => handleOpenEditWorkshop(e, workshop.id)}
+                    >
                       Edit
                     </button>
                     <button className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full">

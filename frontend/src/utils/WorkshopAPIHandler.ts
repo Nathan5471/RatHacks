@@ -35,6 +35,19 @@ export const leaveWorkshop = async (id: string) => {
   return response.data;
 };
 
+export const updateWorkshop = async (
+  id: string,
+  data: {
+    name: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+  }
+) => {
+  const response = await api.put(`/update/${id}`, data);
+  return response.data;
+};
+
 export const getAllWorkshops = async () => {
   const response = await api.get("/all");
   return response.data;
