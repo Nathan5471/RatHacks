@@ -16,7 +16,7 @@ api.interceptors.response.use(
 );
 
 export const createWorkshop = async (data: {
-  title: string;
+  name: string;
   description: string;
   startDate: string;
   endDate: string;

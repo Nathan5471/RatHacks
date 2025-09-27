@@ -15,7 +15,13 @@ export const createWorkshop = async (req: any, res: any) => {
   }
 
   const workshop = await prisma.workshop.create({
-    data: { name, description, startDate, endDate, organizer: user.id },
+    data: {
+      name,
+      description,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      organizer: user.id,
+    },
   });
   res
     .status(201)

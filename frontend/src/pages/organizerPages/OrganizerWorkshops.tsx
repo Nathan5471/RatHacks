@@ -4,6 +4,7 @@ import { useOverlay } from "../../contexts/OverlayContext";
 import { organizerGetAllWorkshops } from "../../utils/WorkshopAPIHandler";
 import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
+import CreateWorkshop from "../../components/CreateWorkshop";
 
 export default function OrganizerWorkshops() {
   const { openOverlay } = useOverlay();
@@ -57,6 +58,11 @@ export default function OrganizerWorkshops() {
     fetchWorkshops();
   }, [reload]);
 
+  const handleOpenCreateWorkshop = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    openOverlay(<CreateWorkshop />);
+  };
+
   if (loading) {
     return (
       <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
@@ -70,7 +76,10 @@ export default function OrganizerWorkshops() {
               <h1 className="text-4xl font-bold">Workshops</h1>
             </div>
             <div className="flex items-center">
-              <button className="ml-auto p-2 rounded-lg text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1">
+              <button
+                className="ml-auto p-2 rounded-lg text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+                onClick={handleOpenCreateWorkshop}
+              >
                 Create Workshop
               </button>
             </div>
@@ -94,7 +103,10 @@ export default function OrganizerWorkshops() {
               <h1 className="text-4xl font-bold">Workshops</h1>
             </div>
             <div className="flex items-center">
-              <button className="ml-auto p-2 rounded-lg text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1">
+              <button
+                className="ml-auto p-2 rounded-lg text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+                onClick={handleOpenCreateWorkshop}
+              >
                 Create Workshop
               </button>
             </div>
@@ -124,7 +136,10 @@ export default function OrganizerWorkshops() {
             <h1 className="text-4xl font-bold">Workshops</h1>
           </div>
           <div className="flex items-center">
-            <button className="ml-auto p-2 rounded-lg text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1">
+            <button
+              className="ml-auto p-2 rounded-lg text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+              onClick={handleOpenCreateWorkshop}
+            >
               Create Workshop
             </button>
           </div>
@@ -148,7 +163,7 @@ export default function OrganizerWorkshops() {
                     >
                       Open
                     </Link>
-                    <button className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center w-full">
+                    <button className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold text-center w-full">
                       Edit
                     </button>
                     <button className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full">
