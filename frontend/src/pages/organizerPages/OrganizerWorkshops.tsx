@@ -6,6 +6,7 @@ import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CreateWorkshop from "../../components/CreateWorkshop";
 import EditWorkshop from "../../components/EditWorkshop";
+import DeleteWorkshop from "../../components/DeleteWorkshop";
 
 export default function OrganizerWorkshops() {
   const { openOverlay } = useOverlay();
@@ -70,6 +71,22 @@ export default function OrganizerWorkshops() {
   ) => {
     e.preventDefault();
     openOverlay(<EditWorkshop workshopId={workshopId} setReload={setReload} />);
+  };
+
+  const handleOpenDeleteWorkshop = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    workshopId: string,
+    workshopName: string
+  ) => {
+    e.preventDefault();
+    openOverlay(
+      <DeleteWorkshop
+        workshopId={workshopId}
+        workshopName={workshopName}
+        currentPage="workshops"
+        setReload={setReload}
+      />
+    );
   };
 
   if (loading) {
@@ -178,7 +195,12 @@ export default function OrganizerWorkshops() {
                     >
                       Edit
                     </button>
-                    <button className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full">
+                    <button
+                      className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
+                      onClick={(e) =>
+                        handleOpenDeleteWorkshop(e, workshop.id, workshop.name)
+                      }
+                    >
                       Delete
                     </button>
                   </div>

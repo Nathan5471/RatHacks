@@ -67,3 +67,8 @@ export const organizerGetWorkshopById = async (id: string) => {
   const response = await api.get(`/organizer/${id}`);
   return response.data;
 };
+
+export const deleteWorkshop = async (id: string) => {
+  const response = await api.delete(`/delete/${id}`);
+  return response.data;
+};

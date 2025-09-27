@@ -358,3 +358,43 @@ export const organizerGetWorkshopById = async (req: any, res: any) => {
     return res.status(500).json({ message: "Failed to load workshop" });
   }
 };
+
+export const deleteWorkshop = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const workshop = await prisma.workshop.findUnique({
+      where: { id },
+    });
+    if (!workshop) {
+      return res.status(404).json({ message: "Workshop not found" });
+    }
+
+    await workshop.participants.forEach(async (participantId) => {
+      const participant = await prisma.user.findUnique({
+        where: { id: participantId },
+      });
+      if (!participant) return;
+      await prisma.user.update({
+        where: { id: participantId },
+        data: {
+          workshops: participant.workshops.filter(
+            (workshopId) => workshopId !== workshop.id
+          ),
+        },
+      });
+    });
+    await prisma.workshop.delete({
+      where: { id },
+    });
+    return res.status(200).json({ message: "Workshop deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting workshop:", error);
+    return res.status(500).json({ message: "Failed to delete workshop" });
+  }
+};

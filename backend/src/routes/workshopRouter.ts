@@ -8,6 +8,7 @@ import {
   organizerGetAllWorkshops,
   getWorkshopById,
   organizerGetWorkshopById,
+  deleteWorkshop,
 } from "../controllers/workshopController";
 import authenticate from "../middleware/authenticate";
 
@@ -108,6 +109,16 @@ router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
   }
 
   await organizerGetWorkshopById(req, res);
+});
+
+router.delete("/delete/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Workshop ID is required" });
+  }
+
+  await deleteWorkshop(req, res);
 });
 
 export default router;

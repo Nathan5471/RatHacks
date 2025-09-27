@@ -2721,6 +2721,93 @@ paths:
                     example: Failed to fetch workshop
                 required:
                   - message
+  /api/workshop/delete/{workshopId}:
+    delete:
+      summary: Delete a workshop
+      tags:
+        - Workshops
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: workshopId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Workshop deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop deleted successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop ID is required
+                required:
+                  - mesasge
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Workshop or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to delete workshop
+                required:
+                  - message
 
 components:
   securitySchemes:
