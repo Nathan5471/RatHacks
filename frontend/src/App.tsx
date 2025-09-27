@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthenticatedRoute from "./utils/AuthenticatedRoute";
 import OrganizerRoute from "./utils/OrganizerRoute";
 import Dashboard from "./pages/Dashboard";
+import Workshops from "./pages/Workshops";
 import Events from "./pages/Events";
 import Event from "./pages/Event";
 import Settings from "./pages/Settings";
@@ -33,6 +34,7 @@ function App() {
       <Routes>
         <Route element={<AuthenticatedRoute />}>
           <Route path="/app" element={<Dashboard />} />
+          <Route path="/app/workshops" element={<Workshops />} />
           <Route path="/app/events" element={<Events />} />
           <Route path="/app/event/:eventId" element={<Event />} />
           <Route path="/app/settings" element={<Settings />} />

@@ -20,6 +20,7 @@ interface AuthContextType {
         parentEmail: string;
         parentPhoneNumber: string;
         events: string[];
+        workshops: string[];
       }
     | null
     | undefined;

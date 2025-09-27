@@ -149,6 +149,7 @@ router.get("/current-user", authenticate, (req: any, res: any) => {
     parentEmail: reqUser.parentEmail,
     parentPhoneNumber: reqUser.parentPhoneNumber,
     events: reqUser.events,
+    workshops: reqUser.workshops,
   };
   res.status(200).json(user);
 });

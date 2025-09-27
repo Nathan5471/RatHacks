@@ -1,33 +1,37 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { getAllEvents, joinEvent, leaveEvent } from "../utils/EventAPIHandler";
+import {
+  getAllWorkshops,
+  joinWorkshop,
+  leaveWorkshop,
+} from "../utils/WorkshopAPIHandler";
 import { formatDate } from "date-fns";
 import AppNavbar from "../components/AppNavbar";
 
-export default function Events() {
+export default function Workshops() {
   const { user, getUser } = useAuth();
-  interface Event {
+  interface Workshop {
     id: string;
     name: string;
     description: string;
-    location: string;
+    googleMeetURL: string;
     startDate: string;
     endDate: string;
-    submissionDeadline: string;
     participantCount: number;
+    organizer: string;
   }
-  const [events, setEvents] = useState<Event[]>([]);
+  const [workshops, setWorkshops] = useState<Workshop[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchWorkshops = async () => {
       setError("");
       try {
-        const response = await getAllEvents();
-        setEvents(response.events);
-      } catch (error: unknown) {
+        const response = await getAllWorkshops();
+        setWorkshops(response.workshops);
+      } catch (error) {
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -40,32 +44,32 @@ export default function Events() {
         setLoading(false);
       }
     };
-    fetchEvents();
+    fetchWorkshops();
   }, []);
 
   const handleJoin = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    eventId: string
+    workshopId: string
   ) => {
     e.preventDefault();
     try {
-      await joinEvent(eventId);
+      await joinWorkshop(workshopId);
       await getUser();
     } catch (error) {
-      console.error("Error joining event:", error);
+      console.error("Error joining workshop:", error);
     }
   };
 
   const handleLeave = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    eventId: string
+    workshopId: string
   ) => {
     e.preventDefault();
     try {
-      await leaveEvent(eventId);
+      await leaveWorkshop(workshopId);
       await getUser();
     } catch (error) {
-      console.error("Error leaving event:", error);
+      console.error("Error leaving workshop:", error);
     }
   };
 
@@ -76,8 +80,8 @@ export default function Events() {
           <AppNavbar />
         </div>
         <div className="w-5/6 h-full flex flex-col p-4 items-center">
-          <h1 className="text-4xl text-center">Events</h1>
-          <p className="mt-4 text-lg">Loading events...</p>
+          <h1 className="text-4xl text-center">Workshops</h1>
+          <p className="mt-4 text-lg">Loading workshops...</p>
         </div>
       </div>
     );
@@ -90,9 +94,9 @@ export default function Events() {
           <AppNavbar />
         </div>
         <div className="w-5/6 h-full flex flex-col p-4 items-center">
-          <h1 className="text-4xl text-center">Events</h1>
+          <h1 className="text-4xl text-center">Workshops</h1>
           <p className="mt-4 text-lg text-red-500 w-3/4 text-center">
-            There was an error loading events, please try refreshing: {error}
+            There was an error loading workshops, please try refreshing: {error}
           </p>
         </div>
       </div>
@@ -104,37 +108,39 @@ export default function Events() {
       <div className="w-1/6 h-full">
         <AppNavbar />
       </div>
-      <div className="w-5/6 h-full flex flex-col p-4 items-center overflow-y-auto">
-        <h1 className="text-4xl text-center font-bold">Events</h1>
-        {events.length === 0 ? (
-          <p className="mt-4 text-lg">No events available.</p>
+      <div className="w-5/6 h-full flex flex-col p-4 items-center">
+        <h1 className="text-4xl text-center font-bold">Workshops</h1>
+        {workshops.length === 0 ? (
+          <p className="mt-4 text-lg">No workshops available.</p>
         ) : (
           <div className="w-full h-full flex flex-col">
-            {events.map((event) => (
+            {workshops.map((workshop) => (
               <div
-                key={event.id}
+                key={workshop.id}
                 className="flex flex-row bg-surface-a1 mx-16 mt-6 p-4 rounded-lg"
               >
                 <div className="flex flex-col w-2/3">
-                  <h2 className="text-3xl font-bold">{event.name}</h2>
-                  <p className="text-lg mb-2">{event.description}</p>
+                  <h2 className="text-3xl text-center font-bold">
+                    {workshop.name}
+                  </h2>
+                  <p className="text-lg mb-2">{workshop.description}</p>
                   <div className="flex flex-row w-full mt-auto">
                     <Link
-                      to={`/app/event/${event.id}`}
+                      to={`/app/workshop/${workshop.id}`}
                       className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
-                    {user && user.events.includes(event.id) ? (
+                    {user && user.workshops.includes(workshop.id) ? (
                       <button
-                        onClick={(e) => handleLeave(e, event.id)}
+                        onClick={(e) => handleLeave(e, workshop.id)}
                         className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
                       >
                         Leave
                       </button>
                     ) : (
                       <button
-                        onClick={(e) => handleJoin(e, event.id)}
+                        onClick={(e) => handleJoin(e, workshop.id)}
                         className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
                       >
                         Join
@@ -143,19 +149,17 @@ export default function Events() {
                   </div>
                 </div>
                 <div className="flex flex-col w-1/3 ml-2">
-                  <span className="font-bold">Location:</span> {event.location}
                   <span className="font-bold">Start Date:</span>{" "}
-                  {formatDate(event.startDate, "EEEE, MMMM d yyyy h:mm a")}
+                  {formatDate(workshop.startDate, "EEEE, MMMM d yyyy h:mm a")}
                   <span className="font-bold">End Date:</span>{" "}
-                  {formatDate(event.endDate, "EEEE, MMMM d yyyy h:mm a")}
-                  <span className="font-bold">Submission Deadline:</span>{" "}
-                  {formatDate(
-                    event.submissionDeadline,
-                    "EEEE, MMMM d yyyy h:mm a"
-                  )}
+                  {formatDate(workshop.endDate, "EEEE, MMMM d yyyy h:mm a")}
                   <p>
                     <span className="font-bold">Participants:</span>{" "}
-                    {event.participantCount}
+                    {workshop.participantCount}
+                  </p>
+                  <p>
+                    <span className="font-bold">Organizer:</span>{" "}
+                    {workshop.organizer}
                   </p>
                 </div>
               </div>

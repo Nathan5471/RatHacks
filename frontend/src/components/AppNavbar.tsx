@@ -19,6 +19,14 @@ export default function AppNavbar() {
         Dashboard
       </Link>
       <Link
+        to="/app/workshops"
+        className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
+          path === "/app/workshops" ? "text-primary-a1" : ""
+        } bg-surface-a2 hover:bg-surface-a3`}
+      >
+        Workshops
+      </Link>
+      <Link
         to="/app/events"
         className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/events" ? "text-primary-a1" : ""
