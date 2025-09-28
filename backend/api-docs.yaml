@@ -1336,6 +1336,9 @@ paths:
                         submissionDeadline:
                           type: string
                           format: date-time
+                        status:
+                          type: string
+                          enum: ["upcoming", "ongoing", "completed"]
                         participantCount:
                           type: number
                           min: 0
@@ -1347,6 +1350,7 @@ paths:
                         - startDate
                         - endDate
                         - submissionDeadline
+                        - status
                         - participantCount
                 required:
                   - message
@@ -1428,6 +1432,9 @@ paths:
                         submissionDeadline:
                           type: string
                           format: date-time
+                        status:
+                          type: string
+                          enum: ["upcoming", "ongoing", "completed"]
                         participants:
                           type: array
                           items:
@@ -1543,6 +1550,7 @@ paths:
                         - startDate
                         - endDate
                         - submissionDeadline
+                        - status
                         - participants
                         - teams
                         - createdBy
@@ -1642,6 +1650,9 @@ paths:
                       submissionDeadline:
                         type: string
                         format: date-time
+                      status:
+                        type: string
+                        enum: ["upcoming", "ongoing", "completed"]
                       participantCount:
                         type: number
                         min: 0
@@ -1677,6 +1688,7 @@ paths:
                       - startDate
                       - endDate
                       - submissionDeadline
+                      - status
                       - participantCount
                 required:
                   - message
@@ -1771,6 +1783,9 @@ paths:
                       submissionDeadline:
                         type: string
                         format: date-time
+                      status:
+                        type: string
+                        enum: ["upcoming", "ongoing", "completed"]
                       participants:
                         type: array
                         items:
@@ -1885,6 +1900,7 @@ paths:
                       - startDate
                       - endDate
                       - submissionDeadline
+                      - status
                       - participants
                       - teams
                       - createdBy

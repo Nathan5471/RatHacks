@@ -1,6 +1,5 @@
 import { User } from "@prisma/client";
 import prisma from "../prisma/client";
-import { sub } from "date-fns";
 
 export const createEvent = async (req: any, res: any) => {
   const {
@@ -390,6 +389,7 @@ export const getAllEvents = async (req: any, res: any) => {
       startDate: event.startDate,
       endDate: event.endDate,
       submissionDeadline: event.submissionDeadline,
+      status: event.status,
       participantCount: event.participants.length,
     }));
     res.status(200).json({ message: "Events loaded successfully", events });
@@ -448,6 +448,7 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
           startDate: event.startDate,
           endDate: event.endDate,
           submissionDeadline: event.submissionDeadline,
+          status: event.status,
           participants: removedUneccesaryFieldsUsers,
           teams: eventTeams,
           createdBy: event.createdBy,
@@ -516,6 +517,7 @@ export const getEventById = async (req: any, res: any) => {
         startDate: event.startDate,
         endDate: event.endDate,
         submissionDeadline: event.submissionDeadline,
+        status: event.status,
         participantCount: event.participants.length,
         team: removedUneccesaryFieldsTeam,
       },
@@ -579,6 +581,7 @@ export const organizerGetEventById = async (req: any, res: any) => {
       startDate: event.startDate,
       endDate: event.endDate,
       submissionDeadline: event.submissionDeadline,
+      status: event.status,
       participants: removedUneccesaryFieldsUsers,
       teams: teams,
       createdBy: event.createdBy,

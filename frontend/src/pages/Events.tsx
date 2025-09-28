@@ -15,6 +15,7 @@ export default function Events() {
     startDate: string;
     endDate: string;
     submissionDeadline: string;
+    status: "upcoming" | "ongoing" | "completed";
     participantCount: number;
   }
   const [events, setEvents] = useState<Event[]>([]);
@@ -143,6 +144,9 @@ export default function Events() {
                   </div>
                 </div>
                 <div className="flex flex-col w-1/3 ml-2">
+                  <p>
+                    <span className="font-bold">Status:</span> {event.status}
+                  </p>
                   <span className="font-bold">Location:</span> {event.location}
                   <span className="font-bold">Start Date:</span>{" "}
                   {formatDate(event.startDate, "EEEE, MMMM d yyyy h:mm a")}

@@ -30,6 +30,15 @@ export default function OrganizerEvent() {
     parentPhoneNumber: string;
     createdAt: string;
   }
+  interface Team {
+    id: string;
+    joinCode: string;
+    members: string[];
+    eventId: string;
+    submittedProject: boolean;
+    project: string | null;
+    createdAt: string;
+  }
   interface Event {
     id: string;
     name: string;
@@ -38,7 +47,9 @@ export default function OrganizerEvent() {
     startDate: string;
     endDate: string;
     submissionDeadline: string;
+    status: "upcoming" | "ongoing" | "completed";
     participants: Participant[];
+    teams: Team[];
     createdBy: string;
     createdAt: string;
   }
@@ -180,6 +191,9 @@ export default function OrganizerEvent() {
                 </div>
               </div>
               <div className="flex flex-col w-1/3 ml-2">
+                <p>
+                  <span className="font-bold">Status:</span> {event.status}
+                </p>
                 <span className="font-bold">Location:</span> {event.location}
                 <span className="font-bold">Start Date:</span>{" "}
                 {formatDate(event.startDate, "EEEE, MMMM d yyyy h:mm a")}

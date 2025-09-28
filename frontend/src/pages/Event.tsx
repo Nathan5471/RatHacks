@@ -8,6 +8,13 @@ import AppNavbar from "../components/AppNavbar";
 export default function Event() {
   const { eventId } = useParams<{ eventId: string }>();
   const { user, getUser } = useAuth();
+  interface Team {
+    id: string;
+    joinCode: string;
+    members: string[];
+    submittedProject: boolean;
+    project: string | null;
+  }
   interface Event {
     id: string;
     name: string;
@@ -16,7 +23,9 @@ export default function Event() {
     startDate: string;
     endDate: string;
     submissionDeadline: string;
+    status: "upcoming" | "ongoing" | "completed";
     participantCount: number;
+    team: Team[];
   }
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
@@ -141,6 +150,9 @@ export default function Event() {
                 </div>
               </div>
               <div className="flex flex-col w-1/3 ml-2">
+                <p>
+                  <span className="font-bold">Status:</span> {event.status}
+                </p>
                 <span className="font-bold">Location:</span> {event.location}
                 <span className="font-bold">Start Date:</span>{" "}
                 {formatDate(event.startDate, "EEEE, MMMM d yyyy h:mm a")}
