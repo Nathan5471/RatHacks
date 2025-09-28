@@ -52,6 +52,31 @@ model User {
   createdAt              DateTime    @default(now())
 }
 
+model Team {
+  id               String   @id @default(uuid())
+  joinCode         String   @unique
+  members          String[] // User Ids (max 4)
+  eventId          String
+  submittedProject Boolean  @default(false)
+  project          String? // Project Id
+  createdAt        DateTime @default(now())
+}
+
+model Project {
+  id             String   @id @default(uuid())
+  name           String
+  description    String
+  codeURL        String?
+  screenshotPath String?
+  videoPath      String?
+  demoURL        String?
+  eventId        String
+  teamId         String
+  createdAt      DateTime @default(now())
+  submittedBy    String // User Id
+  submittedAt    DateTime @default(now())
+}
+
 model Event {
   id                 String   @id @default(uuid())
   name               String
@@ -62,6 +87,8 @@ model Event {
   submissionDeadline DateTime
   status             Status   @default(upcoming)
   participants       String[] // User Ids
+  teams              String[] // Team Ids
+  projects           String[] // Project Ids
   createdBy          String // Organizer Id
   createdAt          DateTime @default(now())
 }

@@ -3,6 +3,8 @@ import {
   createEvent,
   joinEvent,
   leaveEvent,
+  joinTeam,
+  leaveTeam,
   updateEvent,
   getAllEvents,
   organizerGetAllEvents,
@@ -81,6 +83,41 @@ router.post("/leave/:id", authenticate, async (req: any, res: any) => {
 
   await leaveEvent(req, res);
 });
+
+router.post(
+  "/join-team/:eventId/:joinCode",
+  authenticate,
+  async (req: any, res: any) => {
+    const { eventId, joinCode } = req.params as {
+      eventId: string;
+      joinCode: string;
+    };
+
+    if (!eventId || !joinCode) {
+      return res
+        .status(400)
+        .json({ message: "Event ID and Join Code are required" });
+    }
+
+    await joinTeam(req, res);
+  }
+);
+
+router.post(
+  "/leave-team/:eventId",
+  authenticate,
+  async (req: any, res: any) => {
+    const { eventId } = req.params as {
+      eventId: string;
+    };
+
+    if (!eventId) {
+      return res.status(400).json({ message: "Event ID is required" });
+    }
+
+    await leaveTeam(req, res);
+  }
+);
 
 router.put("/update/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };
