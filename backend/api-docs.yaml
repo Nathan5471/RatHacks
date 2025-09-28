@@ -1020,6 +1020,165 @@ paths:
                   message:
                     type: string
                     example: Failed to leave event
+                required:
+                  - message
+  /api/event/join-team/{eventId}/{joinCode}:
+    post:
+      summary: Join a team in an event using a join code
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: joinCode
+          in: paths
+          required: true
+          schema:
+            type: string
+            minLength: 6
+            maxLength: 6
+      responses:
+        200:
+          description: Joined team successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Joined team successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event ID and join code are required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Event, team, or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Team not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to join team
+                required:
+                  - message
+  /api/event/leave-team/{eventId}:
+    post:
+      summary: Leave the current user's team in an event
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Left team successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Left team successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Event or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to leave team
+                required:
+                  - message
   /api/event/update/{eventId}:
     put:
       summary: Update an event
@@ -1338,6 +1497,38 @@ paths:
                               - parentEmail
                               - parentPhoneNumber
                               - createdAt
+                        teams:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                              joinCode:
+                                type: string
+                                minLength: 6
+                                maxLength: 6
+                              members:
+                                type: array
+                                items:
+                                  type: string
+                                  format: uuid
+                              submittedProject:
+                                type: boolean
+                              project:
+                                type: string
+                                format: uuid
+                              createdAt:
+                                type: string
+                                format: date-time
+                            required:
+                              - id
+                              - joinCode
+                              - members
+                              - submittedProject
+                              - project
+                              - createdAt
                         createdBy:
                           type: string
                           format: uuid
@@ -1353,6 +1544,7 @@ paths:
                         - endDate
                         - submissionDeadline
                         - participants
+                        - teams
                         - createdBy
                         - createdAt
                 required:
@@ -1453,6 +1645,30 @@ paths:
                       participantCount:
                         type: number
                         min: 0
+                      team:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          joinCode:
+                            type: string
+                            minLength: 6
+                            maxLength: 6
+                          members:
+                            type: array
+                            items:
+                              type: string
+                          submittedProject:
+                            type: boolean
+                          project:
+                            type: string
+                            format: uuid
+                        required:
+                          - id
+                          - joinCode
+                          - members
+                          - submittedProject
                     required:
                       - id
                       - name
@@ -1624,6 +1840,37 @@ paths:
                             - parentEmail
                             - parentPhoneNumber
                             - createdAt
+                      teams:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            joinCode:
+                              type: string
+                              minLength: 6
+                              maxLength: 6
+                            members:
+                              type: array
+                              items:
+                                type: string
+                                format: uuid
+                            submittedProject:
+                              type: boolean
+                            project:
+                              type: string
+                              format: uuid
+                            createdAt:
+                              type: string
+                              format: date-time
+                          required:
+                            - id
+                            - joinCode
+                            - members
+                            - submittedProject
+                            - createdAt
                       createdBy:
                         type: string
                         format: uuid
@@ -1639,6 +1886,7 @@ paths:
                       - endDate
                       - submissionDeadline
                       - participants
+                      - teams
                       - createdBy
                       - createdAt
                 required:

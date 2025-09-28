@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import prisma from "../prisma/client";
+import { sub } from "date-fns";
 
 export const createEvent = async (req: any, res: any) => {
   const {
@@ -477,7 +478,7 @@ export const getEventById = async (req: any, res: any) => {
     }
 
     const isUserParticipant = event.participants.includes(user.id);
-    let removedUneccesaryFieldsUsers = null;
+    let removedUneccesaryFieldsTeam = null;
     if (isUserParticipant) {
       const userTeam = await prisma.team.findFirst({
         where: { eventId: id, members: { has: user.id } },
@@ -492,9 +493,16 @@ export const getEventById = async (req: any, res: any) => {
           })
         );
         const filteredMembers = members.filter((member) => member !== null);
-        removedUneccesaryFieldsUsers = filteredMembers.map(
+        const removedUneccesaryFieldsUsers = filteredMembers.map(
           (member) => `${member.firstName} ${member.lastName}`
         );
+        removedUneccesaryFieldsTeam = {
+          id: userTeam.id,
+          joinCode: userTeam.joinCode,
+          members: removedUneccesaryFieldsUsers,
+          submittedProject: userTeam.submittedProject,
+          project: userTeam.project,
+        };
       }
     }
 
@@ -509,7 +517,7 @@ export const getEventById = async (req: any, res: any) => {
         endDate: event.endDate,
         submissionDeadline: event.submissionDeadline,
         participantCount: event.participants.length,
-        team: removedUneccesaryFieldsUsers,
+        team: removedUneccesaryFieldsTeam,
       },
     });
   } catch (error) {
