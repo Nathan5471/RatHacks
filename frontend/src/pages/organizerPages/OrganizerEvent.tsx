@@ -151,7 +151,7 @@ export default function OrganizerEvent() {
       </div>
       <div className="w-5/6 h-full flex flex-col items-center overflow-y-auto">
         {event ? (
-          <div className="mx-16 mt-5 flex flex-col mb-2">
+          <div className="w-5/6 mt-5 flex flex-col mb-2">
             <h1 className="text-4xl font-bold text-center mb-4">
               {event.name}
             </h1>
@@ -241,7 +241,7 @@ export default function OrganizerEvent() {
                 Registered Participants ({event.participants.length})
               </h2>
               {event.participants.length > 0 ? (
-                <table className="min-w-full bg-surface-a2 rounded-lg overflow-x-auto">
+                <table className="min-w-full bg-surface-a2 rounded-lg">
                   <thead>
                     <tr>
                       <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
@@ -249,12 +249,6 @@ export default function OrganizerEvent() {
                       </th>
                       <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
                         Email
-                      </th>
-                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
-                        Email Verified
-                      </th>
-                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
-                        Account Type
                       </th>
                       <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
                         School Division
@@ -284,20 +278,6 @@ export default function OrganizerEvent() {
                           }`}
                         >
                           {participant.email}
-                        </td>
-                        <td
-                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
-                            index % 2 === 0 ? "bg-surface-a3" : ""
-                          }`}
-                        >
-                          {participant.emailVerified ? "Yes" : "No"}
-                        </td>
-                        <td
-                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
-                            index % 2 === 0 ? "bg-surface-a3" : ""
-                          }`}
-                        >
-                          {participant.accountType}
                         </td>
                         <td
                           className={`py-2 px-4 border-b border-r border-surface-a1 ${

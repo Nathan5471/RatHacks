@@ -173,11 +173,11 @@ export default function OrganizerEvents() {
         {events.length === 0 ? (
           <p className="text-2xl mt-8">No events yet</p>
         ) : (
-          <div className="w-full h-full flex flex-col">
+          <div className="w-full h-full flex flex-col items-center">
             {events.map((event) => (
               <div
                 key={event.id}
-                className="flex flex-row bg-surface-a1 mx-16 mt-6 p-4 rounded-lg "
+                className="flex flex-row bg-surface-a1 w-5/6 mt-6 p-4 rounded-lg "
               >
                 <div className="flex flex-col w-2/3">
                   <h2 className="text-3xl font-bold">{event.name}</h2>
