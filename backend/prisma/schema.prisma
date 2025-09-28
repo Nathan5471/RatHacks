@@ -20,6 +20,12 @@ enum GradeLevel {
   twelve
 }
 
+enum Status {
+  upcoming
+  ongoing
+  completed
+}
+
 model User {
   id                     String      @id @default(uuid())
   email                  String      @unique
@@ -54,6 +60,7 @@ model Event {
   startDate          DateTime
   endDate            DateTime
   submissionDeadline DateTime
+  status             Status   @default(upcoming)
   participants       String[] // User Ids
   createdBy          String // Organizer Id
   createdAt          DateTime @default(now())
@@ -66,6 +73,7 @@ model Workshop {
   googleMeetURL String?
   startDate     DateTime
   endDate       DateTime
+  status        Status   @default(upcoming)
   participants  String[] // User Ids
   organizer     String // Organizer Id
   createdAt     DateTime @default(now())

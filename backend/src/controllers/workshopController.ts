@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import prisma from "../prisma/client";
+import sendWorkshopStartingEmail from "../utils/sendWorkshopStartingEmail";
 
 export const createWorkshop = async (req: any, res: any) => {
   const { name, description, startDate, endDate } = req.body as {
@@ -131,11 +132,42 @@ export const addGoogleMeetURL = async (req: any, res: any) => {
 
     await prisma.workshop.update({
       where: { id },
-      data: { googleMeetURL },
+      data: { googleMeetURL, status: "ongoing" },
     });
-    return res
-      .status(200)
-      .json({ message: "Google Meet URL added successfully" });
+    res.status(200).json({ message: "Google Meet URL added successfully" });
+
+    // Send notification emails to participants (2 every second)
+    const participants = await Promise.all(
+      workshop.participants.map(async (participantId) => {
+        const participant = await prisma.user.findUnique({
+          where: { id: participantId },
+        });
+        return participant;
+      })
+    );
+    const filteredParticipants = participants.filter(
+      (participant) => participant !== null
+    );
+    const emailVerifiedParticipants = filteredParticipants.filter(
+      (participant) => participant.emailVerified === true
+    );
+    const organizer = await prisma.user.findUnique({
+      where: { id: workshop.organizer },
+    });
+    if (!organizer) return;
+    const hasRatHacksEmail = organizer.email.endsWith("@rathacks.com") ?? false;
+    emailVerifiedParticipants.forEach((participant, index) => {
+      setTimeout(() => {
+        sendWorkshopStartingEmail({
+          senderName: `${organizer.firstName} ${organizer.lastName}`,
+          emailName: hasRatHacksEmail ? organizer.firstName : "nathan",
+          workshopName: workshop.name,
+          email: participant.email,
+          firstName: participant.firstName,
+          meetingURL: googleMeetURL,
+        });
+      }, (index / 2) * 1000);
+    });
   } catch (error) {
     console.error("Error adding Google Meet URL:", error);
     return res.status(500).json({ message: "Failed to add Google Meet URL" });

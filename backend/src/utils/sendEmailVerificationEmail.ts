@@ -26,7 +26,7 @@ export default async function sendEmailVerificationEmail({
   }
 
   try {
-    const response = await axios.post(
+    await axios.post(
       LOOPS_API_URL,
       {
         email,
