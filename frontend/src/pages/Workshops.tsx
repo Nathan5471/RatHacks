@@ -125,15 +125,17 @@ export default function Workshops() {
       </div>
       <div className="w-5/6 h-full flex flex-col items-center overflow-y-auto">
         <h1 className="text-4xl text-center font-bold mt-4">Workshops</h1>
-        <div className="flex flex-row w-full mt-2 mb-4 justify-center">
-          <input
-            type="text"
-            placeholder="Search workshops..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="p-2 rounded-lg bg-surface-a1 w-1/2"
-          />
-        </div>
+        {workshops.length > 0 && (
+          <div className="flex flex-row w-full mt-2 mb-4 justify-center">
+            <input
+              type="text"
+              placeholder="Search workshops..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="p-2 rounded-lg bg-surface-a1 w-1/2"
+            />
+          </div>
+        )}
         {displayedWorkshops.length === 0 ? (
           search ? (
             <p className="mt-4 text-lg">No workshops match your search</p>

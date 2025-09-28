@@ -197,15 +197,17 @@ export default function OrganizerWorkshops() {
             </button>
           </div>
         </div>
-        <div className="flex flex-row w-full mt-2 mb-4 justify-center">
-          <input
-            type="text"
-            placeholder="Search workshops..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="p-2 rounded-lg bg-surface-a1 w-1/2"
-          />
-        </div>
+        {workshops.length > 0 && (
+          <div className="flex flex-row w-full mt-2 mb-4 justify-center">
+            <input
+              type="text"
+              placeholder="Search workshops..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="p-2 rounded-lg bg-surface-a1 w-1/2"
+            />
+          </div>
+        )}
         {displayedWorkshops.length === 0 ? (
           search ? (
             <p className="text-2xl mt-8">No workshops match your search</p>
