@@ -29,6 +29,10 @@ export const register = async (userData: {
   parentLastName: string;
   parentEmail: string;
   parentPhoneNumber: string;
+  contactFirstName: string;
+  contactLastName: string;
+  contactRelationship: string;
+  contactPhoneNumber: string;
 }) => {
   const response = await api.post("/register", userData);
   return response.data;
@@ -81,6 +85,10 @@ export const updateUser = async (userData: {
   parentLastName: string;
   parentEmail: string;
   parentPhoneNumber: string;
+  contactFirstName: string;
+  contactLastName: string;
+  contactRelationship: string;
+  contactPhoneNumber: string;
 }) => {
   const response = await api.put("/update", userData);
   return response.data;

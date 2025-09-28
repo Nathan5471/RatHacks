@@ -53,6 +53,18 @@ export default function Settings() {
   const [parentPhoneNumber, setParentPhoneNumber] = useState(
     user?.parentPhoneNumber || ""
   );
+  const [contactFirstName, setContactFirstName] = useState(
+    user?.contactFirstName || ""
+  );
+  const [contactLastName, setContactLastName] = useState(
+    user?.contactLastName || ""
+  );
+  const [contactRelationship, setContactRelationship] = useState(
+    user?.contactRelationship || ""
+  );
+  const [contactPhoneNumber, setContactPhoneNumber] = useState(
+    user?.contactPhoneNumber || ""
+  );
 
   const handleSaveUserInfo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +83,10 @@ export default function Settings() {
         parentLastName,
         parentEmail,
         parentPhoneNumber,
+        contactFirstName,
+        contactLastName,
+        contactRelationship,
+        contactPhoneNumber,
       });
       toast.success("User information updated successfully!");
     } catch (error) {
@@ -322,6 +338,63 @@ export default function Settings() {
             name="parentPhoneNumber"
             value={parentPhoneNumber}
             onChange={(e) => setParentPhoneNumber(e.target.value)}
+            className="bg-surface-a2 p-2 rounded-lg mt-1"
+            required
+          />
+          <p className="text-2xl text-center mt-4 font-bold">
+            Emergency Contact Information
+          </p>
+          <div className="flex flex-row w-full mt-2">
+            <div className="flex flex-col w-1/2">
+              <label htmlFor="contactFirstName" className="text-2xl mt-2">
+                First Name
+              </label>
+              <input
+                type="text"
+                id="contactFirstName"
+                name="contactFirstName"
+                value={contactFirstName}
+                onChange={(e) => setContactFirstName(e.target.value)}
+                className="bg-surface-a2 p-2 rounded-lg mt-1"
+                required
+              />
+            </div>
+            <div className="flex flex-col w-1/2 ml-2">
+              <label htmlFor="contactLastName" className="text-2xl mt-2">
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="contactLastName"
+                name="contactLastName"
+                value={contactLastName}
+                onChange={(e) => setContactLastName(e.target.value)}
+                className="bg-surface-a2 p-2 rounded-lg mt-1"
+                required
+              />
+            </div>
+          </div>
+          <label htmlFor="contactRelationship" className="text-2xl mt-2">
+            Relationship
+          </label>
+          <input
+            type="text"
+            id="contactRelationship"
+            name="contactRelationship"
+            value={contactRelationship}
+            onChange={(e) => setContactRelationship(e.target.value)}
+            className="bg-surface-a2 p-2 rounded-lg mt-1"
+            required
+          />
+          <label htmlFor="contactPhoneNumber" className="text-2xl mt-2">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            id="contactPhoneNumber"
+            name="contactPhoneNumber"
+            value={contactPhoneNumber}
+            onChange={(e) => setContactPhoneNumber(e.target.value)}
             className="bg-surface-a2 p-2 rounded-lg mt-1"
             required
           />

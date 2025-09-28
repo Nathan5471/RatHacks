@@ -20,6 +20,10 @@ export const register = async (req: any, res: any) => {
     parentLastName,
     parentEmail,
     parentPhoneNumber,
+    contactFirstName,
+    contactLastName,
+    contactRelationship,
+    contactPhoneNumber,
   } = req.body as {
     email: string;
     password: string;
@@ -34,6 +38,10 @@ export const register = async (req: any, res: any) => {
     parentLastName: string;
     parentEmail: string;
     parentPhoneNumber: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactRelationship: string;
+    contactPhoneNumber: string;
   };
 
   try {
@@ -67,6 +75,10 @@ export const register = async (req: any, res: any) => {
         parentLastName,
         parentEmail,
         parentPhoneNumber,
+        contactFirstName,
+        contactLastName,
+        contactRelationship,
+        contactPhoneNumber,
         events: [],
         validAccessTokens: [],
         validRefreshTokens: [],
@@ -246,6 +258,10 @@ export const updateUser = async (req: any, res: any) => {
     parentLastName,
     parentEmail,
     parentPhoneNumber,
+    contactFirstName,
+    contactLastName,
+    contactRelationship,
+    contactPhoneNumber,
   } = req.body as {
     firstName: string;
     lastName: string;
@@ -258,6 +274,10 @@ export const updateUser = async (req: any, res: any) => {
     parentLastName: string;
     parentEmail: string;
     parentPhoneNumber: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactRelationship: string;
+    contactPhoneNumber: string;
   };
 
   try {
@@ -275,6 +295,10 @@ export const updateUser = async (req: any, res: any) => {
         parentLastName,
         parentEmail,
         parentPhoneNumber,
+        contactFirstName,
+        contactLastName,
+        contactRelationship,
+        contactPhoneNumber,
       },
     });
     return res.status(200).json({ message: "User updated successfully" });

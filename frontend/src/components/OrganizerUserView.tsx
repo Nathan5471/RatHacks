@@ -16,6 +16,10 @@ interface User {
   parentLastName: string;
   parentEmail: string;
   parentPhoneNumber: string;
+  contactFirstName: string;
+  contactLastName: string;
+  contactRelationship: string;
+  contactPhoneNumber: string;
   createdAt: string;
 }
 
@@ -58,6 +62,16 @@ export default function OrganizerUserView({ user }: { user: User }) {
       <p className="text-xl text-left">Parent's Email: {user.parentEmail}</p>
       <p className="text-xl text-left">
         Parent's Phone Number: {user.parentPhoneNumber}
+      </p>
+      <p className="text-xl text-left">
+        Emergency Contact: {user.contactFirstName} {user.contactLastName} (
+        {user.contactRelationship})
+      </p>
+      <p className="text-xl text-left">
+        Contact's Phone Number: {user.contactPhoneNumber}
+      </p>
+      <p className="text-xl text-left">
+        Account Created: {new Date(user.createdAt).toLocaleString()}
       </p>
       <button
         className="bg-primary-a0 hover:bg-primary-a1 font-bold p-2 rounded-lg mt-4"

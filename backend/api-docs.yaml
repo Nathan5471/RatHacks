@@ -53,6 +53,15 @@ paths:
                 parentPhoneNumber:
                   type: string
                   example: 5408531056
+                contactFirstName:
+                  type: string
+                contactLastName:
+                  type: string
+                contactRelationship:
+                  type: string
+                contactPhoneNumber:
+                  type: string
+                  example: 5408531056
               required:
                 - email
                 - password
@@ -67,6 +76,10 @@ paths:
                 - parentLastName
                 - parentEmail
                 - parentPhoneNumber
+                - contactFirstName
+                - contactLastName
+                - contactRelationship
+                - contactPhoneNumber
       responses:
         201:
           description: User registered successfully
@@ -463,6 +476,29 @@ paths:
                     enum: ["nine", "ten", "eleven", "twelve"]
                   isGovSchool:
                     type: boolean
+                  techStack:
+                    type: string
+                  previousHackathon:
+                    type: boolean
+                  parentFirstName:
+                    type: string
+                  parentLastName:
+                    type: string
+                  parentEmail:
+                    type: string
+                    format: email
+                  parentPhoneNumber:
+                    type: string
+                    example: 5408531056
+                  contactFirstName:
+                    type: string
+                  contactLastName:
+                    type: string
+                  contactRelationship:
+                    type: string
+                  contactPhoneNumber:
+                    type: string
+                    example: 5408531056
                   events:
                     type: array
                     items:
@@ -477,6 +513,16 @@ paths:
                   - schoolDivision
                   - gradeLevel
                   - isGovSchool
+                  - techStacK
+                  - previousHackathon
+                  - parentFirstName
+                  - parentLastName
+                  - parentEmail
+                  - parentPhoneNumber
+                  - contactFirstName
+                  - contactLastName
+                  - contactRelationship
+                  - contactPhoneNumber
                   - events
         401:
           description: Unauthorized
@@ -553,6 +599,14 @@ paths:
                 parentPhoneNumber:
                   type: string
                   example: 5408531056
+                contactFirstName:
+                  type: string
+                contactLastName:
+                  type: string
+                contactRelationship:
+                  type: string
+                contactPhoneNumber:
+                  type: string
               required:
                 - firstName
                 - lastName
@@ -565,6 +619,10 @@ paths:
                 - parentLastName
                 - parentEmail
                 - parentPhoneNumber
+                - contactFirstName
+                - contactLastName
+                - contactRelationship
+                - contactPhoneNumber
       responses:
         200:
           description: User information updated successfully
@@ -1484,6 +1542,15 @@ paths:
                               parentPhoneNumber:
                                 type: string
                                 example: 5408531056
+                              contactFirstName:
+                                type: string
+                              contactLastName:
+                                type: string
+                              contactRelationship:
+                                type: string
+                              contactPhoneNumber:
+                                type: string
+                                example: 5408531056
                               createdAt:
                                 type: string
                                 format: date-time
@@ -1503,6 +1570,10 @@ paths:
                               - parentLastName
                               - parentEmail
                               - parentPhoneNumber
+                              - contactFirstName
+                              - contactLastName
+                              - contactRelationship
+                              - contactPhoneNumber
                               - createdAt
                         teams:
                           type: array
@@ -1835,6 +1906,15 @@ paths:
                             parentPhoneNumber:
                               type: string
                               example: 5408531056
+                            contactFirstName:
+                              type: string
+                            contactLastName:
+                              type: string
+                            contactRelationship:
+                              type: string
+                            contactPhoneNumber:
+                              type: string
+                              example: 5408531056
                             createdAt:
                               type: string
                               format: date-time
@@ -1854,6 +1934,10 @@ paths:
                             - parentLastName
                             - parentEmail
                             - parentPhoneNumber
+                            - contactFirstName
+                            - contactLastName
+                            - contactRelationship
+                            - contactPhoneNumber
                             - createdAt
                       teams:
                         type: array
@@ -2791,6 +2875,15 @@ paths:
                               parentPhoneNumber:
                                 type: string
                                 example: 5408531056
+                              contactFirstName:
+                                type: string
+                              contactLastName:
+                                type: string
+                              contactRelationship:
+                                type: string
+                              contactPhoneNumber:
+                                type: string
+                                example: 5408531056
                               createdAt:
                                 type: string
                                 format: date-time
@@ -2810,6 +2903,10 @@ paths:
                               - parentLastName
                               - parentEmail
                               - parentPhoneNumber
+                              - contactFirstName
+                              - contactLastName
+                              - contactRelationship
+                              - contactPhoneNumber
                               - createdAt
                         organizer:
                           type: string
@@ -3091,6 +3188,15 @@ paths:
                             parentPhoneNumber:
                               type: string
                               example: 5408531056
+                            contactFirstName:
+                              type: string
+                            contactLastName:
+                              type: string
+                            contactRelationship:
+                              type: string
+                            contactPhoneNumber:
+                              type: string
+                              example: 5408531056
                             createdAt:
                               type: string
                               format: date-time
@@ -3110,6 +3216,10 @@ paths:
                             - parentLastName
                             - parentEmail
                             - parentPhoneNumber
+                            - contactFirstName
+                            - contactLastName
+                            - contactRelationship
+                            - contactPhoneNumber
                             - createdAt
                       organizer:
                         type: string

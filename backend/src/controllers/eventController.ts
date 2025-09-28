@@ -435,6 +435,10 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
           parentLastName: user.parentLastName,
           parentEmail: user.parentEmail,
           parentPhoneNumber: user.parentPhoneNumber,
+          contactFirstName: user.contactFirstName,
+          contactLastName: user.contactLastName,
+          contactRelationship: user.contactRelationship,
+          contactPhoneNumber: user.contactPhoneNumber,
           createdAt: user.createdAt,
         }));
         const eventTeams = await prisma.team.findMany({
@@ -568,6 +572,10 @@ export const organizerGetEventById = async (req: any, res: any) => {
       parentLastName: user.parentLastName,
       parentEmail: user.parentEmail,
       parentPhoneNumber: user.parentPhoneNumber,
+      contactFirstName: user.contactFirstName,
+      contactLastName: user.contactLastName,
+      contactRelationship: user.contactRelationship,
+      contactPhoneNumber: user.contactPhoneNumber,
       createdAt: user.createdAt,
     }));
     const teams = await prisma.team.findMany({

@@ -32,6 +32,10 @@ export default function OrganizerWorkshop() {
     parentLastName: string;
     parentEmail: string;
     parentPhoneNumber: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactRelationship: string;
+    contactPhoneNumber: string;
     createdAt: string;
   }
   interface Workshop {

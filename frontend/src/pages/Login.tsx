@@ -25,7 +25,7 @@ export default function Login() {
     try {
       await login({ email, password });
       await getUser();
-      navigate("/");
+      navigate("/app");
     } catch (error: unknown) {
       console.error("Login error:", error);
       const errorMessage =
@@ -40,7 +40,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-screen bg-surface-a0 text-white">
+    <div className="flex flex-col items-center justify-center h-screen w-screen bg-surface-a0 text-white">
       <form
         className="flex flex-col w-80 bg-surface-a1 rounded-lg p-4 m-4"
         onSubmit={(e) => handleLogin(e)}
@@ -90,7 +90,7 @@ export default function Login() {
         {error && <p className="text-red-500 mt-2">{error}</p>}
         <button
           type="submit"
-          className="bg-surface-a2 p-2 mt-4 rounded-lg hover:bg-surface-a3"
+          className="bg-primary-a0 hover:bg-primary-a1 p-2 mt-4 rounded-lg"
         >
           Login
         </button>

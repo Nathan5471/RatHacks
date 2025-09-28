@@ -311,6 +311,10 @@ export const organizerGetAllWorkshops = async (req: any, res: any) => {
                   parentLastName: participant.parentLastName,
                   parentEmail: participant.parentEmail,
                   parentPhoneNumber: participant.parentPhoneNumber,
+                  contactFirstName: participant.contactFirstName,
+                  contactLastName: participant.contactLastName,
+                  contactRelationship: participant.contactRelationship,
+                  contactPhoneNumber: participant.contactPhoneNumber,
                   createdAt: participant.createdAt,
                 }
               : null;
@@ -427,6 +431,10 @@ export const organizerGetWorkshopById = async (req: any, res: any) => {
           parentLastName: participantData.parentLastName,
           parentEmail: participantData.parentEmail,
           parentPhoneNumber: participantData.parentPhoneNumber,
+          contactFIrstName: participantData.contactFirstName,
+          contactLastName: participantData.contactLastName,
+          contactRelationship: participantData.contactRelationship,
+          contactPhoneNumber: participantData.contactPhoneNumber,
           createdAt: participantData.createdAt,
         };
         return participant;

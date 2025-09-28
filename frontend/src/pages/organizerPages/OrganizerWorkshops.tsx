@@ -22,6 +22,18 @@ export default function OrganizerWorkshops() {
     schoolDivision: string;
     gradeLevel: "nine" | "ten" | "eleven" | "twelve" | "organizer" | "judge";
     isGovSchool: boolean;
+    techStack: string;
+    previousHackathon: boolean;
+    parentFirstName: string;
+    parentLastName: string;
+    parentEmail: string;
+    parentPhoneNumber: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactRelationship: string;
+    contactPhoneNumber: string;
+    events: string[];
+    workshops: string[];
     createdAt: string;
   }
   interface Workshop {

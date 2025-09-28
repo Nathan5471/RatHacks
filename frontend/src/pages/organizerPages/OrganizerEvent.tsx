@@ -28,6 +28,10 @@ export default function OrganizerEvent() {
     parentLastName: string;
     parentEmail: string;
     parentPhoneNumber: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactRelationship: string;
+    contactPhoneNumber: string;
     createdAt: string;
   }
   interface Team {

@@ -21,6 +21,16 @@ export default function OrganizerEvents() {
     schoolDivision: string;
     gradeLevel: "nine" | "ten" | "eleven" | "twelve" | "organizer" | "judge";
     isGovSchool: boolean;
+    techStack: string;
+    previousHackathon: boolean;
+    parentFirstName: string;
+    parentLastName: string;
+    parentEmail: string;
+    parentPhoneNumber: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactRelationship: string;
+    contactPhoneNumber: string;
     createdAt: string;
   }
   interface Team {

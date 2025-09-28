@@ -19,6 +19,10 @@ interface AuthContextType {
         parentLastName: string;
         parentEmail: string;
         parentPhoneNumber: string;
+        contactFirstName: string;
+        contactLastName: string;
+        contactRelationship: string;
+        contactPhoneNumber: string;
         events: string[];
         workshops: string[];
       }

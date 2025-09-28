@@ -30,6 +30,10 @@ router.post("/register", async (req: any, res: any) => {
     parentLastName,
     parentEmail,
     parentPhoneNumber,
+    contactFirstName,
+    contactLastName,
+    contactRelationship,
+    contactPhoneNumber,
   } = req.body as {
     email: string;
     password: string;
@@ -44,6 +48,10 @@ router.post("/register", async (req: any, res: any) => {
     parentLastName: string;
     parentEmail: string;
     parentPhoneNumber: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactRelationship: string;
+    contactPhoneNumber: string;
   };
 
   if (
@@ -59,7 +67,11 @@ router.post("/register", async (req: any, res: any) => {
     !parentFirstName ||
     !parentLastName ||
     !parentEmail ||
-    !parentPhoneNumber
+    !parentPhoneNumber ||
+    !contactFirstName ||
+    !contactLastName ||
+    !contactRelationship ||
+    !contactPhoneNumber
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -148,6 +160,10 @@ router.get("/current-user", authenticate, (req: any, res: any) => {
     parentLastName: reqUser.parentLastName,
     parentEmail: reqUser.parentEmail,
     parentPhoneNumber: reqUser.parentPhoneNumber,
+    contactFirstName: reqUser.contactFirstName,
+    contactLastName: reqUser.contactLastName,
+    contactRelationship: reqUser.contactRelationship,
+    contactPhoneNumber: reqUser.contactPhoneNumber,
     events: reqUser.events,
     workshops: reqUser.workshops,
   };
@@ -167,6 +183,10 @@ router.put("/update", authenticate, async (req: any, res: any) => {
     parentLastName,
     parentEmail,
     parentPhoneNumber,
+    contactFirstName,
+    contactLastName,
+    contactRelationship,
+    contactPhoneNumber,
   } = req.body as {
     firstName: string;
     lastName: string;
@@ -179,6 +199,10 @@ router.put("/update", authenticate, async (req: any, res: any) => {
     parentLastName: string;
     parentEmail: string;
     parentPhoneNumber: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactRelationship: string;
+    contactPhoneNumber: string;
   };
   if (
     !firstName ||
@@ -191,7 +215,11 @@ router.put("/update", authenticate, async (req: any, res: any) => {
     !parentFirstName ||
     !parentLastName ||
     !parentEmail ||
-    !parentPhoneNumber
+    !parentPhoneNumber ||
+    !contactFirstName ||
+    !contactLastName ||
+    !contactRelationship ||
+    !contactPhoneNumber
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }

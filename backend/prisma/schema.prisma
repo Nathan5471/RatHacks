@@ -45,6 +45,10 @@ model User {
   parentLastName         String?
   parentEmail            String?
   parentPhoneNumber      String?
+  contactFirstName       String?
+  contactLastName        String?
+  contactRelationship    String?
+  contactPhoneNumber     String?
   events                 String[] // Event Ids
   workshops              String[] // Workshop Ids
   validAccessTokens      String[]

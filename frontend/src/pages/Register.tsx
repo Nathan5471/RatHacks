@@ -34,6 +34,10 @@ export default function Register() {
   const [parentLastName, setParentLastName] = useState("");
   const [parentEmail, setParentEmail] = useState("");
   const [parentPhoneNumber, setParentPhoneNumber] = useState("");
+  const [contactFirstName, setContactFirstName] = useState("");
+  const [contactLastName, setContactLastName] = useState("");
+  const [contactRelationship, setContactRelationship] = useState("");
+  const [contactPhoneNumber, setContactPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -60,6 +64,10 @@ export default function Register() {
         parentLastName,
         parentEmail,
         parentPhoneNumber,
+        contactFirstName,
+        contactLastName,
+        contactRelationship,
+        contactPhoneNumber,
       });
       navigate("/login");
     } catch (error) {
@@ -370,10 +378,71 @@ export default function Register() {
           placeholder="Enter your parent's phone number"
           required
         />
+        <p className="text-center text-3xl font-bold mt-4">
+          Emergency Contact's Information (Different from above)
+        </p>
+        <div className="flex flex-row w-full mt-2">
+          <div className="flex flex-col w-1/2">
+            <label htmlFor="contactFirstName" className="text-2xl mt-2">
+              First Name
+            </label>
+            <input
+              type="text"
+              id="contactFirstName"
+              name="contactFirstName"
+              value={contactFirstName}
+              onChange={(e) => setContactFirstName(e.target.value)}
+              className="bg-surface-a2 p-2 rounded-lg mt-1"
+              placeholder="Enter your emergency contact's first name"
+              required
+            />
+          </div>
+          <div className="flex flex-col w-1/2 ml-2">
+            <label htmlFor="contactLastName" className="text-2xl mt-2">
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="contactLastName"
+              name="contactLastName"
+              value={contactLastName}
+              onChange={(e) => setContactLastName(e.target.value)}
+              className="bg-surface-a2 p-2 rounded-lg mt-1"
+              placeholder="Enter your emergency contact's last name"
+              required
+            />
+          </div>
+        </div>
+        <label htmlFor="contactRelationship" className="text-2xl mt-2">
+          Relationship
+        </label>
+        <input
+          type="text"
+          id="contactRelationship"
+          name="contactRelationship"
+          value={contactRelationship}
+          onChange={(e) => setContactRelationship(e.target.value)}
+          className="bg-surface-a2 p-2 rounded-lg mt-1"
+          placeholder="Enter your relation ship to your emergency contact"
+          required
+        />
+        <label htmlFor="contactPhoneNumber" className="text-2xl mt-2">
+          Phone Number
+        </label>
+        <input
+          type="text"
+          id="contactPhoneNumber"
+          name="contactPhoneNumber"
+          value={contactPhoneNumber}
+          onChange={(e) => setContactPhoneNumber(e.target.value)}
+          className="bg-surface-a2 p-2 rounded-lg mt-1"
+          placeholder="Enter your emergency contact's phone number"
+          required
+        />
         {error && <p className="text-red-500">{error}</p>}
         <button
           type="submit"
-          className="bg-surface-a2 p-2 rounded-lg mt-4 hover:bg-surface-a3"
+          className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg mt-4"
         >
           Register
         </button>
