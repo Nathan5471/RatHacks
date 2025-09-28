@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import prisma from "../prisma/client";
 import sendWorkshopStartingEmail from "../utils/sendWorkshopStartingEmail";
+import sortWorkshops from "../utils/sortWorkshops";
 
 export const createWorkshop = async (req: any, res: any) => {
   const { name, description, startDate, endDate } = req.body as {
@@ -215,8 +216,9 @@ export const updateWorkshop = async (req: any, res: any) => {
 export const getAllWorkshops = async (req: any, res: any) => {
   try {
     const allWorkshops = await prisma.workshop.findMany();
+    const sortedWorkshops = sortWorkshops(allWorkshops);
     const workshops = await Promise.all(
-      allWorkshops.map(async (workshop) => {
+      sortedWorkshops.map(async (workshop) => {
         const organizer = await prisma.user.findUnique({
           where: { id: workshop.organizer },
         });
@@ -227,6 +229,7 @@ export const getAllWorkshops = async (req: any, res: any) => {
           googleMeetURL: workshop.googleMeetURL,
           startDate: workshop.startDate,
           endDate: workshop.endDate,
+          status: workshop.status,
           participantCount: workshop.participants.length,
           organizer:
             organizer !== null
@@ -253,8 +256,9 @@ export const organizerGetAllWorkshops = async (req: any, res: any) => {
 
   try {
     const allWorkshops = await prisma.workshop.findMany();
+    const sortedWorkshops = sortWorkshops(allWorkshops);
     const workshops = await Promise.all(
-      allWorkshops.map(async (workshop) => {
+      sortedWorkshops.map(async (workshop) => {
         const participants = await Promise.all(
           workshop.participants.map(async (participantId) => {
             const participant = await prisma.user.findUnique({
@@ -295,6 +299,7 @@ export const organizerGetAllWorkshops = async (req: any, res: any) => {
           googleMeetURL: workshop.googleMeetURL,
           startDate: workshop.startDate,
           endDate: workshop.endDate,
+          status: workshop.status,
           participants: filteredParticipants,
           organizer: organizer
             ? `${organizer.firstName} ${organizer.lastName}`
@@ -335,6 +340,7 @@ export const getWorkshopById = async (req: any, res: any) => {
       googleMeetURL: workshopData.googleMeetURL,
       startDate: workshopData.startDate,
       endDate: workshopData.endDate,
+      status: workshopData.status,
       participantCount: workshopData.participants.length,
       organizer: organizer
         ? `${organizer.firstName} ${organizer.lastName}`
@@ -409,6 +415,7 @@ export const organizerGetWorkshopById = async (req: any, res: any) => {
       googleMeetURL: workshopData.googleMeetURL,
       startDate: workshopData.startDate,
       endDate: workshopData.endDate,
+      status: workshopData.status,
       participants: filteredParticipants,
       organizer: organizer
         ? `${organizer.firstName} ${organizer.lastName}`

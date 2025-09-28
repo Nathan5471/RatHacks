@@ -2292,6 +2292,9 @@ paths:
                         endDate:
                           type: string
                           format: date-time
+                        status:
+                          type: string
+                          enum: ["upcoming", "ongoing", "completed"]
                         participantCount:
                           type: number
                           min: 0
@@ -2304,6 +2307,7 @@ paths:
                         - googleMeetURL
                         - startDate
                         - endDate
+                        - status
                         - participantCount
                         - organizer
                 required:
@@ -2384,6 +2388,9 @@ paths:
                         endDate:
                           type: string
                           format: date-time
+                        status:
+                          type: string
+                          enum: ["upcoming", "ongoing", "completed"]
                         participants:
                           type: array
                           items:
@@ -2468,6 +2475,7 @@ paths:
                         - googleMeetURL
                         - startDate
                         - endDate
+                        - status
                         - participants
                         - organizer
                         - organizerId
@@ -2567,9 +2575,14 @@ paths:
                       endDate:
                         type: string
                         format: date-time
+                      status:
+                        type: string
+                        enum: ["upcoming", "ongoing", "completed"]
                       participantCount:
                         type: number
                         min: 0
+                      organizer:
+                        type: string
                     required:
                       - id
                       - name
@@ -2577,7 +2590,9 @@ paths:
                       - googleMeetURL
                       - startDate
                       - endDate
+                      - status
                       - participantCount
+                      - organizer
                 required:
                   - message
                   - workshop
@@ -2673,6 +2688,9 @@ paths:
                       endDate:
                         type: string
                         format: date-time
+                      status:
+                        type: string
+                        enum: ["upcoming", "ongoing", "completed"]
                       participants:
                         type: array
                         items:
@@ -2754,6 +2772,7 @@ paths:
                       - googleMeetURL
                       - startDate
                       - endDate
+                      - status
                       - participants
                       - organizer
                       - createdAt

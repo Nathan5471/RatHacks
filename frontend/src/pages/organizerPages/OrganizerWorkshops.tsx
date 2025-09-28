@@ -173,11 +173,11 @@ export default function OrganizerWorkshops() {
         {workshops.length === 0 ? (
           <p className="text-2xl mt-8">No workshops yet</p>
         ) : (
-          <div className="w-full h-full flex flex-col items-center">
+          <div className="w-full h-full flex flex-col items-center overflow-y-auto">
             {workshops.map((workshop) => (
               <div
                 key={workshop.id}
-                className="flex flex-row bg-surface-a1 w-5/6 mt-6 p-4 rounded-lg"
+                className="flex flex-row bg-surface-a1 w-5/6 mt-4 p-4 rounded-lg mb-2"
               >
                 <div className="flex flex-col w-2/3">
                   <h2 className="text-3xl font-bold">{workshop.name}</h2>

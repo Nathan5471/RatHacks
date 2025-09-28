@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Fuse from "fuse.js";
 import { useAuth } from "../contexts/AuthContext";
 import {
   getAllWorkshops,
@@ -18,10 +19,13 @@ export default function Workshops() {
     googleMeetURL: string;
     startDate: string;
     endDate: string;
+    status: "upcoming" | "ongoing" | "completed";
     participantCount: number;
     organizer: string;
   }
   const [workshops, setWorkshops] = useState<Workshop[]>([]);
+  const [displayedWorkshops, setDisplayedWorkshops] = useState<Workshop[]>([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -31,6 +35,7 @@ export default function Workshops() {
       try {
         const response = await getAllWorkshops();
         setWorkshops(response.workshops);
+        setDisplayedWorkshops(response.workshops);
       } catch (error) {
         const errorMessage =
           typeof error === "object" &&
@@ -46,6 +51,16 @@ export default function Workshops() {
     };
     fetchWorkshops();
   }, []);
+
+  useEffect(() => {
+    if (search.trim() === "") return setDisplayedWorkshops(workshops);
+    const fuse = new Fuse(workshops, {
+      keys: ["name", "description", "organizer"],
+      threshold: 0.3,
+    });
+    const results = fuse.search(search);
+    setDisplayedWorkshops(results.map((result) => result.item));
+  }, [search, workshops]);
 
   const handleJoin = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -108,16 +123,25 @@ export default function Workshops() {
       <div className="w-1/6 h-full">
         <AppNavbar />
       </div>
-      <div className="w-5/6 h-full flex flex-col p-4 items-center">
-        <h1 className="text-4xl text-center font-bold">Workshops</h1>
+      <div className="w-5/6 h-full flex flex-col items-center overflow-y-auto">
+        <h1 className="text-4xl text-center font-bold mt-4">Workshops</h1>
+        <div className="flex flex-row w-full mt-2 mb-4 justify-center">
+          <input
+            type="text"
+            placeholder="Search workshops..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="p-2 rounded-lg bg-surface-a1 w-1/2"
+          />
+        </div>
         {workshops.length === 0 ? (
           <p className="mt-4 text-lg">No workshops available.</p>
         ) : (
           <div className="w-full h-full flex flex-col">
-            {workshops.map((workshop) => (
+            {displayedWorkshops.map((workshop) => (
               <div
                 key={workshop.id}
-                className="flex flex-row bg-surface-a1 mx-16 mt-6 p-4 rounded-lg"
+                className="flex flex-row bg-surface-a1 mx-16 mt-2 mb-4 p-4 rounded-lg"
               >
                 <div className="flex flex-col w-2/3">
                   <h2 className="text-3xl text-center font-bold">
@@ -131,24 +155,38 @@ export default function Workshops() {
                     >
                       Open
                     </Link>
-                    {user && user.workshops.includes(workshop.id) ? (
-                      <button
-                        onClick={(e) => handleLeave(e, workshop.id)}
-                        className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
+                    {workshop.status === "upcoming" &&
+                      (user && user.workshops.includes(workshop.id) ? (
+                        <button
+                          onClick={(e) => handleLeave(e, workshop.id)}
+                          className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
+                        >
+                          Leave
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => handleJoin(e, workshop.id)}
+                          className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
+                        >
+                          Join
+                        </button>
+                      ))}
+                    {workshop.status === "ongoing" && (
+                      <a
+                        href={workshop.googleMeetURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold text-center w-full"
                       >
-                        Leave
-                      </button>
-                    ) : (
-                      <button
-                        onClick={(e) => handleJoin(e, workshop.id)}
-                        className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
-                      >
-                        Join
-                      </button>
+                        Join Meeting
+                      </a>
                     )}
                   </div>
                 </div>
                 <div className="flex flex-col w-1/3 ml-2">
+                  <p>
+                    <span className="font-bold">Status:</span> {workshop.status}
+                  </p>
                   <span className="font-bold">Start Date:</span>{" "}
                   {formatDate(workshop.startDate, "EEEE, MMMM d yyyy h:mm a")}
                   <span className="font-bold">End Date:</span>{" "}
