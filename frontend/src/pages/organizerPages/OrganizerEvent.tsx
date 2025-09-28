@@ -252,6 +252,107 @@ export default function OrganizerEvent() {
             </div>
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">
+                Registered Teams ({event.teams.length})
+              </h2>
+              {event.teams.length > 0 ? (
+                <table className="min-w-full bg-surface-a2 rounded-lg">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Join Code
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Member 1
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Member 2
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Member 3
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Member 4
+                      </th>
+                      <th className="py-2 px-4 border-b border-surface-a1 text-left">
+                        Submitted
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {event.teams.map((team, index) => (
+                      <tr key={team.id}>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {team.joinCode}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {team.members[0]
+                            ? event.participants.find(
+                                (participant) =>
+                                  participant.id === team.members[0]
+                              )?.firstName
+                            : "N/A"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {team.members[1]
+                            ? event.participants.find(
+                                (participant) =>
+                                  participant.id === team.members[1]
+                              )?.firstName
+                            : "N/A"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {team.members[2]
+                            ? event.participants.find(
+                                (participant) =>
+                                  participant.id === team.members[2]
+                              )?.firstName
+                            : "N/A"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {team.members[3]
+                            ? event.participants.find(
+                                (participant) =>
+                                  participant.id === team.members[3]
+                              )?.firstName
+                            : "N/A"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {team.submittedProject ? "Yes" : "No"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-center">No teams registered yet.</p>
+              )}
+            </div>
+            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+              <h2 className="text-2xl font-bold text-center mb-2">
                 Registered Participants ({event.participants.length})
               </h2>
               {event.participants.length > 0 ? (
