@@ -4,6 +4,7 @@ import { useOverlay } from "../../contexts/OverlayContext";
 import {
   organizerGetWorkshopById,
   addGoogleMeetURL,
+  endWorkshop,
 } from "../../utils/WorkshopAPIHandler";
 import { formatDate } from "date-fns";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
@@ -40,6 +41,7 @@ export default function OrganizerWorkshop() {
     googleMeetURL: string;
     startDate: string;
     endDate: string;
+    status: "upcoming" | "ongoing" | "completed";
     participants: Participant[];
     organizer: string;
     organizerId: string;
@@ -68,7 +70,7 @@ export default function OrganizerWorkshop() {
       try {
         if (workshopId) {
           const response = await organizerGetWorkshopById(workshopId);
-          setWorkshop(response.workshop);
+          setWorkshop(response.workshop as Workshop);
         }
       } catch (error: unknown) {
         console.error("Error fetching workshop:", error);
@@ -141,6 +143,17 @@ export default function OrganizerWorkshop() {
     }
   };
 
+  const handleEndWorkshop = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!workshopId) return;
+    try {
+      await endWorkshop(workshopId);
+      setReload(!reload);
+    } catch (error) {
+      console.error("Error ending workshop:", error);
+    }
+  };
+
   const handleOpenUserView = (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number
@@ -200,6 +213,9 @@ export default function OrganizerWorkshop() {
                 </div>
               </div>
               <div className="flex flex-col w-1/3 ml-2">
+                <p>
+                  <span className="font-bold">Status:</span> {workshop.status}
+                </p>
                 <span className="font-bold">Start Date:</span>{" "}
                 {formatDate(workshop.startDate, "EEEE, MMMM d yyyy h:mm a")}
                 <span className="font-bold">End Date:</span>{" "}
@@ -214,21 +230,32 @@ export default function OrganizerWorkshop() {
                 </p>
               </div>
             </div>
-            {workshop.googleMeetURL ? (
-              <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
-                <h2 className="text-2xl font-bold text-center mb-2">
-                  Workshop is live! Join now:
-                </h2>
-                <a
-                  href={workshop.googleMeetURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary-a0 text-center text-lg hover:underline break-all"
-                >
-                  {workshop.googleMeetURL}
-                </a>
+            {workshop.status === "ongoing" && (
+              <div className="flex flex-row w-full mt-4 bg-surface-a1 p-4 rounded-lg">
+                <div className="flex flex-col w-4/5">
+                  <h2 className="text-2xl font-bold text-center mb-2">
+                    Workshop is live! Join now:
+                  </h2>
+                  <a
+                    href={workshop.googleMeetURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary-a0 text-center text-lg hover:underline break-all"
+                  >
+                    {workshop.googleMeetURL}
+                  </a>
+                </div>
+                <div className="flex flex-col w-1/5 justify-center">
+                  <button
+                    className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
+                    onClick={handleEndWorkshop}
+                  >
+                    End Meeting
+                  </button>
+                </div>
               </div>
-            ) : (
+            )}
+            {workshop.status === "upcoming" && (
               <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
                 <h2 className="text-2xl font-bold text-center mb-2">
                   {workshop.name} Countdown

@@ -2144,6 +2144,93 @@ paths:
                     example: Failed to add Google Meet URL
                 required:
                   - message
+  /api/workshop/end/{workshopId}:
+    post:
+      summary: End a workshop
+      tags:
+        - Workshops
+      secuirty:
+        - cookieAuth: []
+      parameters:
+        - name: workshopId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Workshop ended successfully
+          content:
+            applicatoin/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop ended successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Workshop or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Workshop not Found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to end workshop
+                required:
+                  - message
   /api/workshop/update/{workshopId}:
     put:
       summary: Update a workshop
@@ -2762,6 +2849,9 @@ paths:
                             - createdAt
                       organizer:
                         type: string
+                      organizerId:
+                        type: string
+                        format: uuid
                       createdAt:
                         type: string
                         format: date-time
@@ -2775,6 +2865,7 @@ paths:
                       - status
                       - participants
                       - organizer
+                      - organizerId
                       - createdAt
                 required:
                   - message

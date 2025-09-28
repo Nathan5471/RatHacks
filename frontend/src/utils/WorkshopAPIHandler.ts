@@ -42,6 +42,11 @@ export const addGoogleMeetURL = async (id: string, googleMeetURL: string) => {
   return response.data;
 };
 
+export const endWorkshop = async (id: string) => {
+  const response = await api.post(`/end/${id}`);
+  return response.data;
+};
+
 export const updateWorkshop = async (
   id: string,
   data: {

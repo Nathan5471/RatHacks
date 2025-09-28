@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Fuse from "fuse.js";
 import { useOverlay } from "../../contexts/OverlayContext";
 import { organizerGetAllWorkshops } from "../../utils/WorkshopAPIHandler";
 import { formatDate } from "date-fns";
@@ -30,12 +31,15 @@ export default function OrganizerWorkshops() {
     googleMeetURL: string;
     startDate: string;
     endDate: string;
+    status: "upcoming" | "ongoing" | "completed";
     participants: Participants[];
     organizer: string;
     organizerId: string;
     createdAt: string;
   }
   const [workshops, setWorkshops] = useState<Workshop[]>([]);
+  const [displayedWorkshops, setDisplayedWorkshops] = useState<Workshop[]>([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -44,6 +48,7 @@ export default function OrganizerWorkshops() {
       try {
         const fetchedWorkshops = await organizerGetAllWorkshops();
         setWorkshops(fetchedWorkshops.workshops as Workshop[]);
+        setDisplayedWorkshops(fetchedWorkshops.workshops as Workshop[]);
       } catch (error: unknown) {
         const errorMessage =
           typeof error === "object" &&
@@ -59,6 +64,16 @@ export default function OrganizerWorkshops() {
     };
     fetchWorkshops();
   }, [reload]);
+
+  useEffect(() => {
+    if (search.trim() === "") return setDisplayedWorkshops(workshops);
+    const fuse = new Fuse(workshops, {
+      keys: ["name", "description", "organizer"],
+      threshold: 0.3,
+    });
+    const results = fuse.search(search);
+    setDisplayedWorkshops(results.map((result) => result.item));
+  }, [search, workshops]);
 
   const handleOpenCreateWorkshop = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -155,7 +170,7 @@ export default function OrganizerWorkshops() {
       <div className="w-1/6 h-full">
         <OrganizerNavbar />
       </div>
-      <div className="w-5/6 h-full flex flex-col items-center">
+      <div className="w-5/6 h-full flex flex-col items-center overflow-y-auto">
         <div className="grid grid-cols-3 w-full h-[calc(10%)] p-2">
           <div />
           <div className="flex items-center justify-center text-center">
@@ -170,11 +185,24 @@ export default function OrganizerWorkshops() {
             </button>
           </div>
         </div>
-        {workshops.length === 0 ? (
-          <p className="text-2xl mt-8">No workshops yet</p>
+        <div className="flex flex-row w-full mt-2 mb-4 justify-center">
+          <input
+            type="text"
+            placeholder="Search workshops..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="p-2 rounded-lg bg-surface-a1 w-1/2"
+          />
+        </div>
+        {displayedWorkshops.length === 0 ? (
+          search ? (
+            <p className="text-2xl mt-8">No workshops match your search</p>
+          ) : (
+            <p className="text-2xl mt-8">No workshops yet</p>
+          )
         ) : (
-          <div className="w-full h-full flex flex-col items-center overflow-y-auto">
-            {workshops.map((workshop) => (
+          <div className="w-full h-full flex flex-col items-center">
+            {displayedWorkshops.map((workshop) => (
               <div
                 key={workshop.id}
                 className="flex flex-row bg-surface-a1 w-5/6 mt-4 p-4 rounded-lg mb-2"
@@ -206,6 +234,9 @@ export default function OrganizerWorkshops() {
                   </div>
                 </div>
                 <div className="flex flex-col w-1/3 ml-2">
+                  <p>
+                    <span className="font-bold">Status:</span> {workshop.status}
+                  </p>
                   <span className="font-bold">Start Date:</span>{" "}
                   {formatDate(workshop.startDate, "EEEE, MMMM d yyyy h:mm a")}
                   <span className="font-bold">End Date:</span>{" "}

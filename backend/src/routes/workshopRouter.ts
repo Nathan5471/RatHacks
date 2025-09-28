@@ -4,6 +4,7 @@ import {
   joinWorkshop,
   leaveWorkshop,
   addGoogleMeetURL,
+  endWorkshop,
   updateWorkshop,
   getAllWorkshops,
   organizerGetAllWorkshops,
@@ -77,6 +78,16 @@ router.post(
     await addGoogleMeetURL(req, res);
   }
 );
+
+router.post("/end/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Workshop ID is required" });
+  }
+
+  await endWorkshop(req, res);
+});
 
 router.put("/update/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };

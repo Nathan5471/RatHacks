@@ -175,6 +175,36 @@ export const addGoogleMeetURL = async (req: any, res: any) => {
   }
 };
 
+export const endWorkshop = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const workshop = await prisma.workshop.findUnique({
+      where: { id },
+    });
+    if (!workshop) {
+      return res.status(404).json({ message: "Workshop not found" });
+    }
+    if (workshop.status !== "ongoing") {
+      return res.status(400).json({ message: "Workshop is not ongoing" });
+    }
+
+    await prisma.workshop.update({
+      where: { id },
+      data: { status: "completed" },
+    });
+    return res.status(200).json({ message: "Workshop ended successfully" });
+  } catch (error) {
+    console.error("Error ending workshop:", error);
+    return res.status(500).json({ message: "Failed to end workshop" });
+  }
+};
+
 export const updateWorkshop = async (req: any, res: any) => {
   const { id } = req.params as { id: string };
   const { name, description, startDate, endDate } = req.body as {
@@ -345,6 +375,8 @@ export const getWorkshopById = async (req: any, res: any) => {
       organizer: organizer
         ? `${organizer.firstName} ${organizer.lastName}`
         : "Unknown Organizer",
+      organizerId: workshopData.organizer,
+      createdAt: workshopData.createdAt,
     };
     return res
       .status(200)

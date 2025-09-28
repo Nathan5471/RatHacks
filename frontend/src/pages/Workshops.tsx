@@ -134,8 +134,12 @@ export default function Workshops() {
             className="p-2 rounded-lg bg-surface-a1 w-1/2"
           />
         </div>
-        {workshops.length === 0 ? (
-          <p className="mt-4 text-lg">No workshops available.</p>
+        {displayedWorkshops.length === 0 ? (
+          search ? (
+            <p className="mt-4 text-lg">No workshops match your search</p>
+          ) : (
+            <p className="mt-4 text-lg">No workshops available.</p>
+          )
         ) : (
           <div className="w-full h-full flex flex-col">
             {displayedWorkshops.map((workshop) => (
