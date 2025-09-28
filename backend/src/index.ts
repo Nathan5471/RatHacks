@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/authRouter";
 import eventRouter from "./routes/eventRouter";
 import workshopRouter from "./routes/workshopRouter";
+import projectRouter from "./routes/projectRouter";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -24,6 +25,10 @@ app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api/event", eventRouter);
 app.use("/api/workshop", workshopRouter);
+app.use("/api/project", projectRouter);
+
+// Images
+app.use("/api/uploads", express.static("uploads"));
 
 // SwaggerUI Docs
 const swaggerDocument = YAML.load("./api-docs.yaml");

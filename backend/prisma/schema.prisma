@@ -63,7 +63,7 @@ model Team {
 }
 
 model Project {
-  id             String   @id @default(uuid())
+  id             String    @id @default(uuid())
   name           String
   description    String
   codeURL        String?
@@ -72,9 +72,9 @@ model Project {
   demoURL        String?
   eventId        String
   teamId         String
-  createdAt      DateTime @default(now())
-  submittedBy    String // User Id
-  submittedAt    DateTime @default(now())
+  createdAt      DateTime  @default(now())
+  submittedBy    String? // User Id
+  submittedAt    DateTime?
 }
 
 model Event {
