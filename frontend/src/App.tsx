@@ -15,8 +15,6 @@ import OrganizerWorkshop from "./pages/organizerPages/OrganizerWorkshop";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
 import OrganizerEvent from "./pages/organizerPages/OrganizerEvent";
 import Home from "./pages/Home";
-import Projects from "./pages/Projects";
-import ProjectView from "./pages/ProjectView";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -58,8 +56,6 @@ function App() {
           />
         </Route>
         <Route path="/" element={<Home />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:id" element={<ProjectView />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
