@@ -37,72 +37,72 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen min-w-screen bg-surface-a0 text-white overflow-y-auto">
       <div className="flex flex-row min-h-15 min-w-screen bg-surface-a1 shadow-lg">
-        <h1 className="text-3xl col-span-3 md:col-span-1 font-bold text-center text-primary-a0 p-4">
+        <h1 className="text-lg sm:text-3xl col-span-3 md:col-span-1 font-bold text-center justify-center text-primary-a0 p-4">
           Rat Hacks
         </h1>
         <HashLink
           to="/#about"
-          className="ml-auto text-lg lg:text-xl p-4 hover:underline items-center flex font-bold"
+          className="ml-auto text-pretty sm:text-lg lg:text-xl p-2 sm:p-4 hover:underline items-center flex font-bold"
         >
           About
         </HashLink>
         <HashLink
           to="/#schedule"
-          className="text-lg lg:text-xl p-4 hover:underline items-center flex font-bold"
+          className="text-pretty sm:text-lg lg:text-xl p-2 sm:p-4 hover:underline items-center flex font-bold"
         >
           Schedule
         </HashLink>
         <HashLink
           to="/#faq"
-          className="text-lg lg:text-xl p-4 hover:underline items-center flex font-bold"
+          className="text-pretty sm:text-lg lg:text-xl p-2 sm:p-4 hover:underline items-center flex font-bold"
         >
           FAQ
         </HashLink>
         <Link
           to={user ? "/app" : "/login"}
-          className="text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center justify-center items-center flex font-bold m-4 p-2 w-1/6"
+          className="text-pretty sm:text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center justify-center items-center flex font-bold m-4 p-2 w-1/6"
         >
           {user ? "Go to App" : "Login"}
         </Link>
       </div>
       <div className="flex flex-col items-center p-4 w-screen h-full overflow-y-auto">
-        <h2 className="text-6xl mt-6 text-center font-bold">
+        <h2 className="text-3xl sm:text-6xl mt-6 text-center font-bold">
           Join us for Rat Hacks 2025!
         </h2>
-        <p className="text-2xl mt-4 text-center w-3/4">
+        <p className="text-lg sm:text-2xl mt-4 text-center w-3/4">
           November 22, 2025 8:00 AM - 8:00 PM
         </p>
         <div className="flex flex-row mt-4 p-4 justify-center w-2/3">
-          <div className="flex flex-col bg-surface-a1 rounded-lg w-30 p-4 mx-2">
-            <span className="text-4xl font-bold text-primary-a0 text-center">
+          <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 text-center">
               {timeRemaining?.days || 0}
             </span>
-            <span className="text-xl text-center">Days</span>
+            <span className="text-sm sm:text-3xl text-center">Days</span>
           </div>
-          <div className="flex flex-col bg-surface-a1 rounded-lg w-30 p-4 mx-2">
-            <span className="text-4xl font-bold text-primary-a0 text-center">
+          <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 text-center">
               {timeRemaining?.hours || 0}
             </span>
-            <span className="text-xl text-center">Hours</span>
+            <span className="text-sm sm:text-3xl text-center">Hours</span>
           </div>
-          <div className="flex flex-col bg-surface-a1 rounded-lg w-30 p-4 mx-2">
-            <span className="text-4xl font-bold text-primary-a0 text-center">
+          <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 text-center">
               {timeRemaining?.minutes || 0}
             </span>
-            <span className="text-xl text-center">Minutes</span>
+            <span className="text-sm sm:text-3xl text-center">Minutes</span>
           </div>
-          <div className="flex flex-col bg-surface-a1 rounded-lg w-30 p-4 mx-2">
-            <span className="text-4xl font-bold text-primary-a0 text-center">
+          <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 text-center">
               {timeRemaining?.seconds || 0}
             </span>
-            <span className="text-xl text-center">Seconds</span>
+            <span className="text-sm sm:text-3xl text-center">Seconds</span>
           </div>
         </div>
         <div className="mt-6 text-left w-11/12 text-lg">
           <h2 className="text-4xl font-bold mb-2" id="about">
             About Rat Hacks
           </h2>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-xl font-bold mb-2">What is Rat Hacks?</h3>
               <p>
@@ -170,59 +170,63 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <h2 className="text-4xl font-bold my-2">Meet the Team</h2>
-          <div className="flex flex-row text-center">
+          <h2 className="text-4xl font-bold mt-6 mb-4">Meet the Team</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center">
             <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
                 src="/public/nathanCloutier.jpg"
                 alt="Nathan Cloutier"
-                className="w-48 h-56 object-cover rounded-lg mb-2"
+                className="w-full h-56 object-cover rounded-lg mb-2"
               />
-              <span className="text-xl font-bold">Nathan Cloutier</span>
-              <span className="text-lg">Rat Hacks Director</span>
+              <span className="text-lg sm:text-xl font-bold">
+                Nathan Cloutier
+              </span>
+              <span className="sm:text-lg">Rat Hacks Director</span>
             </div>
-            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg ml-4">
+            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
                 src="/public/bearTyree.jpg"
                 alt="Bear Tyree"
-                className="w-48 h-56 object-cover rounded-lg mb-2"
+                className="w-full h-56 object-cover rounded-lg mb-2"
               />
-              <span className="text-xl font-bold">Bear Tyree</span>
-              <span className="text-lg">Rat Hacks Organizer</span>
+              <span className="text-lg sm:text-xl font-bold">Bear Tyree</span>
+              <span className="sm:text-lg">Rat Hacks Organizer</span>
             </div>
-            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg ml-4">
+            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
                 src="/public/caylebWang.jpg"
                 alt="Cayleb Wang"
-                className="w-48 h-56 object-cover rounded-lg mb-2"
+                className="w-full h-56 object-cover rounded-lg mb-2"
               />
-              <span className="text-xl font-bold">Cayleb Wang</span>
-              <span className="text-lg">Rat Hacks Organizer</span>
+              <span className="text-lg sm:text-xl font-bold">Cayleb Wang</span>
+              <span className="sm:text-lg">Rat Hacks Organizer</span>
             </div>
-            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg ml-4">
+            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
                 src="/public/eliPeters.jpg"
                 alt="Eli Peters"
-                className="w-48 h-56 object-cover rounded-lg mb-2"
+                className="w-full h-56 object-cover rounded-lg mb-2"
               />
-              <span className="text-xl font-bold">Eli Peters</span>
-              <span className="text-lg">Rat Hacks Organizer</span>
+              <span className="text-lg sm:text-xl font-bold">Eli Peters</span>
+              <span className="sm:text-lg">Rat Hacks Organizer</span>
             </div>
-            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg ml-4">
+            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
                 src="/public/mattoxJalbert.jpg"
                 alt="Mattox Jalbert"
-                className="w-48 h-56 object-cover rounded-lg mb-2"
+                className="w-full h-56 object-cover rounded-lg mb-2"
               />
-              <span className="text-xl font-bold">Mattox Jalbert</span>
-              <span className="text-lg">Rat Hacks Organizer</span>
+              <span className="text-lg sm:text-xl font-bold">
+                Mattox Jalbert
+              </span>
+              <span className="sm:text-lg">Rat Hacks Organizer</span>
             </div>
           </div>
-          <h2 className="text-4xl font-bold my-2" id="schedule">
+          <h2 className="text-4xl font-bold mt-6" id="schedule">
             Schedule
           </h2>
           <div className="flex flex-col">
-            <div className="flex flex-col bg-surface-a1 rounded-lg p-4 my-2 text-2xl">
+            <div className="flex flex-col bg-surface-a1 rounded-lg p-4 my-2 text-xl sm:text-2xl">
               <p>
                 <span className="font-bold">7:50 AM - 8:15 AM</span> - Check In
                 (RVGS)
@@ -257,10 +261,10 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <h2 className="text-4xl font-bold my-2 mb-4" id="faq">
+          <h2 className="text-4xl font-bold mt-6 mb-4" id="faq">
             FAQ
           </h2>
-          <div className="grid grid-cols-2 gap-4 justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-center">
             <div className="flex flex-col w-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-2xl font-bold mb-2">What is a hackathon?</h3>
               <p>
