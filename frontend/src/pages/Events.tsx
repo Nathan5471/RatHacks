@@ -126,21 +126,22 @@ export default function Events() {
                     >
                       Open
                     </Link>
-                    {user && user.events.includes(event.id) ? (
-                      <button
-                        onClick={(e) => handleLeave(e, event.id)}
-                        className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
-                      >
-                        Leave
-                      </button>
-                    ) : (
-                      <button
-                        onClick={(e) => handleJoin(e, event.id)}
-                        className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
-                      >
-                        Join
-                      </button>
-                    )}
+                    {event.status === "upcoming" &&
+                      (user && user.events.includes(event.id) ? (
+                        <button
+                          onClick={(e) => handleLeave(e, event.id)}
+                          className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
+                        >
+                          Leave
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => handleJoin(e, event.id)}
+                          className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
+                        >
+                          Join
+                        </button>
+                      ))}
                   </div>
                 </div>
                 <div className="flex flex-col w-1/3 ml-2">

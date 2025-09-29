@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getEventById, joinEvent, leaveEvent } from "../utils/EventAPIHandler";
+import {
+  getEventById,
+  joinEvent,
+  leaveEvent,
+  joinTeam,
+  leaveTeam,
+} from "../utils/EventAPIHandler";
 import { useAuth } from "../contexts/AuthContext";
 import { formatDate } from "date-fns";
 import AppNavbar from "../components/AppNavbar";
@@ -25,9 +31,10 @@ export default function Event() {
     submissionDeadline: string;
     status: "upcoming" | "ongoing" | "completed";
     participantCount: number;
-    team: Team[];
+    team: Team | null;
   }
   const [event, setEvent] = useState<Event | null>(null);
+  const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
   const [timeRemaining, setTimeRemaining] = useState<{
     days: number;
@@ -35,6 +42,8 @@ export default function Event() {
     minutes: number;
     seconds: number;
   } | null>(null);
+  const [newTeamJoinCode, setNewTeamJoinCode] = useState("");
+  const [teamError, setTeamError] = useState("");
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -50,16 +59,25 @@ export default function Event() {
       }
     };
     fetchEvent();
-  }, [eventId]);
+  }, [eventId, refresh]);
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
-      if (!event) return null;
+      if (!event || event.status === "completed") return null;
       const now = new Date();
-      const eventDate = new Date(event.startDate);
-      const difference = eventDate.getTime() - now.getTime();
+      const eventStartDate = new Date(event.startDate);
+      const eventSubmissionDeadline = new Date(event.submissionDeadline);
+      let difference = 0;
+      if (event.status === "upcoming") {
+        difference = eventStartDate.getTime() - now.getTime();
+      } else if (event.status === "ongoing") {
+        difference = eventSubmissionDeadline.getTime() - now.getTime();
+      }
 
-      if (difference <= 0) return null;
+      if (difference <= 0) {
+        setRefresh(!refresh);
+        return null;
+      }
 
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
@@ -74,7 +92,7 @@ export default function Event() {
     }, 1000);
 
     return () => clearInterval(updateTimeRemaining);
-  }, [event]);
+  }, [event, refresh]);
 
   const handleJoin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -82,8 +100,9 @@ export default function Event() {
     try {
       await joinEvent(eventId);
       await getUser();
+      setRefresh(!refresh);
     } catch (error) {
-      console.error("Error joinging event:", error);
+      console.error("Error joining event:", error);
     }
   };
 
@@ -93,8 +112,47 @@ export default function Event() {
     try {
       await leaveEvent(eventId);
       await getUser();
+      setRefresh(!refresh);
     } catch (error) {
       console.error("Error leaving event:", error);
+    }
+  };
+
+  const handleJoinTeam = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!eventId || !newTeamJoinCode) return;
+    try {
+      await joinTeam(eventId, newTeamJoinCode);
+      setNewTeamJoinCode("");
+      setTeamError("");
+      setRefresh(!refresh);
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unknown error occurred";
+      setTeamError(errorMessage);
+    }
+  };
+
+  const handleLeaveTeam = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!eventId) return;
+    try {
+      await leaveTeam(eventId);
+      setRefresh(!refresh);
+    } catch (error) {
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unknown error occurred";
+      setTeamError(errorMessage);
     }
   };
 
@@ -132,21 +190,22 @@ export default function Event() {
                   >
                     Back to Events
                   </Link>
-                  {user && user.events.includes(event.id) ? (
-                    <button
-                      className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
-                      onClick={handleLeave}
-                    >
-                      Leave Event
-                    </button>
-                  ) : (
-                    <button
-                      className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
-                      onClick={handleJoin}
-                    >
-                      Join Event
-                    </button>
-                  )}
+                  {event.status === "upcoming" &&
+                    (user && user.events.includes(event.id) ? (
+                      <button
+                        className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
+                        onClick={handleLeave}
+                      >
+                        Leave Event
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
+                        onClick={handleJoin}
+                      >
+                        Join Event
+                      </button>
+                    ))}
                 </div>
               </div>
               <div className="flex flex-col w-1/3 ml-2">
@@ -169,37 +228,101 @@ export default function Event() {
                 </p>
               </div>
             </div>
-            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
-              <h2 className="text-2xl font-bold text-center mb-2">
-                {event.name} Countdown
-              </h2>
-              <div className="flex flex-row w-full justify-center">
-                <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
-                  <span className="text-5xl font-bold text-primary-a0 text-center">
-                    {timeRemaining?.days || 0}
-                  </span>
-                  <span className="text-xl text-center">Days</span>
-                </div>
-                <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
-                  <span className="text-5xl font-bold text-primary-a0 text-center">
-                    {timeRemaining?.hours || 0}
-                  </span>
-                  <span className="text-xl text-center">Hours</span>
-                </div>
-                <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
-                  <span className="text-5xl font-bold text-primary-a0 text-center">
-                    {timeRemaining?.minutes || 0}
-                  </span>
-                  <span className="text-xl text-center">Minutes</span>
-                </div>
-                <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
-                  <span className="text-5xl font-bold text-primary-a0 text-center">
-                    {timeRemaining?.seconds || 0}
-                  </span>
-                  <span className="text-xl text-center">Seconds</span>
+            {event.status !== "completed" && (
+              <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+                {event.status === "upcoming" && (
+                  <h2 className="text-2xl font-bold text-center mb-2">
+                    {event.name} Countdown
+                  </h2>
+                )}
+                {event.status === "ongoing" && (
+                  <h2 className="text-2xl font-bold text-center mb-2">
+                    Time Remaining to Submit Projects
+                  </h2>
+                )}
+                <div className="flex flex-row w-full justify-center">
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
+                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                      {timeRemaining?.days || 0}
+                    </span>
+                    <span className="text-xl text-center">Days</span>
+                  </div>
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
+                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                      {timeRemaining?.hours || 0}
+                    </span>
+                    <span className="text-xl text-center">Hours</span>
+                  </div>
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
+                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                      {timeRemaining?.minutes || 0}
+                    </span>
+                    <span className="text-xl text-center">Minutes</span>
+                  </div>
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
+                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                      {timeRemaining?.seconds || 0}
+                    </span>
+                    <span className="text-xl text-center">Seconds</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+            {user?.events.includes(event.id) &&
+              event.team &&
+              event.status !== "completed" && (
+                <div className="flex flex-row mt-4">
+                  <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-2/3"></div>
+                  <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-1/3 ml-2">
+                    <h2 className="text-2xl font-bold text-center mb-2">
+                      Your Team
+                    </h2>
+                    <p className="text-lg">Join Code: {event.team.joinCode}</p>
+                    <p className="text-lg">Members</p>
+                    <ul className="list-disc list-inside">
+                      {event.team.members.map((member, index) => (
+                        <li key={index}>{member}</li>
+                      ))}
+                    </ul>
+                    <form
+                      className="flex flex-col mt-4"
+                      onSubmit={handleJoinTeam}
+                    >
+                      <label htmlFor="joinCode" className="text-lg mt-2">
+                        Join Code:
+                      </label>
+                      <input
+                        type="text"
+                        id="joinCode"
+                        name="joinCode"
+                        value={newTeamJoinCode}
+                        onChange={(e) => setNewTeamJoinCode(e.target.value)}
+                        className="p-2 rounded-lg bg-surface-a2"
+                        placeholder="Enter join code"
+                        required
+                      />
+                      {teamError && (
+                        <p className="text-red-500 mt-2">{teamError}</p>
+                      )}
+                      <div className="flex flex-row">
+                        <button
+                          type="submit"
+                          className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold mt-2 w-full"
+                        >
+                          Join Team
+                        </button>
+                        <button
+                          type="button"
+                          className="bg-red-500 hover:bg-red-600 p-2 rounded-lg font-bold mt-2 ml-2 w-full"
+                          onClick={handleLeaveTeam}
+                        >
+                          Leave Team
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
           </div>
         ) : (
           <div className="w-2/3 flex flex-col">

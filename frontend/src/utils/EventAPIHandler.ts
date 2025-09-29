@@ -37,6 +37,16 @@ export const leaveEvent = async (eventId: string) => {
   return response.data;
 };
 
+export const joinTeam = async (eventId: string, joinCode: string) => {
+  const response = await api.post(`/join-team/${eventId}/${joinCode}`);
+  return response.data;
+};
+
+export const leaveTeam = async (eventId: string) => {
+  const response = await api.post(`/leave-team/${eventId}`);
+  return response.data;
+};
+
 export const updateEvent = async (
   id: string,
   eventData: {
