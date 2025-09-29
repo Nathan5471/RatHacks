@@ -176,7 +176,7 @@ export default function OrganizerEvents() {
       <div className="w-1/6 h-full">
         <OrganizerNavbar />
       </div>
-      <div className="w-5/6 h-full flex flex-col items-center">
+      <div className="w-5/6 h-full flex flex-col items-center overflow-y-auto">
         <div className="grid grid-cols-3 w-full h-[calc(10%)] p-2">
           <div />
           <div className="flex items-center justify-center text-center">

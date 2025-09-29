@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import prisma from "../prisma/client";
+import sortEvents from "../utils/sortEvents";
 
 export const createEvent = async (req: any, res: any) => {
   const {
@@ -381,7 +382,8 @@ export const updateEvent = async (req: any, res: any) => {
 export const getAllEvents = async (req: any, res: any) => {
   try {
     const allEvents = await prisma.event.findMany();
-    const events = allEvents.map((event) => ({
+    const sortedEvents = sortEvents(allEvents);
+    const events = sortedEvents.map((event) => ({
       id: event.id,
       name: event.name,
       description: event.description,
@@ -408,8 +410,9 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
 
   try {
     const events = await prisma.event.findMany();
+    const sortedEvents = sortEvents(events);
     const filledEvents = await Promise.all(
-      events.map(async (event) => {
+      sortedEvents.map(async (event) => {
         const users = await Promise.all(
           event.participants.map(async (user) => {
             const userData = await prisma.user.findUnique({
