@@ -10,6 +10,7 @@ services:
       - FRONTEND_URL=
       - LOOPS_API_KEY=
       - LOOPS_EMAIL_VERIFICATION_TEMPLATE_ID=
+      - LOOPS_WORKSHOP_STARTING_TEMPLATE_ID=
     restart: unless-stopped
     depends_on:
       - postgres

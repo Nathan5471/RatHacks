@@ -2,25 +2,25 @@
 
 ## Description
 
-This is a website for Rat Hacks. Currently it has a home page to see all of the previous projects from the last hackathon. It also has an ccount system that will be used to manage future signups and submissions for future events hosted by Rat Hacks.
+This is a website for Rat Hacks. It's homepage provides information for the upcoming hackathon! There are also accounts to manage things like events and workshops.
 
 ## Features
 
-Participants get to have an account that manages signing up for events. They also have tools to manage their account by doing things like logging out of all devices or editing their information. Organizers are able to create events and and manage them.
+Participants get to have an account that manages signing up for events and workshops. They are able to edit their data through a settings page and perform actions like logging out of their accounts. Organizer can create and manage events and workshops.
 
 ## Demo
 
-You can test this out yourself at <https://rathacks.com> by using the following credentials:
+You can test this out yourself at <https://demo.rathacks.com> by using the following credentials:
 
 Organizer:
 
-email - <e0bg3a@hack.af>
+email - <0agokw@hack.af>
 
 password - Organizer@123
 
 Student:
 
-email - <e9do1a@hack.af>
+email - <ekiwlh@hack.af>
 
 password - Student@123
 

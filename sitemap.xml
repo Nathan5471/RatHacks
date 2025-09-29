@@ -9,32 +9,17 @@
 
 <url>
   <loc>https://rathacks.com/</loc>
-  <lastmod>2025-9-14T22:46:22+00:00</lastmod>
+  <lastmod>2025-9-29T22:46:22+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://rathacks.com/projects</loc>
-  <lastmod>2025-9-14T22:46:22+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://rathacks.com/app</loc>
-  <lastmod>2025-9-14T22:46:22+00:00</lastmod>
-  <priority>0.10</priority>
-</url>
-<url>
-  <loc>https://rathacks.com/app/settings</loc>
-  <lastmod>2025-9-14T22:46:22+00:00</lastmod>
-  <priority>0.10</priority>
-</url>
-<url>
   <loc>https://rathacks.com/login</loc>
-  <lastmod>2025-9-14T22:46:22+00:00</lastmod>
+  <lastmod>2025-9-29T22:46:22+00:00</lastmod>
   <priority>0.10</priority>
 </url>
 <url>
   <loc>https://rathacks.com/register</loc>
-  <lastmod>2025-9-14T22:46:22+00:00</lastmod>
+  <lastmod>2025-9-29T22:46:22+00:00</lastmod>
   <priority>0.10</priority>
 </url>
 </urlset>
