@@ -3505,6 +3505,221 @@ paths:
                     example: Failed to create project
                 required:
                   - message
+  /api/project/update/{projectId}:
+    put:
+      summary: Update a project
+      tags:
+        - Projects
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                codeURL:
+                  type: string
+                  format: uri
+                demoURL:
+                  type: string
+                  format: uri
+                screenshot:
+                  type: string
+                  format: binary
+                video:
+                  type: string
+                  format: binary
+              required:
+                - name
+                - description
+      responses:
+        200:
+          description: Project updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project updated successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project ID, name, and description are required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Project or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to update project
+                required:
+                  - message
+  /api/project/get/{eventId}:
+    get:
+      summary: Get a project by event ID
+      tags:
+        - Projects
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Project fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project fetched successfully
+                  project:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      codeURL:
+                        type: string
+                        format: uri
+                      screenshotURL:
+                        type: string
+                        format: uri
+                      videoURL:
+                        type: string
+                        format: uri
+                      demoURL:
+                        type: string
+                        format: uri
+                      submittedAt:
+                        type: string
+                        format: date-time
+                    required:
+                      - id
+                      - name
+                      - description
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: No team (this hopefully doesn't happen)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User is not part of any team for this event
+                required:
+                  - message
+        404:
+          description: Project, event, or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project not found
+                required:
+                  - message
+        500:
+          description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to get project
+                required:
+                  - message
 
 components:
   securitySchemes:
