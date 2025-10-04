@@ -174,7 +174,7 @@ export default function Home() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center">
             <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
-                src="/public/nathanCloutier.jpg"
+                src="/nathanCloutier.jpg"
                 alt="Nathan Cloutier"
                 className="w-full h-56 object-cover rounded-lg mb-2"
               />
@@ -185,7 +185,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
-                src="/public/bearTyree.jpg"
+                src="/bearTyree.jpg"
                 alt="Bear Tyree"
                 className="w-full h-56 object-cover rounded-lg mb-2"
               />
@@ -194,7 +194,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
-                src="/public/caylebWang.jpg"
+                src="/caylebWang.jpg"
                 alt="Cayleb Wang"
                 className="w-full h-56 object-cover rounded-lg mb-2"
               />
@@ -203,7 +203,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
-                src="/public/eliPeters.jpg"
+                src="/eliPeters.jpg"
                 alt="Eli Peters"
                 className="w-full h-56 object-cover rounded-lg mb-2"
               />
@@ -212,7 +212,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
-                src="/public/mattoxJalbert.jpg"
+                src="/mattoxJalbert.jpg"
                 alt="Mattox Jalbert"
                 className="w-full h-56 object-cover rounded-lg mb-2"
               />

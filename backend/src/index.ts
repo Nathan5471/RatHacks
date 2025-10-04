@@ -36,17 +36,13 @@ const swaggerDocument = YAML.load("./api-docs.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Frontend
-app.use(express.static("public"));
-
-app.use((req: any, res: any) => {
-  res.sendFile("./public/index.html", { root: "." }, (error: any) => {
-    if (error) {
-      console.error("Error sending index file:", error);
-
-      res.status(500).send("Page not found");
-    }
-  });
-});
+app.use(
+  "/",
+  createProxyMiddleware({
+    target: "http://localhost:5173",
+    changeOrigin: true,
+  })
+);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
