@@ -272,7 +272,37 @@ export default function Event() {
               event.team &&
               event.status !== "completed" && (
                 <div className="flex flex-row mt-4">
-                  <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-2/3"></div>
+                  <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-2/3 items-center">
+                    <h2 className="text-2xl font-bold text-center mb-2">
+                      Project Submission
+                    </h2>
+                    <p className="text-lg text-center">
+                      To submit your project you will need a title, description,
+                      a link to your code, a screenshot, a video of your
+                      project, and optionally you can include a demo URL. The
+                      video should show off all of your project. I highly
+                      reccomend talking during your video because it makes them
+                      much more fun to watch. If you want help deploy your
+                      project, talk to an organizer!
+                    </p>
+                    <button
+                      className={`w-1/2 ${
+                        event.status === "ongoing"
+                          ? "bg-primary-a0 hover:bg-primary-a1"
+                          : "bg-surface-a2 cursor-not-allowed"
+                      } mt-4 rounded-lg p-2 font-bold`}
+                    >
+                      {event.status === "upcoming" && "Submitting Not Open Yet"}
+                      {event.status === "ongoing" &&
+                        new Date().getTime() <=
+                          new Date(event.submissionDeadline).getTime() &&
+                        "Submit Project"}
+                      {event.status === "ongoing" &&
+                        new Date(event.submissionDeadline).getTime() <=
+                          new Date().getTime() &&
+                        "Submission Deadline Passed"}
+                    </button>
+                  </div>
                   <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-1/3 ml-2">
                     <h2 className="text-2xl font-bold text-center mb-2">
                       Your Team
