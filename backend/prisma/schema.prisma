@@ -56,6 +56,13 @@ model User {
   createdAt              DateTime    @default(now())
 }
 
+model Invite {
+  token   String      @id @default(uuid())
+  email   String
+  role    AccountType
+  expires DateTime
+}
+
 model Team {
   id               String   @id @default(uuid())
   joinCode         String   @unique

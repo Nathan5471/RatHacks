@@ -4,6 +4,8 @@ import { User } from "@prisma/client";
 import generateToken from "../utils/generateToken";
 import generateRefreshToken from "../utils/generateRefreshToken";
 import sendEmailVerificationEmail from "../utils/sendEmailVerificationEmail";
+import sendOrganizerInviteEmail from "../utils/sendOrganizerInviteEmail";
+import sendJudgeInviteEmail from "../utils/sendJudgeInviteEmail";
 
 export const register = async (req: any, res: any) => {
   const {
@@ -191,6 +193,74 @@ export const resendVerificationEmail = async (req: any, res: any) => {
     return res
       .status(500)
       .json({ message: "Failed to resend verification email" });
+  }
+};
+
+export const inviteOrganizer = async (req: any, res: any) => {
+  const { email } = req.params as { email: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  const expiration = new Date();
+  expiration.setDate(expiration.getDate() + 7);
+  try {
+    const emailExists = await prisma.user.findUnique({
+      where: { email },
+    });
+    if (emailExists) {
+      return res.status(400).json({ message: "Email already in use" });
+    }
+
+    const invite = await prisma.invite.create({
+      data: {
+        email,
+        role: "organizer",
+        expires: expiration,
+      },
+    });
+
+    await sendOrganizerInviteEmail({ token: invite.token, email, expiration });
+    return res.status(200).json({ message: "Successfully sent invite" });
+  } catch (error) {
+    console.error("Error inviting organizer:", error);
+    return res.status(500).json({ message: "Failed to invite organizer" });
+  }
+};
+
+export const inviteJudge = async (req: any, res: any) => {
+  const { email } = req.params as { email: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  const expiration = new Date();
+  expiration.setDate(expiration.getDate() + 7);
+  try {
+    const emailExists = await prisma.user.findUnique({
+      where: { email },
+    });
+    if (emailExists) {
+      return res.status(400).json({ message: "Email already in use" });
+    }
+
+    const invite = await prisma.invite.create({
+      data: {
+        email,
+        role: "judge",
+        expires: expiration,
+      },
+    });
+
+    await sendJudgeInviteEmail({ token: invite.token, email, expiration });
+    return res.status(200).json({ message: "Successfully sent invitation" });
+  } catch (error) {
+    console.error("Error inviting judge:", error);
+    return res.status(500).json({ message: "Failed to invite judge" });
   }
 };
 

@@ -58,6 +58,16 @@ export const resendVerificationEmail = async () => {
   return response.data;
 };
 
+export const inviteOrganizer = async (email: string) => {
+  const response = await api.post(`/invite/organizer/${email}`);
+  return response.data;
+};
+
+export const inviteJudge = async (email: string) => {
+  const response = await api.post(`/invite/judge/${email}`);
+  return response.data;
+};
+
 export const logoutUser = async () => {
   const response = await api.post("/logout");
   return response.data;

@@ -4,6 +4,8 @@ import {
   login,
   verifyEmail,
   resendVerificationEmail,
+  inviteOrganizer,
+  inviteJudge,
   logout,
   logoutAll,
   updateUser,
@@ -135,6 +137,34 @@ router.post(
       });
     }
     await resendVerificationEmail(req, res);
+  }
+);
+
+router.post(
+  "/invite/organizer/:email",
+  authenticate,
+  async (req: any, res: any) => {
+    const { email } = req.params as { email: string };
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    await inviteOrganizer(req, res);
+  }
+);
+
+router.post(
+  "/invite/judge/:email",
+  authenticate,
+  async (req: any, res: any) => {
+    const { email } = req.params as { email: string };
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    await inviteJudge(req, res);
   }
 );
 
