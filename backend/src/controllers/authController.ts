@@ -231,7 +231,7 @@ export const inviteOrganizer = async (req: any, res: any) => {
 };
 
 export const registerOrganizer = async (req: any, res: any) => {
-  const { email, password, firstName, lastName, token } = req.params as {
+  const { email, password, firstName, lastName, token } = req.body as {
     email: string;
     password: string;
     firstName: string;
@@ -320,7 +320,7 @@ export const inviteJudge = async (req: any, res: any) => {
 };
 
 export const registerJudge = async (req: any, res: any) => {
-  const { email, password, firstName, lastName, token } = req.params as {
+  const { email, password, firstName, lastName, token } = req.body as {
     email: string;
     password: string;
     firstName: string;

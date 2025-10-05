@@ -63,8 +63,30 @@ export const inviteOrganizer = async (email: string) => {
   return response.data;
 };
 
+export const registerOrganizer = async (userData: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  token: string;
+}) => {
+  const response = await api.post("/organizer/register", userData);
+  return response.data;
+};
+
 export const inviteJudge = async (email: string) => {
   const response = await api.post(`/invite/judge/${email}`);
+  return response.data;
+};
+
+export const registerJudge = async (userData: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  token: string;
+}) => {
+  const response = await api.post("/judge/register", userData);
   return response.data;
 };
 
@@ -75,6 +97,20 @@ export const logoutUser = async () => {
 
 export const logoutAll = async () => {
   const response = await api.post("/logout-all");
+  return response.data;
+};
+
+export const checkOrganizerInvite = async (email: string, token: string) => {
+  const response = await api.get("/check/invite/organizer", {
+    params: { email, token },
+  });
+  return response.data;
+};
+
+export const checkJudgeInvite = async (email: string, token: string) => {
+  const response = await api.get("/check/invite/judge", {
+    params: { email, token },
+  });
   return response.data;
 };
 

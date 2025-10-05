@@ -113,7 +113,7 @@ export default function Register() {
             <input
               type="text"
               id="firstName"
-              name="lastName"
+              name="firstName"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               className="bg-surface-a2 p-2 rounded-lg mt-1"
