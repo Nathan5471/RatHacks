@@ -33,7 +33,9 @@ export default async function sendJudgeInviteEmail({
         email,
         transactionalId: LOOPS_JUDGE_INVITE_TEMPLATE_ID,
         dataVariables: {
-          token,
+          inviteLink: `${FRONTEND_URL}/invite/judge?email=${encodeURIComponent(
+            email
+          )}&token=${encodeURIComponent(token)}`,
           expirationDate: `${formatDate(
             expiration,
             "EEEE, MMMM d yyyy h:mm a"

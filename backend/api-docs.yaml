@@ -334,6 +334,13 @@ paths:
         - Auth
       security:
         - cookieAuth: []
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
       responses:
         200:
           description: Organizer invited successfully
@@ -407,6 +414,87 @@ paths:
                     example: Failed to invite organizer
                 required:
                   - message
+  /api/auth/organizer/register:
+    post:
+      summary: Reigster an organizer
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                  pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,16}$'
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                token:
+                  type: string
+                  format: uuid
+              required:
+                - email
+                - password
+                - firstName
+                - lastName
+                - token
+      responses:
+        200:
+          description: Organizer successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Organizer registered successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All fields are required
+                required:
+                  - message
+        404:
+          description: Invite not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invite not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to register organizer
+                required:
+                  - message
   /api/auth/invite/judge/{email}:
     post:
       summary: Invite a judge
@@ -414,6 +502,13 @@ paths:
         - Auth
       security:
         - cookieAuth: []
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
       responses:
         200:
           description: Judge invited successfully
@@ -485,6 +580,87 @@ paths:
                   message:
                     type: string
                     example: Failed to invite judge
+                required:
+                  - message
+  /api/auth/judge/register:
+    post:
+      summary: Reigster a judge
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                  pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,16}$'
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                token:
+                  type: string
+                  format: uuid
+              required:
+                - email
+                - password
+                - firstName
+                - lastName
+                - token
+      responses:
+        200:
+          description: Judge successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Judge registered successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All fields are required
+                required:
+                  - message
+        404:
+          description: Invite not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invite not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to register judge
                 required:
                   - message
   /api/auth/logout:
@@ -599,6 +775,144 @@ paths:
                     example: Failed to logout user from all devices
                 required:
                   - message
+  /api/auth/check/invite/organizer:
+    get:
+      summary: Validate an invite for an organizer
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: email
+          in: query
+          required: true
+          content:
+            type: string
+            format: email
+        - name: token
+          in: query
+          required: true
+          content:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Valid invite
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invite is valid
+                required:
+                  - message
+        400:
+          descrpition: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email and token are required
+                required:
+                  - message
+        404:
+          description: Invite not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invite not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to check invite
+                required:
+                  - properties
+  /api/auth/check/invite/judge:
+    get:
+      summary: Validate an invite for a judge
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: email
+          in: query
+          required: true
+          content:
+            type: string
+            format: email
+        - name: token
+          in: query
+          required: true
+          content:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Valid invite
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invite is valid
+                required:
+                  - message
+        400:
+          descrpition: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email and token are required
+                required:
+                  - message
+        404:
+          description: Invite not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invite not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to check invite
+                required:
+                  - properties
   /api/auth/current-user:
     get:
       summary: Get the currently logged in user

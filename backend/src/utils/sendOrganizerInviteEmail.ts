@@ -33,7 +33,9 @@ export default async function sendOrganizerInviteEmail({
         email,
         transactionalId: LOOPS_ORGANIZER_INVITE_TEMPLATE_ID,
         dataVariables: {
-          token,
+          inviteLink: `${FRONTEND_URL}/invite/organizer?email=${encodeURIComponent(
+            email
+          )}&token=${encodeURIComponent(token)}`,
           expirationDate: `${formatDate(
             expiration,
             "EEEE, MMMM d yyyy h:mm a"

@@ -230,6 +230,61 @@ export const inviteOrganizer = async (req: any, res: any) => {
   }
 };
 
+export const registerOrganizer = async (req: any, res: any) => {
+  const { email, password, firstName, lastName, token } = req.params as {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    token: string;
+  };
+
+  try {
+    const invite = await prisma.invite.findUnique({ where: { token } });
+    if (!invite) {
+      return res.status(404).json({ message: "Invite not found" });
+    }
+    if (
+      invite.email !== email ||
+      invite.role !== "organizer" ||
+      new Date().getTime() > new Date(invite.expires).getTime()
+    ) {
+      return res.status(400).json({ message: "Invalid invite" });
+    }
+
+    const existingEmail = await prisma.user.findUnique({
+      where: { email },
+    });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const emailToken =
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15);
+
+    await prisma.user.create({
+      data: {
+        email,
+        emailToken,
+        accountType: "organizer",
+        password: hashedPassword,
+        firstName,
+        lastName,
+      },
+    });
+    await sendEmailVerificationEmail({ email, token: emailToken, firstName });
+    return res
+      .status(201)
+      .json({ message: "Organizer registered successfully" });
+  } catch (error) {
+    console.error("Error registering organizer:", error);
+    return res.status(500).json({ message: "Failed to register organizer" });
+  }
+};
+
 export const inviteJudge = async (req: any, res: any) => {
   const { email } = req.params as { email: string };
   const user = req.user as User;
@@ -261,6 +316,59 @@ export const inviteJudge = async (req: any, res: any) => {
   } catch (error) {
     console.error("Error inviting judge:", error);
     return res.status(500).json({ message: "Failed to invite judge" });
+  }
+};
+
+export const registerJudge = async (req: any, res: any) => {
+  const { email, password, firstName, lastName, token } = req.params as {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    token: string;
+  };
+
+  try {
+    const invite = await prisma.invite.findUnique({ where: { token } });
+    if (!invite) {
+      return res.status(404).json({ message: "Invite not found" });
+    }
+    if (
+      invite.email !== email ||
+      invite.role !== "judge" ||
+      new Date().getTime() > new Date(invite.expires).getTime()
+    ) {
+      return res.status(400).json({ message: "Invalid invite" });
+    }
+
+    const existingEmail = await prisma.user.findUnique({
+      where: { email },
+    });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const emailToken =
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15);
+
+    await prisma.user.create({
+      data: {
+        email,
+        emailToken,
+        accountType: "judge",
+        password: hashedPassword,
+        firstName,
+        lastName,
+      },
+    });
+    await sendEmailVerificationEmail({ email, token: emailToken, firstName });
+    return res.status(201).json({ message: "Judge registered successfully" });
+  } catch (error) {
+    console.error("Error registering judge:", error);
+    return res.status(500).json({ message: "Failed to register judge" });
   }
 };
 
@@ -311,6 +419,37 @@ export const logoutAll = async (req: any, res: any) => {
     return res
       .status(500)
       .json({ message: "Failed to logout from all devices" });
+  }
+};
+
+export const checkInvite = async (req: any, res: any) => {
+  const { email, token } = req.query as { email: string; token: string };
+  const type = req.type;
+
+  try {
+    const invite = await prisma.invite.findUnique({
+      where: { token },
+    });
+    if (!invite) {
+      return res.status(404).json({ message: "Invite not found" });
+    }
+    if (
+      invite.email !== email ||
+      invite.role !== type ||
+      new Date().getTime() > new Date(invite.expires).getTime()
+    ) {
+      return res.status(400).json({ message: "Invalid invite" });
+    }
+
+    const existingEmail = await prisma.user.findUnique({ where: { email } });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Email already in use" });
+    }
+
+    return res.status(200).json({ message: "Invite is valid" });
+  } catch (error) {
+    console.error("Error checking invite:", error);
+    return res.status(500).json({ message: "Failed to check invite" });
   }
 };
 

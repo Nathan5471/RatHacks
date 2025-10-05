@@ -5,9 +5,12 @@ import {
   verifyEmail,
   resendVerificationEmail,
   inviteOrganizer,
+  registerOrganizer,
   inviteJudge,
+  registerJudge,
   logout,
   logoutAll,
+  checkInvite,
   updateUser,
   updatePassword,
   deleteUser,
@@ -154,6 +157,34 @@ router.post(
   }
 );
 
+router.post("/organizer/register", async (req: any, res: any) => {
+  const { email, password, firstName, lastName, token } = req.body as {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    token: string;
+  };
+
+  if (!email || !password || !firstName || !lastName || !token) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+  if (
+    password.length < 8 ||
+    !/[a-z]/.test(password) ||
+    !/[A-Z]/.test(password) ||
+    !/[0-9]/.test(password) ||
+    !/[!@#$%^&*]/.test(password)
+  ) {
+    return res.status(400).json({
+      message:
+        "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)",
+    });
+  }
+
+  await registerOrganizer(req, res);
+});
+
 router.post(
   "/invite/judge/:email",
   authenticate,
@@ -168,9 +199,61 @@ router.post(
   }
 );
 
+router.post("/judge/register", async (req: any, res: any) => {
+  const { email, password, firstName, lastName, token } = req.body as {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    token: string;
+  };
+
+  if (!email || !password || !firstName || !lastName || !token) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+  if (
+    password.length < 8 ||
+    !/[a-z]/.test(password) ||
+    !/[A-Z]/.test(password) ||
+    !/[0-9]/.test(password) ||
+    !/[!@#$%^&*]/.test(password)
+  ) {
+    return res.status(400).json({
+      message:
+        "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)",
+    });
+  }
+
+  await registerJudge(req, res);
+});
+
 router.post("/logout", authenticate, logout);
 
 router.post("/logout-all", authenticate, logoutAll);
+
+router.get("/check/invite/organizer", async (req: any, res: any) => {
+  const { email, token } = req.query as { email: string; token: string };
+
+  if (!email || !token) {
+    return res.status(400).json({ message: "Email and token are required" });
+  }
+
+  req.type = "organizer";
+
+  await checkInvite(req, res);
+});
+
+router.get("/check/invite/judge", async (req: any, res: any) => {
+  const { email, token } = req.query as { email: string; token: string };
+
+  if (!email || !token) {
+    return res.status(400).json({ message: "Email and token are required" });
+  }
+
+  req.type = "judge";
+
+  await checkInvite(req, res);
+});
 
 router.get("/current-user", authenticate, (req: any, res: any) => {
   const reqUser = req.user as User;
