@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createProject,
+  submitProject,
   updateProject,
   getProjectById,
 } from "../controllers/projectController";
@@ -40,6 +41,16 @@ router.post(
   }
 );
 
+router.post("/submit/:projectId", authenticate, async (req: any, res: any) => {
+  const { projectId } = req.params as { projectId: string };
+
+  if (!projectId) {
+    return res.status(400).json({ message: "Project ID is required" });
+  }
+
+  await submitProject(req, res);
+});
+
 router.put(
   "/update/:projectId",
   authenticate,
@@ -55,6 +66,7 @@ router.put(
       codeURL: string | null;
       demoURL: string | null;
     };
+
     if (!projectId || !name || !description) {
       return res
         .status(400)

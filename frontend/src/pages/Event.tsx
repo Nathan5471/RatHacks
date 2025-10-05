@@ -285,23 +285,45 @@ export default function Event() {
                       much more fun to watch. If you want help deploy your
                       project, talk to an organizer!
                     </p>
-                    <button
+                    <Link
+                      to={`/app/event/submit/${event.id}`}
                       className={`w-1/2 ${
-                        event.status === "ongoing"
+                        event.status === "ongoing" &&
+                        new Date().getTime() <=
+                          new Date(event.submissionDeadline).getTime() &&
+                        !event.team.submittedProject
                           ? "bg-primary-a0 hover:bg-primary-a1"
                           : "bg-surface-a2 cursor-not-allowed"
-                      } mt-4 rounded-lg p-2 font-bold`}
+                      } mt-4 rounded-lg p-2 font-bold text-center`}
+                      onClick={(e) => {
+                        if (
+                          !(
+                            event.status === "ongoing" &&
+                            new Date().getTime() <=
+                              new Date(event.submissionDeadline).getTime() &&
+                            !event.team?.submittedProject
+                          )
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
                     >
                       {event.status === "upcoming" && "Submitting Not Open Yet"}
                       {event.status === "ongoing" &&
                         new Date().getTime() <=
                           new Date(event.submissionDeadline).getTime() &&
+                        !event.team.submittedProject &&
                         "Submit Project"}
+                      {event.status === "ongoing" &&
+                        new Date().getTime() <=
+                          new Date(event.submissionDeadline).getTime() &&
+                        event.team.submittedProject &&
+                        "Project Submitted!"}
                       {event.status === "ongoing" &&
                         new Date(event.submissionDeadline).getTime() <=
                           new Date().getTime() &&
                         "Submission Deadline Passed"}
-                    </button>
+                    </Link>
                   </div>
                   <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-1/3 ml-2">
                     <h2 className="text-2xl font-bold text-center mb-2">
@@ -314,42 +336,44 @@ export default function Event() {
                         <li key={index}>{member}</li>
                       ))}
                     </ul>
-                    <form
-                      className="flex flex-col mt-4"
-                      onSubmit={handleJoinTeam}
-                    >
-                      <label htmlFor="joinCode" className="text-lg mt-2">
-                        Join Code:
-                      </label>
-                      <input
-                        type="text"
-                        id="joinCode"
-                        name="joinCode"
-                        value={newTeamJoinCode}
-                        onChange={(e) => setNewTeamJoinCode(e.target.value)}
-                        className="p-2 rounded-lg bg-surface-a2"
-                        placeholder="Enter join code"
-                        required
-                      />
-                      {teamError && (
-                        <p className="text-red-500 mt-2">{teamError}</p>
-                      )}
-                      <div className="flex flex-row">
-                        <button
-                          type="submit"
-                          className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold mt-2 w-full"
-                        >
-                          Join Team
-                        </button>
-                        <button
-                          type="button"
-                          className="bg-red-500 hover:bg-red-600 p-2 rounded-lg font-bold mt-2 ml-2 w-full"
-                          onClick={handleLeaveTeam}
-                        >
-                          Leave Team
-                        </button>
-                      </div>
-                    </form>
+                    {!event.team.submittedProject && (
+                      <form
+                        className="flex flex-col mt-4"
+                        onSubmit={handleJoinTeam}
+                      >
+                        <label htmlFor="joinCode" className="text-lg mt-2">
+                          Join Code:
+                        </label>
+                        <input
+                          type="text"
+                          id="joinCode"
+                          name="joinCode"
+                          value={newTeamJoinCode}
+                          onChange={(e) => setNewTeamJoinCode(e.target.value)}
+                          className="p-2 rounded-lg bg-surface-a2"
+                          placeholder="Enter join code"
+                          required
+                        />
+                        {teamError && (
+                          <p className="text-red-500 mt-2">{teamError}</p>
+                        )}
+                        <div className="flex flex-row">
+                          <button
+                            type="submit"
+                            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold mt-2 w-full"
+                          >
+                            Join Team
+                          </button>
+                          <button
+                            type="button"
+                            className="bg-red-500 hover:bg-red-600 p-2 rounded-lg font-bold mt-2 ml-2 w-full"
+                            onClick={handleLeaveTeam}
+                          >
+                            Leave Team
+                          </button>
+                        </div>
+                      </form>
+                    )}
                   </div>
                 </div>
               )}

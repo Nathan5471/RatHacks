@@ -63,6 +63,61 @@ export const createProject = async (req: any, res: any) => {
   }
 };
 
+export const submitProject = async (req: any, res: any) => {
+  const { projectId } = req.params as { projectId: string };
+  const user = req.user as User;
+
+  try {
+    const project = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+      },
+    });
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    const team = await prisma.team.findUnique({
+      where: { id: project.teamId },
+    });
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+    if (!team.members.includes(user.id)) {
+      return res
+        .status(403)
+        .json({ message: "User is not part of the team for this project" });
+    }
+
+    if (project.submittedAt) {
+      return res.status(400).json({ message: "Project already submitteded" });
+    }
+    if (!project.codeURL || !project.screenshotPath || !project.videoPath) {
+      return res.status(400).json({
+        message: "Code URL, Screenshot, and Video are required to submit",
+      });
+    }
+
+    await prisma.project.update({
+      where: { id: project.id },
+      data: {
+        submittedAt: new Date(),
+        submittedBy: user.id,
+      },
+    });
+    await prisma.team.update({
+      where: { id: team.id },
+      data: {
+        submittedProject: true,
+      },
+    });
+    return res.status(200).json({ message: "Successfully submitted project" });
+  } catch (error) {
+    console.error("Error submitting project:", error);
+    return res.status(500).json({ message: "Failed to submit project" });
+  }
+};
+
 export const updateProject = async (req: any, res: any) => {
   const { projectId } = req.params as { projectId: string };
   const { name, description, codeURL, demoURL } = req.body as {
@@ -85,7 +140,7 @@ export const updateProject = async (req: any, res: any) => {
     if (project.submittedAt) {
       return res
         .status(400)
-        .json({ message: "Project cann't be editted after being submitted" });
+        .json({ message: "Project can't be editted after being submitted" });
     }
     const team = await prisma.team.findUnique({
       where: { id: project.teamId },

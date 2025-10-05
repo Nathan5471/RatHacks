@@ -43,6 +43,11 @@ export const createProject = async (projectData: {
   return response.data;
 };
 
+export const submitProject = async (projectId: string) => {
+  const response = await api.post(`/submit/${projectId}`);
+  return response.data;
+};
+
 export const updateProject = async (
   projectId: string,
   projectData: {

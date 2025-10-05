@@ -6,6 +6,7 @@ import {
   getProjectById,
   createProject,
   updateProject,
+  submitProject,
 } from "../utils/ProjectAPIHandler";
 import AppNavbar from "../components/AppNavbar";
 
@@ -167,8 +168,11 @@ export default function EventSubmit() {
         eventId,
       })) as { message: string; projectId: string };
       toast.success("Created project successfully!");
-      const project = await getProjectById(response.projectId);
-      setProject(project);
+      const projectData = (await getProjectById(response.projectId)) as {
+        message: string;
+        project: Project;
+      };
+      setProject(projectData.project);
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" &&
@@ -206,6 +210,33 @@ export default function EventSubmit() {
           : "An unknown error occured";
       setError(errorMessage);
       toast.error("Failed to update project");
+    }
+  };
+
+  const handleSubmitProject = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    setError("");
+    if (!project || !eventId) return;
+    try {
+      await submitProject(project.id);
+      toast.success("Project submitted successfully!");
+      const eventData = (await getEventById(eventId)) as {
+        message: string;
+        event: Event;
+      };
+      setEvent(eventData.event);
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unknown error occured";
+      setError(errorMessage);
+      toast.error("Failed to submit project");
     }
   };
 
@@ -476,7 +507,11 @@ export default function EventSubmit() {
           {error && (
             <p className="text-red-500 text-lg mt-2 text-center">{error}</p>
           )}
-
+          {project && (
+            <p className="text-lg mt-2 text-center">
+              Make sure to save FIRST if you made changes BEFORE submitting!
+            </p>
+          )}
           {!project && (
             <button
               type="submit"
@@ -495,6 +530,7 @@ export default function EventSubmit() {
               </button>
               <button
                 type="button"
+                onClick={handleSubmitProject}
                 className="w-full bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold ml-2"
               >
                 Submit
