@@ -3582,8 +3582,18 @@ paths:
                     example: Unauthorized
                 required:
                   - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User is not part of the team for this project
         404:
-          description: Project or user not found
+          description: Project, team, or user not found
           content:
             application/json:
               schema:
@@ -3606,15 +3616,13 @@ paths:
                     example: Failed to update project
                 required:
                   - message
-  /api/project/get/{eventId}:
+  /api/project/get/{projectId}:
     get:
-      summary: Get a project by event ID
+      summary: Get a project by ID
       tags:
         - Projects
-      security:
-        - cookieAuth: []
       parameters:
-        - name: eventId
+        - name: projectId
           in: path
           required: true
           schema:
@@ -3669,35 +3677,11 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Event ID is required
-                required:
-                  - message
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Unauthorized
-                required:
-                  - message
-        403:
-          description: No team (this hopefully doesn't happen)
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User is not part of any team for this event
+                    example: Project ID is required
                 required:
                   - message
         404:
-          description: Project, event, or user not found
+          description: Project not found
           content:
             application/json:
               schema:

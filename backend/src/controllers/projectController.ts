@@ -31,6 +31,9 @@ export const createProject = async (req: any, res: any) => {
         .status(403)
         .json({ message: "User is not part of any team for this event" });
     }
+    if (team.project) {
+      return res.status(400).json({ message: "Team already has a project" });
+    }
 
     const newProject = await prisma.project.create({
       data: {
@@ -42,6 +45,12 @@ export const createProject = async (req: any, res: any) => {
         videoPath: video,
         eventId: event.id,
         teamId: team.id,
+      },
+    });
+    await prisma.team.update({
+      where: { id: team.id },
+      data: {
+        project: newProject.id,
       },
     });
     return res.status(201).json({
@@ -64,6 +73,7 @@ export const updateProject = async (req: any, res: any) => {
   };
   const screenshot = req.screenshot as string | null;
   const video = req.video as string | null;
+  const user = req.user as User;
 
   try {
     const project = await prisma.project.findUnique({
@@ -72,7 +82,22 @@ export const updateProject = async (req: any, res: any) => {
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
-
+    if (project.submittedAt) {
+      return res
+        .status(400)
+        .json({ message: "Project cann't be editted after being submitted" });
+    }
+    const team = await prisma.team.findUnique({
+      where: { id: project.teamId },
+    });
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+    if (!team.members.includes(user.id)) {
+      return res
+        .status(403)
+        .json({ message: "User is not part of the team for this project" });
+    }
     await prisma.project.update({
       where: { id: project.id },
       data: {
@@ -105,33 +130,13 @@ export const updateProject = async (req: any, res: any) => {
   }
 };
 
-export const getProjectByEventId = async (req: any, res: any) => {
-  const { eventId } = req.params as { eventId: string };
-  const user = req.user as User;
+export const getProjectById = async (req: any, res: any) => {
+  const { projectId } = req.params as { projectId: string };
 
   try {
-    const event = await prisma.event.findUnique({
-      where: { id: eventId },
-    });
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-    const team = await prisma.team.findFirst({
+    const project = await prisma.project.findUnique({
       where: {
-        members: { has: user.id },
-        eventId: event.id,
-      },
-    });
-    if (!team) {
-      return res
-        .status(403)
-        .json({ message: "User is not part of any team for this event" });
-    }
-
-    const project = await prisma.project.findFirst({
-      where: {
-        eventId: event.id,
-        teamId: team.id,
+        id: projectId,
       },
     });
     if (!project) {

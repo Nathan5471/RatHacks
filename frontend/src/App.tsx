@@ -8,6 +8,7 @@ import Workshops from "./pages/Workshops";
 import Workshop from "./pages/Workshop";
 import Events from "./pages/Events";
 import Event from "./pages/Event";
+import EventSubmit from "./pages/EventSubmit";
 import Settings from "./pages/Settings";
 import OrganizerDashboard from "./pages/organizerPages/OrganizerDashboard";
 import OrganizerWorkshops from "./pages/organizerPages/OrganizerWorkshops";
@@ -37,6 +38,7 @@ function App() {
           <Route path="/app/workshop/:workshopId" element={<Workshop />} />
           <Route path="/app/events" element={<Events />} />
           <Route path="/app/event/:eventId" element={<Event />} />
+          <Route path="/app/event/submit/:eventId" element={<EventSubmit />} />
           <Route path="/app/settings" element={<Settings />} />
         </Route>
         <Route element={<OrganizerRoute />}>

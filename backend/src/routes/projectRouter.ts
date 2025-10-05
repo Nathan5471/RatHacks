@@ -2,7 +2,7 @@ import express from "express";
 import {
   createProject,
   updateProject,
-  getProjectByEventId,
+  getProjectById,
 } from "../controllers/projectController";
 import authenticate from "../middleware/authenticate";
 import upload from "../middleware/upload";
@@ -70,14 +70,14 @@ router.put(
   }
 );
 
-router.get("/get/:eventId", authenticate, async (req: any, res: any) => {
-  const { eventId } = req.params as { eventId: string };
+router.get("/get/:projectId", async (req: any, res: any) => {
+  const { projectId } = req.params as { projectId: string };
 
-  if (!eventId) {
-    return res.status(400).json({ message: "Event ID is required" });
+  if (!projectId) {
+    return res.status(400).json({ message: "Project ID is required" });
   }
 
-  await getProjectByEventId(req, res);
+  await getProjectById(req, res);
 });
 
 export default router;
