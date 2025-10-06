@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Fuse from "fuse.js";
 import { useOverlay } from "../../contexts/OverlayContext";
 import { getAllUsers } from "../../utils/AuthAPIHandler";
+import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import OrganizerUserView from "../../components/OrganizerUserView";
 
@@ -49,6 +50,7 @@ export default function OrganizerUsers() {
   >("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -120,11 +122,29 @@ export default function OrganizerUsers() {
 
   if (loading) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <OrganizerNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <OrganizerNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col items-center justify-center">
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
           <p className="text-2xl font-bold">Loading users...</p>
         </div>
       </div>
@@ -133,18 +153,36 @@ export default function OrganizerUsers() {
 
   if (error) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <OrganizerNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <OrganizerNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col items-center">
-          <h1 className="text-4xl font-bold mt-2">Users</h1>
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
+          <h1 className="text-2xl sm:text-4xl font-bold">Users</h1>
           <div className="flex flex-col w-full h-full">
             <div className="flex flex-col bg-surface-a1 mx-16 my-6 p-4 rounded-lg">
-              <h2 className="text-4xl text-center">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl text-center">
                 An error occurred while fetching users:
               </h2>
-              <p className="text-2xl text-red-500 mt-2">{error}</p>
+              <p className="text-lg sm:text-2xl text-red-500 mt-2">{error}</p>
             </div>
           </div>
         </div>
@@ -153,17 +191,35 @@ export default function OrganizerUsers() {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-      <div className="w-1/6 h-full">
-        <OrganizerNavbar />
+    <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+      <div
+        className={`${
+          navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+        } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+        onClick={() => setNavbarOpen(false)}
+      >
+        <div
+          className="w-1/2 sm:w-1/3 md:w-full"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <OrganizerNavbar />
+        </div>
       </div>
-      <div className="w-5/6 h-full flex flex-col items-center overflow-y-auto">
-        <div className="w-5/6 mt-2 h-full flex flex-col mb-2">
-          <h1 className="text-4xl font-bold text-center mt-2">
+      <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+        <button
+          className={`absolute top-4 left-4 md:hidden ${
+            navbarOpen ? "hidden" : ""
+          }`}
+          onClick={() => setNavbarOpen(true)}
+        >
+          <IoMenu className="text-3xl hover:text-4xl" />
+        </button>
+        <div className="w-full sm:w-5/6 mt-2 h-full flex flex-col mb-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mt-2">
             Users ({displayedUsers.length})
           </h1>
           <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg items-center">
-            <div className="flex flex-row mb-4 w-full justify-between">
+            <div className="flex flex-col lg:flex-row mb-4 w-full justify-between">
               <input
                 type="text"
                 id="search"
@@ -171,7 +227,7 @@ export default function OrganizerUsers() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search by name, email, school division, or tech stack"
-                className="w-2/5 p-2 rounded-lg bg-surface-a2"
+                className="w-full lg:w-2/5 p-2 rounded-lg bg-surface-a2"
               />
               <select
                 id="gradeLevel"
@@ -187,7 +243,7 @@ export default function OrganizerUsers() {
                       | "twelve"
                   )
                 }
-                className="p-2 rounded-lg bg-surface-a2"
+                className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
               >
                 <option value="all">All Grade Levels</option>
                 <option value="nine">9</option>
@@ -204,7 +260,7 @@ export default function OrganizerUsers() {
                     e.target.value as "all" | "yes" | "no"
                   )
                 }
-                className="p-2 rounded-lg bg-surface-a2"
+                className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
               >
                 <option value="all">Gov School: All</option>
                 <option value="yes">Gov School: Yes</option>
@@ -219,7 +275,7 @@ export default function OrganizerUsers() {
                     e.target.value as "all" | "yes" | "no"
                   )
                 }
-                className="p-2 rounded-lg bg-surface-a2"
+                className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
               >
                 <option value="all">Previous Hackathon: All</option>
                 <option value="yes">Previous Hackathon: Yes</option>
@@ -233,16 +289,16 @@ export default function OrganizerUsers() {
                     <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
                       Name
                     </th>
-                    <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                    <th className="hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
                       Email
                     </th>
-                    <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                    <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
                       School Division
                     </th>
-                    <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                    <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
                       Grade Level
                     </th>
-                    <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                    <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
                       Is RVGS
                     </th>
                     <th className="py-2 px-4 border-b border-r border-surface-a1 text-left"></th>
@@ -259,28 +315,28 @@ export default function OrganizerUsers() {
                         {user.firstName} {user.lastName}
                       </td>
                       <td
-                        className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                        className={`hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                           index % 2 === 0 ? "bg-surface-a3" : ""
                         }`}
                       >
                         {user.email}
                       </td>
                       <td
-                        className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                        className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                           index % 2 === 0 ? "bg-surface-a3" : ""
                         }`}
                       >
                         {user.schoolDivision}
                       </td>
                       <td
-                        className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                        className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                           index % 2 === 0 ? "bg-surface-a3" : ""
                         }`}
                       >
                         {gradeMap[user.gradeLevel]}
                       </td>
                       <td
-                        className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                        className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                           index % 2 === 0 ? "bg-surface-a3" : ""
                         }`}
                       >

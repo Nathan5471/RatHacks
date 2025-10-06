@@ -7,6 +7,7 @@ import {
   endWorkshop,
 } from "../../utils/WorkshopAPIHandler";
 import { formatDate } from "date-fns";
+import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditWorkshop from "../../components/EditWorkshop";
 import DeleteWorkshop from "../../components/DeleteWorkshop";
@@ -68,6 +69,7 @@ export default function OrganizerWorkshop() {
     minutes: number;
     seconds: number;
   } | null>(null);
+  const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -170,11 +172,29 @@ export default function OrganizerWorkshop() {
 
   if (loading) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <OrganizerNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <OrganizerNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col justify-center items-center">
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
           <h1 className="text-4xl">Loading...</h1>
         </div>
       </div>
@@ -182,41 +202,59 @@ export default function OrganizerWorkshop() {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-      <div className="w-1/6 h-full">
-        <OrganizerNavbar />
+    <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+      <div
+        className={`${
+          navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+        } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+        onClick={() => setNavbarOpen(false)}
+      >
+        <div
+          className="w-1/2 sm:w-1/3 md:w-full"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <OrganizerNavbar />
+        </div>
       </div>
-      <div className="w-5/6 h-full flex flex-col items-center overflow-y-auto">
+      <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+        <button
+          className={`absolute top-4 left-4 md:hidden ${
+            navbarOpen ? "hidden" : ""
+          }`}
+          onClick={() => setNavbarOpen(true)}
+        >
+          <IoMenu className="text-3xl hover:text-4xl" />
+        </button>
         {workshop ? (
           <div className="w-5/6 mt-5 flex flex-col mb-2">
-            <h1 className="text-4xl font-bold text-center mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4">
               {workshop.name}
             </h1>
-            <div className="flex flex-row bg-surface-a1 p-4 rounded-lg">
-              <div className="flex flex-col w-2/3">
+            <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 mb-4 p-4 rounded-lg">
+              <div className="flex flex-col w-full sm:w-2/3">
                 <p className="text-lg mb-2">{workshop.description}</p>
                 <div className="flex flex-row w-full mt-auto">
                   <Link
                     to="/app/organizer/workshops"
-                    className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center w-full"
+                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                   >
                     Back to Workshops
                   </Link>
                   <button
-                    className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
+                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                     onClick={handleOpenEditEvent}
                   >
                     Edit
                   </button>
                   <button
-                    className="bg-red-500 hover:bg-red-600 p-2 ml-2 rounded-lg font-bold w-full"
+                    className="bg-red-500 hover:bg-red-600 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                     onClick={handleOpenDeleteEvent}
                   >
                     Delete
                   </button>
                 </div>
               </div>
-              <div className="flex flex-col w-1/3 ml-2">
+              <div className="flex flex-col w-full sm:w-1/3 sm:ml-2">
                 <p>
                   <span className="font-bold">Status:</span> {workshop.status}
                 </p>
@@ -235,21 +273,21 @@ export default function OrganizerWorkshop() {
               </div>
             </div>
             {workshop.status === "ongoing" && (
-              <div className="flex flex-row w-full mt-4 bg-surface-a1 p-4 rounded-lg">
-                <div className="flex flex-col w-4/5">
-                  <h2 className="text-2xl font-bold text-center mb-2">
+              <div className="flex flex-col sm:flex-row w-full mt-4 bg-surface-a1 p-4 rounded-lg">
+                <div className="flex flex-col w-full sm:w-4/5">
+                  <h2 className="text-xl sm:text-2xl font-bold text-center mb-2">
                     Workshop is live! Join now:
                   </h2>
                   <a
                     href={workshop.googleMeetURL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary-a0 text-center text-lg hover:underline break-all"
+                    className="text-primary-a0 text-center sm:text-lg hover:underline break-all"
                   >
                     {workshop.googleMeetURL}
                   </a>
                 </div>
-                <div className="flex flex-col w-1/5 justify-center">
+                <div className="flex flex-col w-full mt-2 sm:mt-0 sm:w-1/5 justify-center">
                   <button
                     className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
                     onClick={handleEndWorkshop}
@@ -265,29 +303,35 @@ export default function OrganizerWorkshop() {
                   {workshop.name} Countdown
                 </h2>
                 <div className="flex flex-row justify-center">
-                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
-                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
+                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
                       {timeRemaining?.days || 0}
                     </span>
-                    <span className="text-xl text-center">Days</span>
+                    <span className="text-lg sm:text-xl text-center">Days</span>
                   </div>
-                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
-                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
+                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
                       {timeRemaining?.hours || 0}
                     </span>
-                    <span className="text-xl text-center">Hours</span>
+                    <span className="text-lg sm:text-xl text-center">
+                      Hours
+                    </span>
                   </div>
-                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
-                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
+                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
                       {timeRemaining?.minutes || 0}
                     </span>
-                    <span className="text-xl text-center">Minutes</span>
+                    <span className="text-lg sm:text-xl text-center">
+                      Minutes
+                    </span>
                   </div>
-                  <div className="flex flex-col bg-surface-a2 rounded-lg w-30 p-4 mx-2">
-                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                  <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
+                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
                       {timeRemaining?.seconds || 0}
                     </span>
-                    <span className="text-xl text-center">Seconds</span>
+                    <span className="text-lg sm:text-xl text-center">
+                      Seconds
+                    </span>
                   </div>
                 </div>
                 <form onSubmit={handleAddGoogleMeetURL} className="mt-4">
@@ -316,7 +360,7 @@ export default function OrganizerWorkshop() {
               </div>
             )}
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
-              <h2 className="text-2xl font-bold text-center mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-center mb-2">
                 Registered Participants ({workshop.participants.length})
               </h2>
               {workshop.participants.length > 0 ? (
@@ -326,16 +370,16 @@ export default function OrganizerWorkshop() {
                       <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
                         Name
                       </th>
-                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                      <th className="hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
                         Email
                       </th>
-                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                      <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
                         School Division
                       </th>
-                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                      <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
                         Grade Level
                       </th>
-                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                      <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
                         Is RVGS
                       </th>
                       <th className="py-2 px-4 border-b border-surface-a1 text-left"></th>
@@ -352,28 +396,28 @@ export default function OrganizerWorkshop() {
                           {participant.firstName} {participant.lastName}
                         </td>
                         <td
-                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                          className={`hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
                           {participant.email}
                         </td>
                         <td
-                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                          className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
                           {participant.schoolDivision}
                         </td>
                         <td
-                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                          className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
                           {gradeMap[participant.gradeLevel]}
                         </td>
                         <td
-                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                          className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >

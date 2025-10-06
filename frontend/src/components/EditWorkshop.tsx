@@ -93,7 +93,7 @@ export default function EditWorkshop({
   }
 
   return (
-    <div className="flex flex-col w-100">
+    <div className="flex flex-col w-80 sm:w-100">
       <h1 className="text-2xl font-bold text-center">Edit Workshop</h1>
       <form className="flex flex-col" onSubmit={handleUpdateWorkshop}>
         <label htmlFor="name" className="text-2xl mt-2">
