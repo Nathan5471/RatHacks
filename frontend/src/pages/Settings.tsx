@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useOverlay } from "../contexts/OverlayContext";
 import { updateUser, logoutUser } from "../utils/AuthAPIHandler";
+import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
 import LogoutAllDevices from "../components/LogoutAllDevices";
 import ChangePassword from "../components/ChangePassword";
@@ -65,6 +66,7 @@ export default function Settings() {
   const [contactPhoneNumber, setContactPhoneNumber] = useState(
     user?.contactPhoneNumber || ""
   );
+  const [navbarOpen, setNavbarOpen] = useState(false);
 
   const handleSaveUserInfo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,22 +124,40 @@ export default function Settings() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-      <div className="w-1/6 h-full">
-        <AppNavbar />
+    <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+      <div
+        className={`${
+          navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+        } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+        onClick={() => setNavbarOpen(false)}
+      >
+        <div
+          className="w-1/2 sm:w-1/3 md:w-full"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AppNavbar />
+        </div>
       </div>
-      <div className="w-5/6 h-full flex flex-col p-4 items-center overflow-y-auto">
-        <h1 className="text-4xl font-bold text-center">Settings</h1>
+      <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+        <button
+          className={`absolute top-4 left-4 md:hidden ${
+            navbarOpen ? "hidden" : ""
+          }`}
+          onClick={() => setNavbarOpen(true)}
+        >
+          <IoMenu className="text-3xl hover:text-4xl" />
+        </button>
+        <h1 className="text-3xl sm:text-4xl font-bold text-center">Settings</h1>
         <form
-          className="flex flex-col w-1/2 bg-surface-a1 p-4 m-4 rounded-lg"
+          className="flex flex-col w-5/6 sm:w-1/2 bg-surface-a1 p-4 m-4 rounded-lg"
           onSubmit={(e) => handleSaveUserInfo(e)}
         >
-          <h3 className="text-2xl mb-4 text-center font-bold">
+          <h3 className="text-2xl mb-2 text-center font-bold">
             User Information
           </h3>
-          <div className="flex flex-row w-full mt-2">
+          <div className="flex flex-row w-full">
             <div className="flex flex-col w-1/2">
-              <label htmlFor="firstName" className="text-2xl mt-2">
+              <label htmlFor="firstName" className="text-2xl">
                 First Name
               </label>
               <input
@@ -151,7 +171,7 @@ export default function Settings() {
               />
             </div>
             <div className="flex flex-col w-1/2 ml-2">
-              <label htmlFor="lastName" className="text-2xl mt-2">
+              <label htmlFor="lastName" className="text-2xl">
                 Last Name
               </label>
               <input
@@ -405,7 +425,7 @@ export default function Settings() {
             Save Changes
           </button>
         </form>
-        <div className="flex flex-col w-1/2 bg-surface-a1 p-4 m-4 rounded-lg">
+        <div className="flex flex-col w-5/6 sm:w-1/2 bg-surface-a1 p-4 m-4 rounded-lg">
           <h3 className="text-2xl mb-4 text-center font-bold text-red-500">
             Danger Zone
           </h3>
