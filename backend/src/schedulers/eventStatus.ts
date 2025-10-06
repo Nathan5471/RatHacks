@@ -4,6 +4,7 @@ import prisma from "../prisma/client";
 cron.schedule("* * * * *", async () => {
   // Runs every minute
   const now = new Date();
+  let updateEvents = 0;
   try {
     const events = await prisma.event.findMany();
     const upcomingEvents = events.filter(
@@ -17,6 +18,7 @@ cron.schedule("* * * * *", async () => {
           where: { id: event.id },
           data: { status: "ongoing" },
         });
+        updateEvents++;
       }
     }
     for (const event of ongoingEvents) {
@@ -28,9 +30,12 @@ cron.schedule("* * * * *", async () => {
           where: { id: event.id },
           data: { status: "completed" },
         });
+        updateEvents++;
       }
     }
-    console.log("Event statuses updated successfully");
+    if (updateEvents > 0) {
+      console.log(`Event statuses updated successfully: ${updateEvents}`);
+    }
   } catch (error) {
     console.error("Error updating event statuses:", error);
   }
