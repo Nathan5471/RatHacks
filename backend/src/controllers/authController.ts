@@ -453,6 +453,46 @@ export const checkInvite = async (req: any, res: any) => {
   }
 };
 
+export const getAllUsers = async (req: any, res: any) => {
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const users = await prisma.user.findMany({});
+    const filteredUsers = users.map((user) => ({
+      id: user.id,
+      email: user.email,
+      emailVerified: user.emailVerified,
+      accountType: user.accountType,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      schoolDivision: user.schoolDivision,
+      gradeLevel: user.gradeLevel,
+      isGovSchool: user.isGovSchool,
+      techStack: user.techStack,
+      previousHackathon: user.previousHackathon,
+      parentFirstName: user.parentFirstName,
+      parentLastName: user.parentLastName,
+      parentEmail: user.parentEmail,
+      parentPhoneNumber: user.parentPhoneNumber,
+      contactFirstName: user.contactFirstName,
+      contactLastName: user.contactLastName,
+      contactRelationship: user.contactRelationship,
+      contactPhoneNumber: user.contactPhoneNumber,
+      createdAt: user.createdAt,
+    }));
+    return res
+      .status(200)
+      .json({ message: "Users retrieved successfully", users: filteredUsers });
+  } catch (error) {
+    console.error("Error getting all users:", error);
+    return res.status(500).json({ message: "Failed to get all users" });
+  }
+};
+
 export const updateUser = async (req: any, res: any) => {
   const user = req.user as User;
   const {

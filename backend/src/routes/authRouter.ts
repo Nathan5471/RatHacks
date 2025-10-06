@@ -11,6 +11,7 @@ import {
   logout,
   logoutAll,
   checkInvite,
+  getAllUsers,
   updateUser,
   updatePassword,
   deleteUser,
@@ -282,6 +283,8 @@ router.get("/current-user", authenticate, (req: any, res: any) => {
   };
   res.status(200).json(user);
 });
+
+router.get("/all", authenticate, getAllUsers);
 
 router.put("/update", authenticate, async (req: any, res: any) => {
   const {

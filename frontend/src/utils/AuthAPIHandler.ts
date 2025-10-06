@@ -119,6 +119,11 @@ export const getCurrentUser = async () => {
   return response.data;
 };
 
+export const getAllUsers = async () => {
+  const response = await api.get("/all");
+  return response.data;
+};
+
 export const updateUser = async (userData: {
   firstName: string;
   lastName: string;
