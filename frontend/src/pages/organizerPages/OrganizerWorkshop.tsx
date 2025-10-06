@@ -226,7 +226,7 @@ export default function OrganizerWorkshop() {
           <IoMenu className="text-3xl hover:text-4xl" />
         </button>
         {workshop ? (
-          <div className="w-5/6 mt-5 flex flex-col mb-2">
+          <div className="w-full sm:w-5/6 mt-5 flex flex-col mb-2">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4">
               {workshop.name}
             </h1>

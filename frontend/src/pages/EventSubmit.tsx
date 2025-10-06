@@ -476,7 +476,7 @@ export default function EventSubmit() {
           <IoMenu className="text-3xl hover:text-4xl" />
         </button>
         <form
-          className="flex flex-col p-4 w-80 sm:w-120 rounded-lg bg-surface-a1"
+          className="flex flex-col p-4 w-85 sm:w-120 rounded-lg bg-surface-a1"
           onSubmit={project ? handleUpdateProject : handleCreateProject}
         >
           <h2 className="text-3xl font-bold text-center mb-2">

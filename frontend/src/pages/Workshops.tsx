@@ -209,7 +209,7 @@ export default function Workshops() {
             {displayedWorkshops.map((workshop) => (
               <div
                 key={workshop.id}
-                className="flex flex-col sm:flex-row bg-surface-a1 w-5/6 mt-2 mb-4 p-4 rounded-lg"
+                className="flex flex-col sm:flex-row bg-surface-a1 w-full sm:w-5/6 mt-2 mb-4 p-4 rounded-lg"
               >
                 <div className="flex flex-col w-full sm:w-2/3">
                   <h2 className="text-3xl text-center font-bold">

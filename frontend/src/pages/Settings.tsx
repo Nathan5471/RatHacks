@@ -149,7 +149,7 @@ export default function Settings() {
         </button>
         <h1 className="text-3xl sm:text-4xl font-bold text-center">Settings</h1>
         <form
-          className="flex flex-col w-5/6 sm:w-1/2 bg-surface-a1 p-4 m-4 rounded-lg"
+          className="flex flex-col w-full sm:w-1/2 bg-surface-a1 p-4 m-4 rounded-lg"
           onSubmit={(e) => handleSaveUserInfo(e)}
         >
           <h3 className="text-2xl mb-2 text-center font-bold">
@@ -425,7 +425,7 @@ export default function Settings() {
             Save Changes
           </button>
         </form>
-        <div className="flex flex-col w-5/6 sm:w-1/2 bg-surface-a1 p-4 m-4 rounded-lg">
+        <div className="flex flex-col w-full sm:w-1/2 bg-surface-a1 p-4 m-4 rounded-lg">
           <h3 className="text-2xl mb-4 text-center font-bold text-red-500">
             Danger Zone
           </h3>
