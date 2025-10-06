@@ -17,6 +17,14 @@ export default function OrganizerNavbar() {
         Dashboard
       </Link>
       <Link
+        to="/app/organizer/users"
+        className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
+          path === "/app/organizer/users" ? "text-primary-a1" : ""
+        } bg-surface-a2 hover:bg-surface-a3`}
+      >
+        Users
+      </Link>
+      <Link
         to="/app/organizer/workshops"
         className={`p-3 m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/organizer/workshops" ? "text-primary-a1" : ""

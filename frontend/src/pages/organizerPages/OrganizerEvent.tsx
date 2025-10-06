@@ -20,7 +20,7 @@ export default function OrganizerEvent() {
     firstName: string;
     lastName: string;
     schoolDivision: string;
-    gradeLevel: "nine" | "ten" | "eleven" | "twelve" | "organizer" | "judge";
+    gradeLevel: "nine" | "ten" | "eleven" | "twelve";
     isGovSchool: boolean;
     techStack: string;
     previousHackathon: boolean;
@@ -62,8 +62,6 @@ export default function OrganizerEvent() {
     ten: "10",
     eleven: "11",
     twelve: "12",
-    organizer: "Organizer",
-    judge: "Judge",
   };
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);

@@ -11,6 +11,7 @@ import Event from "./pages/Event";
 import EventSubmit from "./pages/EventSubmit";
 import Settings from "./pages/Settings";
 import OrganizerDashboard from "./pages/organizerPages/OrganizerDashboard";
+import OrganizerUsers from "./pages/organizerPages/OrganizerUsers";
 import OrganizerWorkshops from "./pages/organizerPages/OrganizerWorkshops";
 import OrganizerWorkshop from "./pages/organizerPages/OrganizerWorkshop";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
@@ -45,6 +46,7 @@ function App() {
         </Route>
         <Route element={<OrganizerRoute />}>
           <Route path="/app/organizer" element={<OrganizerDashboard />} />
+          <Route path="/app/organizer/users" element={<OrganizerUsers />} />
           <Route
             path="/app/organizer/workshops"
             element={<OrganizerWorkshops />}
