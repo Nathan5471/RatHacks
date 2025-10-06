@@ -8,6 +8,7 @@ import {
   updateProject,
   submitProject,
 } from "../utils/ProjectAPIHandler";
+import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
 
 export default function EventSubmit() {
@@ -57,6 +58,7 @@ export default function EventSubmit() {
   const [video, setVideo] = useState<File | undefined>(undefined);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const videoRef = useRef<HTMLInputElement>(null);
+  const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
     const fetchEventAndProject = async () => {
@@ -242,11 +244,29 @@ export default function EventSubmit() {
 
   if (loading) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <AppNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AppNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col p-4 items-center">
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
           <h1 className="text-4xl text-center">Event Project</h1>
           <p className="mt-4 text-lg">Loading...</p>
         </div>
@@ -256,11 +276,29 @@ export default function EventSubmit() {
 
   if (!event) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <AppNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AppNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col p-4 items-center justify-center">
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
           <div className="flex flex-col p-4 rounded-lg bg-surface-a1">
             <h2 className="text-4xl text-center">Event not found</h2>
             <p className="mt-4">
@@ -283,11 +321,29 @@ export default function EventSubmit() {
     new Date().getTime() > new Date(event.submissionDeadline).getTime()
   ) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <AppNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AppNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col p-4 items-center justify-center">
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
           <div className="flex flex-col p-4 rounded-lg bg-surface-a1">
             <h2 className="text-4xl text-center">
               {event.status === "ongoing"
@@ -313,11 +369,29 @@ export default function EventSubmit() {
 
   if (!event.team) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <AppNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AppNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col p-4 items-center justify-center">
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
           <div className="flex flex-col p-4 rounded-lg bg-surface-a1">
             <h2 className="text-4xl text-center">Not apart of the event</h2>
             <p className="mt-4">
@@ -337,11 +411,29 @@ export default function EventSubmit() {
 
   if (event.team.submittedProject) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <AppNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AppNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col p-4 items-center justify-center">
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
           <div className="flex flex-col p-4 rounded-lg bg-surface-a1">
             <h2 className="text-4xl text-center">Project already submitted!</h2>
             <p className="mt-4">
@@ -360,13 +452,31 @@ export default function EventSubmit() {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-      <div className="w-1/6 h-full">
-        <AppNavbar />
+    <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+      <div
+        className={`${
+          navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+        } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+        onClick={() => setNavbarOpen(false)}
+      >
+        <div
+          className="w-1/2 sm:w-1/3 md:w-full"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AppNavbar />
+        </div>
       </div>
-      <div className="w-5/6 h-full flex flex-col p-4 items-center overflow-y-auto">
+      <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+        <button
+          className={`absolute top-4 left-4 md:hidden ${
+            navbarOpen ? "hidden" : ""
+          }`}
+          onClick={() => setNavbarOpen(true)}
+        >
+          <IoMenu className="text-3xl hover:text-4xl" />
+        </button>
         <form
-          className="flex flex-col p-4 w-120 rounded-lg bg-surface-a1"
+          className="flex flex-col p-4 w-80 sm:w-120 rounded-lg bg-surface-a1"
           onSubmit={project ? handleUpdateProject : handleCreateProject}
         >
           <h2 className="text-3xl font-bold text-center mb-2">

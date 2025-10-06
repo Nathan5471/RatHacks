@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { getAllEvents, joinEvent, leaveEvent } from "../utils/EventAPIHandler";
 import { formatDate } from "date-fns";
+import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
 
 export default function Events() {
@@ -21,6 +22,7 @@ export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -72,12 +74,30 @@ export default function Events() {
 
   if (loading) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <AppNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AppNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col p-4 items-center">
-          <h1 className="text-4xl text-center">Events</h1>
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
+          <h1 className="text-3xl sm:text-4xl text-center">Events</h1>
           <p className="mt-4 text-lg">Loading events...</p>
         </div>
       </div>
@@ -86,12 +106,30 @@ export default function Events() {
 
   if (error) {
     return (
-      <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-        <div className="w-1/6 h-full">
-          <AppNavbar />
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AppNavbar />
+          </div>
         </div>
-        <div className="w-5/6 h-full flex flex-col p-4 items-center">
-          <h1 className="text-4xl text-center">Events</h1>
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
+          <h1 className="text-3xl sm:text-4xl text-center">Events</h1>
           <p className="mt-4 text-lg text-red-500 w-3/4 text-center">
             There was an error loading events, please try refreshing: {error}
           </p>
@@ -101,22 +139,40 @@ export default function Events() {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-row bg-surface-a0 text-white">
-      <div className="w-1/6 h-full">
-        <AppNavbar />
+    <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+      <div
+        className={`${
+          navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+        } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+        onClick={() => setNavbarOpen(false)}
+      >
+        <div
+          className="w-1/2 sm:w-1/3 md:w-full"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AppNavbar />
+        </div>
       </div>
-      <div className="w-5/6 h-full flex flex-col p-4 items-center overflow-y-auto">
-        <h1 className="text-4xl text-center font-bold">Events</h1>
+      <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+        <button
+          className={`absolute top-4 left-4 md:hidden ${
+            navbarOpen ? "hidden" : ""
+          }`}
+          onClick={() => setNavbarOpen(true)}
+        >
+          <IoMenu className="text-3xl hover:text-4xl" />
+        </button>
+        <h1 className="text-3xl sm:text-4xl text-center font-bold">Events</h1>
         {events.length === 0 ? (
           <p className="mt-4 text-lg">No events available.</p>
         ) : (
-          <div className="w-full h-full flex flex-col">
+          <div className="w-full h-full flex flex-col items-center">
             {events.map((event) => (
               <div
                 key={event.id}
-                className="flex flex-row bg-surface-a1 mx-16 mt-6 p-4 rounded-lg"
+                className="flex flex-col sm:flex-row bg-surface-a1 w-5/6 mt-2 mb-4 p-4 rounded-lg"
               >
-                <div className="flex flex-col w-2/3">
+                <div className="flex flex-col w-full sm:w-2/3">
                   <h2 className="text-3xl font-bold">{event.name}</h2>
                   <p className="text-lg mb-2">{event.description}</p>
                   <div className="flex flex-row w-full mt-auto">
@@ -144,7 +200,7 @@ export default function Events() {
                       ))}
                   </div>
                 </div>
-                <div className="flex flex-col w-1/3 ml-2">
+                <div className="flex flex-col w-full sm:w-1/3 sm:ml-2">
                   <p>
                     <span className="font-bold">Status:</span> {event.status}
                   </p>

@@ -54,7 +54,7 @@ export default function Dashboard() {
           <AppNavbar />
         </div>
       </div>
-      <div className="ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto flex flex-col p-4 items-center">
+      <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
         <button
           className={`absolute top-4 left-4 md:hidden ${
             navbarOpen ? "hidden" : ""
