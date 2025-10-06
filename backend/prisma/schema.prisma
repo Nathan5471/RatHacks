@@ -85,9 +85,32 @@ model Project {
   demoURL        String?
   eventId        String
   teamId         String
+  judgeFeedback  String[] // JudgeFeedback Ids
+  ranking        Int?
   createdAt      DateTime  @default(now())
   submittedBy    String? // User Id
   submittedAt    DateTime?
+}
+
+model JudgeFeedback {
+  id                    String   @id @default(uuid())
+  judgeId               String // User Id
+  projectId             String // Project Id
+  themeScore            Int
+  themeFeedback         String
+  creativityScore       Int
+  creativityFeedback    String
+  functionalityScore    Int
+  functionalityFeedback String
+  technicalityScore     Int
+  technicalityFeedback  String
+  interfaceScore        Int
+  interfaceFeedback     String
+  polishScore           Int
+  polishFeedback        String
+  otherFeedback         String
+  totalScore            Int
+  createdAt             DateTime @default(now())
 }
 
 model Event {
@@ -99,6 +122,7 @@ model Event {
   endDate            DateTime
   submissionDeadline DateTime
   status             Status   @default(upcoming)
+  releasedJuding     Boolean  @default(false)
   participants       String[] // User Ids
   teams              String[] // Team Ids
   projects           String[] // Project Ids
