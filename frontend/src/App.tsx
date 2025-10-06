@@ -19,6 +19,7 @@ import OrganizerEvent from "./pages/organizerPages/OrganizerEvent";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
 import OrganizerRegister from "./pages/organizerPages/OrganizerRegister";
 import JudgeRegister from "./pages/judgePages/JudgeRegister";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -64,6 +65,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/invite/organizer" element={<OrganizerRegister />} />
         <Route path="/invite/judge" element={<JudgeRegister />} />
         <Route path="/verify-email" element={<VerifyEmail />} />

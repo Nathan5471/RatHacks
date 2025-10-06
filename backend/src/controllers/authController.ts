@@ -4,6 +4,7 @@ import { User } from "@prisma/client";
 import generateToken from "../utils/generateToken";
 import generateRefreshToken from "../utils/generateRefreshToken";
 import sendEmailVerificationEmail from "../utils/sendEmailVerificationEmail";
+import sendResetPasswordEmail from "../utils/sendResetPasswordEmail";
 import sendOrganizerInviteEmail from "../utils/sendOrganizerInviteEmail";
 import sendJudgeInviteEmail from "../utils/sendJudgeInviteEmail";
 
@@ -193,6 +194,87 @@ export const resendVerificationEmail = async (req: any, res: any) => {
     return res
       .status(500)
       .json({ message: "Failed to resend verification email" });
+  }
+};
+
+export const resetPassword = async (req: any, res: any) => {
+  const { email } = req.body as { email: string };
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return res
+        .status(200)
+        .json({ message: "Password reset email sent if there is an account" });
+    }
+    if (user.passwordResetExpiry && user.passwordResetExpiry > new Date()) {
+      return res.status(429).json({
+        message: "You can only request a password reset once every 15 minutes",
+      });
+    }
+
+    const resetToken =
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15);
+    const resetExpiry = new Date();
+    resetExpiry.setMinutes(resetExpiry.getMinutes() + 15);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordResetToken: resetToken,
+        passwordResetExpiry: resetExpiry,
+      },
+    });
+    await sendResetPasswordEmail({
+      email: user.email,
+      token: resetToken,
+      firstName: user.firstName,
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Password reset email sent if there is an account" });
+  } catch (error) {
+    console.error("Error during password reset:", error);
+    return res.status(500).json({ message: "Failed to reset password" });
+  }
+};
+
+export const setNewPassword = async (req: any, res: any) => {
+  const { email, token, newPassword } = req.body as {
+    email: string;
+    token: string;
+    newPassword: string;
+  };
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (
+      !user ||
+      user.passwordResetToken !== token ||
+      !user.passwordResetExpiry ||
+      user.passwordResetExpiry < new Date()
+    ) {
+      return res.status(400).json({ message: "Invalid email or token" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        passwordResetToken: null,
+        passwordResetExpiry: null,
+        validAccessTokens: [],
+        validRefreshTokens: [],
+      },
+    });
+
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Error setting new password:", error);
+    return res.status(500).json({ message: "Failed to set new password" });
   }
 };
 
@@ -419,6 +501,27 @@ export const logoutAll = async (req: any, res: any) => {
     return res
       .status(500)
       .json({ message: "Failed to logout from all devices" });
+  }
+};
+
+export const checkResetPassword = async (req: any, res: any) => {
+  const { email, token } = req.query as { email: string; token: string };
+
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (
+      !user ||
+      user.passwordResetToken !== token ||
+      !user.passwordResetExpiry ||
+      user.passwordResetExpiry < new Date()
+    ) {
+      return res.status(400).json({ message: "Invalid email or token" });
+    }
+
+    return res.status(200).json({ message: "Reset password token is valid" });
+  } catch (error) {
+    console.error("Error checking reset password token:", error);
+    return res.status(500).json({ message: "Failed to check reset password" });
   }
 };
 

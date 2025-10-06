@@ -58,6 +58,24 @@ export const resendVerificationEmail = async () => {
   return response.data;
 };
 
+export const resetPassword = async (email: string) => {
+  const response = await api.post("/reset-password", { email });
+  return response.data;
+};
+
+export const setNewPassword = async (
+  email: string,
+  token: string,
+  newPassword: string
+) => {
+  const response = await api.post("/set-new-password", {
+    email,
+    token,
+    newPassword,
+  });
+  return response.data;
+};
+
 export const inviteOrganizer = async (email: string) => {
   const response = await api.post(`/invite/organizer/${email}`);
   return response.data;
@@ -97,6 +115,13 @@ export const logoutUser = async () => {
 
 export const logoutAll = async () => {
   const response = await api.post("/logout-all");
+  return response.data;
+};
+
+export const checkResetPassword = async (email: string, token: string) => {
+  const response = await api.get("/check/reset-password", {
+    params: { email, token },
+  });
   return response.data;
 };
 

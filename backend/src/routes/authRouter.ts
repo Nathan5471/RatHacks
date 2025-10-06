@@ -4,12 +4,15 @@ import {
   login,
   verifyEmail,
   resendVerificationEmail,
+  resetPassword,
+  setNewPassword,
   inviteOrganizer,
   registerOrganizer,
   inviteJudge,
   registerJudge,
   logout,
   logoutAll,
+  checkResetPassword,
   checkInvite,
   getAllUsers,
   updateUser,
@@ -144,6 +147,43 @@ router.post(
   }
 );
 
+router.post("/reset-password", async (req: any, res: any) => {
+  const { email } = req.body as { email: string };
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+
+  await resetPassword(req, res);
+});
+
+router.post("/set-new-password", async (req: any, res: any) => {
+  const { email, token, newPassword } = req.body as {
+    email: string;
+    token: string;
+    newPassword: string;
+  };
+
+  if (!email || !token || !newPassword) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  if (
+    newPassword.length < 8 ||
+    !/[a-z]/.test(newPassword) ||
+    !/[A-Z]/.test(newPassword) ||
+    !/[0-9]/.test(newPassword) ||
+    !/[!@#$%^&*]/.test(newPassword)
+  ) {
+    return res.status(400).json({
+      message:
+        "New password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one number, and one special character (!@#$%^&*)",
+    });
+  }
+
+  await setNewPassword(req, res);
+});
+
 router.post(
   "/invite/organizer/:email",
   authenticate,
@@ -231,6 +271,16 @@ router.post("/judge/register", async (req: any, res: any) => {
 router.post("/logout", authenticate, logout);
 
 router.post("/logout-all", authenticate, logoutAll);
+
+router.get("/check/reset-password", async (req: any, res: any) => {
+  const { email, token } = req.query as { email: string; token: string };
+
+  if (!email || !token) {
+    return res.status(400).json({ message: "Email and token are required" });
+  }
+
+  await checkResetPassword(req, res);
+});
 
 router.get("/check/invite/organizer", async (req: any, res: any) => {
   const { email, token } = req.query as { email: string; token: string };

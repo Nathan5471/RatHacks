@@ -32,6 +32,8 @@ model User {
   emailToken             String
   emailVerified          Boolean     @default(false)
   lastResendEmailRequest DateTime?
+  passwordResetToken     String?
+  passwordResetExpiry    DateTime?
   accountType            AccountType @default(student)
   password               String
   firstName              String

@@ -173,6 +173,80 @@ paths:
                     example: Failed to verify email
                 required:
                   - message
+  /api/auth/login:
+    post:
+      summary: Login a user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        200:
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successful
+                  token:
+                    type: string
+                    example: yourToken123
+                    format: jwt
+                required:
+                  - message
+                  - token
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email and password are required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid email or password
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to login user
+                required:
+                  - message
   /api/auth/resend-verification:
     post:
       summary: Resend the verification email
@@ -253,9 +327,9 @@ paths:
                     example: Failed to resend verification email
                 required:
                   - message
-  /api/auth/login:
+  /api/auth/reset-password:
     post:
-      summary: Login a user
+      summary: Send a reset password request
       tags:
         - Auth
       requestBody:
@@ -268,14 +342,11 @@ paths:
                 email:
                   type: string
                   format: email
-                password:
-                  type: string
               required:
                 - email
-                - password
       responses:
         200:
-          description: User logged in successfully
+          description: Reset password email sent
           content:
             application/json:
               schema:
@@ -283,14 +354,9 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Login successful
-                  token:
-                    type: string
-                    example: yourToken123
-                    format: jwt
+                    example: If an account with that email exists, a reset password email has been sent
                 required:
                   - message
-                  - token
         400:
           description: Bad request
           content:
@@ -300,19 +366,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Email and password are required
-                required:
-                  - message
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Invalid email or password
+                    example: Email is required
                 required:
                   - message
         500:
@@ -324,7 +378,69 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Failed to login user
+                    example: Failed to send reset password email
+                required:
+                  - message
+  /api/auth/set-new-password:
+    post:
+      summary: Set a new password using the reset token
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                token:
+                  type: string
+                newPassword:
+                  type: string
+                  minLength: 8
+                  pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,16}$'
+              required:
+                - email
+                - token
+                - newPassword
+      responses:
+        200:
+          description: Password reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Password updated successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All fields are required
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to set new password
                 required:
                   - message
   /api/auth/invite/organizer/{email}:
@@ -773,6 +889,62 @@ paths:
                   message:
                     type: string
                     example: Failed to logout user from all devices
+                required:
+                  - message
+  /api/auth/check/reset-password:
+    get:
+      summary: Validate a reset password token
+      tags:
+        - Auth
+      parameters:
+        - name: email
+          in: query
+          required: true
+          content:
+            type: string
+            format: email
+        - name: token
+          in: query
+          required: true
+          content:
+            type: string
+            minLength: 8
+            pattern: "^(?=.*[a-z])(?=.*[0-9]).{8,16}$"
+      responses:
+        200:
+          description: Valid token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token is valid
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email and token are required
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to check reset password token
                 required:
                   - message
   /api/auth/check/invite/organizer:
