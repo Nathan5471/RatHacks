@@ -35,8 +35,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen min-w-screen bg-surface-a0 text-white overflow-y-auto">
-      <div className="flex flex-row min-h-15 min-w-screen bg-surface-a1 shadow-lg">
+    <div className="flex flex-col h-screen w-screen bg-surface-a0 text-white overflow-y-auto">
+      <div className="flex flex-row min-h-15 w-screen bg-surface-a1 shadow-lg">
         <h1 className="text-lg sm:text-3xl col-span-3 md:col-span-1 font-bold text-center justify-center text-primary-a0 p-4">
           Rat Hacks
         </h1>
@@ -65,7 +65,7 @@ export default function Home() {
           {user ? "Go to App" : "Login"}
         </Link>
       </div>
-      <div className="flex flex-col items-center p-4 w-screen h-full overflow-y-auto">
+      <div className="flex flex-col items-center w-screen h-full overflow-y-auto">
         <h2 className="text-3xl sm:text-6xl mt-6 text-center font-bold">
           Join us for Rat Hacks 2025!
         </h2>
@@ -320,6 +320,35 @@ export default function Home() {
                 </a>
               </p>
             </div>
+          </div>
+        </div>
+        <div className="flex flex-col items-center p-4 w-screen h-full bg-surface-a1 mt-6">
+          <p className="text-center sm:text-lg">
+            {"Made with <3 by the Rat Hacks Team!"}
+          </p>
+          <div className="flex flex-row mt-2">
+            <a
+              href="https://github.com/Nathan5471/RatHacks"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="/github.svg"
+                alt="GitHub"
+                className="w-10 hover:w-12 h-10 hover:h-12 mx-2"
+              />
+            </a>
+            <a
+              href="https://discord.rathacks.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="/discord.svg"
+                alt="Discord"
+                className="w-10 hover:w-12 h-10 hover:h-12 mx-2"
+              />
+            </a>
           </div>
         </div>
       </div>

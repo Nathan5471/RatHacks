@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { MouseEvent } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { resendVerificationEmail } from "../utils/AuthAPIHandler";
 import { IoMenu } from "react-icons/io5";
@@ -100,10 +101,34 @@ export default function Dashboard() {
           </div>
         )}
         <div className="flex flex-col mt-6 p-4 w-5/6 lg:w-2/3 bg-surface-a1 rounded-lg items-center">
-          <h2 className="text-2xl font-bold text-center">Rat Hacks!</h2>
+          <h2 className="text-2xl font-bold text-center">Rat Hacks 2025!</h2>
           <p className="text-center mt-2 text-lg">
-            There will be more information about the next Rat Hacks Hackathon
-            soon! Check back later for more details.
+            Rat Hacks 2025 is upon us! We are excited to host another hackathon
+            at RVGS. It will be 8:00 AM to 8:00 PM on Saturday, November 2nd,
+            2025. Check out the{" "}
+            <Link to="/" className="text-primary-a0 hover:underline">
+              Home Page
+            </Link>{" "}
+            or{" "}
+            <Link to="/app/events" className="text-primary-a0 hover:underline">
+              Events Page
+            </Link>{" "}
+            for more information.
+          </p>
+        </div>
+        <div className="flex flex-col mt-6 p-4 w-5/6 lg:w-2/3 bg-surface-a1 rounded-lg items-center">
+          <h2 className="text-2xl font-bold text-center">Rat Hacks Discord</h2>
+          <p className="text-center mt-2 text-lg">
+            Join the Rat Hacks Discord server to get updates, ask questions, and
+            connect with others!{" "}
+            <a
+              href="https://discord.rathacks.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-a0 hover:underline"
+            >
+              discord.rathacks.com
+            </a>
           </p>
         </div>
       </div>
