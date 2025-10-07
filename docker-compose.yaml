@@ -10,7 +10,10 @@ services:
       - FRONTEND_URL=
       - LOOPS_API_KEY=
       - LOOPS_EMAIL_VERIFICATION_TEMPLATE_ID=
+      - LOOPS_RESET_PASSWORD_TEMPLATE_ID=
       - LOOPS_WORKSHOP_STARTING_TEMPLATE_ID=
+      - LOOPS_ORGANIZER_INVITE_TEMPLATE_ID=
+      - LOOPS_JUDGE_INVITE_TEMPLATE_ID=
     restart: unless-stopped
     depends_on:
       - postgres
@@ -25,4 +28,4 @@ services:
       - POSTGRES_DB=rathacks
     restart: unless-stopped
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - /path/to/pgdata:/var/lib/postgresql/data

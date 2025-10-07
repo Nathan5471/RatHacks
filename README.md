@@ -14,13 +14,13 @@ You can test this out yourself at <https://demo.rathacks.com> by using the follo
 
 Organizer:
 
-email - <0agokw@hack.af>
+email - <4g5hfj@hack.af>
 
 password - Organizer@123
 
 Student:
 
-email - <ekiwlh@hack.af>
+email - <kjccr0@hack.af>
 
 password - Student@123
 
