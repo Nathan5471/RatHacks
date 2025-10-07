@@ -230,7 +230,7 @@ export default function OrganizerWorkshop() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4">
               {workshop.name}
             </h1>
-            <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 mb-4 p-4 rounded-lg">
+            <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 p-4 rounded-lg">
               <div className="flex flex-col w-full sm:w-2/3">
                 <p className="text-lg mb-2">{workshop.description}</p>
                 <div className="flex flex-row w-full mt-auto">

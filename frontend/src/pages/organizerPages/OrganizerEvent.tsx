@@ -93,10 +93,16 @@ export default function OrganizerEvent() {
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
-      if (!event) return null;
+      if (!event || event.status === "completed") return null;
       const now = new Date();
-      const eventDate = new Date(event.startDate);
-      const difference = eventDate.getTime() - now.getTime();
+      const eventStartDate = new Date(event.startDate);
+      const eventSubmissionDeadline = new Date(event.submissionDeadline);
+      let difference = 0;
+      if (event.status === "upcoming") {
+        difference = eventStartDate.getTime() - now.getTime();
+      } else if (event.status === "ongoing") {
+        difference = eventSubmissionDeadline.getTime() - now.getTime();
+      }
 
       if (difference <= 0) return null;
 
@@ -206,7 +212,7 @@ export default function OrganizerEvent() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4">
               {event.name}
             </h1>
-            <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 mb-4 p-4 rounded-lg">
+            <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 p-4 rounded-lg">
               <div className="flex flex-col w-full sm:w-2/3">
                 <p className="text-lg mb-2">{event.description}</p>
                 <div className="flex flex-row w-full mt-auto">
@@ -250,52 +256,59 @@ export default function OrganizerEvent() {
                 </p>
               </div>
             </div>
-            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
-              <h2 className="text-2xl font-bold text-center mb-2">
-                Scary Countdown for {event.name} (
-                <span
-                  className="font-normal text-primary-a0 hover:underline cursor-pointer"
-                  onClick={() => setHideCountdown(!hideCountdown)}
-                >
-                  {hideCountdown ? "Show" : "Hide"}
-                </span>
-                )
-              </h2>
-              {!hideCountdown && (
-                <div className="flex flex-row justify-center">
-                  <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
-                      {timeRemaining?.days || 0}
-                    </span>
-                    <span className="text-lg sm:text-xl text-center">Days</span>
-                  </div>
-                  <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
-                      {timeRemaining?.hours || 0}
-                    </span>
-                    <span className="text-lg sm:text-xl text-center">
-                      Hours
-                    </span>
-                  </div>
-                  <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
-                      {timeRemaining?.minutes || 0}
-                    </span>
-                    <span className="text-lg sm:text-xl text-center">
-                      Minutes
-                    </span>
-                  </div>
-                  <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
-                      {timeRemaining?.seconds || 0}
-                    </span>
-                    <span className="text-lg sm:text-xl text-center">
-                      Seconds
-                    </span>
-                  </div>
+            {event.status !== "completed" && (
+              <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+                <h2 className="text-2xl font-bold text-center mb-2">
+                  {event.status === "upcoming" ? "Scary" : "Submission"}{" "}
+                  Countdown for {event.name} (
+                  <span
+                    className="font-normal text-primary-a0 hover:underline cursor-pointer"
+                    onClick={() => setHideCountdown(!hideCountdown)}
+                  >
+                    {hideCountdown ? "Show" : "Hide"}
+                  </span>
+                  )
+                </h2>
+                <div>
+                  {!hideCountdown && (
+                    <div className="flex flex-row justify-center">
+                      <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
+                          {timeRemaining?.days || 0}
+                        </span>
+                        <span className="text-lg sm:text-xl text-center">
+                          Days
+                        </span>
+                      </div>
+                      <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
+                          {timeRemaining?.hours || 0}
+                        </span>
+                        <span className="text-lg sm:text-xl text-center">
+                          Hours
+                        </span>
+                      </div>
+                      <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
+                          {timeRemaining?.minutes || 0}
+                        </span>
+                        <span className="text-lg sm:text-xl text-center">
+                          Minutes
+                        </span>
+                      </div>
+                      <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
+                          {timeRemaining?.seconds || 0}
+                        </span>
+                        <span className="text-lg sm:text-xl text-center">
+                          Seconds
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">
                 Registered Teams ({event.teams.length})
