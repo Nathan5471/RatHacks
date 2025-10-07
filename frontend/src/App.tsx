@@ -3,6 +3,7 @@ import { useAuth } from "./contexts/AuthContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthenticatedRoute from "./utils/AuthenticatedRoute";
 import OrganizerRoute from "./utils/OrganizerRoute";
+import JudgeRoute from "./utils/JudgeRoute";
 import Dashboard from "./pages/Dashboard";
 import Workshops from "./pages/Workshops";
 import Workshop from "./pages/Workshop";
@@ -16,6 +17,7 @@ import OrganizerWorkshops from "./pages/organizerPages/OrganizerWorkshops";
 import OrganizerWorkshop from "./pages/organizerPages/OrganizerWorkshop";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
 import OrganizerEvent from "./pages/organizerPages/OrganizerEvent";
+import JudgeDashboard from "./pages/judgePages/JudgeDashboard";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -61,6 +63,9 @@ function App() {
             path="/app/organizer/event/:eventId"
             element={<OrganizerEvent />}
           />
+        </Route>
+        <Route element={<JudgeRoute />}>
+          <Route path="/app/judge" element={<JudgeDashboard />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

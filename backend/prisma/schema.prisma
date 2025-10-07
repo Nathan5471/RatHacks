@@ -96,8 +96,6 @@ model JudgeFeedback {
   id                    String   @id @default(uuid())
   judgeId               String // User Id
   projectId             String // Project Id
-  themeScore            Int
-  themeFeedback         String
   creativityScore       Int
   creativityFeedback    String
   functionalityScore    Int
@@ -106,8 +104,6 @@ model JudgeFeedback {
   technicalityFeedback  String
   interfaceScore        Int
   interfaceFeedback     String
-  polishScore           Int
-  polishFeedback        String
   otherFeedback         String
   totalScore            Int
   createdAt             DateTime @default(now())

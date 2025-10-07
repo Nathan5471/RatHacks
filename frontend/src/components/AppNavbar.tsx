@@ -54,6 +54,16 @@ export default function AppNavbar() {
           Organizer
         </Link>
       )}
+      {user?.accountType === "judge" && (
+        <Link
+          to="/app/judge"
+          className={`p-2 sm:p-3 mx-2 mt-2 sm:m-2 rounded-lg text-xl text-center font-bold ${
+            path === "/app/judge" ? "text-primary-a1" : ""
+          } bg-surface-a2 hover:bg-surface-a3`}
+        >
+          Judge
+        </Link>
+      )}
       <Link
         to="/"
         className="mt-auto p-2 sm:p-3 m-2 rounded-lg text-xl text-center font-bold bg-surface-a2 hover:bg-surface-a3"

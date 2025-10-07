@@ -73,9 +73,9 @@ export default function OrganizerDashboard() {
         >
           <IoMenu className="text-3xl hover:text-4xl" />
         </button>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
           Dashboard
-        </h2>
+        </h1>
         <div className="w-full flex flex-col sm:flex-row mt-4">
           <div className="w-full flex flex-col bg-surface-a1 rounded-lg p-4">
             <h3 className="text-2xl font-bold text-center">Invite Organizer</h3>
