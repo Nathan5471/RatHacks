@@ -8,8 +8,10 @@ import {
   updateEvent,
   getAllEvents,
   organizerGetAllEvents,
+  judgeGetAllEvents,
   getEventById,
   organizerGetEventById,
+  judgeGetEventById,
   deleteEvent,
 } from "../controllers/eventController";
 import authenticate from "../middleware/authenticate";
@@ -173,6 +175,8 @@ router.get("/all", authenticate, getAllEvents);
 
 router.get("/organizer-all", authenticate, organizerGetAllEvents);
 
+router.get("/judge-all", authenticate, judgeGetAllEvents);
+
 router.get("/get/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };
 
@@ -191,6 +195,16 @@ router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
   }
 
   await organizerGetEventById(req, res);
+});
+
+router.get("/judge/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Event ID is required" });
+  }
+
+  await judgeGetEventById(req, res);
 });
 
 router.delete("/delete/:id", authenticate, async (req: any, res: any) => {

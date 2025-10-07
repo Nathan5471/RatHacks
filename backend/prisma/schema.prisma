@@ -118,7 +118,7 @@ model Event {
   endDate            DateTime
   submissionDeadline DateTime
   status             Status   @default(upcoming)
-  releasedJuding     Boolean  @default(false)
+  releasedJudging    Boolean  @default(false)
   participants       String[] // User Ids
   teams              String[] // Team Ids
   projects           String[] // Project Ids

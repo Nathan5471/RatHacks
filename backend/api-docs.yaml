@@ -2464,6 +2464,123 @@ paths:
                   message:
                     type: string
                     example: Failed to fetch events
+                required:
+                  - message
+  /api/event/judge-all:
+    get:
+      summary: Judge's get all events
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Events successfully fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Events loaded successfully
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        location:
+                          type: string
+                        startDate:
+                          type: string
+                          format: date-time
+                        endDate:
+                          type: string
+                          format: date-time
+                        submissionDeadline:
+                          type: string
+                          format: date-time
+                        status:
+                          type: string
+                          enum: ["upcoming", "ongoing", "completed"]
+                        releasedJudging:
+                          type: boolean
+                        participantCount:
+                          type: number
+                          min: 0
+                        projectCount:
+                          type: number
+                          min: 0
+                      required:
+                        - id
+                        - name
+                        - description
+                        - location
+                        - startDate
+                        - endDate
+                        - submissionDeadline
+                        - status
+                        - releasedJudging
+                        - participantCount
+                        - projectCount
+                required:
+                  - message
+                  - events
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch events
+                required:
+                  - message
   /api/event/get/{eventId}:
     get:
       summary: Get event by id
@@ -2819,6 +2936,176 @@ paths:
                   - message
         404:
           description: Event or User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch event
+                required:
+                  - message
+  /api/event/judge/{eventId}:
+    get:
+      summary: Judge's get event by ID
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Event fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event loaded successfully
+                  event:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      location:
+                        type: string
+                      startDate:
+                        type: string
+                        format: date-time
+                      endDate:
+                        type: string
+                        format: date-time
+                      submissionDeadline:
+                        type: string
+                        format: date-time
+                      status:
+                        type: string
+                        enum: ["upcoming", "ongoing", "completed"]
+                      releasedJudging:
+                        type: boolean
+                      participantCount:
+                        type: number
+                        min: 0
+                      projects:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            codeURL:
+                              type: string
+                              format: uri
+                            screenshotURL:
+                              type: string
+                              format: uri
+                            videoURL:
+                              type: string
+                              format: uri
+                            demoURL:
+                              type: string
+                              format: uri
+                            team:
+                              type: array
+                              items:
+                                type: string
+                            submittedAt:
+                              type: string
+                              format: date-time
+                          required:
+                            - id
+                            - name
+                            - description
+                            - codeURL
+                            - screenshotURL
+                            - videoURL
+                            - demoURL
+                            - team
+                            - submittedAt
+                    required:
+                      - id
+                      - name
+                      - description
+                      - location
+                      - startDate
+                      - endDate
+                      - submissionDeadline
+                      - status
+                      - releasedJudging
+                      - participantCount
+                      - projects
+                required:
+                  - message
+                  - event
+        400:
+          description: Bad requestBody
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Event or user not found
           content:
             application/json:
               schema:

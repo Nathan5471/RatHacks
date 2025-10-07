@@ -473,6 +473,42 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
   }
 };
 
+export const judgeGetAllEvents = async (req: any, res: any) => {
+  // This isn't all of the events, just the ones that can be judged
+  const user = req.user as User;
+
+  if (user.accountType !== "judge") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const events = await prisma.event.findMany({
+      where: { releasedJudging: false },
+    });
+    const sortedEvents = sortEvents(events);
+    const removedUneccessaryFieldsEvents = sortedEvents.map((event) => ({
+      id: event.id,
+      name: event.name,
+      description: event.description,
+      location: event.location,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      submissionDeadline: event.submissionDeadline,
+      status: event.status,
+      releasedJudging: event.releasedJudging,
+      participantCount: event.participants.length,
+      projectCount: event.projects.length,
+    }));
+    return res.status(200).json({
+      message: "Events loaded successfully",
+      events: removedUneccessaryFieldsEvents,
+    });
+  } catch (error) {
+    console.error("Error loading events for judge:", error);
+    return res.status(500).json({ message: "Failed to load events" });
+  }
+};
+
 export const getEventById = async (req: any, res: any) => {
   const { id } = req.params as { id: string };
   const user = req.user as User;
@@ -603,6 +639,95 @@ export const organizerGetEventById = async (req: any, res: any) => {
       .json({ message: "Event loaded successfully", event: filledEvent });
   } catch (error) {
     console.error("Error loading event for organizer:", error);
+    return res.status(500).json({ message: "Failed to load event" });
+  }
+};
+
+export const judgeGetEventById = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "judge") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id },
+    });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    if (event.releasedJudging !== false) {
+      return res.status(400).json({ message: "Judging not available" });
+    }
+
+    const projects = await Promise.all(
+      event.projects.map(async (projectId) => {
+        const project = await prisma.project.findUnique({
+          where: { id: projectId },
+        });
+        if (!project) return null;
+        if (!project.submittedAt) return null;
+        if (project.eventId !== event.id) return null;
+        const team = await prisma.team.findUnique({
+          where: { id: project.teamId },
+        });
+        if (!team) return null;
+        const members = await Promise.all(
+          team.members.map(async (memberId) => {
+            const member = await prisma.user.findUnique({
+              where: { id: memberId },
+            });
+            if (!member) return null;
+            return `${member.firstName} ${member.lastName}`;
+          })
+        );
+        const filteredMembers = members.filter((member) => member !== null);
+        const judgeFeedback = await prisma.judgeFeedback.findFirst({
+          where: { judgeId: user.id, projectId: project.id },
+        });
+        return {
+          id: project.id,
+          name: project.name,
+          description: project.description,
+          codeURL: project.codeURL,
+          screenshotURL: project.screenshotPath
+            ? `/api/uploads/${project.screenshotPath}`
+            : null,
+          videoURL: project.videoPath
+            ? `/api/uploads/${project.videoPath}`
+            : null,
+          demoURL: project.demoURL,
+          team: filteredMembers,
+          judged: judgeFeedback ? true : false,
+          submittedAt: project.submittedAt,
+        };
+      })
+    );
+    const filteredProjects = projects.filter((project) => project !== null);
+
+    const removedUneccessaryFieldsEvent = {
+      id: event.id,
+      name: event.name,
+      description: event.description,
+      location: event.location,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      submissionDeadline: event.submissionDeadline,
+      status: event.status,
+      releasedJudging: event.releasedJudging,
+      participantCount: event.participants.length,
+      projects: filteredProjects,
+    };
+    return res
+      .status(200)
+      .json({
+        message: "Event loaded successfully",
+        event: removedUneccessaryFieldsEvent,
+      });
+  } catch (error) {
+    console.error("Error loading event for judge:", error);
     return res.status(500).json({ message: "Failed to load event" });
   }
 };
