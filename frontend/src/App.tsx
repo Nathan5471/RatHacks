@@ -27,6 +27,12 @@ import JudgeRegister from "./pages/judgePages/JudgeRegister";
 import VerifyEmail from "./pages/VerifyEmail";
 import Overlay from "./components/Overlay";
 
+declare global {
+  interface Window {
+    _mtm?: any[];
+  }
+}
+
 function App() {
   const { user, getUser } = useAuth();
   useEffect(() => {
@@ -34,6 +40,17 @@ function App() {
       getUser();
     }
   }, [user, getUser]);
+
+  useEffect(() => {
+    const _mtm = (window._mtm = window._mtm || []);
+    _mtm.push({ "mtm.startTime": new Date().getTime(), event: "mtm.Start" });
+    const g = document.createElement("script");
+    g.async = true;
+    g.src = "https://matomo.rathacks.com/js/container_Ck8sMDR5.js";
+    document
+      .getElementsByTagName("script")[0]
+      .parentNode?.insertBefore(g, null);
+  }, []);
 
   return (
     <Router>

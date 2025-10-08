@@ -3,3 +3,4 @@ node_modules/
 dist/
 /src/generated/prisma
 /uploads
+/public
