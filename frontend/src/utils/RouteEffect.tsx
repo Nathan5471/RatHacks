@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useMatomo } from "@mitresthen/matomo-tracker-react";
 import { useAuth } from "../contexts/AuthContext";
@@ -7,6 +7,7 @@ export default function RouteEffect() {
   const location = useLocation();
   const { trackPageView, pushInstruction } = useMatomo();
   const { user } = useAuth();
+  const firstRun = useRef(true);
 
   useEffect(() => {
     const routeTitles: { [key: string]: string } = {
@@ -46,6 +47,11 @@ export default function RouteEffect() {
       title = routeTitles[location.pathname] || "Rat Hacks";
     }
     document.title = title;
+
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
 
     trackPageView({
       documentTitle: title,
