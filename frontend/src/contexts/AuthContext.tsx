@@ -4,7 +4,7 @@ import { getCurrentUser } from "../utils/AuthAPIHandler";
 interface AuthContextType {
   user:
     | {
-        _id: string;
+        id: string;
         email: string;
         emailVerified: boolean;
         accountType: "student" | "organizer" | "judge";
