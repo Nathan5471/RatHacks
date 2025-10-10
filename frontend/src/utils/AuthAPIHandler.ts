@@ -139,6 +139,11 @@ export const checkJudgeInvite = async (email: string, token: string) => {
   return response.data;
 };
 
+export const getInvites = async () => {
+  const response = await api.get("/invites");
+  return response.data;
+};
+
 export const getCurrentUser = async () => {
   const response = await api.get("/current-user");
   return response.data;

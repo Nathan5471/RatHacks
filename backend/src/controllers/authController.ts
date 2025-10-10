@@ -556,6 +556,33 @@ export const checkInvite = async (req: any, res: any) => {
   }
 };
 
+export const getInvites = async (req: any, res: any) => {
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const invites = await prisma.invite.findMany();
+    const filteredExpiredInvites = invites.filter((invite) => {
+      return new Date() < new Date(invite.expires);
+    });
+    const removedTokenInvites = filteredExpiredInvites.map((invite) => ({
+      email: invite.email,
+      role: invite.role,
+      expires: invite.expires,
+    }));
+    return res.status(200).json({
+      message: "Invites retrieved successfully",
+      invites: removedTokenInvites,
+    });
+  } catch (error) {
+    console.error("Error getting invites:", error);
+    return res.status(500).json({ message: "Failed to get invites" });
+  }
+};
+
 export const getAllUsers = async (req: any, res: any) => {
   const user = req.user as User;
 

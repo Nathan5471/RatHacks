@@ -1085,6 +1085,81 @@ paths:
                     example: Failed to check invite
                 required:
                   - properties
+  /api/auth/invites:
+    get:
+      summary: Get all active invites
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Successfully got all invites
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invites retrieved successfully
+                  invites:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        email:
+                          type: string
+                          format: email
+                        role:
+                          type: string
+                          enum: ["organizer", "judge"]
+                        expires:
+                          type: string
+                          format: date-time
+                      required:
+                        - email
+                        - role
+                        - expires
+                required:
+                  - message
+                  - invites
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to get invites
+                required:
+                  - message
   /api/auth/current-user:
     get:
       summary: Get the currently logged in user

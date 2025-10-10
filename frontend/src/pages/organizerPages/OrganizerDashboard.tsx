@@ -1,15 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { inviteOrganizer, inviteJudge } from "../../utils/AuthAPIHandler";
+import {
+  inviteOrganizer,
+  inviteJudge,
+  getInvites,
+} from "../../utils/AuthAPIHandler";
+import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 
 export default function OrganizerDashboard() {
   const [inviteOrganizerEmail, setInviteOrganizerEmail] = useState("");
   const [inviteOrganizerError, setInviteOrganizerError] = useState("");
+  interface Invite {
+    email: string;
+    role: "organizer" | "judge";
+    expires: string;
+  }
+  const [outgoingOrganizerInvites, setOutgoingOrganizerInvites] = useState<
+    Invite[]
+  >([]);
   const [inviteJudgeEmail, setInviteJudgeEmail] = useState("");
   const [inviteJudgeError, setInviteJudgeError] = useState("");
+  const [outgoingJudgeInvites, setOutgoingJudgeInvites] = useState<Invite[]>(
+    []
+  );
   const [navbarOpen, setNavbarOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchInvites = async () => {
+      try {
+        const invites = (await getInvites()) as {
+          message: string;
+          invites: Invite[];
+        };
+        const organizerInvites = invites.invites.filter(
+          (invite) => invite.role === "organizer"
+        );
+        const judgeInvites = invites.invites.filter(
+          (invite) => invite.role === "judge"
+        );
+        setOutgoingOrganizerInvites(organizerInvites);
+        setOutgoingJudgeInvites(judgeInvites);
+      } catch (error) {
+        console.error("Failed to fetch invites:", error);
+      }
+    };
+    fetchInvites();
+  }, []);
 
   const handleInviteOrganizer = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,6 +143,23 @@ export default function OrganizerDashboard() {
                 Invite
               </button>
             </form>
+            {outgoingOrganizerInvites.length > 0 && (
+              <div className="mt-4">
+                <h4 className="text-xl font-bold mb-2">Pending Invites:</h4>
+                {outgoingOrganizerInvites.map((invite, index) => (
+                  <div
+                    key={index}
+                    className="p-2 bg-surface-a2 rounded-lg mb-2"
+                  >
+                    <p className="text-lg">Email: {invite.email}</p>
+                    <p className="text-lg">
+                      Expires:{" "}
+                      {formatDate(invite.expires, "EEEE, MMMM d yyyy h:mm a")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="w-full flex flex-col bg-surface-a1 mt-2 sm:mt-0 sm:ml-2 rounded-lg p-4">
             <h3 className="text-2xl font-bold text-center">Invite Judge</h3>
@@ -132,6 +187,23 @@ export default function OrganizerDashboard() {
                 Invite
               </button>
             </form>
+            {outgoingJudgeInvites.length > 0 && (
+              <div className="mt-4">
+                <h4 className="text-xl font-bold mb-2">Pending Invites:</h4>
+                {outgoingJudgeInvites.map((invite, index) => (
+                  <div
+                    key={index}
+                    className="p-2 bg-surface-a2 rounded-lg mb-2"
+                  >
+                    <p className="text-lg">Email: {invite.email}</p>
+                    <p className="text-lg">
+                      Expires:{" "}
+                      {formatDate(invite.expires, "EEEE, MMMM d yyyy h:mm a")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

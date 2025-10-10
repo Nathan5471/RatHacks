@@ -14,6 +14,7 @@ import {
   logoutAll,
   checkResetPassword,
   checkInvite,
+  getInvites,
   getAllUsers,
   updateUser,
   updatePassword,
@@ -305,6 +306,8 @@ router.get("/check/invite/judge", async (req: any, res: any) => {
 
   await checkInvite(req, res);
 });
+
+router.get("/invites", authenticate, getInvites);
 
 router.get("/current-user", authenticate, (req: any, res: any) => {
   const reqUser = req.user as User;
