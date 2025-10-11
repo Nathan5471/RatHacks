@@ -108,6 +108,11 @@ export const registerJudge = async (userData: {
   return response.data;
 };
 
+export const cancelInvite = async (email: string) => {
+  const response = await api.post("/cancel-invite", { email });
+  return response.data;
+};
+
 export const logoutUser = async () => {
   const response = await api.post("/logout");
   return response.data;

@@ -5,11 +5,14 @@ import {
   inviteJudge,
   getInvites,
 } from "../../utils/AuthAPIHandler";
+import { useOverlay } from "../../contexts/OverlayContext";
 import { formatDate } from "date-fns";
-import { IoMenu } from "react-icons/io5";
+import { IoMenu, IoTrash } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
+import CancelInvite from "../../components/CancelInvite";
 
 export default function OrganizerDashboard() {
+  const { openOverlay } = useOverlay();
   const [inviteOrganizerEmail, setInviteOrganizerEmail] = useState("");
   const [inviteOrganizerError, setInviteOrganizerError] = useState("");
   interface Invite {
@@ -25,6 +28,7 @@ export default function OrganizerDashboard() {
   const [outgoingJudgeInvites, setOutgoingJudgeInvites] = useState<Invite[]>(
     []
   );
+  const [refreshInvites, setRefreshInvites] = useState(false);
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
@@ -47,7 +51,7 @@ export default function OrganizerDashboard() {
       }
     };
     fetchInvites();
-  }, []);
+  }, [refreshInvites]);
 
   const handleInviteOrganizer = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,6 +60,7 @@ export default function OrganizerDashboard() {
       await inviteOrganizer(inviteOrganizerEmail);
       toast.success("Successfully invited organizer");
       setInviteOrganizerEmail("");
+      setRefreshInvites((prev) => !prev);
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" &&
@@ -75,6 +80,7 @@ export default function OrganizerDashboard() {
       await inviteJudge(inviteJudgeEmail);
       toast.success("Successfully invited judge");
       setInviteJudgeEmail("");
+      setRefreshInvites((prev) => !prev);
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" &&
@@ -85,6 +91,11 @@ export default function OrganizerDashboard() {
           : "An unknown error occurred";
       setInviteJudgeError(errorMessage);
     }
+  };
+
+  const handleOpenCancelInvite = (email: string) => {
+    openOverlay(<CancelInvite email={email} setReload={setRefreshInvites} />);
+    setNavbarOpen(false);
   };
 
   return (
@@ -151,11 +162,24 @@ export default function OrganizerDashboard() {
                     key={index}
                     className="p-2 bg-surface-a2 rounded-lg mb-2"
                   >
-                    <p className="text-lg">Email: {invite.email}</p>
-                    <p className="text-lg">
-                      Expires:{" "}
-                      {formatDate(invite.expires, "EEEE, MMMM d yyyy h:mm a")}
-                    </p>
+                    <div className="flex flex-row">
+                      <div className="flex flex-col">
+                        <p className="text-lg">Email: {invite.email}</p>
+                        <p className="text-lg">
+                          Expires:{" "}
+                          {formatDate(
+                            invite.expires,
+                            "EEEE, MMMM d yyyy h:mm a"
+                          )}
+                        </p>
+                      </div>
+                      <button
+                        className="ml-auto self-center bg-surface-a3 hover:bg-surface-a4 p-2 rounded-lg"
+                        onClick={() => handleOpenCancelInvite(invite.email)}
+                      >
+                        <IoTrash className="text-2xl" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -195,11 +219,24 @@ export default function OrganizerDashboard() {
                     key={index}
                     className="p-2 bg-surface-a2 rounded-lg mb-2"
                   >
-                    <p className="text-lg">Email: {invite.email}</p>
-                    <p className="text-lg">
-                      Expires:{" "}
-                      {formatDate(invite.expires, "EEEE, MMMM d yyyy h:mm a")}
-                    </p>
+                    <div className="flex flex-row">
+                      <div className="flex flex-col">
+                        <p className="text-lg">Email: {invite.email}</p>
+                        <p className="text-lg">
+                          Expires:{" "}
+                          {formatDate(
+                            invite.expires,
+                            "EEEE, MMMM d yyyy h:mm a"
+                          )}
+                        </p>
+                      </div>
+                      <button
+                        className="ml-auto self-center bg-surface-a3 hover:bg-surface-a4 p-2 rounded-lg"
+                        onClick={() => handleOpenCancelInvite(invite.email)}
+                      >
+                        <IoTrash className="text-2xl" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

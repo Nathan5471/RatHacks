@@ -10,6 +10,7 @@ import {
   registerOrganizer,
   inviteJudge,
   registerJudge,
+  cancelInvite,
   logout,
   logoutAll,
   checkResetPassword,
@@ -267,6 +268,16 @@ router.post("/judge/register", async (req: any, res: any) => {
   }
 
   await registerJudge(req, res);
+});
+
+router.post("/cancel-invite", authenticate, async (req: any, res: any) => {
+  const { email } = req.body as { email: string };
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+
+  await cancelInvite(req, res);
 });
 
 router.post("/logout", authenticate, logout);

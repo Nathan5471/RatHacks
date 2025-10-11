@@ -358,6 +358,7 @@ export const registerOrganizer = async (req: any, res: any) => {
       },
     });
     await sendEmailVerificationEmail({ email, token: emailToken, firstName });
+    await prisma.invite.delete({ where: { token } });
     return res
       .status(201)
       .json({ message: "Organizer registered successfully" });
@@ -447,10 +448,33 @@ export const registerJudge = async (req: any, res: any) => {
       },
     });
     await sendEmailVerificationEmail({ email, token: emailToken, firstName });
+    await prisma.invite.delete({ where: { token } });
     return res.status(201).json({ message: "Judge registered successfully" });
   } catch (error) {
     console.error("Error registering judge:", error);
     return res.status(500).json({ message: "Failed to register judge" });
+  }
+};
+
+export const cancelInvite = async (req: any, res: any) => {
+  const user = req.user as User;
+  const { email } = req.body as { email: string };
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const invite = await prisma.invite.findFirst({ where: { email } });
+    if (!invite) {
+      return res.status(404).json({ message: "Invite not found" });
+    }
+
+    await prisma.invite.delete({ where: { token: invite.token } });
+    return res.status(200).json({ message: "Invite cancelled successfully" });
+  } catch (error) {
+    console.error("Error cancelling invite:", error);
+    return res.status(500).json({ message: "Failed to cancel invite" });
   }
 };
 
