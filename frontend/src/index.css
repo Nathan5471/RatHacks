@@ -1,22 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-    --color-primary-a0: #17bd3d;
-    --color-primary-a1: #48c554;
-    --color-primary-a2: #66cd6a;
-    --color-primary-a3: #7fd57f;
-    --color-primary-a4: #96dc94;
-    --color-primary-a5: #ace3a9;
-    --color-surface-a0: #121212;
-    --color-surface-a1: #282828;
-    --color-surface-a2: #3f3f3f;
-    --color-surface-a3: #575757;
-    --color-surface-a4: #717171;
-    --color-surface-a5: #8b8b8b;
-    --color-tonal-a0: #182118;
-    --color-tonal-a1: #2d362d;
-    --color-tonal-a2: #444c44;
-    --color-tonal-a3: #5c635c;
-    --color-tonal-a4: #757b75;
-    --color-tonal-a5: #8f948f;
+  --color-primary-a0: #17bd3d;
+  --color-primary-a1: #48c554;
+  --color-primary-a2: #66cd6a;
+  --color-primary-a3: #7fd57f;
+  --color-primary-a4: #96dc94;
+  --color-primary-a5: #ace3a9;
+  --color-surface-a0: #121212;
+  --color-surface-a1: #282828;
+  --color-surface-a2: #3f3f3f;
+  --color-surface-a3: #575757;
+  --color-surface-a4: #717171;
+  --color-surface-a5: #8b8b8b;
+  --color-tonal-a0: #182118;
+  --color-tonal-a1: #2d362d;
+  --color-tonal-a2: #444c44;
+  --color-tonal-a3: #5c635c;
+  --color-tonal-a4: #757b75;
+  --color-tonal-a5: #8f948f;
+  --color-spooky-a0: #ff892e;
+  --color-spooky-a1: #ff9647;
+  --color-spooky-a2: #ffa45f;
+  --color-spooky-a3: #ffb175;
+  --color-spooky-a4: #ffbe8c;
+  --color-spooky-a5: #ffcba2;
 }
