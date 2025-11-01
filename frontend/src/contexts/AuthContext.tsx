@@ -47,12 +47,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const theme = localStorage.getItem("theme") as AuthContextType["theme"];
       if (theme) {
         setTheme(theme);
+        if (theme !== "default") {
+          document.documentElement.classList.add(theme);
+        }
       } else {
         setTheme("default");
       }
       const userData = await getCurrentUser();
       setUser(userData);
       if (userData.theme) {
+        document.documentElement.classList.remove("spooky");
+        if (userData.theme !== "default") {
+          document.documentElement.classList.add(userData.theme);
+        }
         setTheme(userData.theme as AuthContextType["theme"]);
         localStorage.setItem("theme", userData.theme);
       }
@@ -67,6 +74,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const handleUpdateTheme = async (theme: AuthContextType["theme"]) => {
+    document.documentElement.classList.remove("spooky");
+    if (theme !== "default") {
+      document.documentElement.classList.add(theme);
+    }
     setTheme(theme);
     localStorage.setItem("theme", theme);
     try {

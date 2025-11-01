@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant spooky (&:where(.spooky, .spooky *));
+
 @theme {
   --color-primary-a0: #17bd3d;
   --color-primary-a1: #48c554;

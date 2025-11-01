@@ -38,13 +38,7 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen w-screen bg-surface-a0 text-white overflow-y-auto">
       <div className="flex flex-row min-h-15 w-screen bg-surface-a1 shadow-lg">
-        <h1
-          className={`text-lg sm:text-3xl col-span-3 md:col-span-1 font-bold text-center justify-center ${checkTheme(
-            theme,
-            "default",
-            "text-primary-a0"
-          )}${checkTheme(theme, "spooky", "text-spooky-a0")} p-4`}
-        >
+        <h1 className="text-lg sm:text-3xl col-span-3 md:col-span-1 font-bold text-center justify-center text-primary-a0 spooky:text-spooky-a0 p-4">
           Rat Hacks
         </h1>
         <HashLink
@@ -67,15 +61,7 @@ export default function Home() {
         </HashLink>
         <Link
           to={user ? "/app" : "/login"}
-          className={`text-pretty sm:text-lg lg:text-xl ${checkTheme(
-            theme,
-            "default",
-            "bg-primary-a0 hover:bg-primary-a1"
-          )}${checkTheme(
-            theme,
-            "spooky",
-            "bg-spooky-a0 hover:bg-spooky-a1"
-          )} rounded-lg text-center justify-center items-center flex font-bold m-4 p-2 w-1/6`}
+          className="text-pretty sm:text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 rounded-lg text-center justify-center items-center flex font-bold m-4 p-2 w-1/6"
         >
           {user ? "Go to App" : "Login"}
         </Link>
@@ -89,49 +75,25 @@ export default function Home() {
         </p>
         <div className="flex flex-row mt-4 p-4 justify-center w-2/3">
           <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
-            <span
-              className={`text-3xl sm:text-6xl font-bold ${checkTheme(
-                theme,
-                "default",
-                "text-primary-a0"
-              )}${checkTheme(theme, "spooky", "text-spooky-a0")} text-center`}
-            >
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
               {timeRemaining?.days || 0}
             </span>
             <span className="text-sm sm:text-3xl text-center">Days</span>
           </div>
           <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
-            <span
-              className={`text-3xl sm:text-6xl font-bold ${checkTheme(
-                theme,
-                "default",
-                "text-primary-a0"
-              )}${checkTheme(theme, "spooky", "text-spooky-a0")} text-center`}
-            >
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
               {timeRemaining?.hours || 0}
             </span>
             <span className="text-sm sm:text-3xl text-center">Hours</span>
           </div>
           <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
-            <span
-              className={`text-3xl sm:text-6xl font-bold ${checkTheme(
-                theme,
-                "default",
-                "text-primary-a0"
-              )}${checkTheme(theme, "spooky", "text-spooky-a0")} text-center`}
-            >
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
               {timeRemaining?.minutes || 0}
             </span>
             <span className="text-sm sm:text-3xl text-center">Minutes</span>
           </div>
           <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
-            <span
-              className={`text-3xl sm:text-6xl font-bold ${checkTheme(
-                theme,
-                "default",
-                "text-primary-a0"
-              )}${checkTheme(theme, "spooky", "text-spooky-a0")} text-center`}
-            >
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
               {timeRemaining?.seconds || 0}
             </span>
             <span className="text-sm sm:text-3xl text-center">Seconds</span>
@@ -159,15 +121,7 @@ export default function Home() {
                 event! (
                 <Link
                   to="/register"
-                  className={`${checkTheme(
-                    theme,
-                    "default",
-                    "text-primary-a0"
-                  )}${checkTheme(
-                    theme,
-                    "spooky",
-                    "text-spooky-a0"
-                  )} hover:underline`}
+                  className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
                 >
                   Register Here
                 </Link>
@@ -200,15 +154,7 @@ export default function Home() {
                 dietary restrictions, please email{" "}
                 <a
                   href="mailto:nathan@rathacks.com"
-                  className={`${checkTheme(
-                    theme,
-                    "default",
-                    "text-primary-a0"
-                  )}${checkTheme(
-                    theme,
-                    "spooky",
-                    "text-spooky-a0"
-                  )} hover:underline`}
+                  className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
                 >
                   nathan@rathacks.com
                 </a>
@@ -369,15 +315,7 @@ export default function Home() {
                 You can email us at{" "}
                 <a
                   href="mailto:questions@rathacks.com"
-                  className={`${checkTheme(
-                    theme,
-                    "default",
-                    "text-primary-a0"
-                  )}${checkTheme(
-                    theme,
-                    "spooky",
-                    "text-spooky-a0"
-                  )} hover:underline`}
+                  className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
                 >
                   questions@rathacks.com
                 </a>
