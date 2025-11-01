@@ -20,6 +20,11 @@ enum GradeLevel {
   twelve
 }
 
+enum Theme {
+  default
+  spooky
+}
+
 enum Status {
   upcoming
   ongoing
@@ -55,6 +60,7 @@ model User {
   workshops              String[] // Workshop Ids
   validAccessTokens      String[]
   validRefreshTokens     String[]
+  theme                  Theme       @default(default)
   createdAt              DateTime    @default(now())
 }
 

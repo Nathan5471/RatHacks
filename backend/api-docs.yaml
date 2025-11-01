@@ -1721,6 +1721,86 @@ paths:
                       example: Failed to update password
                   required:
                     - message
+  /api/auth/update-theme:
+    put:
+      summary: Update the current user's theme
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+                  enum: ["default", "spooky"]
+              required:
+                - theme
+      responses:
+        200:
+          description: Theme updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Theme updated successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid theme option
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mesasge:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to update theme
+                required:
+                  - message
   /api/auth/delete:
     delete:
       summary: Delete the current user's account
