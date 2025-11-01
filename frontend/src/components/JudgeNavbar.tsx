@@ -11,7 +11,7 @@ export default function JudgeNavbar() {
       <Link
         to="/app/judge"
         className={`p-2 sm:p-3 mt-2 md:mt-4 mx-2 md:m-2 rounded-lg text-xl text-center font-bold ${
-          path === "/app/judge" ? "text-primary-a1" : ""
+          path === "/app/judge" ? "text-primary-a0 spooky:text-spooky-a0" : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
         Dashboard
@@ -19,7 +19,9 @@ export default function JudgeNavbar() {
       <Link
         to="/app/judge/events"
         className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
-          path === "/app/judge/events" ? "text-primary-a1" : ""
+          path === "/app/judge/events"
+            ? "text-primary-a0 spooky:text-spooky-a0"
+            : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
         Events

@@ -78,7 +78,7 @@ export default function OrganizerUserView({ user }: { user: User }) {
         Account Created: {new Date(user.createdAt).toLocaleString()}
       </p>
       <button
-        className="bg-primary-a0 hover:bg-primary-a1 font-bold p-2 rounded-lg mt-4"
+        className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 font-bold p-2 rounded-lg mt-4"
         onClick={closeOverlay}
       >
         Close
