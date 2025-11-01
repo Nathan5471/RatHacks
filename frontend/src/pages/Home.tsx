@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { useAuth } from "../contexts/AuthContext";
-import checkTheme from "../utils/CheckTheme";
 
 export default function Home() {
-  const { user, theme } = useAuth();
+  const { user } = useAuth();
   const [timeRemaining, setTimeRemaining] = useState<{
     days: number;
     hours: number;

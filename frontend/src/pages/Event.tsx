@@ -224,7 +224,7 @@ export default function Event() {
                 <div className="flex flex-row w-full mt-auto">
                   <Link
                     to="/app/events"
-                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                   >
                     Back to Events
                   </Link>
@@ -238,7 +238,7 @@ export default function Event() {
                       </button>
                     ) : (
                       <button
-                        className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                        className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                         onClick={handleJoin}
                       >
                         Join Event
@@ -280,13 +280,13 @@ export default function Event() {
                 )}
                 <div className="flex flex-row w-full justify-center">
                   <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-2 sm:p-4 mx-2">
-                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                    <span className="text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
                       {timeRemaining?.days || 0}
                     </span>
                     <span className="text-lg sm:text-xl text-center">Days</span>
                   </div>
                   <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-2 sm:p-4 mx-2">
-                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                    <span className="text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
                       {timeRemaining?.hours || 0}
                     </span>
                     <span className="text-lg sm:text-xl text-center">
@@ -294,7 +294,7 @@ export default function Event() {
                     </span>
                   </div>
                   <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-2 sm:p-4 mx-2">
-                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                    <span className="text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
                       {timeRemaining?.minutes || 0}
                     </span>
                     <span className="text-lg sm:text-xl text-center">
@@ -302,7 +302,7 @@ export default function Event() {
                     </span>
                   </div>
                   <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-2 sm:p-4 mx-2">
-                    <span className="text-5xl font-bold text-primary-a0 text-center">
+                    <span className="text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
                       {timeRemaining?.seconds || 0}
                     </span>
                     <span className="text-lg sm:text-xl text-center">
@@ -336,7 +336,7 @@ export default function Event() {
                         new Date().getTime() <=
                           new Date(event.submissionDeadline).getTime() &&
                         !event.team.submittedProject
-                          ? "bg-primary-a0 hover:bg-primary-a1"
+                          ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
                           : "bg-surface-a2 cursor-not-allowed"
                       } mt-4 rounded-lg p-2 font-bold text-center`}
                       onClick={(e) => {
@@ -404,7 +404,7 @@ export default function Event() {
                         <div className="flex flex-row">
                           <button
                             type="submit"
-                            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold mt-2 w-full"
+                            className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold mt-2 w-full"
                           >
                             Join Team
                           </button>
@@ -430,7 +430,7 @@ export default function Event() {
             <div className="flex w-full justify-center">
               <Link
                 to="/app/events"
-                className="bg-primary-a0 hover:bg-primary-a1 font-bold p-2 rounded-lg"
+                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 font-bold p-2 rounded-lg"
               >
                 Back to Events
               </Link>

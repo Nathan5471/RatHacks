@@ -178,7 +178,7 @@ export default function Events() {
                   <div className="flex flex-row w-full mt-auto">
                     <Link
                       to={`/app/event/${event.id}`}
-                      className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
@@ -193,7 +193,7 @@ export default function Events() {
                       ) : (
                         <button
                           onClick={(e) => handleJoin(e, event.id)}
-                          className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
+                          className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 ml-2 rounded-lg font-bold w-full"
                         >
                           Join
                         </button>
