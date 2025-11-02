@@ -31,6 +31,7 @@ import OrganizerRegister from "./pages/organizerPages/OrganizerRegister";
 import JudgeRegister from "./pages/judgePages/JudgeRegister";
 import VerifyEmail from "./pages/VerifyEmail";
 import Overlay from "./components/Overlay";
+import ThemeOverlay from "./components/ThemeOverlay";
 
 function App() {
   const { user, getUser } = useAuth();
@@ -96,6 +97,7 @@ function App() {
           <Route path="/verify-email" element={<VerifyEmail />} />
         </Routes>
         <Overlay />
+        <ThemeOverlay />
       </Router>
     </MatomoProvider>
   );
