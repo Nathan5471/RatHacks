@@ -72,6 +72,11 @@ export const organizerGetAllEvents = async () => {
   return response.data;
 };
 
+export const judgeGetAllEvents = async () => {
+  const response = await api.get("/judge-all");
+  return response.data;
+};
+
 export const getEventById = async (eventId: string) => {
   const response = await api.get(`/get/${eventId}`);
   return response.data;
@@ -79,6 +84,11 @@ export const getEventById = async (eventId: string) => {
 
 export const organizerGetEventById = async (eventId: string) => {
   const response = await api.get(`/organizer/${eventId}`);
+  return response.data;
+};
+
+export const judgeGetEventById = async (eventId: string) => {
+  const response = await api.get(`/judge/${eventId}`);
   return response.data;
 };
 
