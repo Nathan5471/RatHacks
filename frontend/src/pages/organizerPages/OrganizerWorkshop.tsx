@@ -12,6 +12,7 @@ import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditWorkshop from "../../components/EditWorkshop";
 import DeleteWorkshop from "../../components/DeleteWorkshop";
 import OrganizerUserView from "../../components/OrganizerUserView";
+import LinkDetectedText from "../../components/LinkDetectedText";
 
 export default function OrganizerWorkshop() {
   const { openOverlay } = useOverlay();
@@ -232,7 +233,10 @@ export default function OrganizerWorkshop() {
             </h1>
             <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 p-4 rounded-lg">
               <div className="flex flex-col w-full sm:w-2/3">
-                <p className="text-lg mb-2">{workshop.description}</p>
+                <LinkDetectedText
+                  className="text-lg mb-2"
+                  text={workshop.description}
+                />
                 <div className="flex flex-row w-full mt-auto">
                   <Link
                     to="/app/organizer/workshops"

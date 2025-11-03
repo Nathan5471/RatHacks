@@ -8,6 +8,7 @@ import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditEvent from "../../components/EditEvent";
 import DeleteEvent from "../../components/DeleteEvent";
 import OrganizerUserView from "../../components/OrganizerUserView";
+import LinkDetectedText from "../../components/LinkDetectedText";
 
 export default function OrganizerEvent() {
   const { openOverlay } = useOverlay();
@@ -214,7 +215,10 @@ export default function OrganizerEvent() {
             </h1>
             <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 p-4 rounded-lg">
               <div className="flex flex-col w-full sm:w-2/3">
-                <p className="text-lg mb-2">{event.description}</p>
+                <LinkDetectedText
+                  className="text-lg mb-2"
+                  text={event.description}
+                />
                 <div className="flex flex-row w-full mt-auto">
                   <Link
                     to="/app/organizer/events"

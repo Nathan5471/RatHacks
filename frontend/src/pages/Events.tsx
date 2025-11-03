@@ -5,6 +5,7 @@ import { getAllEvents, joinEvent, leaveEvent } from "../utils/EventAPIHandler";
 import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
+import LinkDetectedText from "../components/LinkDetectedText";
 
 export default function Events() {
   const { user, getUser } = useAuth();
@@ -174,7 +175,10 @@ export default function Events() {
               >
                 <div className="flex flex-col w-full sm:w-2/3">
                   <h2 className="text-3xl font-bold">{event.name}</h2>
-                  <p className="text-lg mb-2">{event.description}</p>
+                  <LinkDetectedText
+                    className="text-lg mb-2"
+                    text={event.description}
+                  />
                   <div className="flex flex-row w-full mt-auto">
                     <Link
                       to={`/app/event/${event.id}`}

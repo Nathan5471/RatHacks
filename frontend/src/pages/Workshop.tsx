@@ -9,6 +9,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
+import LinkDetectedText from "../components/LinkDetectedText";
 
 export default function Workshop() {
   const { workshopId } = useParams<{ workshopId: string }>();
@@ -157,7 +158,10 @@ export default function Workshop() {
             </h1>
             <div className="flex flex-col sm:flex-row bg-surface-a1 p-4 rounded-lg">
               <div className="flex flex-col w-full sm:w-2/3">
-                <p className="text-lg mb-2">{workshop.description}</p>
+                <LinkDetectedText
+                  className="text-lg mb-2"
+                  text={workshop.description}
+                />
                 <div className="flex flex-row w-full mt-auto">
                   <Link
                     to="/app/workshops"

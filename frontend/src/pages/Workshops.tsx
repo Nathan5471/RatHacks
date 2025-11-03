@@ -10,6 +10,7 @@ import {
 import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
+import LinkDetectedText from "../components/LinkDetectedText";
 
 export default function Workshops() {
   const { user, getUser } = useAuth();
@@ -215,7 +216,10 @@ export default function Workshops() {
                   <h2 className="text-3xl text-center font-bold">
                     {workshop.name}
                   </h2>
-                  <p className="text-lg mb-2">{workshop.description}</p>
+                  <LinkDetectedText
+                    className="text-lg mb-2"
+                    text={workshop.description}
+                  />
                   <div className="flex flex-row w-full mt-auto">
                     <Link
                       to={`/app/workshop/${workshop.id}`}

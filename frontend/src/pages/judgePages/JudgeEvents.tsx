@@ -4,6 +4,7 @@ import { IoMenu } from "react-icons/io5";
 import { judgeGetAllEvents } from "../../utils/EventAPIHandler";
 import JudgeNavbar from "../../components/JudgeNavbar";
 import { formatDate } from "date-fns";
+import LinkDetectedText from "../../components/LinkDetectedText";
 
 export default function JudgeEvents() {
   interface Event {
@@ -105,7 +106,10 @@ export default function JudgeEvents() {
               >
                 <div className="flex flex-col w-full sm:w-2/3">
                   <h2 className="text-3xl font-bold">{event.name}</h2>
-                  <p className="text-lg mb-2">{event.description}</p>
+                  <LinkDetectedText
+                    className="text-lg mb-2"
+                    text={event.description}
+                  />
                   <Link
                     to={`/app/judge/event/${event.id}`}
                     className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full mt-2 sm:mt-auto"
