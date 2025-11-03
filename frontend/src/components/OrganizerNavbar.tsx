@@ -41,6 +41,14 @@ export default function OrganizerNavbar() {
         Events
       </Link>
       <Link
+        to="/app/organizer/emails"
+        className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
+          path === "/app/organizer/emails" ? "text-primary-a1" : ""
+        } bg-surface-a2 hover:bg-surface-a3`}
+      >
+        Emails
+      </Link>
+      <Link
         to="/app"
         className="mt-auto p-2 sm:p-3 m-2 rounded-lg text-xl text-center font-bold bg-surface-a2 hover:bg-surface-a3"
       >

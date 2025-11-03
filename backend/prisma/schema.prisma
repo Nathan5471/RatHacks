@@ -138,3 +138,13 @@ model Workshop {
   organizer     String // Organizer Id
   createdAt     DateTime @default(now())
 }
+
+model Email {
+  id                String    @id @default(uuid())
+  name              String
+  messageSubject    String
+  messageBody       String
+  senderEmail       String
+  receiversEmails   String[]
+  sent              Boolean  @default(false)        
+}

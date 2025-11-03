@@ -6,6 +6,7 @@ import authRouter from "./routes/authRouter";
 import eventRouter from "./routes/eventRouter";
 import workshopRouter from "./routes/workshopRouter";
 import projectRouter from "./routes/projectRouter";
+import emailRouter from "./routes/emailRouter";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -27,6 +28,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/event", eventRouter);
 app.use("/api/workshop", workshopRouter);
 app.use("/api/project", projectRouter);
+app.use("/api/email", emailRouter);
 
 // Images
 app.use("/api/uploads", express.static("uploads"));
@@ -36,17 +38,13 @@ const swaggerDocument = YAML.load("./api-docs.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Frontend
-app.use(express.static("public"));
-
-app.use((req: any, res: any) => {
-  res.sendFile("./public/index.html", { root: "." }, (error: any) => {
-    if (error) {
-      console.error("Error sending index file:", error);
-
-      res.status(500).send("Page not found");
-    }
-  });
-});
+app.use(
+  "/",
+  createProxyMiddleware({
+    target: 'http://localhost:5173',
+    changeOrigin: true
+  })
+)
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
