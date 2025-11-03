@@ -620,6 +620,45 @@ export const organizerGetEventById = async (req: any, res: any) => {
     const teams = await prisma.team.findMany({
       where: { eventId: event.id },
     });
+    const projects = await Promise.all(
+      event.projects.map(async (projectId) => {
+        const project = await prisma.project.findUnique({
+          where: { id: projectId },
+        });
+        if (!project) return null;
+        if (project.eventId !== event.id) return null;
+        const team = await prisma.team.findUnique({
+          where: { id: project.teamId },
+        });
+        if (!team) return null;
+        const members = await Promise.all(
+          team.members.map(async (memberId) => {
+            const member = await prisma.user.findUnique({
+              where: { id: memberId },
+            });
+            if (!member) return null;
+            return `${member.firstName} ${member.lastName}`;
+          })
+        );
+        const filteredMembers = members.filter((member) => member !== null);
+        return {
+          id: project.id,
+          name: project.name,
+          description: project.description,
+          codeURL: project.codeURL,
+          screenshotURL: project.screenshotPath
+            ? `/api/uploads/${project.screenshotPath}`
+            : null,
+          videoURL: project.videoPath
+            ? `/api/uploads/${project.videoPath}`
+            : null,
+          demoURL: project.demoURL,
+          team: filteredMembers,
+          submittedAt: project.submittedAt,
+        };
+      })
+    );
+    const filteredProjects = projects.filter((project) => project !== null);
     const filledEvent = {
       id: event.id,
       name: event.name,
@@ -631,6 +670,7 @@ export const organizerGetEventById = async (req: any, res: any) => {
       status: event.status,
       participants: removedUneccesaryFieldsUsers,
       teams: teams,
+      projects: filteredProjects,
       createdBy: event.createdBy,
       createdAt: event.createdAt,
     };

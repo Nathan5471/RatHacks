@@ -45,6 +45,17 @@ export default function OrganizerEvent() {
     project: string | null;
     createdAt: string;
   }
+  interface Project {
+    id: string;
+    name: string;
+    description: string;
+    codeURL: string | null;
+    screenshotURL: string | null;
+    videoURL: string | null;
+    demoURL: string | null;
+    team: string[];
+    submittedAt: string;
+  }
   interface Event {
     id: string;
     name: string;
@@ -56,6 +67,7 @@ export default function OrganizerEvent() {
     status: "upcoming" | "ongoing" | "completed";
     participants: Participant[];
     teams: Team[];
+    projects: Project[];
     createdBy: string;
     createdAt: string;
   }
@@ -498,6 +510,46 @@ export default function OrganizerEvent() {
                 </table>
               ) : (
                 <p className="text-center">No participants registered yet.</p>
+              )}
+            </div>
+            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+              <h2 className="text-2xl font-bold text-center mb-2">Projects</h2>
+              {event.projects.length === 0 ? (
+                <p className="text-center">No projects submitted yet.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {event.projects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="bg-surface-a2 p-4 rounded-lg"
+                    >
+                      {project.screenshotURL && (
+                        <img
+                          src={`${window.location.origin}${project.screenshotURL}`}
+                          alt={`${project.name} Screenshot`}
+                          className="w-full h-auto mb-4 rounded-lg"
+                        />
+                      )}
+                      <h3 className="text-xl font-bold mb-2">{project.name}</h3>
+                      <p className="mb-2">{project.description}</p>
+                      <p className="mb-2">
+                        Submitted:{" "}
+                        {project.submittedAt
+                          ? formatDate(
+                              new Date(project.submittedAt),
+                              "EEEE, MMMM d yyyy h:mm a"
+                            )
+                          : "N/A"}
+                      </p>
+                      <Link
+                        to={`/app/organizer/project/${project.id}`}
+                        className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold w-full"
+                      >
+                        View Project
+                      </Link>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
