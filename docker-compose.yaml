@@ -15,7 +15,7 @@ services:
       - LOOPS_ORGANIZER_INVITE_TEMPLATE_ID=
       - LOOPS_JUDGE_INVITE_TEMPLATE_ID=
     restart: unless-stopped
-    voluemts:
+    volumes:
       - uploads:/backend/uploads
     depends_on:
       - postgres
@@ -30,7 +30,7 @@ services:
       - POSTGRES_DB=rathacks
     restart: unless-stopped
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
 
 volumes:
   uploads:
