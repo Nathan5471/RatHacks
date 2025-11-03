@@ -222,7 +222,167 @@ export const getProjectById = async (req: any, res: any) => {
       },
     });
   } catch (error) {
-    console.log("Error getting project by event ID:", error);
+    console.error("Error getting project by event ID:", error);
     return res.status(500).json({ message: "Failed to get event" });
+  }
+};
+
+export const organizerGetProjectById = async (req: any, res: any) => {
+  const { projectId } = req.params as { projectId: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const project = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+      },
+    });
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+    const event = await prisma.event.findUnique({
+      where: { id: project.eventId },
+    });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    const team = await prisma.team.findUnique({
+      where: { id: project.teamId },
+    });
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+    const members = await Promise.all(
+      team.members.map(async (memberId) => {
+        const member = await prisma.user.findUnique({
+          where: { id: memberId },
+        });
+        if (!member) return null;
+        return {
+          id: member.id,
+          email: member.email,
+          emailVerified: member.emailVerified,
+          accountType: member.accountType,
+          firstName: member.firstName,
+          lastName: member.lastName,
+          schoolDivision: member.schoolDivision,
+          gradeLevel: member.gradeLevel,
+          isGovSchool: member.isGovSchool,
+          techStack: member.techStack,
+          previousHackathon: member.previousHackathon,
+          parentFirstName: member.parentFirstName,
+          parentLastName: member.parentLastName,
+          parentEmail: member.parentEmail,
+          parentPhoneNumber: member.parentPhoneNumber,
+          contactFirstName: member.contactFirstName,
+          contactLastName: member.contactLastName,
+          contactRelationship: member.contactRelationship,
+          contactPhoneNumber: member.contactPhoneNumber,
+          createdAt: member.createdAt,
+        };
+      })
+    );
+    const filteredMembers = members.filter((member) => member !== null);
+
+    return res.status(200).json({
+      message: "Project loaded succesfully",
+      project: {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        codeURL: project.codeURL,
+        screenshotURL: project.screenshotPath
+          ? `/api/uploads/${project.screenshotPath}`
+          : null,
+        videoURL: project.videoPath
+          ? `/api/uploads/${project.videoPath}`
+          : null,
+        demoURL: project.demoURL,
+        submittedAt: project.submittedAt,
+        team: {
+          id: team.id,
+          joinCode: team.joinCode,
+          members: filteredMembers,
+        },
+        event: {
+          id: event.id,
+          name: event.name,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error getting project by ID for organizer:", error);
+    return res.status(500).json({ message: "Failed to get project" });
+  }
+};
+
+export const judgeGetProjectById = async (req: any, res: any) => {
+  const { projectId } = req.params as { projectId: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "judge") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const project = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+      },
+    });
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+    const event = await prisma.event.findUnique({
+      where: { id: project.eventId },
+    });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    const team = await prisma.team.findUnique({
+      where: { id: project.teamId },
+    });
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+    const members = await Promise.all(
+      team.members.map(async (memberId) => {
+        const member = await prisma.user.findUnique({
+          where: { id: memberId },
+        });
+        if (!member) return null;
+        return `${member.firstName} ${member.lastName}`;
+      })
+    );
+    const filteredMembers = members.filter((member) => member !== null);
+    return res.status(200).json({
+      message: "Project loaded succesfully",
+      project: {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        codeURL: project.codeURL,
+        screenshotURL: project.screenshotPath
+          ? `/api/uploads/${project.screenshotPath}`
+          : null,
+        videoURL: project.videoPath
+          ? `/api/uploads/${project.videoPath}`
+          : null,
+        demoURL: project.demoURL,
+        submittedAt: project.submittedAt,
+        team: filteredMembers,
+        event: {
+          id: event.id,
+          name: event.name,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error getting project by ID for judge:", error);
+    return res.status(500).json({ message: "Failed to get project" });
   }
 };
