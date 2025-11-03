@@ -111,6 +111,12 @@ export const submitProject = async (req: any, res: any) => {
         submittedProject: true,
       },
     });
+    await prisma.event.update({
+      where: { id: project.eventId },
+      data: {
+        projects: { push: project.id },
+      },
+    });
     return res.status(200).json({ message: "Successfully submitted project" });
   } catch (error) {
     console.error("Error submitting project:", error);

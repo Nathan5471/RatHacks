@@ -720,12 +720,10 @@ export const judgeGetEventById = async (req: any, res: any) => {
       participantCount: event.participants.length,
       projects: filteredProjects,
     };
-    return res
-      .status(200)
-      .json({
-        message: "Event loaded successfully",
-        event: removedUneccessaryFieldsEvent,
-      });
+    return res.status(200).json({
+      message: "Event loaded successfully",
+      event: removedUneccessaryFieldsEvent,
+    });
   } catch (error) {
     console.error("Error loading event for judge:", error);
     return res.status(500).json({ message: "Failed to load event" });
