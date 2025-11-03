@@ -109,7 +109,7 @@ export default function Dashboard() {
           <h2 className="text-2xl font-bold text-center">Rat Hacks 2025!</h2>
           <p className="text-center mt-2 text-lg">
             Rat Hacks 2025 is upon us! We are excited to host another hackathon
-            at RVGS. It will be 8:00 AM to 8:00 PM on Saturday, November 2nd,
+            at RVGS. It will be 8:00 AM to 8:00 PM on Saturday, November 22nd,
             2025. Check out the{" "}
             <Link
               to="/"

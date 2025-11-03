@@ -107,7 +107,7 @@ export default function Home() {
               <h3 className="text-xl font-bold mb-2">What is Rat Hacks?</h3>
               <p>
                 Rat Hacks is a hackathon hosted by the Roanoke Valley Governor's
-                School (RVGS). It will be help November 22, 2025 from 8:00 AM to
+                School (RVGS). It will be held November 22, 2025 from 8:00 AM to
                 8:00 PM. It will be at RVGS, 2104 Grandin Road SW, Roanoke, VA
                 24015.
               </p>
@@ -147,7 +147,7 @@ export default function Home() {
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-xl font-bold mb-2">Food & Drinks</h3>
               <p>
-                Food and drinks will be provided for free at Rat Hacks! We will
+                Food and drinks will be provided for FREE at Rat Hacks! We will
                 have chicken nuggets for lunch and pizza for dinner. There will
                 also be snacks and water throughout the event. If you have any
                 dietary restrictions, please email{" "}
@@ -163,9 +163,9 @@ export default function Home() {
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-xl font-bold mb-2">Judging</h3>
               <p>
-                Projects will be judged through the week after Rat Hacks by
+                Projects will be judged throughout the week after Rat Hacks by
                 judges from the tech industry. Winners will be announced in a
-                virtual awards ceremony on Sunday, November 23 at 7:00 PM. You
+                virtual awards ceremony on Sunday, November 30 at 7:00 PM. You
                 will also receive feedback on your project from the judges.
               </p>
             </div>
