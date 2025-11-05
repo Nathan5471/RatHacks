@@ -17,8 +17,8 @@ api.interceptors.response.use(
 
 export const createEmail = async (data: {
   name: string;
-  description: string;
-  startDate: string;
+  messageSubject: string;
+  messageBody: string;
   endDate: string;
 }) => {
   const response = await api.post("/create", data);

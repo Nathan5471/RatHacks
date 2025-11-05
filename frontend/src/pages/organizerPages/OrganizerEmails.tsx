@@ -6,6 +6,7 @@ import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CreateEvent from "../../components/CreateEvent";
+import CreateEmail from  "../../components/CreateEmail";
 import EditEvent from "../../components/EditEvent";
 import DeleteEvent from "../../components/DeleteEvent";
 
@@ -95,7 +96,7 @@ export default function OrganizerEmails() {
 
   const handleOpenCreateEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    openOverlay(<CreateEvent />);
+    openOverlay(<CreateEmail />);
   };
 
   const handleOpenEditEvent = (
