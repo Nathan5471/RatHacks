@@ -67,7 +67,7 @@ export const getAllEmails = async () => {
   return response.data;
 };
 
-export const organizerGetAllWorkshops = async () => {
+export const organizerGetAllEmails = async () => {
   const response = await api.get("/organizer-all");
   return response.data;
 };

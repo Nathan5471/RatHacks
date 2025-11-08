@@ -12,9 +12,11 @@ import {
   organizerGetWorkshopById,
   deleteWorkshop,
 } from "../controllers/workshopController";
+
 import authenticate from "../middleware/authenticate";
 import {
-    createEmail
+    createEmail,
+    organizerGetAllEmails
 } from "../controllers/emailController"
 
 const router = express.Router();
@@ -66,7 +68,7 @@ router.put("/update/:id", authenticate, async (req: any, res: any) => {
 
 router.get("/all", authenticate, getAllWorkshops);
 
-router.get("/organizer-all", authenticate, organizerGetAllWorkshops);
+router.get("/organizer-all", authenticate, organizerGetAllEmails);
 
 router.get("/get/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };

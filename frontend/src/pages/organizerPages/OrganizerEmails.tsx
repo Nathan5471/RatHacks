@@ -1,82 +1,40 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useOverlay } from "../../contexts/OverlayContext";
-import { organizerGetAllEvents } from "../../utils/EventAPIHandler";
-import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
-import CreateEmail from  "../../components/CreateEmail";
+import CreateEmail from "../../components/CreateEmail";
 import EditEvent from "../../components/EditEvent";
 import DeleteEvent from "../../components/DeleteEvent";
+import { organizerGetAllEmails } from "../../utils/EmailAPIHandler";
+import { organizerGetAllEvents } from "../../utils/EventAPIHandler";
 
 export default function OrganizerEmails() {
   const { openOverlay } = useOverlay();
   const [reload, setReload] = useState(false);
-  interface Participant {
-    id: string;
-    email: string;
-    emailVerified: boolean;
-    accountType: "student" | "organizer" | "judge";
-    firstName: string;
-    lastName: string;
-    schoolDivision: string;
-    gradeLevel: "nine" | "ten" | "eleven" | "twelve" | "organizer" | "judge";
-    isGovSchool: boolean;
-    techStack: string;
-    previousHackathon: boolean;
-    parentFirstName: string;
-    parentLastName: string;
-    parentEmail: string;
-    parentPhoneNumber: string;
-    contactFirstName: string;
-    contactLastName: string;
-    contactRelationship: string;
-    contactPhoneNumber: string;
-    createdAt: string;
-  }
-  interface Team {
-    id: string;
-    joinCode: string;
-    members: string[];
-    eventId: string;
-    submittedProject: boolean;
-    project: string | null;
-    createdAt: string;
-  }
-  interface Event {
-    id: string;
-    name: string;
-    description: string;
-    location: string;
-    startDate: string;
-    endDate: string;
-    submissionDeadline: string;
-    status: "upcoming" | "ongoing" | "completed";
-    participants: Participant[];
-    teams: Team[];
-    createdBy: string;
-    createdAt: string;
-  }
+
   interface Email {
     id: string;
-    subject: string;
+    name: string;
     messageSubject: string;
     messageBody: string;
-    senderEmail: string;
-    receiversEmails: string[];
-    sent: boolean;   
+    sendAll: boolean;
+    filterBy: string | null;
+    subFilterBy: string | null;
+    sent: boolean;
   }
-  const [events, setEvents] = useState<Event[]>([]);
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    console.log("fetching emails");
+    const fetchEmails = async () => {
       try {
-        const fetchedEvents = await organizerGetAllEvents();
-        setEvents(fetchedEvents.events as Event[]);
+        const fetchedEmails = await organizerGetAllEmails();
+        console.log(fetchedEmails, typeof fetchedEmails);
+        setEmails(fetchedEmails.allEmails as Email[]);
       } catch (error: unknown) {
         const errorMessage =
           typeof error === "object" &&
@@ -90,7 +48,8 @@ export default function OrganizerEmails() {
         setLoading(false);
       }
     };
-    fetchEvents();
+    fetchEmails();
+    console.log(emails);
   }, [reload]);
 
   const handleOpenCreateEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -263,60 +222,48 @@ export default function OrganizerEmails() {
             </button>
           </div>
         </div>
-        {events.length === 0 ? (
+        {emails.length === 0 ? (
           <p className="text-2xl mt-8">No emails yet</p>
         ) : (
           <div className="w-full h-full flex flex-col items-center">
-            {events.map((event) => (
+            {emails.map((email) => (
               <div
-                key={event.id}
+                key={email.id}
                 className="flex flex-col sm:flex-row bg-surface-a1 w-full sm:w-5/6 mt-2 mb-4 p-4 rounded-lg"
               >
-                <div className="flex flex-col w-full sm:w-2/3">
-                  <h2 className="text-3xl font-bold">{event.name}</h2>
-                  <p className="text-lg mb-2">{event.description}</p>
-                  <div className="flex flex-row w-full mt-auto">
+                <div className="flex w-full justify-between">
+                  <div className="flex flex-col">
+                    <h2 className="text-3xl font-bold">{email.name}</h2>
+                    <h2 className="text-2xl font-bold">
+                      {email.messageSubject}
+                    </h2>
+                    <p className="text-lg mb-2">{email.messageBody}</p>
+                  </div>
+
+                  <div className="flex flex-col mt-auto gap-2 items-center w-1/4">
                     <Link
-                      to={`/app/organizer/event/${event.id}`}
+                      to={`/app/organizer/event/${email.id}`}
                       className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
                     <button
-                      className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
-                      onClick={(e) => handleOpenEditEvent(e, event.id)}
+                      className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold w-full"
+                      onClick={(e) => handleOpenEditEvent(e, email.id)}
                     >
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 hover:bg-red-600 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                      className="bg-red-500 hover:bg-red-600 p-1 sm:p-2 rounded-lg font-bold w-full"
                       onClick={(e) =>
-                        handleOpenDeleteEvent(e, event.id, event.name)
+                        handleOpenDeleteEvent(e, email.id, email.name)
                       }
                     >
                       Delete
                     </button>
                   </div>
                 </div>
-                <div className="flex flex-col w-full sm:w-1/3 sm:ml-2">
-                  <p>
-                    <span className="font-bold">Status:</span> {event.status}
-                  </p>
-                  <span className="font-bold">Location:</span> {event.location}
-                  <span className="font-bold">Start Date:</span>{" "}
-                  {formatDate(event.startDate, "EEEE, MMMM d yyyy h:mm a")}
-                  <span className="font-bold">End Date:</span>{" "}
-                  {formatDate(event.endDate, "EEEE, MMMM d yyyy h:mm a")}
-                  <span className="font-bold">Submission Deadline:</span>{" "}
-                  {formatDate(
-                    event.submissionDeadline,
-                    "EEEE, MMMM d yyyy h:mm a"
-                  )}
-                  <p>
-                    <span className="font-bold">Participants:</span>{" "}
-                    {event.participants.length}
-                  </p>
-                </div>
+               
               </div>
             ))}
           </div>
