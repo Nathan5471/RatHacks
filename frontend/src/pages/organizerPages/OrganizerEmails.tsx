@@ -5,7 +5,6 @@ import { organizerGetAllEvents } from "../../utils/EventAPIHandler";
 import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
-import CreateEvent from "../../components/CreateEvent";
 import CreateEmail from  "../../components/CreateEmail";
 import EditEvent from "../../components/EditEvent";
 import DeleteEvent from "../../components/DeleteEvent";

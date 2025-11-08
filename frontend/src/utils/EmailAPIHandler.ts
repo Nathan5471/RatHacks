@@ -19,7 +19,9 @@ export const createEmail = async (data: {
   name: string;
   messageSubject: string;
   messageBody: string;
-  endDate: string;
+  sendAll: boolean;
+  filterBy: string | null;
+  subFilterBy: string | null;
 }) => {
   const response = await api.post("/create", data);
   return response.data;
@@ -60,7 +62,7 @@ export const updateWorkshop = async (
   return response.data;
 };
 
-export const getAllWorkshops = async () => {
+export const getAllEmails = async () => {
   const response = await api.get("/all");
   return response.data;
 };

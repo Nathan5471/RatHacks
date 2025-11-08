@@ -144,7 +144,8 @@ model Email {
   name              String
   messageSubject    String
   messageBody       String
-  senderEmail       String
-  receiversEmails   String[]
+  sendAll           Boolean
+  filterBy          String?
+  subFilterBy       String?
   sent              Boolean  @default(false)        
 }

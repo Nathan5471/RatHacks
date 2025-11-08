@@ -9,6 +9,7 @@ export default function CreateWorkshop() {
   const navigate = useNavigate();
   const { closeOverlay } = useOverlay();
   const [messageSubject, setMessageSubject] = useState("");
+  const [name, setName] = useState("");
   const [messageBody, setMessageBody] = useState("");
   const [filterBy, setFilterBy] = useState<string | null>(null);
   const [subFilterBy, setSubFilterBy] = useState<string | null>(null);
@@ -72,7 +73,7 @@ export default function CreateWorkshop() {
     endDate: string;
     submissionDeadline: string;
     status: "upcoming" | "ongoing" | "completed";
-    participants: Participant[];
+    participants: Participants[];
     teams: Team[];
     createdBy: string;
     createdAt: string;
@@ -82,7 +83,9 @@ export default function CreateWorkshop() {
     const fetchWorkshops = async () => {
       try {
         const fetchedWorkshops = await organizerGetAllWorkshops();
-        setWorkshops(fetchedWorkshops.workshops.map((workshop:Workshop)=>workshop.name)); // array of strings
+        setWorkshops(
+          fetchedWorkshops.workshops.map((workshop: Workshop) => workshop.name)
+        ); // array of strings
       } catch (error: unknown) {
         const errorMessage =
           typeof error === "object" &&
@@ -95,14 +98,13 @@ export default function CreateWorkshop() {
       }
     };
     fetchWorkshops();
-
   }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const fetchedEvents = await organizerGetAllEvents();
-        setEvents(fetchedEvents.events.map((event:Event)=>event.name));
+        setEvents(fetchedEvents.events.map((event: Event) => event.name));
       } catch (error: unknown) {
         const errorMessage =
           typeof error === "object" &&
@@ -144,14 +146,17 @@ export default function CreateWorkshop() {
     setError("");
     try {
       const response = await createEmail({
+        name,
         messageSubject,
         messageBody,
+        sendAll,
         filterBy,
         subFilterBy,
       });
       closeOverlay();
       navigate(`/app/organizer/email/${response.id}`);
     } catch (error: unknown) {
+      console.log(error);
       const errorMessage =
         typeof error === "object" &&
         error !== null &&
@@ -167,6 +172,18 @@ export default function CreateWorkshop() {
     <div className="flex flex-col w-130 sm:w-150">
       <h1 className="text-2xl font-bold text-center">Create Email</h1>
       <form className="flex flex-col" onSubmit={handleCreateEmail}>
+        <label htmlFor="name" className="text-2xl mt-2">
+          Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
+          required
+        />
         <label htmlFor="messageSubject" className="text-2xl mt-2">
           Subject
         </label>
@@ -235,7 +252,9 @@ export default function CreateWorkshop() {
             >
               <option value="">Select a {filterMap.get(filterBy)}</option>
               {subFilterMap.get(filterBy).map((catergory: string) => (
-                <option value={catergory} key={catergory}>{catergory}</option>
+                <option value={catergory} key={catergory}>
+                  {catergory}
+                </option>
               ))}
             </select>
           </>
