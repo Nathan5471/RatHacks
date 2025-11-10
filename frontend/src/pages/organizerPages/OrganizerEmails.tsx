@@ -4,10 +4,9 @@ import { useOverlay } from "../../contexts/OverlayContext";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CreateEmail from "../../components/CreateEmail";
-import EditEvent from "../../components/EditEvent";
-import DeleteEvent from "../../components/DeleteEvent";
+import EditEmail from "../../components/EditEmail";
+import DeleteEmail from "../../components/DeleteEmail";
 import { organizerGetAllEmails } from "../../utils/EmailAPIHandler";
-import { organizerGetAllEvents } from "../../utils/EventAPIHandler";
 
 export default function OrganizerEmails() {
   const { openOverlay } = useOverlay();
@@ -29,7 +28,6 @@ export default function OrganizerEmails() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
-    console.log("fetching emails");
     const fetchEmails = async () => {
       try {
         const fetchedEmails = await organizerGetAllEmails();
@@ -49,33 +47,32 @@ export default function OrganizerEmails() {
       }
     };
     fetchEmails();
-    console.log(emails);
   }, [reload]);
 
-  const handleOpenCreateEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOpenCreateEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     openOverlay(<CreateEmail />);
   };
 
-  const handleOpenEditEvent = (
+  const handleOpenEditEmail = (
     e: React.MouseEvent<HTMLButtonElement>,
-    eventId: string
+    emailId: string
   ) => {
     e.preventDefault();
-    openOverlay(<EditEvent eventId={eventId} setReload={setReload} />);
+    openOverlay(<EditEmail emailId={emailId} setReload={setReload} />);
   };
 
-  const handleOpenDeleteEvent = (
+  const handleOpenDeleteEmail = (
     e: React.MouseEvent<HTMLButtonElement>,
-    eventId: string,
-    eventName: string
+    emailId: string,
+    emailName: string
   ) => {
     e.preventDefault();
     openOverlay(
-      <DeleteEvent
-        eventId={eventId}
-        eventName={eventName}
-        currentPage="events"
+      <DeleteEmail
+        emailId={emailId}
+        emailName={emailName}
+        currentPage="emails"
         setReload={setReload}
       />
     );
@@ -116,7 +113,7 @@ export default function OrganizerEmails() {
             <div className="flex items-center">
               <button
                 className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1"
-                onClick={handleOpenCreateEvent}
+                onClick={handleOpenCreateEmail}
               >
                 New Email
               </button>
@@ -163,9 +160,9 @@ export default function OrganizerEmails() {
             <div className="flex items-center">
               <button
                 className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1"
-                onClick={handleOpenCreateEvent}
+                onClick={handleOpenCreateEmail}
               >
-                Add Event
+                Add Email
               </button>
             </div>
           </div>
@@ -216,7 +213,7 @@ export default function OrganizerEmails() {
           <div className="flex items-center">
             <button
               className="ml-auto p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1"
-              onClick={handleOpenCreateEvent}
+              onClick={handleOpenCreateEmail}
             >
               New Email
             </button>
@@ -225,7 +222,7 @@ export default function OrganizerEmails() {
         {emails.length === 0 ? (
           <p className="text-2xl mt-8">No emails yet</p>
         ) : (
-          <div className="w-full h-full flex flex-col items-center">
+          <div className="w-full h-full flex flex-col items-center overflow-y-scroll">
             {emails.map((email) => (
               <div
                 key={email.id}
@@ -234,7 +231,7 @@ export default function OrganizerEmails() {
                 <div className="flex w-full justify-between">
                   <div className="flex flex-col">
                     <h2 className="text-3xl font-bold">{email.name}</h2>
-                    <h2 className="text-2xl font-bold">
+                    <h2 className="text-xl font-bold">
                       {email.messageSubject}
                     </h2>
                     <p className="text-lg mb-2">{email.messageBody}</p>
@@ -242,21 +239,21 @@ export default function OrganizerEmails() {
 
                   <div className="flex flex-col mt-auto gap-2 items-center w-1/4">
                     <Link
-                      to={`/app/organizer/event/${email.id}`}
+                      to={`/app/organizer/email/${email.id}`}
                       className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
                     <button
                       className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold w-full"
-                      onClick={(e) => handleOpenEditEvent(e, email.id)}
+                      onClick={(e) => handleOpenEditEmail(e, email.id)}
                     >
                       Edit
                     </button>
                     <button
                       className="bg-red-500 hover:bg-red-600 p-1 sm:p-2 rounded-lg font-bold w-full"
                       onClick={(e) =>
-                        handleOpenDeleteEvent(e, email.id, email.name)
+                        handleOpenDeleteEmail(e, email.id, email.name)
                       }
                     >
                       Delete

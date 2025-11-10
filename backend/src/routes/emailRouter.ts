@@ -16,7 +16,9 @@ import {
 import authenticate from "../middleware/authenticate";
 import {
     createEmail,
-    organizerGetAllEmails
+    organizerGetAllEmails,
+    organizerGetEmailById,
+    deleteEmail
 } from "../controllers/emailController"
 
 const router = express.Router();
@@ -70,34 +72,34 @@ router.get("/all", authenticate, getAllWorkshops);
 
 router.get("/organizer-all", authenticate, organizerGetAllEmails);
 
-router.get("/get/:id", authenticate, async (req: any, res: any) => {
-  const { id } = req.params as { id: string };
+// router.get("/get/:id", authenticate, async (req: any, res: any) => {
+//   const { id } = req.params as { id: string };
 
-  if (!id) {
-    return res.status(400).json({ message: "Workshop ID is required" });
-  }
+//   if (!id) {
+//     return res.status(400).json({ message: "Email ID is required" });
+//   }
 
-  await getWorkshopById(req, res);
-});
+//   await getEmailById(req, res);
+// });
 
 router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };
 
   if (!id) {
-    return res.status(400).json({ message: "Workshop ID is required" });
+    return res.status(400).json({ message: "Email ID is required" });
   }
 
-  await organizerGetWorkshopById(req, res);
+  await organizerGetEmailById(req, res);
 });
 
 router.delete("/delete/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };
 
   if (!id) {
-    return res.status(400).json({ message: "Workshop ID is required" });
+    return res.status(400).json({ message: "Email ID is required" });
   }
 
-  await deleteWorkshop(req, res);
+  await deleteEmail(req, res);
 });
 
 export default router;

@@ -49,13 +49,16 @@ export const endWorkshop = async (id: string) => {
   return response.data;
 };
 
-export const updateWorkshop = async (
+export const updateEmail = async (
   id: string,
   data: {
     name: string;
-    description: string;
-    startDate: string;
-    endDate: string;
+    messageSubject: string;
+    messageBody: string;
+    sendAll: boolean;
+    filterBy: string | null;
+    subFilterBy: string | null;
+    sent: boolean;
   }
 ) => {
   const response = await api.put(`/update/${id}`, data);
@@ -72,17 +75,17 @@ export const organizerGetAllEmails = async () => {
   return response.data;
 };
 
-export const getWorkshopById = async (id: string) => {
+export const getEmailById = async (id: string) => {
   const response = await api.get(`/get/${id}`);
   return response.data;
 };
 
-export const organizerGetWorkshopById = async (id: string) => {
+export const organizerGetEmailById = async (id: string) => {
   const response = await api.get(`/organizer/${id}`);
   return response.data;
 };
 
-export const deleteWorkshop = async (id: string) => {
+export const deleteEmail = async (id: string) => {
   const response = await api.delete(`/delete/${id}`);
   return response.data;
 };
