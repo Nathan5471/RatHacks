@@ -25,7 +25,7 @@ export default function DeleteEmail({
       await deleteEmail(emailId);
       closeOverlay();
       if (currentPage === "email") {
-        navigate("/app/organizer/events");
+        navigate("/app/organizer/emails");
       }
       if (setReload !== undefined) {
         setReload((prev) => !prev);

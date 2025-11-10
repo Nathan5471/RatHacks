@@ -229,12 +229,12 @@ export default function OrganizerEmails() {
                 className="flex flex-col sm:flex-row bg-surface-a1 w-full sm:w-5/6 mt-2 mb-4 p-4 rounded-lg"
               >
                 <div className="flex w-full justify-between">
-                  <div className="flex flex-col">
+                  <div className="flex flex-col w-3/4">
                     <h2 className="text-3xl font-bold">{email.name}</h2>
                     <h2 className="text-xl font-bold">
                       {email.messageSubject}
                     </h2>
-                    <p className="text-lg mb-2">{email.messageBody}</p>
+                    <p className="text-lg line-clamp-2">{email.messageBody}</p>
                   </div>
 
                   <div className="flex flex-col mt-auto gap-2 items-center w-1/4">

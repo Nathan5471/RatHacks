@@ -320,7 +320,7 @@ export default function EditEmail({
             type="submit"
             className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full font-bold"
           >
-            Create
+            Update
           </button>
           <button
             type="button"
