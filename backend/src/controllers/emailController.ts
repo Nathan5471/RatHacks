@@ -117,14 +117,12 @@ export const organizerGetEmailById = async (req: any, res: any) => {
   }
 
   try {
-    console.log("finding emails...");
     const emailData = await prisma.email.findUnique({
       where: { id },
     });
+
     if (!emailData) {
       return res.status(404).json({ message: "Email not found" });
-    } else {
-      console.log("email successfully loaded", emailData);
     }
 
     const email = {
@@ -155,10 +153,10 @@ export const deleteEmail = async (req: any, res: any) => {
   }
 
   try {
-    const event = await prisma.email.findUnique({
+    const email = await prisma.email.findUnique({
       where: { id },
     });
-    if (!event) {
+    if (!email) {
       return res.status(404).json({ message: "Email not found" });
     }
 
@@ -171,3 +169,97 @@ export const deleteEmail = async (req: any, res: any) => {
     return res.status(500).json({ message: "Failed to delete email" });
   }
 };
+
+export const getAllReceipients = async (req: any, res: any) => {
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const allReceipients = await prisma.user.findMany();
+
+    return res
+      .status(200)
+      .json({ message: "Emails loaded successfully", allReceipients });
+  } catch (error) {
+    console.error("Error loading workshops for organizer:", error);
+    return res.status(500).json({ message: "Failed to load workshops" });
+  }
+};
+
+export const getReceipientsByFilter = async (req: any, res: any) => {
+  const user = req.user as User;
+  const { filter, id } = req.params as { filter: string; id: any };
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    let receipientData;
+    switch (filter) {
+      case "gradeLevel":
+        receipientData = await prisma.user.findMany({
+          where: { gradeLevel: id },
+        });
+        break;
+      case "school":
+        receipientData = await prisma.user.findMany({
+          where: { schoolDivision: id },
+        });
+        break;
+      case "workshop":
+        receipientData = await prisma.user.findMany({
+          where: { workshops: { has: id } },
+        });
+        break;
+      case "event":
+        receipientData = await prisma.user.findMany({
+          where: { events: { has: id } },
+        });
+        break;
+    }
+
+    if (!receipientData) {
+      return res
+        .status(404)
+        .json({ message: `No participants found in ${filter}` });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Email loaded successfully", receipientData });
+  } catch (error) {
+    console.error("Error loading email:", error);
+    return res.status(500).json({ message: "Failed to load email" });
+  }
+};
+
+// export const getReceipientsByWorkshop = async (req: any, res: any) => {
+//   const user = req.user as User;
+//   const { id } = req.params as { id: string };
+
+//   if (user.accountType !== "organizer") {
+//     return res.status(403).json({ message: "Unauthorized" });
+//   }
+
+//   try {
+//     const receipientData = await prisma.user.findMany({
+//       where: { workshops: { has: id } },
+//     });
+//     if (!receipientData) {
+//       return res
+//         .status(404)
+//         .json({ message: "No participants found in workshop" });
+//     }
+
+//     return res
+//       .status(200)
+//       .json({ message: "Email loaded successfully", receipientData });
+//   } catch (error) {
+//     console.error("Error loading email:", error);
+//     return res.status(500).json({ message: "Failed to load email" });
+//   }
+// };

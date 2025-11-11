@@ -89,3 +89,23 @@ export const deleteEmail = async (id: string) => {
   const response = await api.delete(`/delete/${id}`);
   return response.data;
 };
+
+export const getAllReceipients = async () => {
+  const response = await api.get("/receipient-all");
+  return response.data;
+};
+
+export const getReceipientsByEvent = async (id: string) => {
+  const response = await api.get(`/receipient-by-event/${id}`);
+  return response.data;
+};
+
+export const getReceipientsByWorkshop = async (id: string) => {
+  const response = await api.get(`/receipient-by-workshop/${id}`);
+  return response.data;
+};
+
+export const getReceipientsByFilter= async (filter: string, id: string) => {
+  const response = await api.get(`/receipient-by-filter/${filter}/${id}`);
+  return response.data;
+};

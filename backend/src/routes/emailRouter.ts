@@ -1,17 +1,4 @@
 import express from "express";
-import {
-  createWorkshop,
-  joinWorkshop,
-  leaveWorkshop,
-  addGoogleMeetURL,
-  endWorkshop,
-  updateWorkshop,
-  getAllWorkshops,
-  organizerGetAllWorkshops,
-  getWorkshopById,
-  organizerGetWorkshopById,
-  deleteWorkshop,
-} from "../controllers/workshopController";
 
 import authenticate from "../middleware/authenticate";
 import {
@@ -20,6 +7,8 @@ import {
   organizerGetEmailById,
   deleteEmail,
   updateEmail,
+  getReceipientsByFilter,
+  getAllReceipients
 } from "../controllers/emailController";
 
 const router = express.Router();
@@ -42,12 +31,19 @@ router.post("/create", authenticate, async (req: any, res: any) => {
       .json({ message: "Verify message fields are filled" });
   }
 
+
+  if (!sendAll && filterBy && !subFilterBy) {
+    console.log("fields weren't filled");
+    return res
+      .status(400)
+      .json({ message: "Both filter fields must be filled" });
+  }
+
   await createEmail(req, res);
 });
 
 router.put("/update/:id", authenticate, async (req: any, res: any) => {
-  const { id } = req.params as { id: string };
-  const { name, messageSubject, messageBody, sendAll, filterBy, subFilterBy } =
+  const { name, messageSubject, messageBody, sendAll, filterBy, subFilterBy} =
     req.body as {
       name: string;
       messageSubject: string;
@@ -64,12 +60,24 @@ router.put("/update/:id", authenticate, async (req: any, res: any) => {
       .json({ message: "Verify message fields are filled" });
   }
 
+ if (!sendAll && filterBy && !subFilterBy) {
+    console.log("fields weren't filled");
+    return res
+      .status(400)
+      .json({ message: "Both filter fields must be filled" });
+  }
+
   await updateEmail(req, res);
 });
 
-router.get("/all", authenticate, getAllWorkshops);
+// router.get("/all", authenticate, getAllWorkshops);
 
 router.get("/organizer-all", authenticate, organizerGetAllEmails);
+
+router.get("/receipient-all", authenticate, getAllReceipients)
+
+router.get("/receipient-by-filter/:filter/:id", authenticate, getReceipientsByFilter);
+
 
 // router.get("/get/:id", authenticate, async (req: any, res: any) => {
 //   const { id } = req.params as { id: string };

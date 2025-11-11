@@ -5,7 +5,7 @@ import { createEmail } from "../utils/EmailAPIHandler";
 import { organizerGetAllEvents } from "../utils/EventAPIHandler";
 import { organizerGetAllWorkshops } from "../utils/WorkshopAPIHandler";
 
-export default function CreateWorkshop() {
+export default function CreateEmail() {
   const navigate = useNavigate();
   const { closeOverlay } = useOverlay();
   const [messageSubject, setMessageSubject] = useState("");
@@ -84,7 +84,10 @@ export default function CreateWorkshop() {
       try {
         const fetchedWorkshops = await organizerGetAllWorkshops();
         setWorkshops(
-          fetchedWorkshops.workshops.map((workshop: Workshop) => workshop.name)
+          fetchedWorkshops.workshops.map((workshop: Workshop) => ({
+            name: workshop.name,
+            id: workshop.id,
+          }))
         ); // array of strings
       } catch (error: unknown) {
         const errorMessage =
@@ -104,7 +107,12 @@ export default function CreateWorkshop() {
     const fetchEvents = async () => {
       try {
         const fetchedEvents = await organizerGetAllEvents();
-        setEvents(fetchedEvents.events.map((event: Event) => event.name));
+        setEvents(
+          fetchedEvents.events.map((event: Event) => ({
+            name: event.name,
+            id: event.id,
+          }))
+        );
       } catch (error: unknown) {
         const errorMessage =
           typeof error === "object" &&
@@ -128,17 +136,21 @@ export default function CreateWorkshop() {
   const subFilterMap = new Map();
   subFilterMap.set("event", events);
   subFilterMap.set("workshop", workshops);
-  subFilterMap.set("gradeLevel", [9, 10, 11, 12]);
+  subFilterMap.set("gradeLevel", [
+    { name: "Ninth", id: "nine" },
+    { name: "Tenth", id: "ten" },
+    { name: "Eleventh", id: "eleven" },
+    { name: "Twelfth", id: "twelve" },
+  ]);
   subFilterMap.set("school", [
-    "Bedford County",
-    "Botetourt County",
-    "Craig County",
-    "Floyd County",
-    "Franklin County",
-    "Roanoke City",
-    "Roanoke County",
-    "Salem City",
-    "Other",
+    { name: "Bedford County", id: "Bedford County" },
+    { name: "Craig County", id: "Craig County" },
+    { name: "Floyd County", id: "Floyd County" },
+    { name: "Franklin County", id: "Franklin County" },
+    { name: "Roanoke City", id: "Roanoke City" },
+    { name: "Roanoke County", id: "Roanoke County" },
+    { name: "Salem City", id: "Salem City" },
+    { name: "Other", id: "Other" },
   ]);
 
   const handleCreateEmail = async (e: React.FormEvent) => {
@@ -216,7 +228,7 @@ export default function CreateWorkshop() {
             id="sendAll"
             name="sendAll"
             className="p-2 rounded-lg text-lg bg-surface-a2"
-            onChange={(e) => (setSendAll(e.target.checked))}
+            onChange={(e) => setSendAll(e.target.checked)}
           />
         </div>
         {!sendAll && (
@@ -251,9 +263,9 @@ export default function CreateWorkshop() {
               onChange={(e) => setSubFilterBy(e.target.value)}
             >
               <option value="">Select a {filterMap.get(filterBy)}</option>
-              {subFilterMap.get(filterBy).map((catergory: string) => (
-                <option value={catergory} key={catergory}>
-                  {catergory}
+              {subFilterMap.get(filterBy).map((catergory: {name: string; id: string}) => (
+                <option value={catergory.id} key={catergory.id}>
+                  {catergory.name}
                 </option>
               ))}
             </select>

@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useOverlay } from "../../contexts/OverlayContext";
-import { organizerGetEmailById } from "../../utils/EmailAPIHandler";
+import {
+  organizerGetEmailById,
+  getAllReceipients,
+  getReceipientsByFilter,
+} from "../../utils/EmailAPIHandler";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
-import EditEvent from "../../components/EditEvent";
+import EditEmail from "../../components/EditEmail";
 import DeleteEmail from "../../components/DeleteEmail";
+import OrganizerUserView from "../../components/OrganizerUserView";
+import { getEventById } from "../../utils/EventAPIHandler";
+import { getWorkshopById } from "../../utils/WorkshopAPIHandler";
 
 export default function OrganizerEvent() {
   const { openOverlay } = useOverlay();
@@ -23,9 +30,41 @@ export default function OrganizerEvent() {
     sent: boolean;
   }
 
+  interface Participant {
+    id: string;
+    email: string;
+    emailVerified: boolean;
+    accountType: "student" | "organizer" | "judge";
+    firstName: string;
+    lastName: string;
+    schoolDivision: string;
+    gradeLevel: "nine" | "ten" | "eleven" | "twelve";
+    isGovSchool: boolean;
+    techStack: string;
+    previousHackathon: boolean;
+    parentFirstName: string;
+    parentLastName: string;
+    parentEmail: string;
+    parentPhoneNumber: string;
+    contactFirstName: string;
+    contactLastName: string;
+    contactRelationship: string;
+    contactPhoneNumber: string;
+    createdAt: string;
+  }
+
+  const gradeMap = {
+    nine: "9",
+    ten: "10",
+    eleven: "11",
+    twelve: "12",
+  };
+
   const [email, setEmail] = useState<Email | null>(null);
   const [loading, setLoading] = useState(true);
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const [receipients, setReceipients] = useState<Participant[]>([]);
+  const [subFilterName, setSubFilterName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchEmail = async () => {
@@ -44,10 +83,120 @@ export default function OrganizerEvent() {
     fetchEmail();
   }, [emailId, reload]);
 
-  const handleOpenEditEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
+  useEffect(() => {
+    const fetchReceipients = async () => {
+      if (!email) {
+        return;
+      }
+      try {
+        if (email.sendAll) {
+          const response = await getAllReceipients();
+          setReceipients(response.allReceipients);
+          console.log("reponse", response.allReceipients);
+        }
+        switch (email.filterBy) {
+          case "gradeLevel":
+            console.log("gradeLevel!");
+            {
+              if (email.subFilterBy) {
+                const response = await getReceipientsByFilter(
+                  email.filterBy,
+                  email.subFilterBy
+                );
+                setReceipients(response.receipientData);
+                setSubFilterName(email.subFilterBy);
+                console.log("reponse", response.allReceipients);
+              } else {
+                throw Error("subfilter not found");
+              }
+            }
+            break;
+          case "school":
+            {
+              if (email.subFilterBy) {
+                const response = await getReceipientsByFilter(
+                  email.filterBy,
+                  email.subFilterBy
+                );
+                setReceipients(response.receipientData);
+                setSubFilterName(email.subFilterBy);
+              } else {
+                throw Error("subfilter not found");
+              }
+            }
+            break;
+          case "event":
+            {
+              console.log("event!");
+              if (email.subFilterBy) {
+                const response = await getReceipientsByFilter(
+                  email.filterBy,
+                  email.subFilterBy
+                );
+                console.log("response before", response);
+                setReceipients(response.receipientData);
+
+                try {
+                  const fetchedEvent = await getEventById(email.subFilterBy);
+                  setSubFilterName(fetchedEvent.event.name);
+                } catch (error: unknown) {
+                  const errorMessage =
+                    typeof error === "object" &&
+                    error !== null &&
+                    "message" in error &&
+                    typeof error.message === "string"
+                      ? error.message
+                      : "An unkown error accured";
+                  console.error(errorMessage);
+                }
+
+                console.log("reponse", response.receipientData);
+              } else {
+                throw Error("subfilter not found");
+              }
+            }
+            break;
+          case "workshop":
+            {
+              if (email.subFilterBy) {
+                const response = await getReceipientsByFilter(
+                  email.filterBy,
+                  email.subFilterBy
+                );
+                setReceipients(response.receipientData);
+
+                try {
+                  const fetchedWorkshop = await getWorkshopById(email.subFilterBy);
+                  setSubFilterName(fetchedWorkshop.name);
+                } catch (error: unknown) {
+                  const errorMessage =
+                    typeof error === "object" &&
+                    error !== null &&
+                    "message" in error &&
+                    typeof error.message === "string"
+                      ? error.message
+                      : "An unkown error accured";
+                  console.error(errorMessage);
+                }
+
+                console.log("reponse", response.receipientData);
+              } else {
+                throw Error("subfilter not found");
+              }
+            }
+            break;
+        }
+      } catch (error: unknown) {
+        console.error("Error fetching event:", error);
+      }
+    };
+    fetchReceipients();
+  }, [reload, email]);
+
+  const handleOpenEditEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (emailId) {
-      openOverlay(<EditEvent eventId={emailId} setReload={setReload} />);
+      openOverlay(<EditEmail emailId={emailId} setReload={setReload} />);
     }
   };
 
@@ -62,6 +211,20 @@ export default function OrganizerEvent() {
           setReload={undefined}
         />
       );
+    }
+  };
+
+  const handleSendEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  };
+
+  const handleOpenOrganizerUserView = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    e.preventDefault();
+    if (emailId && email) {
+      openOverlay(<OrganizerUserView user={receipients[index]} />);
     }
   };
 
@@ -137,7 +300,13 @@ export default function OrganizerEvent() {
                   </Link>
                   <button
                     className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
-                    onClick={handleOpenEditEvent}
+                    onClick={handleSendEmail}
+                  >
+                    Send
+                  </button>
+                  <button
+                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                    onClick={handleOpenEditEmail}
                   >
                     Edit
                   </button>
@@ -149,7 +318,7 @@ export default function OrganizerEvent() {
                   </button>
                 </div>
               </div>
-              <div className="flex flex-col w-full sm:w-1/3 sm:ml-2">
+              <div className="flex flex-col w-full sm:w-1/3 sm:ml-2 justify-center">
                 {email.messageSubject && (
                   <div className="flex gap-1">
                     <span className="font-bold">Subject:</span>
@@ -169,19 +338,113 @@ export default function OrganizerEvent() {
                   </div>
                 )}
 
-                {email.filterBy && (
+                {(email.filterBy && subFilterName) && (
                   <div className="flex gap-1">
-                    <span className="font-bold">Filter:</span> {email.filterBy}
+                    <span className="font-bold">Filter:</span>
+                    {email.filterBy} ({subFilterName})
                   </div>
                 )}
 
-                {email.subFilterBy && (
+                {email.sent ? (
                   <div className="flex gap-1">
-                    <span className="font-bold">Sub Filter:</span>{" "}
-                    {email.subFilterBy}
+                    <span className="font-bold italic text-primary-a0">
+                      Sent
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex gap-1">
+                    <span className="font-bold italic text-red-500">
+                      Not Sent
+                    </span>
                   </div>
                 )}
               </div>
+            </div>
+            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+              <h2 className="text-2xl font-bold text-center mb-2">
+                Receipients ({receipients.length})
+              </h2>
+              {receipients.length > 0 ? (
+                <table className="min-w-full bg-surface-a2 rounded-lg">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Name
+                      </th>
+                      <th className="hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Email
+                      </th>
+                      <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        School Division
+                      </th>
+                      <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Grade Level
+                      </th>
+                      <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
+                        Is RVGS
+                      </th>
+                      <th className="py-2 px-4 border-b border-surface-a1 text-left"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {receipients.map((participant, index) => (
+                      <tr key={participant.id}>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.firstName} {participant.lastName}
+                        </td>
+                        <td
+                          className={`hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.email}
+                        </td>
+                        <td
+                          className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.schoolDivision}
+                        </td>
+                        <td
+                          className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {gradeMap[participant.gradeLevel]}
+                        </td>
+                        <td
+                          className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          {participant.isGovSchool ? "Yes" : "No"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-surface-a1 ${
+                            index % 2 === 0 ? "bg-surface-a3" : ""
+                          }`}
+                        >
+                          <button
+                            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
+                            onClick={(e) =>
+                              handleOpenOrganizerUserView(e, index)
+                            }
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-center">No Receipients with Filters</p>
+              )}
             </div>
           </div>
         ) : (

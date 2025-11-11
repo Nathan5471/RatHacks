@@ -90,7 +90,10 @@ export default function EditEmail({
       try {
         const fetchedWorkshops = await organizerGetAllWorkshops();
         setWorkshops(
-          fetchedWorkshops.workshops.map((workshop: Workshop) => workshop.name)
+          fetchedWorkshops.workshops.map((workshop: Workshop) => ({
+            name: workshop.name,
+            id: workshop.id,
+          }))
         ); // array of strings
       } catch (error: unknown) {
         const errorMessage =
@@ -110,7 +113,12 @@ export default function EditEmail({
     const fetchEvents = async () => {
       try {
         const fetchedEvents = await organizerGetAllEvents();
-        setEvents(fetchedEvents.events.map((event: Event) => event.name));
+        setEvents(
+          fetchedEvents.events.map((event: Event) => ({
+            name: event.name,
+            id: event.id,
+          }))
+        );
       } catch (error: unknown) {
         const errorMessage =
           typeof error === "object" &&
@@ -134,17 +142,21 @@ export default function EditEmail({
   const subFilterMap = new Map();
   subFilterMap.set("event", events);
   subFilterMap.set("workshop", workshops);
-  subFilterMap.set("gradeLevel", [9, 10, 11, 12]);
+  subFilterMap.set("gradeLevel", [
+    { name: "Ninth", id: "nine" },
+    { name: "Tenth", id: "nine" },
+    { name: "Eleventh", id: "nine" },
+    { name: "Twelfth", id: "nine" },
+  ]);
   subFilterMap.set("school", [
-    "Bedford County",
-    "Botetourt County",
-    "Craig County",
-    "Floyd County",
-    "Franklin County",
-    "Roanoke City",
-    "Roanoke County",
-    "Salem City",
-    "Other",
+    { name: "Bedford County", id: "Bedford County" },
+    { name: "Craig County", id: "Craig County" },
+    { name: "Floyd County", id: "Floyd County" },
+    { name: "Franklin County", id: "Franklin County" },
+    { name: "Roanoke City", id: "Roanoke City" },
+    { name: "Roanoke County", id: "Roanoke County" },
+    { name: "Salem City", id: "Salem City" },
+    { name: "Other", id: "Other" },
   ]);
 
   useEffect(() => {
@@ -185,10 +197,18 @@ export default function EditEmail({
     fetchEmailData();
   }, [emailId]);
 
+  useEffect(() => {
+    if (sendAll) {
+      setFilterBy(null);
+      setSubFilterBy(null);
+    }
+  }, [sendAll]);
+
   const handleUpdateEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     try {
+      console.log("update info", name, messageSubject, messageBody, sendAll, filterBy, subFilterBy, sent);
       await updateEmail(emailId, {
         name,
         messageSubject,
@@ -292,7 +312,6 @@ export default function EditEmail({
             </select>
           </>
         )}
-
         {!sendAll && filterBy && (
           <>
             <label htmlFor="subFilterBy" className="text-2xl mt-2">
@@ -305,11 +324,13 @@ export default function EditEmail({
               onChange={(e) => setSubFilterBy(e.target.value)}
             >
               <option value="">Select a {filterMap.get(filterBy)}</option>
-              {subFilterMap.get(filterBy).map((catergory: string) => (
-                <option value={catergory} key={catergory}>
-                  {catergory}
-                </option>
-              ))}
+              {subFilterMap
+                .get(filterBy)
+                .map((catergory: { name: string; id: string }) => (
+                  <option value={catergory.id} key={catergory.id}>
+                    {catergory.name}
+                  </option>
+                ))}
             </select>
           </>
         )}
