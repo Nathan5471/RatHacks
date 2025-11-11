@@ -166,7 +166,9 @@ export default function OrganizerEvent() {
                 setReceipients(response.receipientData);
 
                 try {
-                  const fetchedWorkshop = await getWorkshopById(email.subFilterBy);
+                  const fetchedWorkshop = await getWorkshopById(
+                    email.subFilterBy
+                  );
                   setSubFilterName(fetchedWorkshop.name);
                 } catch (error: unknown) {
                   const errorMessage =
@@ -288,35 +290,35 @@ export default function OrganizerEvent() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4">
               {email.name}
             </h1>
-            <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 p-4 rounded-lg">
+            <div className="flex flex-row w-full mt-auto">
+              <Link
+                to="/app/organizer/emails"
+                className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+              >
+                Back to Emails
+              </Link>
+              <button
+                className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                onClick={handleSendEmail}
+              >
+                Send
+              </button>
+              <button
+                className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                onClick={handleOpenEditEmail}
+              >
+                Edit
+              </button>
+              <button
+                className="bg-red-500 hover:bg-red-600 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                onClick={handleOpenDeleteEmail}
+              >
+                Delete
+              </button>
+            </div>
+            <div className="flex flex-col sm:flex-row bg-surface-a1 mt-4 p-4 rounded-lg">
               <div className="flex flex-col w-full sm:w-2/3">
                 <p className="text-lg mb-2">{email.messageBody}</p>
-                <div className="flex flex-row w-full mt-auto">
-                  <Link
-                    to="/app/organizer/emails"
-                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
-                  >
-                    Back to Emails
-                  </Link>
-                  <button
-                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
-                    onClick={handleSendEmail}
-                  >
-                    Send
-                  </button>
-                  <button
-                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
-                    onClick={handleOpenEditEmail}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-500 hover:bg-red-600 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
-                    onClick={handleOpenDeleteEmail}
-                  >
-                    Delete
-                  </button>
-                </div>
               </div>
               <div className="flex flex-col w-full sm:w-1/3 sm:ml-2 justify-center">
                 {email.messageSubject && (
@@ -338,7 +340,7 @@ export default function OrganizerEvent() {
                   </div>
                 )}
 
-                {(email.filterBy && subFilterName) && (
+                {email.filterBy && subFilterName && (
                   <div className="flex gap-1">
                     <span className="font-bold">Filter:</span>
                     {email.filterBy} ({subFilterName})
