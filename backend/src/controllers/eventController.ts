@@ -331,6 +331,70 @@ export const leaveTeam = async (req: any, res: any) => {
   }
 };
 
+export const checkInUser = async (req: any, res: any) => {
+  const { eventId, userId } = req.params as {
+    eventId: string;
+    userId: string;
+  };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+    });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    const userToCheckIn = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!userToCheckIn) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (
+      !event.participants.includes(userId) ||
+      !userToCheckIn.events.includes(eventId)
+    ) {
+      await prisma.event.update({
+        where: { id: eventId },
+        data: {
+          participants: event.participants.includes(userId)
+            ? event.participants
+            : event.participants.concat(userId),
+          checkedIn: event.checkedIn.includes(userId)
+            ? event.checkedIn
+            : event.checkedIn.concat(userId),
+        },
+      });
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          events: userToCheckIn.events.includes(eventId)
+            ? userToCheckIn.events
+            : userToCheckIn.events.concat(eventId),
+        },
+      });
+    } else {
+      await prisma.event.update({
+        where: { id: eventId },
+        data: {
+          checkedIn: event.checkedIn.includes(userId)
+            ? event.checkedIn
+            : event.checkedIn.concat(userId),
+        },
+      });
+    }
+    return res.status(200).json({ message: "User checked in successfully" });
+  } catch (error) {
+    console.error("Error checking in user:", error);
+    return res.status(500).json({ message: "Failed to check in user" });
+  }
+};
+
 export const updateEvent = async (req: any, res: any) => {
   const { id } = req.params as { id: string };
   const {
@@ -680,6 +744,37 @@ export const organizerGetEventById = async (req: any, res: any) => {
   } catch (error) {
     console.error("Error loading event for organizer:", error);
     return res.status(500).json({ message: "Failed to load event" });
+  }
+};
+
+export const organizerGetUserByEmail = async (req: any, res: any) => {
+  const { email } = req.params as { email: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const removedUneccesaryFieldsUser = {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+    return res.status(200).json({
+      message: "User loaded successfully",
+      user: removedUneccesaryFieldsUser,
+    });
+  } catch (error) {
+    console.error("Error loading user by email for organizer:", error);
+    return res.status(500).json({ message: "Failed to load user" });
   }
 };
 

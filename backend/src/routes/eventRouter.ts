@@ -5,12 +5,14 @@ import {
   leaveEvent,
   joinTeam,
   leaveTeam,
+  checkInUser,
   updateEvent,
   getAllEvents,
   organizerGetAllEvents,
   judgeGetAllEvents,
   getEventById,
   organizerGetEventById,
+  organizerGetUserByEmail,
   judgeGetEventById,
   deleteEvent,
 } from "../controllers/eventController";
@@ -121,6 +123,25 @@ router.post(
   }
 );
 
+router.post(
+  "/check-in/:eventId/:userId",
+  authenticate,
+  async (req: any, res: any) => {
+    const { eventId, userId } = req.params as {
+      eventId: string;
+      userId: string;
+    };
+
+    if (!eventId || !userId) {
+      return res
+        .status(400)
+        .json({ message: "Event ID and User ID are required" });
+    }
+
+    await checkInUser(req, res);
+  }
+);
+
 router.put("/update/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };
   const {
@@ -196,6 +217,21 @@ router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
 
   await organizerGetEventById(req, res);
 });
+
+// This is going in the event router instead of auth router since it will only be used in the context of checking in at an event
+router.get(
+  "/organizer-user-by-email/:email",
+  authenticate,
+  async (req: any, res: any) => {
+    const { email } = req.params as { email: string };
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    await organizerGetUserByEmail(req, res);
+  }
+);
 
 router.get("/judge/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };

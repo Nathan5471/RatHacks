@@ -126,6 +126,7 @@ model Event {
   status             Status   @default(upcoming)
   releasedJudging    Boolean  @default(false)
   participants       String[] // User Ids
+  checkedIn          String[] // User Ids
   teams              String[] // Team Ids
   projects           String[] // Project Ids
   createdBy          String // Organizer Id
