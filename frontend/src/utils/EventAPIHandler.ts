@@ -47,6 +47,11 @@ export const leaveTeam = async (eventId: string) => {
   return response.data;
 };
 
+export const checkInUser = async (eventId: string, userId: string) => {
+  const response = await api.post(`/check-in/${eventId}/${userId}`);
+  return response.data;
+};
+
 export const updateEvent = async (
   id: string,
   eventData: {
@@ -84,6 +89,13 @@ export const getEventById = async (eventId: string) => {
 
 export const organizerGetEventById = async (eventId: string) => {
   const response = await api.get(`/organizer/${eventId}`);
+  return response.data;
+};
+
+export const organizerGetUserByEmail = async (email: string) => {
+  const response = await api.get(
+    `/organizer-user-by-email/${encodeURIComponent(email)}`
+  );
   return response.data;
 };
 

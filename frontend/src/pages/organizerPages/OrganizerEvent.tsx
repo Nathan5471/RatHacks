@@ -323,6 +323,12 @@ export default function OrganizerEvent() {
                     </div>
                   )}
                 </div>
+                <Link
+                  to={`/app/organizer/check-in/${eventId}`}
+                  className="mt-4 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold w-full text-center"
+                >
+                  Go To Check In
+                </Link>
               </div>
             )}
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
