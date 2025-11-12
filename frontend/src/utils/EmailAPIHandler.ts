@@ -90,6 +90,11 @@ export const deleteEmail = async (id: string) => {
   return response.data;
 };
 
+export const sendEmail = async (id: string) => {
+  const response = await api.post(`/send-email/${id}`);
+  return response.data;
+};
+
 export const getAllReceipients = async () => {
   const response = await api.get("/receipient-all");
   return response.data;
@@ -105,7 +110,7 @@ export const getReceipientsByWorkshop = async (id: string) => {
   return response.data;
 };
 
-export const getReceipientsByFilter= async (filter: string, id: string) => {
+export const getReceipientsByFilter = async (filter: string, id: string) => {
   const response = await api.get(`/receipient-by-filter/${filter}/${id}`);
   return response.data;
 };

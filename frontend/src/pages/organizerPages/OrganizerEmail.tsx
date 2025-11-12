@@ -5,6 +5,7 @@ import {
   organizerGetEmailById,
   getAllReceipients,
   getReceipientsByFilter,
+  sendEmail,
 } from "../../utils/EmailAPIHandler";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
@@ -84,6 +85,7 @@ export default function OrganizerEvent() {
   }, [emailId, reload]);
 
   useEffect(() => {
+    console.log("fetching receipients");
     const fetchReceipients = async () => {
       if (!email) {
         return;
@@ -216,8 +218,24 @@ export default function OrganizerEvent() {
     }
   };
 
-  const handleSendEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSendEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    try {
+      if (emailId) {
+        const sentEmail = await sendEmail(emailId);
+        console.log(sentEmail);
+      }
+      setReload(prev => !prev);
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unkown error accured";
+      console.error(errorMessage);
+    }
   };
 
   const handleOpenOrganizerUserView = (

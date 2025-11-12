@@ -1,5 +1,6 @@
-import { User } from "@prisma/client";
+import { GradeLevel, User } from "@prisma/client";
 import prisma from "../prisma/client";
+import sendCustomEmail from "../utils/sendCustomEmail";
 
 export const createEmail = async (req: any, res: any) => {
   const { name, messageSubject, messageBody, sendAll, filterBy, subFilterBy } =
@@ -237,29 +238,103 @@ export const getReceipientsByFilter = async (req: any, res: any) => {
   }
 };
 
-// export const getReceipientsByWorkshop = async (req: any, res: any) => {
-//   const user = req.user as User;
-//   const { id } = req.params as { id: string };
+export const sendEmail = async (req: any, res: any) => {
+  const { id } = req.params as { id: any };
+  const user = req.user as User;
 
-//   if (user.accountType !== "organizer") {
-//     return res.status(403).json({ message: "Unauthorized" });
-//   }
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
 
-//   try {
-//     const receipientData = await prisma.user.findMany({
-//       where: { workshops: { has: id } },
-//     });
-//     if (!receipientData) {
-//       return res
-//         .status(404)
-//         .json({ message: "No participants found in workshop" });
-//     }
+  try {
+    const email = await prisma.email.findUnique({
+      where: { id },
+    });
+    if (!email) {
+      return res.status(404).json({ message: "Workshop not found" });
+    }
+    if (email.sent !== false) {
+      return res.status(400).json({ message: "Email already sent" });
+    }
 
-//     return res
-//       .status(200)
-//       .json({ message: "Email loaded successfully", receipientData });
-//   } catch (error) {
-//     console.error("Error loading email:", error);
-//     return res.status(500).json({ message: "Failed to load email" });
-//   }
-// };
+    let receipientData;
+    switch (email.filterBy) {
+      case "gradeLevel":
+        receipientData = await prisma.user.findMany({
+          where: { gradeLevel: email.subFilterBy as GradeLevel },
+        });
+        break;
+      case "school":
+        receipientData = await prisma.user.findMany({
+          where: { schoolDivision: email.subFilterBy },
+        });
+        break;
+      case "workshop":
+        receipientData = await prisma.user.findMany({
+          where: { workshops: { has: email.subFilterBy } },
+        });
+        break;
+      case "event":
+        receipientData = await prisma.user.findMany({
+          where: { events: { has: email.subFilterBy } },
+        });
+        break;
+      case null:
+        receipientData = await prisma.user.findMany();
+        break;  
+    }
+
+    if (!receipientData || receipientData.length == 0) {
+      return res
+        .status(404)
+        .json({ message: `No participants found in ${email.filterBy}` });
+    }
+
+    receipientData = receipientData.map((receipient) => receipient.id);
+
+    // Send notification emails to participants (2 every second)
+    const participants = await Promise.all(
+      receipientData.map(async (participantId) => {
+        const participant = await prisma.user.findUnique({
+          where: { id: participantId },
+        });
+        return participant;
+      })
+    );
+    console.log("participants", participants);
+    const filteredParticipants = participants.filter(
+      (participant) => participant !== null
+    );
+    const emailVerifiedParticipants = filteredParticipants.filter(
+      (participant) => participant.emailVerified === true
+    );
+    const organizer = user;
+    if (!organizer) return;
+    const hasRatHacksEmail = organizer.email.endsWith("@rathacks.com") ?? false;
+
+    emailVerifiedParticipants.forEach((participant, index) => {
+      setTimeout(() => {
+        console.log("sending email...");
+        sendCustomEmail({
+          email: participant.email,
+          receiverFirstName: participant.firstName,
+          messageBody: email.messageBody,
+          senderName: organizer.firstName,
+          messageSubject: email.messageSubject,
+          senderEmail: hasRatHacksEmail ? organizer.email : "nathan@rathacks.com",
+        });
+      }, (index / 2) * 1000);
+    });
+    
+    await prisma.email.update({
+      where: { id },
+      data: {
+        sent: true
+      },
+    });
+
+  } catch (error) {
+    console.error("Error sending emails", error);
+    return res.status(500).json({ message: "Failed to send emails" });
+  }
+};

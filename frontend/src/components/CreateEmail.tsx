@@ -144,6 +144,7 @@ export default function CreateEmail() {
   ]);
   subFilterMap.set("school", [
     { name: "Bedford County", id: "Bedford County" },
+    { name: "Botetourt County", id: "Botetourt County" },
     { name: "Craig County", id: "Craig County" },
     { name: "Floyd County", id: "Floyd County" },
     { name: "Franklin County", id: "Franklin County" },

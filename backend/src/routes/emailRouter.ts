@@ -8,7 +8,8 @@ import {
   deleteEmail,
   updateEmail,
   getReceipientsByFilter,
-  getAllReceipients
+  getAllReceipients,
+  sendEmail
 } from "../controllers/emailController";
 
 const router = express.Router();
@@ -31,7 +32,6 @@ router.post("/create", authenticate, async (req: any, res: any) => {
       .json({ message: "Verify message fields are filled" });
   }
 
-
   if (!sendAll && filterBy && !subFilterBy) {
     console.log("fields weren't filled");
     return res
@@ -43,7 +43,7 @@ router.post("/create", authenticate, async (req: any, res: any) => {
 });
 
 router.put("/update/:id", authenticate, async (req: any, res: any) => {
-  const { name, messageSubject, messageBody, sendAll, filterBy, subFilterBy} =
+  const { name, messageSubject, messageBody, sendAll, filterBy, subFilterBy } =
     req.body as {
       name: string;
       messageSubject: string;
@@ -60,7 +60,7 @@ router.put("/update/:id", authenticate, async (req: any, res: any) => {
       .json({ message: "Verify message fields are filled" });
   }
 
- if (!sendAll && filterBy && !subFilterBy) {
+  if (!sendAll && filterBy && !subFilterBy) {
     console.log("fields weren't filled");
     return res
       .status(400)
@@ -74,20 +74,29 @@ router.put("/update/:id", authenticate, async (req: any, res: any) => {
 
 router.get("/organizer-all", authenticate, organizerGetAllEmails);
 
-router.get("/receipient-all", authenticate, getAllReceipients)
+router.get("/receipient-all", authenticate, getAllReceipients);
 
-router.get("/receipient-by-filter/:filter/:id", authenticate, getReceipientsByFilter);
+router.get(
+  "/receipient-by-filter/:filter/:id",
+  authenticate,
+  getReceipientsByFilter
+);
 
+router.post(
+  "/send-email/:id",
+  authenticate,
+  async (req: any, res: any) => {
+    const { id } = req.params as { id: string };
 
-// router.get("/get/:id", authenticate, async (req: any, res: any) => {
-//   const { id } = req.params as { id: string };
+    if (!id) {
+      return res
+        .status(400)
+        .json({ message: "Email ID is required" });
+    }
 
-//   if (!id) {
-//     return res.status(400).json({ message: "Email ID is required" });
-//   }
-
-//   await getEmailById(req, res);
-// });
+    await sendEmail(req, res);
+  }
+);
 
 router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };
