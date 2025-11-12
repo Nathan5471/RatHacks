@@ -34,6 +34,7 @@ export default function OrganizerEvent() {
     contactLastName: string;
     contactRelationship: string;
     contactPhoneNumber: string;
+    checkedIn: boolean;
     createdAt: string;
   }
   interface Team {
@@ -66,6 +67,7 @@ export default function OrganizerEvent() {
     submissionDeadline: string;
     status: "upcoming" | "ongoing" | "completed";
     participants: Participant[];
+    checkedInParticipants: number;
     teams: Team[];
     projects: Project[];
     createdBy: string;
@@ -269,6 +271,10 @@ export default function OrganizerEvent() {
                 <p>
                   <span className="font-bold">Participants:</span>{" "}
                   {event.participants.length}
+                </p>
+                <p>
+                  <span className="font-bold">Checked In Participants:</span>{" "}
+                  {event.checkedInParticipants}
                 </p>
               </div>
             </div>

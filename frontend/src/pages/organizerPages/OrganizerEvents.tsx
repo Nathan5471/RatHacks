@@ -54,6 +54,7 @@ export default function OrganizerEvents() {
     submissionDeadline: string;
     status: "upcoming" | "ongoing" | "completed";
     participants: Participant[];
+    checkedInParticipants: number;
     teams: Team[];
     createdBy: string;
     createdAt: string;
@@ -309,6 +310,10 @@ export default function OrganizerEvents() {
                   <p>
                     <span className="font-bold">Participants:</span>{" "}
                     {event.participants.length}
+                  </p>
+                  <p>
+                    <span className="font-bold">Checked In Participants:</span>{" "}
+                    {event.checkedInParticipants}
                   </p>
                 </div>
               </div>

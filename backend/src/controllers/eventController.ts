@@ -521,6 +521,7 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
           submissionDeadline: event.submissionDeadline,
           status: event.status,
           participants: removedUneccesaryFieldsUsers,
+          checkedInParticipants: event.checkedIn.length,
           teams: eventTeams,
           createdBy: event.createdBy,
           createdAt: event.createdAt,
@@ -679,6 +680,7 @@ export const organizerGetEventById = async (req: any, res: any) => {
       contactLastName: user.contactLastName,
       contactRelationship: user.contactRelationship,
       contactPhoneNumber: user.contactPhoneNumber,
+      checkedIn: event.checkedIn.includes(user.id),
       createdAt: user.createdAt,
     }));
     const teams = await prisma.team.findMany({
@@ -733,6 +735,7 @@ export const organizerGetEventById = async (req: any, res: any) => {
       submissionDeadline: event.submissionDeadline,
       status: event.status,
       participants: removedUneccesaryFieldsUsers,
+      checkedInParticipants: event.checkedIn.length,
       teams: teams,
       projects: filteredProjects,
       createdBy: event.createdBy,

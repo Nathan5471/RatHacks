@@ -20,6 +20,7 @@ interface User {
   contactLastName: string;
   contactRelationship: string;
   contactPhoneNumber: string;
+  checkedIn?: boolean;
   createdAt: string;
 }
 
@@ -74,6 +75,11 @@ export default function OrganizerUserView({ user }: { user: User }) {
       <p className="text-lg sm:text-xl text-left">
         Contact's Phone Number: {user.contactPhoneNumber}
       </p>
+      {user.checkedIn !== undefined && (
+        <p className="text-lg sm:text-xl text-left">
+          Checked In: {user.checkedIn ? "Yes" : "No"}
+        </p>
+      )}
       <p className="text-lg sm:text-xl text-left">
         Account Created: {new Date(user.createdAt).toLocaleString()}
       </p>
