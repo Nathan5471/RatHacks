@@ -92,7 +92,7 @@ export default function ChangePassword() {
         <div className="flex flex-row w-full">
           <button
             type="submit"
-            className="mt-4 bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full font-bold"
+            className="mt-4 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg w-full font-bold"
           >
             Change Password
           </button>

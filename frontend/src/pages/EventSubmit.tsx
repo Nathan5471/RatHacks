@@ -306,7 +306,7 @@ export default function EventSubmit() {
             </p>
             <Link
               to="/app/events"
-              className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 rounded-lg mt-2"
+              className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 rounded-lg mt-2"
             >
               Back to events
             </Link>
@@ -357,7 +357,7 @@ export default function EventSubmit() {
             </p>
             <Link
               to={`/app/event/${eventId}`}
-              className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 rounded-lg mt-2"
+              className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 rounded-lg mt-2"
             >
               Back to event
             </Link>
@@ -399,7 +399,7 @@ export default function EventSubmit() {
             </p>
             <Link
               to={`/app/event/${eventId}`}
-              className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 rounded-lg mt-2"
+              className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 rounded-lg mt-2"
             >
               Back to event
             </Link>
@@ -441,7 +441,7 @@ export default function EventSubmit() {
             </p>
             <Link
               to={`/app/event/${eventId}`}
-              className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 rounded-lg mt-2"
+              className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 rounded-lg mt-2"
             >
               Back to event
             </Link>
@@ -573,7 +573,7 @@ export default function EventSubmit() {
               href="https://tools.rotato.app/compress"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-a0 hover:underline break-all"
+              className="text-primary-a0 spooky:text-spooky-a0 hover:underline break-all"
             >
               https://tools.rotato.app/compress
             </a>{" "}
@@ -625,7 +625,7 @@ export default function EventSubmit() {
           {!project && (
             <button
               type="submit"
-              className="w-full bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold mt-2"
+              className="w-full bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold mt-2"
             >
               Create Project
             </button>
@@ -634,14 +634,14 @@ export default function EventSubmit() {
             <div className="flex flex-row w-full mt-2">
               <button
                 type="submit"
-                className="w-full bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
+                className="w-full bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold"
               >
                 Save
               </button>
               <button
                 type="button"
                 onClick={handleSubmitProject}
-                className="w-full bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold ml-2"
+                className="w-full bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold ml-2"
               >
                 Submit
               </button>

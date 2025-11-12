@@ -8,6 +8,7 @@ import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditEvent from "../../components/EditEvent";
 import DeleteEvent from "../../components/DeleteEvent";
 import OrganizerUserView from "../../components/OrganizerUserView";
+import LinkDetectedText from "../../components/LinkDetectedText";
 
 export default function OrganizerEvent() {
   const { openOverlay } = useOverlay();
@@ -33,6 +34,7 @@ export default function OrganizerEvent() {
     contactLastName: string;
     contactRelationship: string;
     contactPhoneNumber: string;
+    checkedIn: boolean;
     createdAt: string;
   }
   interface Team {
@@ -44,6 +46,17 @@ export default function OrganizerEvent() {
     project: string | null;
     createdAt: string;
   }
+  interface Project {
+    id: string;
+    name: string;
+    description: string;
+    codeURL: string | null;
+    screenshotURL: string | null;
+    videoURL: string | null;
+    demoURL: string | null;
+    team: string[];
+    submittedAt: string;
+  }
   interface Event {
     id: string;
     name: string;
@@ -54,7 +67,9 @@ export default function OrganizerEvent() {
     submissionDeadline: string;
     status: "upcoming" | "ongoing" | "completed";
     participants: Participant[];
+    checkedInParticipants: number;
     teams: Team[];
+    projects: Project[];
     createdBy: string;
     createdAt: string;
   }
@@ -214,16 +229,19 @@ export default function OrganizerEvent() {
             </h1>
             <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 p-4 rounded-lg">
               <div className="flex flex-col w-full sm:w-2/3">
-                <p className="text-lg mb-2">{event.description}</p>
+                <LinkDetectedText
+                  className="text-lg mb-2"
+                  text={event.description}
+                />
                 <div className="flex flex-row w-full mt-auto">
                   <Link
                     to="/app/organizer/events"
-                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                   >
                     Back to Events
                   </Link>
                   <button
-                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                     onClick={handleOpenEditEvent}
                   >
                     Edit
@@ -254,6 +272,10 @@ export default function OrganizerEvent() {
                   <span className="font-bold">Participants:</span>{" "}
                   {event.participants.length}
                 </p>
+                <p>
+                  <span className="font-bold">Checked In Participants:</span>{" "}
+                  {event.checkedInParticipants}
+                </p>
               </div>
             </div>
             {event.status !== "completed" && (
@@ -262,7 +284,7 @@ export default function OrganizerEvent() {
                   {event.status === "upcoming" ? "Scary" : "Submission"}{" "}
                   Countdown for {event.name} (
                   <span
-                    className="font-normal text-primary-a0 hover:underline cursor-pointer"
+                    className="font-normal text-primary-a0 spooky:text-spooky-a0 hover:underline cursor-pointer"
                     onClick={() => setHideCountdown(!hideCountdown)}
                   >
                     {hideCountdown ? "Show" : "Hide"}
@@ -273,7 +295,7 @@ export default function OrganizerEvent() {
                   {!hideCountdown && (
                     <div className="flex flex-row justify-center">
                       <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
                           {timeRemaining?.days || 0}
                         </span>
                         <span className="text-lg sm:text-xl text-center">
@@ -281,7 +303,7 @@ export default function OrganizerEvent() {
                         </span>
                       </div>
                       <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
                           {timeRemaining?.hours || 0}
                         </span>
                         <span className="text-lg sm:text-xl text-center">
@@ -289,7 +311,7 @@ export default function OrganizerEvent() {
                         </span>
                       </div>
                       <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
                           {timeRemaining?.minutes || 0}
                         </span>
                         <span className="text-lg sm:text-xl text-center">
@@ -297,7 +319,7 @@ export default function OrganizerEvent() {
                         </span>
                       </div>
                       <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
                           {timeRemaining?.seconds || 0}
                         </span>
                         <span className="text-lg sm:text-xl text-center">
@@ -307,6 +329,12 @@ export default function OrganizerEvent() {
                     </div>
                   )}
                 </div>
+                <Link
+                  to={`/app/organizer/check-in/${eventId}`}
+                  className="mt-4 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold w-full text-center"
+                >
+                  Go To Check In
+                </Link>
               </div>
             )}
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
@@ -480,7 +508,7 @@ export default function OrganizerEvent() {
                           }`}
                         >
                           <button
-                            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
+                            className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold"
                             onClick={(e) =>
                               handleOpenOrganizerUserView(e, index)
                             }
@@ -496,6 +524,46 @@ export default function OrganizerEvent() {
                 <p className="text-center">No participants registered yet.</p>
               )}
             </div>
+            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+              <h2 className="text-2xl font-bold text-center mb-2">Projects</h2>
+              {event.projects.length === 0 ? (
+                <p className="text-center">No projects submitted yet.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {event.projects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="bg-surface-a2 p-4 rounded-lg"
+                    >
+                      {project.screenshotURL && (
+                        <img
+                          src={`${window.location.origin}${project.screenshotURL}`}
+                          alt={`${project.name} Screenshot`}
+                          className="w-full h-auto mb-4 rounded-lg"
+                        />
+                      )}
+                      <h3 className="text-xl font-bold mb-2">{project.name}</h3>
+                      <p className="mb-2">{project.description}</p>
+                      <p className="mb-2">
+                        Submitted:{" "}
+                        {project.submittedAt
+                          ? formatDate(
+                              new Date(project.submittedAt),
+                              "EEEE, MMMM d yyyy h:mm a"
+                            )
+                          : "N/A"}
+                      </p>
+                      <Link
+                        to={`/app/organizer/project/${project.id}`}
+                        className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold w-full"
+                      >
+                        View Project
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <div className="flex flex-col">
@@ -503,7 +571,7 @@ export default function OrganizerEvent() {
             <div className="flex w-full justify-center">
               <Link
                 to="/app/organizer/events"
-                className="bg-primary-a0 hover:bg-primary-a1 font-bold p-2 rounded-lg"
+                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 font-bold p-2 rounded-lg"
               >
                 Back to Events
               </Link>

@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from "react";
-import { getCurrentUser } from "../utils/AuthAPIHandler";
+import { getCurrentUser, updateTheme } from "../utils/AuthAPIHandler";
 
 interface AuthContextType {
   user:
@@ -28,8 +28,10 @@ interface AuthContextType {
       }
     | null
     | undefined;
+  theme: "default" | "spooky";
   getUser: () => void;
   logout: () => void;
+  handleUpdateTheme: (theme: "default" | "spooky") => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,25 +40,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<AuthContextType["user"]>(undefined);
+  const [theme, setTheme] = useState<AuthContextType["theme"]>("default");
 
   const getUser = async () => {
     try {
+      const theme = localStorage.getItem("theme") as AuthContextType["theme"];
+      if (theme) {
+        setTheme(theme);
+        if (theme !== "default") {
+          document.documentElement.classList.add(theme);
+        }
+      } else {
+        setTheme("default");
+      }
       const userData = await getCurrentUser();
       setUser(userData);
+      if (userData.theme) {
+        document.documentElement.classList.remove("spooky");
+        if (userData.theme !== "default") {
+          document.documentElement.classList.add(userData.theme);
+        }
+        setTheme(userData.theme as AuthContextType["theme"]);
+        localStorage.setItem("theme", userData.theme);
+      }
     } catch (error) {
       console.error("Failed to fetch user data:", error);
       setUser(null);
     }
   };
 
-  const logout = async () => {
+  const logout = () => {
     setUser(undefined);
+  };
+
+  const handleUpdateTheme = async (theme: AuthContextType["theme"]) => {
+    document.documentElement.classList.remove("spooky");
+    if (theme !== "default") {
+      document.documentElement.classList.add(theme);
+    }
+    setTheme(theme);
+    localStorage.setItem("theme", theme);
+    try {
+      await updateTheme(theme);
+    } catch (error) {
+      console.error("Error updating theme:", error);
+    }
   };
 
   const contextValue = {
     user,
+    theme,
     getUser,
     logout,
+    handleUpdateTheme,
   };
 
   return (

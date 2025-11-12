@@ -110,7 +110,7 @@ export default function ResetPassword() {
           {error && <p className="text-red-500 mt-2">{error}</p>}
           <button
             type="submit"
-            className="bg-primary-a0 text-white p-2 rounded-lg mt-4 hover:bg-primary-a1"
+            className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 text-white p-2 rounded-lg mt-4"
           >
             Send Reset Link
           </button>
@@ -132,7 +132,7 @@ export default function ResetPassword() {
           </p>
           <Link
             to="/login"
-            className="mt-4 bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold w-1/2 text-center"
+            className="mt-4 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold w-1/2 text-center"
           >
             Back to Login
           </Link>
@@ -163,7 +163,7 @@ export default function ResetPassword() {
           </p>
           <Link
             to="/reset-password"
-            className="mt-4 bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold w-2/3 text-center"
+            className="mt-4 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold w-2/3 text-center"
           >
             Request New Link
           </Link>
@@ -226,7 +226,7 @@ export default function ResetPassword() {
         {error && <p className="text-red-500 mt-2">{error}</p>}
         <button
           type="submit"
-          className="bg-primary-a0 text-white p-2 rounded-lg mt-4 hover:bg-primary-a1"
+          className="bg-primary-a0 hover:bg-primary-a1 text-white p-2 rounded-lg mt-4 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
         >
           Set New Password
         </button>

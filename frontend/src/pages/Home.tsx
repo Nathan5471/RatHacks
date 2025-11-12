@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen w-screen bg-surface-a0 text-white overflow-y-auto">
       <div className="flex flex-row min-h-15 w-screen bg-surface-a1 shadow-lg">
-        <h1 className="text-lg sm:text-3xl col-span-3 md:col-span-1 font-bold text-center justify-center text-primary-a0 p-4">
+        <h1 className="text-lg sm:text-3xl col-span-3 md:col-span-1 font-bold text-center justify-center text-primary-a0 spooky:text-spooky-a0 p-4">
           Rat Hacks
         </h1>
         <HashLink
@@ -60,7 +60,7 @@ export default function Home() {
         </HashLink>
         <Link
           to={user ? "/app" : "/login"}
-          className="text-pretty sm:text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center justify-center items-center flex font-bold m-4 p-2 w-1/6"
+          className="text-pretty sm:text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 rounded-lg text-center justify-center items-center flex font-bold m-4 p-2 w-1/6"
         >
           {user ? "Go to App" : "Login"}
         </Link>
@@ -74,25 +74,25 @@ export default function Home() {
         </p>
         <div className="flex flex-row mt-4 p-4 justify-center w-2/3">
           <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
-            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 text-center">
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
               {timeRemaining?.days || 0}
             </span>
             <span className="text-sm sm:text-3xl text-center">Days</span>
           </div>
           <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
-            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 text-center">
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
               {timeRemaining?.hours || 0}
             </span>
             <span className="text-sm sm:text-3xl text-center">Hours</span>
           </div>
           <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
-            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 text-center">
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
               {timeRemaining?.minutes || 0}
             </span>
             <span className="text-sm sm:text-3xl text-center">Minutes</span>
           </div>
           <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
-            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 text-center">
+            <span className="text-3xl sm:text-6xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
               {timeRemaining?.seconds || 0}
             </span>
             <span className="text-sm sm:text-3xl text-center">Seconds</span>
@@ -107,7 +107,7 @@ export default function Home() {
               <h3 className="text-xl font-bold mb-2">What is Rat Hacks?</h3>
               <p>
                 Rat Hacks is a hackathon hosted by the Roanoke Valley Governor's
-                School (RVGS). It will be help November 22, 2025 from 8:00 AM to
+                School (RVGS). It will be held November 22, 2025 from 8:00 AM to
                 8:00 PM. It will be at RVGS, 2104 Grandin Road SW, Roanoke, VA
                 24015.
               </p>
@@ -120,7 +120,7 @@ export default function Home() {
                 event! (
                 <Link
                   to="/register"
-                  className="text-primary-a0 hover:underline"
+                  className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
                 >
                   Register Here
                 </Link>
@@ -147,13 +147,13 @@ export default function Home() {
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-xl font-bold mb-2">Food & Drinks</h3>
               <p>
-                Food and drinks will be provided for free at Rat Hacks! We will
+                Food and drinks will be provided for FREE at Rat Hacks! We will
                 have chicken nuggets for lunch and pizza for dinner. There will
                 also be snacks and water throughout the event. If you have any
                 dietary restrictions, please email{" "}
                 <a
                   href="mailto:nathan@rathacks.com"
-                  className="text-primary-a0 hover:underline"
+                  className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
                 >
                   nathan@rathacks.com
                 </a>
@@ -163,9 +163,9 @@ export default function Home() {
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-xl font-bold mb-2">Judging</h3>
               <p>
-                Projects will be judged through the week after Rat Hacks by
+                Projects will be judged throughout the week after Rat Hacks by
                 judges from the tech industry. Winners will be announced in a
-                virtual awards ceremony on Sunday, November 23 at 7:00 PM. You
+                virtual awards ceremony on Sunday, November 30 at 7:00 PM. You
                 will also receive feedback on your project from the judges.
               </p>
             </div>
@@ -314,7 +314,7 @@ export default function Home() {
                 You can email us at{" "}
                 <a
                   href="mailto:questions@rathacks.com"
-                  className="text-primary-a0 hover:underline"
+                  className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
                 >
                   questions@rathacks.com
                 </a>

@@ -8,6 +8,7 @@ import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CreateEvent from "../../components/CreateEvent";
 import EditEvent from "../../components/EditEvent";
 import DeleteEvent from "../../components/DeleteEvent";
+import LinkDetectedText from "../../components/LinkDetectedText";
 
 export default function OrganizerEvents() {
   const { openOverlay } = useOverlay();
@@ -53,6 +54,7 @@ export default function OrganizerEvents() {
     submissionDeadline: string;
     status: "upcoming" | "ongoing" | "completed";
     participants: Participant[];
+    checkedInParticipants: number;
     teams: Team[];
     createdBy: string;
     createdAt: string;
@@ -146,7 +148,7 @@ export default function OrganizerEvents() {
             </div>
             <div className="flex items-center">
               <button
-                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
                 onClick={handleOpenCreateEvent}
               >
                 Add Event
@@ -193,7 +195,7 @@ export default function OrganizerEvents() {
             </div>
             <div className="flex items-center">
               <button
-                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
                 onClick={handleOpenCreateEvent}
               >
                 Add Event
@@ -246,7 +248,7 @@ export default function OrganizerEvents() {
           </div>
           <div className="flex items-center">
             <button
-              className="ml-auto p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+              className="ml-auto p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
               onClick={handleOpenCreateEvent}
             >
               Add Event
@@ -264,16 +266,19 @@ export default function OrganizerEvents() {
               >
                 <div className="flex flex-col w-full sm:w-2/3">
                   <h2 className="text-3xl font-bold">{event.name}</h2>
-                  <p className="text-lg mb-2">{event.description}</p>
+                  <LinkDetectedText
+                    className="text-lg mb-2"
+                    text={event.description}
+                  />
                   <div className="flex flex-row w-full mt-auto">
                     <Link
                       to={`/app/organizer/event/${event.id}`}
-                      className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
                     <button
-                      className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                       onClick={(e) => handleOpenEditEvent(e, event.id)}
                     >
                       Edit
@@ -305,6 +310,10 @@ export default function OrganizerEvents() {
                   <p>
                     <span className="font-bold">Participants:</span>{" "}
                     {event.participants.length}
+                  </p>
+                  <p>
+                    <span className="font-bold">Checked In Participants:</span>{" "}
+                    {event.checkedInParticipants}
                   </p>
                 </div>
               </div>

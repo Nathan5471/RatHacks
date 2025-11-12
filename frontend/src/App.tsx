@@ -22,9 +22,12 @@ import OrganizerWorkshops from "./pages/organizerPages/OrganizerWorkshops";
 import OrganizerWorkshop from "./pages/organizerPages/OrganizerWorkshop";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
 import OrganizerEvent from "./pages/organizerPages/OrganizerEvent";
+import CheckIn from "./pages/organizerPages/CheckIn";
 import OrganizerEmails from "./pages/organizerPages/OrganizerEmails";
 import OrganizerEmail from "./pages/organizerPages/OrganizerEmail";
 import JudgeDashboard from "./pages/judgePages/JudgeDashboard";
+import JudgeEvents from "./pages/judgePages/JudgeEvents";
+import JudgeEvent from "./pages/judgePages/JudgeEvent";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -33,6 +36,7 @@ import OrganizerRegister from "./pages/organizerPages/OrganizerRegister";
 import JudgeRegister from "./pages/judgePages/JudgeRegister";
 import VerifyEmail from "./pages/VerifyEmail";
 import Overlay from "./components/Overlay";
+import ThemeOverlay from "./components/ThemeOverlay";
 
 function App() {
   const { user, getUser } = useAuth();
@@ -85,6 +89,10 @@ function App() {
               path="/app/organizer/event/:eventId"
               element={<OrganizerEvent />}
             />
+            <Route
+              path="/app/organizer/check-in/:eventId"
+              element={<CheckIn />}
+            />
             <Route path="/app/organizer/emails" element={<OrganizerEmails />} />
             <Route
               path="/app/organizer/email/:emailId"
@@ -93,6 +101,8 @@ function App() {
           </Route>
           <Route element={<JudgeRoute />}>
             <Route path="/app/judge" element={<JudgeDashboard />} />
+            <Route path="/app/judge/events" element={<JudgeEvents />} />
+            <Route path="/app/judge/event/:eventId" element={<JudgeEvent />} />
           </Route>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -103,6 +113,7 @@ function App() {
           <Route path="/verify-email" element={<VerifyEmail />} />
         </Routes>
         <Overlay />
+        <ThemeOverlay />
       </Router>
     </MatomoProvider>
   );

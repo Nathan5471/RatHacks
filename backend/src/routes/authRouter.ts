@@ -19,6 +19,7 @@ import {
   getAllUsers,
   updateUser,
   updatePassword,
+  updateTheme,
   deleteUser,
 } from "../controllers/authController";
 import authenticate from "../middleware/authenticate";
@@ -344,6 +345,7 @@ router.get("/current-user", authenticate, (req: any, res: any) => {
     contactPhoneNumber: reqUser.contactPhoneNumber,
     events: reqUser.events,
     workshops: reqUser.workshops,
+    theme: reqUser.theme,
   };
   res.status(200).json(user);
 });
@@ -433,6 +435,16 @@ router.put("/update-password", authenticate, async (req: any, res: any) => {
   }
 
   await updatePassword(req, res);
+});
+
+router.put("/update-theme", authenticate, async (req: any, res: any) => {
+  const { theme } = req.body as { theme: string };
+  const themeOptions = ["default", "spooky"];
+  if (!themeOptions.includes(theme)) {
+    return res.status(400).json({ message: "Invalid theme option" });
+  }
+
+  await updateTheme(req, res);
 });
 
 router.delete("/delete", authenticate, deleteUser);

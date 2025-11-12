@@ -9,6 +9,7 @@ import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CreateWorkshop from "../../components/CreateWorkshop";
 import EditWorkshop from "../../components/EditWorkshop";
 import DeleteWorkshop from "../../components/DeleteWorkshop";
+import LinkDetectedText from "../../components/LinkDetectedText";
 
 export default function OrganizerWorkshops() {
   const { openOverlay } = useOverlay();
@@ -152,7 +153,7 @@ export default function OrganizerWorkshops() {
             </div>
             <div className="flex items-center">
               <button
-                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
                 onClick={handleOpenCreateWorkshop}
               >
                 Create Workshop
@@ -199,7 +200,7 @@ export default function OrganizerWorkshops() {
             </div>
             <div className="flex items-center">
               <button
-                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
                 onClick={handleOpenCreateWorkshop}
               >
                 Create Workshop
@@ -252,7 +253,7 @@ export default function OrganizerWorkshops() {
           </div>
           <div className="flex items-center">
             <button
-              className="ml-auto p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+              className="ml-auto p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
               onClick={handleOpenCreateWorkshop}
             >
               Create Workshop
@@ -285,16 +286,19 @@ export default function OrganizerWorkshops() {
               >
                 <div className="flex flex-col w-full sm:w-2/3">
                   <h2 className="text-3xl font-bold">{workshop.name}</h2>
-                  <p className="text-lg mb-2">{workshop.description}</p>
+                  <LinkDetectedText
+                    className="text-lg mb-2"
+                    text={workshop.description}
+                  />
                   <div className="flex flex-row mt-auto">
                     <Link
                       to={`/app/organizer/workshop/${workshop.id}`}
-                      className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
                     <button
-                      className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold text-center w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold text-center w-full"
                       onClick={(e) => handleOpenEditWorkshop(e, workshop.id)}
                     >
                       Edit

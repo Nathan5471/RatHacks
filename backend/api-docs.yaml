@@ -1721,6 +1721,86 @@ paths:
                       example: Failed to update password
                   required:
                     - message
+  /api/auth/update-theme:
+    put:
+      summary: Update the current user's theme
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+                  enum: ["default", "spooky"]
+              required:
+                - theme
+      responses:
+        200:
+          description: Theme updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Theme updated successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid theme option
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mesasge:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to update theme
+                required:
+                  - message
   /api/auth/delete:
     delete:
       summary: Delete the current user's account
@@ -2193,6 +2273,99 @@ paths:
                     example: Failed to leave team
                 required:
                   - message
+  /api/event/check-in/{eventId}/{userId}:
+    post:
+      summary: Check in a user to an event
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: userId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: User checked in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User checked in successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event ID and User ID are required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User or Event not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to check in user
+                required:
+                  - message
   /api/event/update/{eventId}:
     put:
       summary: Update an event
@@ -2531,6 +2704,9 @@ paths:
                               - contactRelationship
                               - contactPhoneNumber
                               - createdAt
+                        checkedInParticipants:
+                          type: number
+                          min: 0
                         teams:
                           type: array
                           items:
@@ -2988,6 +3164,8 @@ paths:
                             contactPhoneNumber:
                               type: string
                               example: 5408531056
+                            checkedIn:
+                              type: boolean
                             createdAt:
                               type: string
                               format: date-time
@@ -3011,7 +3189,11 @@ paths:
                             - contactLastName
                             - contactRelationship
                             - contactPhoneNumber
+                            - checkedIn
                             - createdAt
+                      checkedInParticipants:
+                        type: number
+                        min: 0
                       teams:
                         type: array
                         items:
@@ -3123,6 +3305,111 @@ paths:
                   message:
                     type: string
                     example: Failed to fetch event
+                required:
+                  - message
+  /api/event/organizer-user-by-email/{email}:
+    get:
+      summary: Organizer's get user by email for check-in purposes
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        200:
+          description: User fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User loaded successfully
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      email:
+                        type: email
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                    required:
+                      - id
+                      - email
+                      - firstName
+                      - lastName
+                required:
+                  - message
+                  - user
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to get user
                 required:
                   - message
   /api/event/judge/{eventId}:
@@ -5024,6 +5311,231 @@ paths:
                   - message
         500:
           description: Internal server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to get project
+                required:
+                  - message
+  /api/project/organizer/{projectId}:
+    get:
+      summary: Organizer get project by id with more data
+      tags:
+        - Projects
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Project fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project loaded successfully
+                  project:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      codeURL:
+                        type: string
+                        format: uri
+                      screenshotURL:
+                        type: string
+                        format: uri
+                      videoURL:
+                        type: string
+                        format: uri
+                      demoURL:
+                        type: string
+                        format: uri
+                      submittedAt:
+                        type: string
+                        format: date-time
+                      team:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          joinCode:
+                            type: string
+                          members:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                  format: uuid
+                                email:
+                                  type: string
+                                  format: email
+                                emailVerified:
+                                  type: boolean
+                                accountType:
+                                  type: string
+                                  enum: ["student", "organizer", "judge"]
+                                firstName:
+                                  type: string
+                                lastName:
+                                  type: string
+                                schoolDivision:
+                                  type: string
+                                gradeLevel:
+                                  type: string
+                                  enum:
+                                    [
+                                      "nine",
+                                      "ten",
+                                      "eleven",
+                                      "twelve",
+                                      "organizer",
+                                      "judge",
+                                    ]
+                                isGovSchool:
+                                  type: boolean
+                                techStack:
+                                  type: string
+                                previousHackathon:
+                                  type: boolean
+                                parentFirstName:
+                                  type: string
+                                parentLastName:
+                                  type: string
+                                parentEmail:
+                                  type: string
+                                  format: email
+                                parentPhoneNumber:
+                                  type: string
+                                  example: 5408531056
+                                contactFirstName:
+                                  type: string
+                                contactLastName:
+                                  type: string
+                                contactRelationship:
+                                  type: string
+                                contactPhoneNumber:
+                                  type: string
+                                  example: 5408531056
+                                createdAt:
+                                  type: string
+                                  format: date-time
+                              required:
+                                - id
+                                - email
+                                - emailVerified
+                                - accountType
+                                - firstName
+                                - lastName
+                                - schoolDivision
+                                - gradeLevel
+                                - isGovSchool
+                                - techStack
+                                - previousHackathon
+                                - parentFirstName
+                                - parentLastName
+                                - parentEmail
+                                - parentPhoneNumber
+                                - contactFirstName
+                                - contactLastName
+                                - contactRelationship
+                                - contactPhoneNumber
+                                - createdAt
+                        required:
+                          - id
+                          - joinCode
+                          - members
+                      event:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          name:
+                            type: string
+                        required:
+                          - id
+                          - name
+                    required:
+                      - id
+                      - name
+                      - description
+                      - submittedAt
+                      - team
+                      - event
+                required:
+                  - message
+                  - project
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Project, user, event, or team not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
           content:
             application/json:
               schema:

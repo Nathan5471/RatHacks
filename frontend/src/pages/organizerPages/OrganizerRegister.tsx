@@ -79,7 +79,7 @@ export default function OrganizerRegister() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen w-screen bg-surface-a0 text-white">
         <div className="flex flex-col w-80 sm:w-100 bg-surface-a1 p-4 m-4 rounded-lg">
-          <h1 className="text-2xl font-bold text-center mb-4 text-primary-a0">
+          <h1 className="text-2xl font-bold text-center mb-4 text-primary-a0 spooky:text-spooky-a0">
             Invalid Invite
           </h1>
           <p className="text-center">
@@ -96,7 +96,7 @@ export default function OrganizerRegister() {
         className="flex flex-col w-80 sm:w-100 bg-surface-a1 p-4 m-4 rounded-lg"
         onSubmit={handleRegister}
       >
-        <h1 className="text-2xl font-bold text-center mb-4 text-primary-a0">
+        <h1 className="text-2xl font-bold text-center mb-4 text-primary-a0 spooky:text-spooky-a0">
           Organizer Registration
         </h1>
         <p className="text-lg">Email: {email}</p>
@@ -187,7 +187,7 @@ export default function OrganizerRegister() {
         {error && <p className="text-red-500 mt-2">{error}</p>}
         <button
           type="submit"
-          className="bg-primary-a0 hover:bg-primary-a1 font-bold p-2 rounded-lg mt-4"
+          className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 font-bold p-2 rounded-lg mt-4"
         >
           Register
         </button>

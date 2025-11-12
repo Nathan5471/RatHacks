@@ -735,6 +735,27 @@ export const updatePassword = async (req: any, res: any) => {
   }
 };
 
+export const updateTheme = async (req: any, res: any) => {
+  const { theme } = req.body as { theme: "default" | "spooky" };
+  const user = req.user as User;
+
+  if (user.theme === theme) {
+    return res.status(200).json({ message: "Theme updated successfully" });
+  }
+  try {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        theme,
+      },
+    });
+    return res.status(200).json({ message: "Theme updated successfully" });
+  } catch (error) {
+    console.error("Error updating theme:", error);
+    return res.status(500).json({ message: "Failed to update theme" });
+  }
+};
+
 export const deleteUser = async (req: any, res: any) => {
   const user = req.user as User;
 

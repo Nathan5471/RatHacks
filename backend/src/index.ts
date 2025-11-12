@@ -41,10 +41,10 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(
   "/",
   createProxyMiddleware({
-    target: 'http://localhost:5173',
-    changeOrigin: true
+    target: "http://localhost:5173",
+    changeOrigin: true,
   })
-)
+);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");

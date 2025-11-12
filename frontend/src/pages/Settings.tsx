@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
@@ -12,8 +12,11 @@ import DeleteAccount from "../components/DeleteAccount";
 
 export default function Settings() {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, theme, logout, handleUpdateTheme } = useAuth();
   const { openOverlay } = useOverlay();
+  const [selectedTheme, setSelectedTheme] = useState<"default" | "spooky">(
+    theme
+  );
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
   const schoolDivisions = [
@@ -67,6 +70,16 @@ export default function Settings() {
     user?.contactPhoneNumber || ""
   );
   const [navbarOpen, setNavbarOpen] = useState(false);
+
+  const saveSelectedTheme = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      await handleUpdateTheme(selectedTheme);
+    } catch (error) {
+      console.error("Failed to update theme:", error);
+      toast.error("Failed to update theme");
+    }
+  };
 
   const handleSaveUserInfo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -148,6 +161,35 @@ export default function Settings() {
           <IoMenu className="text-3xl hover:text-4xl" />
         </button>
         <h1 className="text-3xl sm:text-4xl font-bold text-center">Settings</h1>
+        <div className="flex flex-col w-full sm:w-1/2 bg-surface-a1 p-4 m-4 rounded-lg">
+          <h3 className="text-2xl mb-2 text-center font-bold">
+            Website Settings
+          </h3>
+          <label htmlFor="theme" className="text-2xl">
+            Theme
+          </label>
+          <div className="flex flex-row w-full mt-1">
+            <select
+              id="theme"
+              name="theme"
+              value={selectedTheme}
+              onChange={(e) =>
+                setSelectedTheme(e.target.value as "default" | "spooky")
+              }
+              className="p-2 rounded-lg text-lg bg-surface-a2 w-full"
+              required
+            >
+              <option value="default">default</option>
+              <option value="spooky">spooky</option>
+            </select>
+            <button
+              onClick={saveSelectedTheme}
+              className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg w-20 ml-1"
+            >
+              Save
+            </button>
+          </div>
+        </div>
         <form
           className="flex flex-col w-full sm:w-1/2 bg-surface-a1 p-4 m-4 rounded-lg"
           onSubmit={(e) => handleSaveUserInfo(e)}
@@ -246,7 +288,7 @@ export default function Settings() {
               onClick={() => setIsGovSchool(true)}
               className={`${
                 isGovSchool
-                  ? "bg-primary-a1 hover:bg-primary-a2"
+                  ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
                   : "bg-surface-a2 hover:bg-surface-3"
               } p-2 rounded-lg w-1/2 mr-1`}
             >
@@ -257,7 +299,7 @@ export default function Settings() {
               onClick={() => setIsGovSchool(false)}
               className={`${
                 isGovSchool === false
-                  ? "bg-primary-a1 hover:bg-primary-a2"
+                  ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
                   : "bg-surface-a2 hover:bg-surface-a3"
               } p-2 rounded-lg w-1/2`}
             >
@@ -286,7 +328,7 @@ export default function Settings() {
               onClick={() => setPreviousHackathon(true)}
               className={`${
                 previousHackathon === true
-                  ? "bg-primary-a1 hover:bg-primary-a2"
+                  ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
                   : "bg-surface-a2 hover:bg-surface-a3"
               } p-2 rounded-lg w-1/2 mr-1`}
             >
@@ -297,7 +339,7 @@ export default function Settings() {
               onClick={() => setPreviousHackathon(false)}
               className={`${
                 previousHackathon === false
-                  ? "bg-primary-a1 hover:bg-primary-a2"
+                  ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spokoy:hover:bg-spooky-a1"
                   : "bg-surface-a2 hover:bg-surface-a3"
               } p-2 rounded-lg w-1/2`}
             >
@@ -420,7 +462,7 @@ export default function Settings() {
           />
           <button
             type="submit"
-            className="mt-4 p-2 bg-primary-a0 hover:bg-primary-a1 rounded-lg text-xl font-bold"
+            className="mt-4 p-2 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 rounded-lg text-xl font-bold"
           >
             Save Changes
           </button>

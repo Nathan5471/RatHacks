@@ -5,6 +5,7 @@ import { getAllEvents, joinEvent, leaveEvent } from "../utils/EventAPIHandler";
 import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
+import LinkDetectedText from "../components/LinkDetectedText";
 
 export default function Events() {
   const { user, getUser } = useAuth();
@@ -174,11 +175,14 @@ export default function Events() {
               >
                 <div className="flex flex-col w-full sm:w-2/3">
                   <h2 className="text-3xl font-bold">{event.name}</h2>
-                  <p className="text-lg mb-2">{event.description}</p>
+                  <LinkDetectedText
+                    className="text-lg mb-2"
+                    text={event.description}
+                  />
                   <div className="flex flex-row w-full mt-auto">
                     <Link
                       to={`/app/event/${event.id}`}
-                      className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
@@ -193,7 +197,7 @@ export default function Events() {
                       ) : (
                         <button
                           onClick={(e) => handleJoin(e, event.id)}
-                          className="bg-primary-a0 hover:bg-primary-a1 p-2 ml-2 rounded-lg font-bold w-full"
+                          className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 ml-2 rounded-lg font-bold w-full"
                         >
                           Join
                         </button>

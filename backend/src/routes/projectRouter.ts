@@ -4,6 +4,8 @@ import {
   submitProject,
   updateProject,
   getProjectById,
+  organizerGetProjectById,
+  judgeGetProjectById,
 } from "../controllers/projectController";
 import authenticate from "../middleware/authenticate";
 import upload from "../middleware/upload";
@@ -90,6 +92,30 @@ router.get("/get/:projectId", async (req: any, res: any) => {
   }
 
   await getProjectById(req, res);
+});
+
+router.get(
+  "/organizer/:projectId",
+  authenticate,
+  async (req: any, res: any) => {
+    const { projectId } = req.params as { projectId: string };
+
+    if (!projectId) {
+      return res.status(400).json({ message: "Project ID is required" });
+    }
+
+    await organizerGetProjectById(req, res);
+  }
+);
+
+router.get("/judge/:projectId", authenticate, async (req: any, res: any) => {
+  const { projectId } = req.params as { projectId: string };
+
+  if (!projectId) {
+    return res.status(400).json({ message: "Project ID is required" });
+  }
+
+  await judgeGetProjectById(req, res);
 });
 
 export default router;

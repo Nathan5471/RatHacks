@@ -187,6 +187,13 @@ export const updatePassword = async (newPassword: string) => {
   return response.data;
 };
 
+export const updateTheme = async (theme: "default" | "spooky") => {
+  const response = await api.put("/update-theme", {
+    theme,
+  });
+  return response.data;
+};
+
 export const deleteUser = async () => {
   const response = await api.delete("/delete");
   return response.data;
