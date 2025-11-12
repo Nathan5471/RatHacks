@@ -31,7 +31,6 @@ export default function OrganizerEmails() {
     const fetchEmails = async () => {
       try {
         const fetchedEmails = await organizerGetAllEmails();
-        console.log(fetchedEmails, typeof fetchedEmails);
         setEmails(fetchedEmails.allEmails as Email[]);
       } catch (error: unknown) {
         const errorMessage =

@@ -72,7 +72,6 @@ export default function OrganizerEvent() {
       try {
         if (emailId) {
           const response = await organizerGetEmailById(emailId);
-          console.log("received emails", response);
           setEmail(response.email);
         }
       } catch (error: unknown) {
@@ -85,7 +84,6 @@ export default function OrganizerEvent() {
   }, [emailId, reload]);
 
   useEffect(() => {
-    console.log("fetching receipients");
     const fetchReceipients = async () => {
       if (!email) {
         return;
@@ -94,11 +92,9 @@ export default function OrganizerEvent() {
         if (email.sendAll) {
           const response = await getAllReceipients();
           setReceipients(response.allReceipients);
-          console.log("reponse", response.allReceipients);
         }
         switch (email.filterBy) {
           case "gradeLevel":
-            console.log("gradeLevel!");
             {
               if (email.subFilterBy) {
                 const response = await getReceipientsByFilter(
@@ -107,7 +103,6 @@ export default function OrganizerEvent() {
                 );
                 setReceipients(response.receipientData);
                 setSubFilterName(email.subFilterBy);
-                console.log("reponse", response.allReceipients);
               } else {
                 throw Error("subfilter not found");
               }
@@ -129,13 +124,11 @@ export default function OrganizerEvent() {
             break;
           case "event":
             {
-              console.log("event!");
               if (email.subFilterBy) {
                 const response = await getReceipientsByFilter(
                   email.filterBy,
                   email.subFilterBy
                 );
-                console.log("response before", response);
                 setReceipients(response.receipientData);
 
                 try {
@@ -152,7 +145,6 @@ export default function OrganizerEvent() {
                   console.error(errorMessage);
                 }
 
-                console.log("reponse", response.receipientData);
               } else {
                 throw Error("subfilter not found");
               }
@@ -183,7 +175,6 @@ export default function OrganizerEvent() {
                   console.error(errorMessage);
                 }
 
-                console.log("reponse", response.receipientData);
               } else {
                 throw Error("subfilter not found");
               }
@@ -222,8 +213,7 @@ export default function OrganizerEvent() {
     e.preventDefault();
     try {
       if (emailId) {
-        const sentEmail = await sendEmail(emailId);
-        console.log(sentEmail);
+        await sendEmail(emailId);
       }
       setReload(prev => !prev);
     } catch (error: unknown) {

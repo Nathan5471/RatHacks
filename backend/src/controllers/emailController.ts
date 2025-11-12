@@ -47,7 +47,6 @@ export const organizerGetAllEmails = async (req: any, res: any) => {
 
   try {
     const allEmails = await prisma.email.findMany();
-    // console.log("all emails", allEmails);
     return res
       .status(200)
       .json({ message: "Emails loaded successfully", allEmails });
@@ -281,7 +280,7 @@ export const sendEmail = async (req: any, res: any) => {
         break;
       case null:
         receipientData = await prisma.user.findMany();
-        break;  
+        break;
     }
 
     if (!receipientData || receipientData.length == 0) {
@@ -301,7 +300,6 @@ export const sendEmail = async (req: any, res: any) => {
         return participant;
       })
     );
-    console.log("participants", participants);
     const filteredParticipants = participants.filter(
       (participant) => participant !== null
     );
@@ -314,25 +312,29 @@ export const sendEmail = async (req: any, res: any) => {
 
     emailVerifiedParticipants.forEach((participant, index) => {
       setTimeout(() => {
-        console.log("sending email...");
         sendCustomEmail({
           email: participant.email,
           receiverFirstName: participant.firstName,
           messageBody: email.messageBody,
           senderName: organizer.firstName,
           messageSubject: email.messageSubject,
-          senderEmail: hasRatHacksEmail ? organizer.email : "nathan@rathacks.com",
+          senderEmail: hasRatHacksEmail
+            ? organizer.email
+            : "nathan@rathacks.com",
         });
       }, (index / 2) * 1000);
     });
-    
+
     await prisma.email.update({
       where: { id },
       data: {
-        sent: true
+        sent: true,
       },
     });
 
+    return res
+      .status(200)
+      .json({ message: "Email sent successfully" });
   } catch (error) {
     console.error("Error sending emails", error);
     return res.status(500).json({ message: "Failed to send emails" });

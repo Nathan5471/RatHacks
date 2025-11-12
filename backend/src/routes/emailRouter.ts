@@ -26,14 +26,12 @@ router.post("/create", authenticate, async (req: any, res: any) => {
     };
 
   if (!name || !messageSubject || !messageBody) {
-    console.log("fields weren't filled");
     return res
       .status(400)
       .json({ message: "Verify message fields are filled" });
   }
 
   if (!sendAll && filterBy && !subFilterBy) {
-    console.log("fields weren't filled");
     return res
       .status(400)
       .json({ message: "Both filter fields must be filled" });
@@ -54,14 +52,12 @@ router.put("/update/:id", authenticate, async (req: any, res: any) => {
     };
 
   if (!name || !messageSubject || !messageBody) {
-    console.log("fields weren't filled");
     return res
       .status(400)
       .json({ message: "Verify message fields are filled" });
   }
 
   if (!sendAll && filterBy && !subFilterBy) {
-    console.log("fields weren't filled");
     return res
       .status(400)
       .json({ message: "Both filter fields must be filled" });
@@ -70,7 +66,6 @@ router.put("/update/:id", authenticate, async (req: any, res: any) => {
   await updateEmail(req, res);
 });
 
-// router.get("/all", authenticate, getAllWorkshops);
 
 router.get("/organizer-all", authenticate, organizerGetAllEmails);
 
