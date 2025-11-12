@@ -23,6 +23,8 @@ import OrganizerWorkshop from "./pages/organizerPages/OrganizerWorkshop";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
 import OrganizerEvent from "./pages/organizerPages/OrganizerEvent";
 import CheckIn from "./pages/organizerPages/CheckIn";
+import OrganizerEmails from "./pages/organizerPages/OrganizerEmails";
+import OrganizerEmail from "./pages/organizerPages/OrganizerEmail";
 import JudgeDashboard from "./pages/judgePages/JudgeDashboard";
 import JudgeEvents from "./pages/judgePages/JudgeEvents";
 import JudgeEvent from "./pages/judgePages/JudgeEvent";
@@ -90,6 +92,11 @@ function App() {
             <Route
               path="/app/organizer/check-in/:eventId"
               element={<CheckIn />}
+            />
+            <Route path="/app/organizer/emails" element={<OrganizerEmails />} />
+            <Route
+              path="/app/organizer/email/:emailId"
+              element={<OrganizerEmail />}
             />
           </Route>
           <Route element={<JudgeRoute />}>
