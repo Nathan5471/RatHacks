@@ -8,7 +8,7 @@ export default function ThemeOverlay() {
   const [velocity, setVelocity] = useState({ dx: 2, dy: 2 });
 
   useEffect(() => {
-    if (theme !== "spooky") return;
+    if (!["spooky", "space"].includes(theme)) return;
     let animationFrameId: number;
 
     const animate = () => {
@@ -48,16 +48,28 @@ export default function ThemeOverlay() {
     return () => cancelAnimationFrame(animationFrameId);
   }, [position, velocity, theme]);
 
-  if (theme === "spooky") {
+  if (theme === "spooky" || theme === "space") {
     return (
-      <div className="fixed top-0 left-0 w-screen h-screen pointer-events-none z-51">
+      <div className="fixed top-0 left-0 w-screen h-screen pointer-events-none z-52">
         <div
           ref={objectRef}
           className="absolute"
           style={{ left: position.x, top: position.y }}
         >
-          <img src="/ghost.png" alt="Spooky Ghost" className="w-24 h-auto" />
+          {theme === "spooky" && (
+            <img src="/ghost.png" alt="Spooky Ghost" className="w-24 h-auto" />
+          )}
+          {theme === "space" && (
+            <img src="/alienUFO.png" alt="Alien UFO" className="w-24 h-auto" />
+          )}
         </div>
+        {theme === "space" && (
+          <img
+            src="/stars.png"
+            alt="Starry Background"
+            className="w-screen h-screen object-cover"
+          />
+        )}
       </div>
     );
   } else {

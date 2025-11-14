@@ -14,9 +14,9 @@ export default function Settings() {
   const navigate = useNavigate();
   const { user, theme, logout, handleUpdateTheme } = useAuth();
   const { openOverlay } = useOverlay();
-  const [selectedTheme, setSelectedTheme] = useState<"default" | "spooky">(
-    theme
-  );
+  const [selectedTheme, setSelectedTheme] = useState<
+    "default" | "spooky" | "space"
+  >(theme);
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
   const schoolDivisions = [
@@ -174,13 +174,16 @@ export default function Settings() {
               name="theme"
               value={selectedTheme}
               onChange={(e) =>
-                setSelectedTheme(e.target.value as "default" | "spooky")
+                setSelectedTheme(
+                  e.target.value as "default" | "spooky" | "space"
+                )
               }
               className="p-2 rounded-lg text-lg bg-surface-a2 w-full"
               required
             >
               <option value="default">default</option>
               <option value="spooky">spooky</option>
+              <option value="space">space</option>
             </select>
             <button
               onClick={saveSelectedTheme}

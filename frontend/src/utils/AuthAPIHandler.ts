@@ -187,7 +187,7 @@ export const updatePassword = async (newPassword: string) => {
   return response.data;
 };
 
-export const updateTheme = async (theme: "default" | "spooky") => {
+export const updateTheme = async (theme: "default" | "spooky" | "space") => {
   const response = await api.put("/update-theme", {
     theme,
   });

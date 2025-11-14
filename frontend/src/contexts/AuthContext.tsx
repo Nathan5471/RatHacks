@@ -28,10 +28,10 @@ interface AuthContextType {
       }
     | null
     | undefined;
-  theme: "default" | "spooky";
+  theme: "default" | "spooky" | "space";
   getUser: () => void;
   logout: () => void;
-  handleUpdateTheme: (theme: "default" | "spooky") => void;
+  handleUpdateTheme: (theme: "default" | "spooky" | "space") => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,6 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setUser(userData);
       if (userData.theme) {
         document.documentElement.classList.remove("spooky");
+        document.documentElement.classList.remove("space");
         if (userData.theme !== "default") {
           document.documentElement.classList.add(userData.theme);
         }
@@ -75,6 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const handleUpdateTheme = async (theme: AuthContextType["theme"]) => {
     document.documentElement.classList.remove("spooky");
+    document.documentElement.classList.remove("space");
     if (theme !== "default") {
       document.documentElement.classList.add(theme);
     }

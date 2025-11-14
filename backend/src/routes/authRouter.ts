@@ -439,7 +439,7 @@ router.put("/update-password", authenticate, async (req: any, res: any) => {
 
 router.put("/update-theme", authenticate, async (req: any, res: any) => {
   const { theme } = req.body as { theme: string };
-  const themeOptions = ["default", "spooky"];
+  const themeOptions = ["default", "spooky", "space"];
   if (!themeOptions.includes(theme)) {
     return res.status(400).json({ message: "Invalid theme option" });
   }

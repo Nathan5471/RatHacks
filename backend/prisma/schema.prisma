@@ -23,6 +23,7 @@ enum GradeLevel {
 enum Theme {
   default
   spooky
+  space
 }
 
 enum Status {
@@ -147,12 +148,12 @@ model Workshop {
 }
 
 model Email {
-  id                String    @id @default(uuid())
-  name              String
-  messageSubject    String
-  messageBody       String
-  sendAll           Boolean
-  filterBy          String?
-  subFilterBy       String?
-  sent              Boolean  @default(false)        
+  id             String  @id @default(uuid())
+  name           String
+  messageSubject String
+  messageBody    String
+  sendAll        Boolean
+  filterBy       String?
+  subFilterBy    String?
+  sent           Boolean @default(false)
 }

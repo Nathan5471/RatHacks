@@ -1737,7 +1737,7 @@ paths:
               properties:
                 theme:
                   type: string
-                  enum: ["default", "spooky"]
+                  enum: ["default", "spooky", "space"]
               required:
                 - theme
       responses:
