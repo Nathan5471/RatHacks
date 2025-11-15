@@ -89,7 +89,7 @@ export default function Register() {
         className="flex flex-col w-80 sm:w-100 bg-surface-a1 p-4 m-4 rounded-lg"
         onSubmit={(e) => handleRegister(e)}
       >
-        <h1 className="text-primary-a0 spooky:text-spooky-a0 text-4xl font-bold text-center mb-4">
+        <h1 className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-4xl font-bold text-center mb-4">
           Register
         </h1>
         <label htmlFor="email" className="text-2xl mt-2">
@@ -257,13 +257,9 @@ export default function Register() {
             onClick={() => setIsGovSchool(true)}
             className={`${
               isGovSchool
-                ? "bg-primary-a0 spooky:bg-spooky-a0"
-                : "bg-surface-a2"
-            } p-2 rounded-lg w-1/2 mr-1 ${
-              isGovSchool
-                ? "hover:bg-primary-a1 spooky:hover:bg-spooky-a1"
-                : "hover:bg-surface-a3"
-            }`}
+                ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 spooky:space:bg-space-a1"
+                : "bg-surface-a2 hover:bg-surface-a3"
+            } p-2 rounded-lg w-1/2 mr-1`}
           >
             Yes
           </button>
@@ -272,13 +268,9 @@ export default function Register() {
             onClick={() => setIsGovSchool(false)}
             className={`${
               isGovSchool === false
-                ? "bg-primary-a0 spooky:bg-spooky-a0"
-                : "bg-surface-a2"
-            } p-2 rounded-lg w-1/2 ${
-              isGovSchool === false
-                ? "hover:bg-primary-a1 spooky:hover:bg-spooky-a1"
-                : "hover:bg-surface-a3"
-            }`}
+                ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a2"
+                : "bg-surface-a2 hover:bg-surface-a3"
+            } p-2 rounded-lg w-1/2`}
           >
             No
           </button>
@@ -305,7 +297,7 @@ export default function Register() {
             onClick={() => setPreviousHackathon(true)}
             className={`${
               previousHackathon === true
-                ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
+                ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
                 : "bg-surface-a2 hover:bg-surface-a3"
             } p-2 rounded-lg w-1/2 mr-1`}
           >
@@ -316,7 +308,7 @@ export default function Register() {
             onClick={() => setPreviousHackathon(false)}
             className={`${
               previousHackathon === false
-                ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
+                ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
                 : "bg-surface-a2 hover:bg-surface-a3"
             } p-2 rounded-lg w-1/2 mr-1`}
           >
@@ -448,7 +440,7 @@ export default function Register() {
         {error && <p className="text-red-500">{error}</p>}
         <button
           type="submit"
-          className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg mt-4"
+          className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg mt-4"
         >
           Register
         </button>
@@ -456,7 +448,7 @@ export default function Register() {
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
+            className="text-primary-a0 spooky:text-spooky-a0 space:bg-space-a0 hover:underline"
           >
             Login here.
           </Link>

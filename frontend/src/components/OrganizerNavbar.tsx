@@ -12,7 +12,7 @@ export default function OrganizerNavbar() {
         to="/app/organizer"
         className={`p-2 sm:p-3 mt-2 md:mt-4 mx-2 md:m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/organizer"
-            ? "text-primary-a0 spooky:text-spooky-a0"
+            ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
             : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
@@ -22,7 +22,7 @@ export default function OrganizerNavbar() {
         to="/app/organizer/users"
         className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/organizer/users"
-            ? "text-primary-a0 spooky:text-spooky-a0"
+            ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
             : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
@@ -32,7 +32,7 @@ export default function OrganizerNavbar() {
         to="/app/organizer/workshops"
         className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/organizer/workshops"
-            ? "text-primary-a0 spooky:text-spooky-a0"
+            ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
             : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
@@ -42,7 +42,7 @@ export default function OrganizerNavbar() {
         to="/app/organizer/events"
         className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/organizer/events"
-            ? "text-primary-a0 spooky:text-spooky-a0"
+            ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
             : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
@@ -52,7 +52,7 @@ export default function OrganizerNavbar() {
         to="/app/organizer/emails"
         className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/organizer/emails"
-            ? "text-primary-a0 spooky:text-spooky-a0"
+            ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
             : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >

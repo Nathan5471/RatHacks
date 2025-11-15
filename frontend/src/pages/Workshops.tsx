@@ -223,7 +223,7 @@ export default function Workshops() {
                   <div className="flex flex-row w-full mt-auto">
                     <Link
                       to={`/app/workshop/${workshop.id}`}
-                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold text-center w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
@@ -238,7 +238,7 @@ export default function Workshops() {
                       ) : (
                         <button
                           onClick={(e) => handleJoin(e, workshop.id)}
-                          className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a1 spooky:hover:bg-spooky-a1 p-2 ml-2 rounded-lg font-bold w-full"
+                          className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a1 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 ml-2 rounded-lg font-bold w-full"
                         >
                           Join
                         </button>
@@ -248,7 +248,7 @@ export default function Workshops() {
                         href={workshop.googleMeetURL}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 ml-2 rounded-lg font-bold text-center w-full"
+                        className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 ml-2 rounded-lg font-bold text-center w-full"
                       >
                         Join Meeting
                       </a>

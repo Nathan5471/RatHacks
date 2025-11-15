@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @custom-variant spooky (&:where(.spooky, .spooky *));
+@custom-variant space (&:where(.space, .space *));
 
 @theme {
   --color-primary-a0: #17bd3d;
@@ -27,4 +28,10 @@
   --color-spooky-a3: #ffb175;
   --color-spooky-a4: #ffbe8c;
   --color-spooky-a5: #ffcba2;
+  --color-space-a0: #9b3cba;
+  --color-space-a1: #a854c2;
+  --color-space-a2: #b46aca;
+  --color-space-a3: #bf7fd2;
+  --color-space-a4: #cb94d9;
+  --color-space-a5: #d6a9e1;
 }

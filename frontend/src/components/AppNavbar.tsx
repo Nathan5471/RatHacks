@@ -15,7 +15,9 @@ export default function AppNavbar() {
       <Link
         to="/app"
         className={`p-2 sm:p-3 mt-2 md:mt-4 mx-2 md:m-2 rounded-lg text-xl text-center font-bold ${
-          path === "/app" ? "text-primary-a0 spooky:text-spooky-a0" : ""
+          path === "/app"
+            ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
+            : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
         Dashboard
@@ -24,7 +26,7 @@ export default function AppNavbar() {
         to="/app/workshops"
         className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/workshops"
-            ? "text-primary-a0 spooky:text-spooky-a0"
+            ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
             : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
@@ -33,7 +35,9 @@ export default function AppNavbar() {
       <Link
         to="/app/events"
         className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
-          path === "/app/events" ? "text-primary-a0 spooky:text-spooky-a0" : ""
+          path === "/app/events"
+            ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
+            : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
         Events
@@ -42,7 +46,7 @@ export default function AppNavbar() {
         to="/app/settings"
         className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/settings"
-            ? "text-primary-a0 spooky:text-spooky-a0"
+            ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
             : ""
         } bg-surface-a2 hover:bg-surface-a3`}
       >
@@ -53,7 +57,7 @@ export default function AppNavbar() {
           to="/app/organizer"
           className={`p-2 sm:p-3 mx-2 mt-2 sm:m-2 rounded-lg text-xl text-center font-bold ${
             path === "/app/organizer"
-              ? "text-primary-a0 spooky:text-spooky-a0"
+              ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
               : ""
           } bg-surface-a2 hover:bg-surface-a3`}
         >
@@ -64,7 +68,9 @@ export default function AppNavbar() {
         <Link
           to="/app/judge"
           className={`p-2 sm:p-3 mx-2 mt-2 sm:m-2 rounded-lg text-xl text-center font-bold ${
-            path === "/app/judge" ? "text-primary-a0 spooky:text-spooky-a0" : ""
+            path === "/app/judge"
+              ? "text-primary-a0 spooky:text-spooky-a0 space:text-space-a0"
+              : ""
           } bg-surface-a2 hover:bg-surface-a3`}
         >
           Judge

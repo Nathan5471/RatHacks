@@ -112,7 +112,7 @@ export default function JudgeEvents() {
                   />
                   <Link
                     to={`/app/judge/event/${event.id}`}
-                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full mt-2 sm:mt-auto"
+                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full mt-2 sm:mt-auto"
                   >
                     View Event
                   </Link>

@@ -95,7 +95,7 @@ export default function CheckIn() {
             className="w-full sm:w-5/6 h-full mt-5 flex items-center justify-center mb-2"
           >
             <form className="flex flex-col w-120 bg-surface-a1 p-4 rounded-lg">
-              <h1 className="text-4xl font-bold text-center text-primary-a0 spooky:text-spooky-a0 mb-4">
+              <h1 className="text-4xl font-bold text-center text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 mb-4">
                 Check In
               </h1>
               <label htmlFor="userEmail" className="text-2xl mb-2">
@@ -113,7 +113,7 @@ export default function CheckIn() {
               />
               <button
                 type="submit"
-                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 text-white font-bold p-2 rounded-lg"
+                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-white font-bold p-2 rounded-lg"
               >
                 Check In
               </button>
@@ -154,7 +154,7 @@ export default function CheckIn() {
             className="w-full sm:w-5/6 h-full mt-5 flex items-center justify-center mb-2"
           >
             <div className="flex flex-col w-120 bg-surface-a1 p-4 rounded-lg">
-              <h1 className="text-4xl font-bold text-center text-primary-a0 spooky:text-spooky-a0 mb-4">
+              <h1 className="text-4xl font-bold text-center text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 mb-4">
                 {user ? "User Found" : "User Not Found"}
               </h1>
               {!user && (
@@ -170,7 +170,7 @@ export default function CheckIn() {
                       setError("");
                       setStatus("awaitingUser");
                     }}
-                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 text-white font-bold p-2 rounded-lg mt-2"
+                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-white font-bold p-2 rounded-lg mt-2"
                   >
                     Back to Email
                   </button>
@@ -185,7 +185,7 @@ export default function CheckIn() {
                   <div className="flex flex-row">
                     <button
                       onClick={handleCheckIn}
-                      className="w-full bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 text-white font-bold p-2 rounded-lg"
+                      className="w-full bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-white font-bold p-2 rounded-lg"
                     >
                       Confirm Check-In
                     </button>
@@ -239,7 +239,7 @@ export default function CheckIn() {
           className="w-full sm:w-5/6 h-full mt-5 flex items-center justify-center mb-2"
         >
           <form className="flex flex-col w-120 bg-surface-a1 p-4 rounded-lg">
-            <h1 className="text-4xl font-bold text-center text-primary-a0 spooky:text-spooky-a0 mb-4">
+            <h1 className="text-4xl font-bold text-center text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 mb-4">
               {error ? "Check In Failed" : "Checked In Successfully!"}
             </h1>
             {error ? (
@@ -255,13 +255,13 @@ export default function CheckIn() {
                       setError("");
                       setStatus("awaitingUser");
                     }}
-                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 text-white font-bold p-2 rounded-lg mt-2"
+                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-white font-bold p-2 rounded-lg mt-2"
                   >
                     Back to Email
                   </button>
                   <button
                     onClick={handleCheckIn}
-                    className="w-full ml-2 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 text-white font-bold p-2 rounded-lg mt-2"
+                    className="w-full ml-2 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-white font-bold p-2 rounded-lg mt-2"
                   >
                     Retry Check-In
                   </button>
@@ -279,7 +279,7 @@ export default function CheckIn() {
                     setError("");
                     setStatus("awaitingUser");
                   }}
-                  className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 text-white font-bold p-2 rounded-lg mt-2"
+                  className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-white font-bold p-2 rounded-lg mt-2"
                 >
                   Back to Email
                 </button>

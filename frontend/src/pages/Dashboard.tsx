@@ -66,7 +66,7 @@ export default function Dashboard() {
         </button>
         <h1 className="text-2xl sm:text-3xl md:text-4xl text-center">
           Welcome to your dashboard{" "}
-          <span className="font-bold text-primary-a0 spooky:text-spooky-a0">
+          <span className="font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0">
             {user?.firstName}
           </span>
           !
@@ -75,7 +75,7 @@ export default function Dashboard() {
           <div className="flex flex-col mt-4 p-4 w-5/6 lg:w-2/3 bg-surface-a1 rounded-lg items-center">
             <h2 className="text-xl sm:text-2xl font-bold text-center">
               Your email has{" "}
-              <span className="text-2xl sm:text-3xl text-primary-a0 spooky:text-spooky-a0">
+              <span className="text-2xl sm:text-3xl text-primary-a0 spooky:text-spooky-a0 space:text-space-a0">
                 NOT
               </span>{" "}
               been verified
@@ -86,7 +86,7 @@ export default function Dashboard() {
                 href="mailto:nathan@rathacks.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
+                className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 hover:underline"
               >
                 nathan@rathacks.com
               </a>
@@ -97,7 +97,7 @@ export default function Dashboard() {
               className={`mt-4 p-2 ${
                 lastRequested
                   ? "bg-surface-a2 cursor-not-allowed"
-                  : "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
+                  : "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
               } rounded-lg w-5/6 sm:w-2/3 md:w-1/2 lg:w-1/3 font-bold`}
               onClick={(e) => handleResendVerification(e)}
             >
@@ -113,14 +113,14 @@ export default function Dashboard() {
             2025. Check out the{" "}
             <Link
               to="/"
-              className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
+              className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 hover:underline"
             >
               Home Page
             </Link>{" "}
             or{" "}
             <Link
               to="/app/events"
-              className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
+              className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 hover:underline"
             >
               Events Page
             </Link>{" "}
@@ -136,7 +136,7 @@ export default function Dashboard() {
               href="https://discord.rathacks.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-a0 spooky:text-spooky-a0 hover:underline"
+              className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 hover:underline"
             >
               discord.rathacks.com
             </a>

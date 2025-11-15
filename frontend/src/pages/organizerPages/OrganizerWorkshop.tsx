@@ -240,12 +240,12 @@ export default function OrganizerWorkshop() {
                 <div className="flex flex-row w-full mt-auto">
                   <Link
                     to="/app/organizer/workshops"
-                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                   >
                     Back to Workshops
                   </Link>
                   <button
-                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                     onClick={handleOpenEditEvent}
                   >
                     Edit
@@ -286,14 +286,14 @@ export default function OrganizerWorkshop() {
                     href={workshop.googleMeetURL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary-a0 spooky:text-spooky-a0 text-center sm:text-lg hover:underline break-all"
+                    className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center sm:text-lg hover:underline break-all"
                   >
                     {workshop.googleMeetURL}
                   </a>
                 </div>
                 <div className="flex flex-col w-full mt-2 sm:mt-0 sm:w-1/5 justify-center">
                   <button
-                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold"
+                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold"
                     onClick={handleEndWorkshop}
                   >
                     End Meeting
@@ -308,13 +308,13 @@ export default function OrganizerWorkshop() {
                 </h2>
                 <div className="flex flex-row justify-center">
                   <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
+                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center">
                       {timeRemaining?.days || 0}
                     </span>
                     <span className="text-lg sm:text-xl text-center">Days</span>
                   </div>
                   <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
+                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center">
                       {timeRemaining?.hours || 0}
                     </span>
                     <span className="text-lg sm:text-xl text-center">
@@ -322,7 +322,7 @@ export default function OrganizerWorkshop() {
                     </span>
                   </div>
                   <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
+                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center">
                       {timeRemaining?.minutes || 0}
                     </span>
                     <span className="text-lg sm:text-xl text-center">
@@ -330,7 +330,7 @@ export default function OrganizerWorkshop() {
                     </span>
                   </div>
                   <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 text-center">
+                    <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center">
                       {timeRemaining?.seconds || 0}
                     </span>
                     <span className="text-lg sm:text-xl text-center">
@@ -355,7 +355,7 @@ export default function OrganizerWorkshop() {
                     />
                     <button
                       type="submit"
-                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 px-8 py-2 ml-2 rounded-lg font-bold"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 px-8 py-2 ml-2 rounded-lg font-bold"
                     >
                       Start
                     </button>
@@ -433,7 +433,7 @@ export default function OrganizerWorkshop() {
                           }`}
                         >
                           <button
-                            className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold"
+                            className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold"
                             onClick={(e) => handleOpenUserView(e, index)}
                           >
                             View
@@ -454,7 +454,7 @@ export default function OrganizerWorkshop() {
             <div className="flex w-full justify-center">
               <Link
                 to="/app/organizer/workshops"
-                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-2 rounded-lg font-bold"
+                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold"
               >
                 Back to Workshops
               </Link>

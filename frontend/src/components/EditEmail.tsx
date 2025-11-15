@@ -208,7 +208,16 @@ export default function EditEmail({
     e.preventDefault();
     setError("");
     try {
-      console.log("update info", name, messageSubject, messageBody, sendAll, filterBy, subFilterBy, sent);
+      console.log(
+        "update info",
+        name,
+        messageSubject,
+        messageBody,
+        sendAll,
+        filterBy,
+        subFilterBy,
+        sent
+      );
       await updateEmail(emailId, {
         name,
         messageSubject,
@@ -339,7 +348,7 @@ export default function EditEmail({
         <div className="w-full flex flex-row mt-4">
           <button
             type="submit"
-            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full font-bold"
+            className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg w-full font-bold"
           >
             Update
           </button>

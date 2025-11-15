@@ -252,7 +252,7 @@ export default function CreateEmail() {
           </>
         )}
 
-        {(!sendAll && filterBy) && (
+        {!sendAll && filterBy && (
           <>
             <label htmlFor="subFilterBy" className="text-2xl mt-2">
               {filterMap.get(filterBy)}?
@@ -264,11 +264,13 @@ export default function CreateEmail() {
               onChange={(e) => setSubFilterBy(e.target.value)}
             >
               <option value="">Select a {filterMap.get(filterBy)}</option>
-              {subFilterMap.get(filterBy).map((catergory: {name: string; id: string}) => (
-                <option value={catergory.id} key={catergory.id}>
-                  {catergory.name}
-                </option>
-              ))}
+              {subFilterMap
+                .get(filterBy)
+                .map((catergory: { name: string; id: string }) => (
+                  <option value={catergory.id} key={catergory.id}>
+                    {catergory.name}
+                  </option>
+                ))}
             </select>
           </>
         )}
@@ -277,7 +279,7 @@ export default function CreateEmail() {
         <div className="w-full flex flex-row mt-4">
           <button
             type="submit"
-            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full font-bold"
+            className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg w-full font-bold"
           >
             Create
           </button>

@@ -111,7 +111,7 @@ export default function OrganizerEmails() {
             </div>
             <div className="flex items-center">
               <button
-                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
+                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
                 onClick={handleOpenCreateEmail}
               >
                 New Email
@@ -158,7 +158,7 @@ export default function OrganizerEmails() {
             </div>
             <div className="flex items-center">
               <button
-                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
+                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
                 onClick={handleOpenCreateEmail}
               >
                 Add Email
@@ -211,7 +211,7 @@ export default function OrganizerEmails() {
           </div>
           <div className="flex items-center">
             <button
-              className="ml-auto p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1"
+              className="ml-auto p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
               onClick={handleOpenCreateEmail}
             >
               New Email
@@ -239,12 +239,12 @@ export default function OrganizerEmails() {
                   <div className="flex flex-col mt-auto gap-2 items-center w-1/4">
                     <Link
                       to={`/app/organizer/email/${email.id}`}
-                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
                     <button
-                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 p-1 sm:p-2 rounded-lg font-bold w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 rounded-lg font-bold w-full"
                       onClick={(e) => handleOpenEditEmail(e, email.id)}
                     >
                       Edit
