@@ -5122,6 +5122,136 @@ paths:
                     example: Failed to submit project
                 required:
                   - message
+  /api/project/feedback/{projectId}:
+    post:
+      summary: Leave feedback on a project
+      tags:
+        - Projects
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                creativityScore:
+                  type: number
+                  min: 1
+                  max: 10
+                creativityFeedback:
+                  type: string
+                functionalityScore:
+                  type: number
+                  min: 1
+                  max: 10
+                functionalityFeedback:
+                  type: string
+                technicalityScore:
+                  type: number
+                  min: 1
+                  max: 10
+                technicalityFeedback:
+                  type: string
+                interfaceScore:
+                  type: number
+                  min: 1
+                  max: 10
+                interfaceFeedback:
+                  type: string
+                otherFeedback:
+                  type: string
+              required:
+                - creativityScore
+                - creativityFeedback
+                - functionalityScore
+                - functionalityFeedback
+                - technicalityScore
+                - technicalityFeedback
+                - interfaceScore
+                - interfaceFeedback
+                - otherFeedback
+      responses:
+        201:
+          description: Successfully left feedback
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully left feedback
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Project or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to leave feedback
+                required:
+                  - message
   /api/project/update/{projectId}:
     put:
       summary: Update a project

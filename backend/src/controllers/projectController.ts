@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import prisma from "../prisma/client";
+import { resolveSoa } from "dns";
 
 export const createProject = async (req: any, res: any) => {
   const { name, description, codeURL, demoURL, eventId } = req.body as {
@@ -121,6 +122,82 @@ export const submitProject = async (req: any, res: any) => {
   } catch (error) {
     console.error("Error submitting project:", error);
     return res.status(500).json({ message: "Failed to submit project" });
+  }
+};
+
+export const leaveFeedback = async (req: any, res: any) => {
+  const { projectId } = req.params as { projectId: string };
+  const {
+    creativityScore,
+    creativityFeedback,
+    functionalityScore,
+    functionalityFeedback,
+    technicalityScore,
+    technicalityFeedback,
+    interfaceScore,
+    interfaceFeedback,
+    otherFeedback,
+  } = req.body as {
+    creativityScore: number;
+    creativityFeedback: string;
+    functionalityScore: number;
+    functionalityFeedback: string;
+    technicalityScore: number;
+    technicalityFeedback: string;
+    interfaceScore: number;
+    interfaceFeedback: string;
+    otherFeedback: string;
+  };
+  const user = req.user as User;
+
+  if (user.accountType !== "judge") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+    });
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+    const existingFeedback = await prisma.judgeFeedback.findMany({
+      where: {
+        judgeId: user.id,
+        projectId,
+      },
+    });
+    if (existingFeedback.length > 0) {
+      existingFeedback.forEach(async (feedback) => {
+        await prisma.judgeFeedback.delete({
+          where: { id: feedback.id },
+        });
+      });
+    }
+    await prisma.judgeFeedback.create({
+      data: {
+        judgeId: user.id,
+        projectId,
+        creativityScore,
+        creativityFeedback,
+        functionalityScore,
+        functionalityFeedback,
+        technicalityScore,
+        technicalityFeedback,
+        interfaceScore,
+        interfaceFeedback,
+        otherFeedback,
+        totalScore:
+          creativityScore +
+          functionalityScore +
+          technicalityScore +
+          interfaceScore,
+      },
+    });
+    return res.status(201).json({ message: "Successfully left feedback" });
+  } catch (error) {
+    console.error("Error leaving feedback:", error);
+    return res.status(500).json({ message: "Failed to leave feedback" });
   }
 };
 

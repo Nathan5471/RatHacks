@@ -2,6 +2,7 @@ import express from "express";
 import {
   createProject,
   submitProject,
+  leaveFeedback,
   updateProject,
   getProjectById,
   organizerGetProjectById,
@@ -40,6 +41,68 @@ router.post(
     req.video = req.files?.video ? req.files.video[0].filename : null;
 
     await createProject(req, res);
+  }
+);
+
+router.post(
+  "/feedback/:projectId",
+  authenticate,
+  async (req: any, res: any) => {
+    const { projectId } = req.params as { projectId: string };
+    const {
+      creativityScore,
+      creativityFeedback,
+      functionalityScore,
+      functionalityFeedback,
+      technicalityScore,
+      technicalityFeedback,
+      interfaceScore,
+      interfaceFeedback,
+      otherFeedback,
+    } = req.body as {
+      creativityScore: number;
+      creativityFeedback: string;
+      functionalityScore: number;
+      functionalityFeedback: string;
+      technicalityScore: number;
+      technicalityFeedback: string;
+      interfaceScore: number;
+      interfaceFeedback: string;
+      otherFeedback: string;
+    };
+
+    if (!projectId) {
+      return res.status(400).json({ message: "Project ID is required" });
+    }
+    if (
+      !creativityScore ||
+      !creativityFeedback ||
+      !functionalityScore ||
+      !functionalityFeedback ||
+      !technicalityScore ||
+      !technicalityFeedback ||
+      !interfaceScore ||
+      !interfaceFeedback ||
+      !otherFeedback
+    ) {
+      return res
+        .status(400)
+        .json({ message: "All scores and feedback are required" });
+    }
+    if (
+      creativityScore < 1 ||
+      creativityScore > 10 ||
+      functionalityScore < 1 ||
+      functionalityScore > 10 ||
+      technicalityScore < 1 ||
+      technicalityScore > 10 ||
+      interfaceScore < 1 ||
+      interfaceScore > 10
+    ) {
+      return res.status(400).json({ message: "Score is out of range: 1-10" });
+    }
+
+    await leaveFeedback(req, res);
   }
 );
 
