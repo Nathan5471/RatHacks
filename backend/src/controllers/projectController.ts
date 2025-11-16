@@ -161,6 +161,17 @@ export const leaveFeedback = async (req: any, res: any) => {
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
+    const event = await prisma.event.findUnique({
+      where: { id: project.eventId },
+    });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    if (event.releasedJudging) {
+      return res
+        .status(400)
+        .json({ message: "Judging has already been released" });
+    }
     const existingFeedback = await prisma.judgeFeedback.findMany({
       where: {
         judgeId: user.id,
@@ -456,6 +467,7 @@ export const judgeGetProjectById = async (req: any, res: any) => {
           id: event.id,
           name: event.name,
         },
+        canBeJudged: !event.releasedJudging,
       },
     });
   } catch (error) {

@@ -254,7 +254,7 @@ export default function JudgeEvent() {
                 {filteredProjects.map((project) => (
                   <div
                     key={project.id}
-                    className="bg-surface-a1 p-4 rounded-lg"
+                    className="flex flex-col bg-surface-a1 p-4 rounded-lg w-ful"
                   >
                     {project.screenshotURL && (
                       <img
@@ -266,8 +266,8 @@ export default function JudgeEvent() {
                     <h3 className="text-xl font-bold mb-2">{project.name}</h3>
                     <p className="mb-2">{project.description}</p>
                     <Link
-                      to={`/app/judge/event/${event.id}/project/${project.id}`}
-                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1s p-2 rounded-lg font-bold text-center"
+                      to={`/app/judge/project/${project.id}`}
+                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold text-center w-full mt-2"
                     >
                       {project.judged === false
                         ? "Judge Project"

@@ -48,6 +48,24 @@ export const submitProject = async (projectId: string) => {
   return response.data;
 };
 
+export const judgeProject = async (
+  projectId: string,
+  feedback: {
+    creativityScore: number;
+    creativityFeedback: string;
+    functionalityScore: number;
+    functionalityFeedback: string;
+    technicalityScore: number;
+    technicalityFeedback: string;
+    interfaceScore: number;
+    interfaceFeedback: string;
+    otherFeedback: string;
+  }
+) => {
+  const response = await api.post(`/feedback/${projectId}`, feedback);
+  return response.data;
+};
+
 export const updateProject = async (
   projectId: string,
   projectData: {
@@ -79,5 +97,15 @@ export const updateProject = async (
 
 export const getProjectById = async (projectId: string) => {
   const response = await api.get(`/get/${projectId}`);
+  return response.data;
+};
+
+export const organizerGetProjectById = async (projectId: string) => {
+  const response = await api.get(`/organizer/${projectId}`);
+  return response.data;
+};
+
+export const judgeGetProjectById = async (projectId: string) => {
+  const response = await api.get(`/judge/${projectId}`);
   return response.data;
 };

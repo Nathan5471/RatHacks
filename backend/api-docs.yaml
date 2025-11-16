@@ -2930,7 +2930,7 @@ paths:
       tags:
         - Events
       security:
-        - cookieAUth: []
+        - cookieAuth: []
       parameters:
         - name: eventId
           in: paths
@@ -5229,7 +5229,7 @@ paths:
                 required:
                   - message
         404:
-          description: Project or user not found
+          description: Project, event, or user not found
           content:
             application/json:
               schema:
@@ -5613,6 +5613,144 @@ paths:
                       - submittedAt
                       - team
                       - event
+                required:
+                  - message
+                  - project
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Project, user, event, or team not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to get project
+                required:
+                  - message
+  /api/project/judge/{projectId}:
+    get:
+      summary: Judge get project id
+      tags:
+        - Projects
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Project fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Project loaded successfully
+                  project:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      codeURL:
+                        type: string
+                        format: uri
+                      screenshotURL:
+                        type: string
+                        format: uri
+                      videoURL:
+                        type: string
+                        format: uri
+                      demoURL:
+                        type: string
+                        format: uri
+                      submittedAt:
+                        type: string
+                        format: date-time
+                      team:
+                        type: array
+                        items:
+                          type: string
+                      event:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          name:
+                            type: string
+                        required:
+                          - id
+                          - name
+                      canBeJudged:
+                        type: boolean
+                    required:
+                      - id
+                      - name
+                      - description
+                      - submittedAt
+                      - team
+                      - event
+                      - canBeJudged
                 required:
                   - message
                   - project

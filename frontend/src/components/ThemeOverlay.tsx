@@ -21,9 +21,7 @@ export default function ThemeOverlay() {
       const objectRectangle = object.getBoundingClientRect();
 
       let { x, y } = position;
-      console.log(`x: ${x}, y: ${y}`);
       let { dx, dy } = velocity;
-      console.log(`dx: ${dx}, dy: ${dy}`);
 
       if (x + objectRectangle.width >= width || x < 0) {
         dx *= -1;
@@ -31,11 +29,9 @@ export default function ThemeOverlay() {
       if (y + objectRectangle.height >= height || y < 0) {
         dy *= -1;
       }
-      console.log(`dx: ${dx}, dy: ${dy}`);
 
       x += dx;
       y += dy;
-      console.log(`x: ${x}, y: ${y}`);
 
       setPosition({ x, y });
       setVelocity({ dx, dy });

@@ -28,6 +28,7 @@ import OrganizerEmail from "./pages/organizerPages/OrganizerEmail";
 import JudgeDashboard from "./pages/judgePages/JudgeDashboard";
 import JudgeEvents from "./pages/judgePages/JudgeEvents";
 import JudgeEvent from "./pages/judgePages/JudgeEvent";
+import JudgeProject from "./pages/judgePages/JudgeProject";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -103,6 +104,10 @@ function App() {
             <Route path="/app/judge" element={<JudgeDashboard />} />
             <Route path="/app/judge/events" element={<JudgeEvents />} />
             <Route path="/app/judge/event/:eventId" element={<JudgeEvent />} />
+            <Route
+              path="/app/judge/project/:projectId"
+              element={<JudgeProject />}
+            />
           </Route>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
