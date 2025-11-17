@@ -5147,38 +5147,26 @@ paths:
                   type: number
                   min: 1
                   max: 10
-                creativityFeedback:
-                  type: string
                 functionalityScore:
                   type: number
                   min: 1
                   max: 10
-                functionalityFeedback:
-                  type: string
                 technicalityScore:
                   type: number
                   min: 1
                   max: 10
-                technicalityFeedback:
-                  type: string
                 interfaceScore:
                   type: number
                   min: 1
                   max: 10
-                interfaceFeedback:
-                  type: string
-                otherFeedback:
+                feedback:
                   type: string
               required:
                 - creativityScore
-                - creativityFeedback
                 - functionalityScore
-                - functionalityFeedback
                 - technicalityScore
-                - technicalityFeedback
                 - interfaceScore
-                - interfaceFeedback
-                - otherFeedback
+                - feedback
       responses:
         201:
           description: Successfully left feedback
@@ -5743,6 +5731,33 @@ paths:
                           - name
                       canBeJudged:
                         type: boolean
+                      judgeFeedback:
+                        type: object
+                        properties:
+                          creativityScore:
+                            type: number
+                            min: 1
+                            max: 10
+                          functionalityScore:
+                            type: number
+                            min: 1
+                            max: 10
+                          technicalityScore:
+                            type: number
+                            min: 1
+                            max: 10
+                          interfaceScore:
+                            type: number
+                            min: 1
+                            max: 10
+                          feedback:
+                            type: string
+                        required:
+                          - creativityScore
+                          - functionalityScore
+                          - technicalityScore
+                          - interfaceScore
+                          - feedback
                     required:
                       - id
                       - name

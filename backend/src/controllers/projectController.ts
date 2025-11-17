@@ -129,24 +129,16 @@ export const leaveFeedback = async (req: any, res: any) => {
   const { projectId } = req.params as { projectId: string };
   const {
     creativityScore,
-    creativityFeedback,
     functionalityScore,
-    functionalityFeedback,
     technicalityScore,
-    technicalityFeedback,
     interfaceScore,
-    interfaceFeedback,
-    otherFeedback,
+    feedback,
   } = req.body as {
     creativityScore: number;
-    creativityFeedback: string;
     functionalityScore: number;
-    functionalityFeedback: string;
     technicalityScore: number;
-    technicalityFeedback: string;
     interfaceScore: number;
-    interfaceFeedback: string;
-    otherFeedback: string;
+    feedback: string;
   };
   const user = req.user as User;
 
@@ -190,14 +182,10 @@ export const leaveFeedback = async (req: any, res: any) => {
         judgeId: user.id,
         projectId,
         creativityScore,
-        creativityFeedback,
         functionalityScore,
-        functionalityFeedback,
         technicalityScore,
-        technicalityFeedback,
         interfaceScore,
-        interfaceFeedback,
-        otherFeedback,
+        feedback,
         totalScore:
           creativityScore +
           functionalityScore +
@@ -447,6 +435,9 @@ export const judgeGetProjectById = async (req: any, res: any) => {
       })
     );
     const filteredMembers = members.filter((member) => member !== null);
+    const judgeFeedback = await prisma.judgeFeedback.findFirst({
+      where: { projectId, judgeId: user.id },
+    });
     return res.status(200).json({
       message: "Project loaded succesfully",
       project: {
@@ -468,6 +459,7 @@ export const judgeGetProjectById = async (req: any, res: any) => {
           name: event.name,
         },
         canBeJudged: !event.releasedJudging,
+        judgeFeedback,
       },
     });
   } catch (error) {

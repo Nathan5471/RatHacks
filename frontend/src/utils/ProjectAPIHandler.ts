@@ -52,14 +52,10 @@ export const judgeProject = async (
   projectId: string,
   feedback: {
     creativityScore: number;
-    creativityFeedback: string;
     functionalityScore: number;
-    functionalityFeedback: string;
     technicalityScore: number;
-    technicalityFeedback: string;
     interfaceScore: number;
-    interfaceFeedback: string;
-    otherFeedback: string;
+    feedback: string;
   }
 ) => {
   const response = await api.post(`/feedback/${projectId}`, feedback);

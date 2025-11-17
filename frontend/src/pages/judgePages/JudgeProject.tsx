@@ -1,14 +1,29 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { judgeGetProjectById } from "../../utils/ProjectAPIHandler";
+import {
+  judgeGetProjectById,
+  judgeProject,
+} from "../../utils/ProjectAPIHandler";
 import { IoMenu } from "react-icons/io5";
+import { ToastContainer, toast } from "react-toastify";
 import JudgeNavbar from "../../components/JudgeNavbar";
 
 export default function JudgeProject() {
   const { projectId } = useParams() as {
-    eventId: string;
     projectId: string;
   };
+  interface JudgeFeedback {
+    id: string;
+    judgeId: string;
+    projectId: string;
+    creativityScore: number;
+    functionalityScore: number;
+    technicalityScore: number;
+    interfaceScore: number;
+    feedback: string;
+    totalScore: number;
+    createdAt: string;
+  }
   interface Project {
     id: string;
     name: string;
@@ -20,11 +35,17 @@ export default function JudgeProject() {
     team: string[];
     judged: boolean;
     canBeJudged: boolean;
+    judgeFeedback: JudgeFeedback | null;
     submittedAt: string;
   }
   const [project, setProject] = useState<Project | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [creativityScore, setCreativityScore] = useState(5);
+  const [functionalityScore, setFunctionalityScore] = useState(5);
+  const [technicalityScore, setTechnicalityScore] = useState(5);
+  const [interfaceScore, setInterfaceScore] = useState(5);
+  const [feedback, setFeedback] = useState("");
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
@@ -33,8 +54,18 @@ export default function JudgeProject() {
       setError("");
       try {
         const projectData = await judgeGetProjectById(projectId);
-        console.log(projectData);
         setProject(projectData.project);
+        if (projectData.project.judgeFeedback) {
+          setCreativityScore(projectData.project.judgeFeedback.creativityScore);
+          setFunctionalityScore(
+            projectData.project.judgeFeedback.functionalityScore
+          );
+          setTechnicalityScore(
+            projectData.project.judgeFeedback.technicalityScore
+          );
+          setInterfaceScore(projectData.project.judgeFeedback.interfaceScore);
+          setFeedback(projectData.project.judgeFeedback.feedback);
+        }
       } catch (error) {
         console.error("Failed to get project:", error);
         const errorMessage =
@@ -51,6 +82,31 @@ export default function JudgeProject() {
     };
     handleFetchProject();
   }, [projectId]);
+
+  const handleJudgeProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!projectId) return;
+    try {
+      await judgeProject(projectId, {
+        creativityScore,
+        functionalityScore,
+        technicalityScore,
+        interfaceScore,
+        feedback,
+      });
+      toast.success("Feedback submitted successfully!");
+    } catch (error) {
+      console.error("Failed to judge project:", error);
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unknown error occurred";
+      toast.error(`Failed to submit feedback: ${errorMessage}`);
+    }
+  };
 
   if (!projectId) {
     return (
@@ -232,8 +288,125 @@ export default function JudgeProject() {
               </video>
             </div>
           )}
+          {(project.judgeFeedback || project.canBeJudged) && (
+            <form
+              className="flex flex-col mt-4 bg-surface-a1 rounded-lg p-4"
+              onSubmit={handleJudgeProject}
+            >
+              <h2 className="text-2xl font-bold">
+                {project.judgeFeedback ? "Your Feedback" : "Judge Project"}
+              </h2>
+              <div className="grid grid-cols-3 gap-4">
+                <label htmlFor="creativityScore" className="text-xl mt-2">
+                  Creativity Score (1-10):
+                </label>
+                <input
+                  type="number"
+                  id="creativityScore"
+                  name="creativityScore"
+                  min={1}
+                  max={10}
+                  value={creativityScore}
+                  onChange={(e) => setCreativityScore(Number(e.target.value))}
+                  className="w-full col-span-2 p-2 rounded-lg bg-surface-a2 font-bold text-lg"
+                />
+                <label htmlFor="functionalityScore" className="text-xl mt-2">
+                  Functionality Score (1-10):
+                </label>
+                <input
+                  type="number"
+                  id="functionalityScore"
+                  name="functionalityScore"
+                  min={1}
+                  max={10}
+                  value={functionalityScore}
+                  onChange={(e) =>
+                    setFunctionalityScore(Number(e.target.value))
+                  }
+                  className="w-full col-span-2 p-2 rounded-lg bg-surface-a2 font-bold text-lg"
+                />
+                <label htmlFor="technicalityScore" className="text-xl mt-2">
+                  Technicality Score (1-10):
+                </label>
+                <input
+                  type="number"
+                  id="technicalityScore"
+                  name="technicalityScore"
+                  min={1}
+                  max={10}
+                  value={technicalityScore}
+                  onChange={(e) => setTechnicalityScore(Number(e.target.value))}
+                  className="w-full col-span-2 p-2 rounded-lg bg-surface-a2 font-bold text-lg"
+                />
+                <label htmlFor="interfaceScore" className="text-xl mt-2">
+                  Interface Score (1-10):
+                </label>
+                <input
+                  type="number"
+                  id="interfaceScore"
+                  name="interfaceScore"
+                  min={1}
+                  max={10}
+                  value={interfaceScore}
+                  onChange={(e) => setInterfaceScore(Number(e.target.value))}
+                  className="w-full col-span-2 p-2 rounded-lg bg-surface-a2 font-bold text-lg"
+                />
+              </div>
+              <label htmlFor="feedback" className="text-xl mt-4">
+                Feedback:
+              </label>
+              <textarea
+                id="feedback"
+                name="feedback"
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                className="w-full h-32 p-2 rounded-lg bg-surface-a2 text-lg mt-2"
+              />
+              {project.canBeJudged && (
+                <div className="flex flex-row mt-2">
+                  <button
+                    type="submit"
+                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 font-bold text-lg"
+                  >
+                    {project.judgeFeedback
+                      ? "Update Feedback"
+                      : "Submit Feedback"}
+                  </button>
+                  {project.judgeFeedback && (
+                    <button
+                      type="button"
+                      className="w-full ml-2 p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 font-bold text-lg"
+                      onClick={() => {
+                        setCreativityScore(
+                          project.judgeFeedback!.creativityScore
+                        );
+                        setFunctionalityScore(
+                          project.judgeFeedback!.functionalityScore
+                        );
+                        setTechnicalityScore(
+                          project.judgeFeedback!.technicalityScore
+                        );
+                        setInterfaceScore(
+                          project.judgeFeedback!.interfaceScore
+                        );
+                        setFeedback(project.judgeFeedback!.feedback);
+                      }}
+                    >
+                      Reset Feedback
+                    </button>
+                  )}
+                </div>
+              )}
+            </form>
+          )}
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        theme="dark"
+        pauseOnHover={false}
+      />
     </div>
   );
 }

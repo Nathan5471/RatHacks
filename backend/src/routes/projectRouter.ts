@@ -51,24 +51,16 @@ router.post(
     const { projectId } = req.params as { projectId: string };
     const {
       creativityScore,
-      creativityFeedback,
       functionalityScore,
-      functionalityFeedback,
       technicalityScore,
-      technicalityFeedback,
       interfaceScore,
-      interfaceFeedback,
-      otherFeedback,
+      feedback,
     } = req.body as {
       creativityScore: number;
-      creativityFeedback: string;
       functionalityScore: number;
-      functionalityFeedback: string;
       technicalityScore: number;
-      technicalityFeedback: string;
       interfaceScore: number;
-      interfaceFeedback: string;
-      otherFeedback: string;
+      feedback: string;
     };
 
     if (!projectId) {
@@ -76,14 +68,10 @@ router.post(
     }
     if (
       !creativityScore ||
-      !creativityFeedback ||
       !functionalityScore ||
-      !functionalityFeedback ||
       !technicalityScore ||
-      !technicalityFeedback ||
       !interfaceScore ||
-      !interfaceFeedback ||
-      !otherFeedback
+      !feedback
     ) {
       return res
         .status(400)

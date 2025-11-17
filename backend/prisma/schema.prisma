@@ -100,20 +100,16 @@ model Project {
 }
 
 model JudgeFeedback {
-  id                    String   @id @default(uuid())
-  judgeId               String // User Id
-  projectId             String // Project Id
-  creativityScore       Int
-  creativityFeedback    String
-  functionalityScore    Int
-  functionalityFeedback String
-  technicalityScore     Int
-  technicalityFeedback  String
-  interfaceScore        Int
-  interfaceFeedback     String
-  otherFeedback         String
-  totalScore            Int
-  createdAt             DateTime @default(now())
+  id                 String   @id @default(uuid())
+  judgeId            String // User Id
+  projectId          String // Project Id
+  creativityScore    Int
+  functionalityScore Int
+  technicalityScore  Int
+  interfaceScore     Int
+  feedback           String
+  totalScore         Int
+  createdAt          DateTime @default(now())
 }
 
 model Event {
