@@ -14,6 +14,7 @@ services:
       - LOOPS_WORKSHOP_STARTING_TEMPLATE_ID=
       - LOOPS_ORGANIZER_INVITE_TEMPLATE_ID=
       - LOOPS_JUDGE_INVITE_TEMPLATE_ID=
+      - LOOPS_CUSTOM_TEMPLATE_ID=
     restart: unless-stopped
     volumes:
       - uploads:/backend/uploads

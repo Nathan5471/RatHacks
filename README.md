@@ -6,7 +6,7 @@ This is a website for Rat Hacks. It's homepage provides information for the upco
 
 ## Features
 
-Participants get to have an account that manages signing up for events and workshops. They are able to edit their data through a settings page and perform actions like logging out of their accounts. Organizer can create and manage events and workshops.
+Participants get to have an account that manages signing up for events and workshops. They are able to edit their data through a settings page and perform actions like logging out of their accounts. Organizer can create and manage events and workshops. Organizers also are able to see the users and send out emails within the website. There are judge accounts that are able to leave feedback on projects.
 
 ## Demo
 
@@ -26,7 +26,7 @@ password - Student@123
 
 ## Technologies
 
-The frontend is build in TypeScript React and uses Axios to make called to the backend's API. The Backend is build in TypeScript ExpressJS. It handle tokens with JWT and sends emails through <https://loops.so>.
+The frontend is build in TypeScript React and uses Axios to make called to the backend's API. The Backend is build in TypeScript ExpressJS. It handle tokens with JWT and sends emails through <https://loops.so>. There is a access token and refresh token system to keep users logged in. The database is PostgreSQL and is interfaced through Prisma.
 
 ## Deployment
 
