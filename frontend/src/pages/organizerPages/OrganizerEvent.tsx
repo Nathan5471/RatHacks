@@ -319,7 +319,7 @@ export default function OrganizerEvent() {
                         </span>
                       </div>
                       <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:bg-space-a0 text-center">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center">
                           {timeRemaining?.seconds || 0}
                         </span>
                         <span className="text-lg sm:text-xl text-center">

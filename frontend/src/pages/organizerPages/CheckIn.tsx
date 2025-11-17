@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   organizerGetUserByEmail,
   checkInUser,
@@ -117,6 +117,12 @@ export default function CheckIn() {
               >
                 Check In
               </button>
+              <Link
+                to={`/app/organizer/event/${eventId}`}
+                className="mt-1 text-surface-a3 hover:text-surface-a5"
+              >
+                Back to Event
+              </Link>
             </form>
           </div>
         </div>

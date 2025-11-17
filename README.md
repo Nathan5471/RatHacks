@@ -18,6 +18,12 @@ email - <4g5hfj@hack.af>
 
 password - Organizer@123
 
+Judge:
+
+email - <0imwsn@rushilchopra.com>
+
+password - Judge@123
+
 Student:
 
 email - <kjccr0@hack.af>

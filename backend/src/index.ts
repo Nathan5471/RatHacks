@@ -39,17 +39,27 @@ const swaggerDocument = YAML.load("./api-docs.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Frontend
-app.use(express.static("public"));
+if (process.env.IS_DEV) {
+  app.use(
+    "/",
+    createProxyMiddleware({
+      target: "http://localhost:5173",
+      changeOrigin: true,
+    })
+  );
+} else {
+  app.use(express.static("public"));
 
-app.use((req: any, res: any) => {
-  res.sendFile("./public/index.html", { root: "." }, (error: any) => {
-    if (error) {
-      console.error("Error sending index.html:", error);
+  app.use((req: any, res: any) => {
+    res.sendFile("./public/index.html", { root: "." }, (error: any) => {
+      if (error) {
+        console.error("Error sending index.html:", error);
 
-      res.status(500).send("Page not found");
-    }
+        res.status(500).send("Page not found");
+      }
+    });
   });
-});
+}
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
