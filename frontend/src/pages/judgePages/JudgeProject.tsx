@@ -94,6 +94,8 @@ export default function JudgeProject() {
         interfaceScore,
         feedback,
       });
+      const updatedProject = await judgeGetProjectById(projectId);
+      setProject(updatedProject.project);
       toast.success("Feedback submitted successfully!");
     } catch (error) {
       console.error("Failed to judge project:", error);

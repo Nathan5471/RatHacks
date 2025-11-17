@@ -548,7 +548,7 @@ export const judgeGetAllEvents = async (req: any, res: any) => {
 
   try {
     const events = await prisma.event.findMany({
-      where: { releasedJudging: false },
+      where: { status: { not: "upcoming" }, releasedJudging: false },
     });
     const sortedEvents = sortEvents(events);
     const removedUneccessaryFieldsEvents = sortedEvents.map((event) => ({
