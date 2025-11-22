@@ -154,7 +154,7 @@ router.get(
     if (!projectId) {
       return res.status(400).json({ message: "Project ID is required" });
     }
-
+    console.log("request received");
     await organizerGetProjectById(req, res);
   }
 );

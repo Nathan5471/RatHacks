@@ -38,6 +38,7 @@ import JudgeRegister from "./pages/judgePages/JudgeRegister";
 import VerifyEmail from "./pages/VerifyEmail";
 import Overlay from "./components/Overlay";
 import ThemeOverlay from "./components/ThemeOverlay";
+import OrganizerProject from "./pages/organizerPages/OrganizerProject";
 
 function App() {
   const { user, getUser } = useAuth();
@@ -98,6 +99,10 @@ function App() {
             <Route
               path="/app/organizer/email/:emailId"
               element={<OrganizerEmail />}
+            />
+            <Route
+              path="/app/organizer/project/:projectId"
+              element={<OrganizerProject />}
             />
           </Route>
           <Route element={<JudgeRoute />}>

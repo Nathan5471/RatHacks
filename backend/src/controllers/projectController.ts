@@ -304,7 +304,9 @@ export const getProjectById = async (req: any, res: any) => {
 };
 
 export const organizerGetProjectById = async (req: any, res: any) => {
+  console.log("controller called");
   const { projectId } = req.params as { projectId: string };
+  console.log(projectId);
   const user = req.user as User;
 
   if (user.accountType !== "organizer") {
@@ -363,7 +365,7 @@ export const organizerGetProjectById = async (req: any, res: any) => {
       })
     );
     const filteredMembers = members.filter((member) => member !== null);
-
+    console.log("project loaded");
     return res.status(200).json({
       message: "Project loaded succesfully",
       project: {
