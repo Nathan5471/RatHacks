@@ -142,6 +142,20 @@ router.post(
   }
 );
 
+router.post(
+  "/release-judging/:eventId",
+  authenticate,
+  async (req: any, res: any) => {
+    const { eventId } = req.params as { eventId: string };
+
+    if (!eventId) {
+      return res.status(400).json({ message: "Event ID is required" });
+    }
+
+    // TODO: Implement release judging functionality
+  }
+);
+
 router.put("/update/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };
   const {

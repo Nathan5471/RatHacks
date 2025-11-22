@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import prisma from "../prisma/client";
 import sortEvents from "../utils/sortEvents";
+import sendJudgingEmails from "../utils/sendJudgingEmails";
 
 export const createEvent = async (req: any, res: any) => {
   const {
@@ -392,6 +393,61 @@ export const checkInUser = async (req: any, res: any) => {
   } catch (error) {
     console.error("Error checking in user:", error);
     return res.status(500).json({ message: "Failed to check in user" });
+  }
+};
+
+export const releaseJudging = async (req: any, res: any) => {
+  const { eventId } = req.params as { eventId: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+    });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    const projectScores = {} as { [key: string]: number }; // This is the average total score for each project (x/40)
+    const projects = await prisma.project.findMany({
+      where: { eventId },
+    });
+    await Promise.all(
+      projects.map(async (project) => {
+        const judgeFeedbacks = await prisma.judgeFeedback.findMany({
+          where: { projectId: project.id },
+        });
+        const averageScore =
+          judgeFeedbacks.reduce(
+            (acc, feedback) => acc + feedback.totalScore,
+            0
+          ) / judgeFeedbacks.length || 0;
+        projectScores[project.id] = averageScore;
+      })
+    );
+    const rankedProjects = Object.entries(projectScores).sort(
+      (a, b) => b[1] - a[1]
+    );
+    await Promise.all(
+      rankedProjects.map(async ([projectId], index) => {
+        await prisma.project.update({
+          where: { id: projectId },
+          data: { ranking: index + 1 },
+        });
+      })
+    );
+    await prisma.event.update({
+      where: { id: eventId },
+      data: { releasedJudging: true },
+    });
+    res.status(200).json({ message: "Judging released successfully" });
+    await sendJudgingEmails(eventId);
+  } catch (error) {
+    console.error("Error releasing judging:", error);
+    return res.status(500).json({ message: "Failed to release judging" });
   }
 };
 
