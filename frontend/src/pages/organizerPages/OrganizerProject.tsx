@@ -40,7 +40,7 @@ export default function OrganizerProject() {
   interface Team {
     id: string;
     joinCode: string;
-    members: string[];
+    members: Participant[];
     eventId: string;
     submittedProject: boolean;
     project: string | null;
@@ -54,7 +54,7 @@ export default function OrganizerProject() {
     screenshotURL: string | null;
     videoURL: string | null;
     demoURL: string | null;
-    team: string[];
+    team: Team;
     submittedAt: string;
     event: Event;
   }
@@ -200,7 +200,7 @@ export default function OrganizerProject() {
             </h3>
             <div className="flex flex-col sm:flex-row bg-surface-a1 mt-2 p-4 rounded-lg box-border">
               <div className="flex flex-col w-full">
-                <div className="flex items-center content-center p-4 box-border">
+                <div className="flex items-center justify-center p-4 box-border w-full gap-3">
                   <img
                     src={`${window.location.origin}${project.screenshotURL}`}
                     alt={`${project.name} Screenshot`}
@@ -247,9 +247,9 @@ export default function OrganizerProject() {
             </div>
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">
-                Team Members ({project.team.length})
+                Team Members ({project.team.members.length})
               </h2>
-              {project.team.length > 0 ? (
+              {project.team.members.length > 0 ? (
                 <table className="min-w-full bg-surface-a2 rounded-lg">
                   <thead>
                     <tr>
@@ -259,14 +259,14 @@ export default function OrganizerProject() {
                     </tr>
                   </thead>
                   <tbody>
-                    {project.team.map((id, index) => (
-                      <tr key={id}>
+                    {project.team.members.map((p, index) => (
+                      <tr key={p.id}>
                         <td
                           className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {id}
+                          {p.id}
                         </td>
                       </tr>
                     ))}
