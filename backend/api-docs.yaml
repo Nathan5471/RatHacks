@@ -5722,6 +5722,51 @@ paths:
                         required:
                           - id
                           - name
+                      judgeFeedback:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            judge:
+                              type: string
+                            creativityScore:
+                              type: number
+                              min: 1
+                              max: 10
+                            functionalityScore:
+                              type: number
+                              min: 1
+                              max: 10
+                            technicalityScore:
+                              type: number
+                              min: 1
+                              max: 10
+                            interfaceScore:
+                              type: number
+                              min: 1
+                              max: 10
+                            totalScore:
+                              type: number
+                              min: 4
+                              max: 40
+                            feedback:
+                              type: string
+                            createdAt:
+                              type: string
+                              format: date-time
+                          required:
+                            - id
+                            - judge
+                            - creativityScore
+                            - functionalityScore
+                            - technicalityScore
+                            - interfaceScore
+                            - totalScore
+                            - feedback
+                            - createdAt
                     required:
                       - id
                       - name
@@ -5729,6 +5774,7 @@ paths:
                       - submittedAt
                       - team
                       - event
+                      - judgeFeedback
                 required:
                   - message
                   - project

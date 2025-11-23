@@ -33,6 +33,17 @@ export default function OrganizerProject() {
     checkedIn: boolean;
     createdAt: string;
   }
+  interface JudgeFeedback {
+    id: string;
+    judge: string; // FirstName LastName
+    creativityScore: number;
+    functionalityScore: number;
+    technicalityScore: number;
+    interfaceScore: number;
+    totalScore: number;
+    feedback: string;
+    createdAt: string;
+  }
   interface Project {
     id: string;
     name: string;
@@ -50,9 +61,11 @@ export default function OrganizerProject() {
       id: string;
       name: string;
     };
+    judgeFeedback: JudgeFeedback[];
     submittedAt: string;
   }
   const [project, setProject] = useState<Project | null>(null);
+  const [selectedJudgeFeedback, setSelectedJudgeFeedback] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -306,6 +319,58 @@ export default function OrganizerProject() {
                 <source src={project.videoURL} />
                 Your browser doesn't support this video
               </video>
+            </div>
+          )}
+          {project.judgeFeedback.length > 0 && (
+            <div className="flex flex-col mt-4 bg-surface-a1 rounded-lg p-4">
+              <h2 className="text-2xl font-bold mb-2">Judge Feedback</h2>
+              <div className="flex flex-row mb-2 w-full gap-2 overflow-x-auto">
+                {project.judgeFeedback.map((feedback, index) => (
+                  <button
+                    key={feedback.id}
+                    className={`p-2 rounded-lg w-1/3 md:w-1/4 text-center font-bold ${
+                      index === selectedJudgeFeedback
+                        ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                        : "bg-surface-a2 hover:bg-surface-a3"
+                    }`}
+                    onClick={() => setSelectedJudgeFeedback(index)}
+                  >
+                    {feedback.judge}
+                  </button>
+                ))}
+              </div>
+              <div className="flex flex-col">
+                <p>
+                  <span className="font-bold">Creativity Score:</span>{" "}
+                  {project.judgeFeedback[selectedJudgeFeedback].creativityScore}
+                </p>
+                <p>
+                  <span className="font-bold">Functionality Score:</span>{" "}
+                  {
+                    project.judgeFeedback[selectedJudgeFeedback]
+                      .functionalityScore
+                  }
+                </p>
+                <p>
+                  <span className="font-bold">Technicality Score:</span>{" "}
+                  {
+                    project.judgeFeedback[selectedJudgeFeedback]
+                      .technicalityScore
+                  }
+                </p>
+                <p>
+                  <span className="font-bold">Interface Score:</span>{" "}
+                  {project.judgeFeedback[selectedJudgeFeedback].interfaceScore}
+                </p>
+                <p>
+                  <span className="font-bold">Total Score:</span>{" "}
+                  {project.judgeFeedback[selectedJudgeFeedback].totalScore}
+                </p>
+                <p className="mt-2">
+                  <span className="font-bold">Feedback:</span>{" "}
+                  {project.judgeFeedback[selectedJudgeFeedback].feedback}
+                </p>
+              </div>
             </div>
           )}
         </div>

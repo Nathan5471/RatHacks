@@ -363,6 +363,27 @@ export const organizerGetProjectById = async (req: any, res: any) => {
       })
     );
     const filteredMembers = members.filter((member) => member !== null);
+    const judgeFeedback = await prisma.judgeFeedback.findMany({
+      where: { projectId },
+    });
+    const filledJudgeFeedback = await Promise.all(
+      judgeFeedback.map(async (feedback) => {
+        const judge = await prisma.user.findUnique({
+          where: { id: feedback.judgeId },
+        });
+        return {
+          id: feedback.id,
+          judge: `${judge?.firstName} ${judge?.lastName}`,
+          creativityScore: feedback.creativityScore,
+          functionalityScore: feedback.functionalityScore,
+          technicalityScore: feedback.technicalityScore,
+          interfaceScore: feedback.interfaceScore,
+          totalScore: feedback.totalScore,
+          feedback: feedback.feedback,
+          createdAt: feedback.createdAt,
+        };
+      })
+    );
 
     return res.status(200).json({
       message: "Project loaded succesfully",
@@ -388,6 +409,7 @@ export const organizerGetProjectById = async (req: any, res: any) => {
           id: event.id,
           name: event.name,
         },
+        judgeFeedback: filledJudgeFeedback,
       },
     });
   } catch (error) {
