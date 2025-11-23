@@ -1,4 +1,6 @@
-node_modules
-dist
-.env
-uploads
+frontend/node_modules
+backend/node_modules
+frontend/dist
+backend/dist
+backend/.env
+backend/uploads
