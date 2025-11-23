@@ -1,5 +1,6 @@
 import cron from "node-cron";
 import prisma from "../prisma/client";
+import removeUncheckedInUsers from "../utils/removeUncheckedInUsers";
 
 cron.schedule("* * * * *", async () => {
   // Runs every minute
@@ -31,6 +32,7 @@ cron.schedule("* * * * *", async () => {
           data: { status: "completed" },
         });
         updateEvents++;
+        await removeUncheckedInUsers(event.id);
       }
     }
     if (updateEvents > 0) {
