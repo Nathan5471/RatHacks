@@ -2366,6 +2366,93 @@ paths:
                     example: Failed to check in user
                 required:
                   - message
+  /api/event/release-judging/{eventId}:
+    post:
+      summary: Release judging for an event and send emails to participants
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: eventId
+          in: paths
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Judging successfully released
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Judging released successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event ID is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Event not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Event not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to release judging
+                required:
+                  - message
   /api/event/update/{eventId}:
     put:
       summary: Update an event
@@ -3225,6 +3312,45 @@ paths:
                             - members
                             - submittedProject
                             - createdAt
+                      projects:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            codeURL:
+                              type: string
+                              format: uri
+                            screenshotURL:
+                              type: string
+                              format: uri
+                            videoURL:
+                              type: string
+                              format: uri
+                            demoURL:
+                              type: string
+                              format: uri
+                            team:
+                              type: array
+                              items:
+                                type: string
+                            submittedAt:
+                              type: string
+                              format: date-time
+                          required:
+                            - id
+                            - name
+                            - description
+                            - team
+                      judgedProjects:
+                        type: number
+                        min: 0
                       createdBy:
                         type: string
                         format: uuid
@@ -3242,6 +3368,8 @@ paths:
                       - status
                       - participants
                       - teams
+                      - projects
+                      - judgedProjects
                       - createdBy
                       - createdAt
                 required:

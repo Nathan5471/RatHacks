@@ -6,6 +6,7 @@ import {
   joinTeam,
   leaveTeam,
   checkInUser,
+  releaseJudging,
   updateEvent,
   getAllEvents,
   organizerGetAllEvents,
@@ -152,7 +153,7 @@ router.post(
       return res.status(400).json({ message: "Event ID is required" });
     }
 
-    // TODO: Implement release judging functionality
+    await releaseJudging(req, res);
   }
 );
 

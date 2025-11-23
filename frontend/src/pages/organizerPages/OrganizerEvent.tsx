@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { useOverlay } from "../../contexts/OverlayContext";
-import { organizerGetEventById } from "../../utils/EventAPIHandler";
+import {
+  organizerGetEventById,
+  releaseJudging,
+} from "../../utils/EventAPIHandler";
 import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
@@ -70,6 +74,7 @@ export default function OrganizerEvent() {
     checkedInParticipants: number;
     teams: Team[];
     projects: Project[];
+    judgedProjects: number;
     createdBy: string;
     createdAt: string;
   }
@@ -164,6 +169,26 @@ export default function OrganizerEvent() {
     e.preventDefault();
     if (eventId && event) {
       openOverlay(<OrganizerUserView user={event.participants[index]} />);
+    }
+  };
+
+  const handleReleaseJudging = async () => {
+    if (!eventId) return;
+    try {
+      await releaseJudging(eventId);
+      toast.success("Successfully released judging");
+      const updatedEvent = await organizerGetEventById(eventId);
+      setEvent(updatedEvent.event);
+    } catch (error: unknown) {
+      console.error("Error releasing judging:", error);
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unknown error occurred";
+      toast.error(`Failed to release judging: ${errorMessage}`);
     }
   };
 
@@ -526,6 +551,18 @@ export default function OrganizerEvent() {
             </div>
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">Projects</h2>
+              <div className="flex flex-row w-full mb-4">
+                <button
+                  className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 roudned-lg font-bold w-1/3 rounded-lg"
+                  onClick={handleReleaseJudging}
+                >
+                  Release Judging
+                </button>
+                <p className="ml-2 text-xl">
+                  Judged Projects: {event.judgedProjects} /{" "}
+                  {event.projects.length}
+                </p>
+              </div>
               {event.projects.length === 0 ? (
                 <p className="text-center">No projects submitted yet.</p>
               ) : (
@@ -564,6 +601,11 @@ export default function OrganizerEvent() {
                 </div>
               )}
             </div>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              pauseOnHover={false}
+            />
           </div>
         ) : (
           <div className="flex flex-col">

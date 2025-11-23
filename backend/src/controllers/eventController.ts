@@ -781,6 +781,15 @@ export const organizerGetEventById = async (req: any, res: any) => {
       })
     );
     const filteredProjects = projects.filter((project) => project !== null);
+    let judgedProjects = 0;
+    for (const project of filteredProjects) {
+      const judgeFeedbacks = await prisma.judgeFeedback.findMany({
+        where: { projectId: project.id },
+      });
+      if (judgeFeedbacks.length > 0) {
+        judgedProjects += 1;
+      }
+    }
     const filledEvent = {
       id: event.id,
       name: event.name,
@@ -794,6 +803,7 @@ export const organizerGetEventById = async (req: any, res: any) => {
       checkedInParticipants: event.checkedIn.length,
       teams: teams,
       projects: filteredProjects,
+      judgedProjects: judgedProjects,
       createdBy: event.createdBy,
       createdAt: event.createdAt,
     };

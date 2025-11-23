@@ -52,6 +52,11 @@ export const checkInUser = async (eventId: string, userId: string) => {
   return response.data;
 };
 
+export const releaseJudging = async (eventId: string) => {
+  const response = await api.post(`/release-judging/${eventId}`);
+  return response.data;
+};
+
 export const updateEvent = async (
   id: string,
   eventData: {
