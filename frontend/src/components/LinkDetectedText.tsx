@@ -25,7 +25,7 @@ export default function LinkDetectedText({
         <a
           key={index}
           href={`mailto:${match}`}
-          className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 hover:underline"
+          className="text-primary-a0 hover:underline"
         >
           {match}
         </a>
@@ -38,7 +38,7 @@ export default function LinkDetectedText({
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 hover:underline"
+          className="text-primary-a0 hover:underline"
         >
           {match}
         </a>

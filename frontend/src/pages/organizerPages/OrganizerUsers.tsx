@@ -348,7 +348,7 @@ export default function OrganizerUsers() {
                         }`}
                       >
                         <button
-                          className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold"
+                          className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
                           onClick={(e) => handleOpenOrganizerUserView(e, user)}
                         >
                           View

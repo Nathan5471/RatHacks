@@ -261,12 +261,12 @@ export default function OrganizerEvent() {
                 <div className="flex flex-row w-full mt-auto">
                   <Link
                     to="/app/organizer/events"
-                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                   >
                     Back to Events
                   </Link>
                   <button
-                    className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                     onClick={handleOpenEditEvent}
                   >
                     Edit
@@ -309,7 +309,7 @@ export default function OrganizerEvent() {
                   {event.status === "upcoming" ? "Scary" : "Submission"}{" "}
                   Countdown for {event.name} (
                   <span
-                    className="font-normal text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 hover:underline cursor-pointer"
+                    className="font-normal text-primary-a0 hover:underline cursor-pointer"
                     onClick={() => setHideCountdown(!hideCountdown)}
                   >
                     {hideCountdown ? "Show" : "Hide"}
@@ -320,7 +320,7 @@ export default function OrganizerEvent() {
                   {!hideCountdown && (
                     <div className="flex flex-row justify-center">
                       <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
                           {timeRemaining?.days || 0}
                         </span>
                         <span className="text-lg sm:text-xl text-center">
@@ -328,7 +328,7 @@ export default function OrganizerEvent() {
                         </span>
                       </div>
                       <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
                           {timeRemaining?.hours || 0}
                         </span>
                         <span className="text-lg sm:text-xl text-center">
@@ -336,7 +336,7 @@ export default function OrganizerEvent() {
                         </span>
                       </div>
                       <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
                           {timeRemaining?.minutes || 0}
                         </span>
                         <span className="text-lg sm:text-xl text-center">
@@ -344,7 +344,7 @@ export default function OrganizerEvent() {
                         </span>
                       </div>
                       <div className="flex flex-col bg-surface-a2 rounded-lg w-25 sm:w-30 p-1 sm:p-4 mx-1 sm:mx-2">
-                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 text-center">
+                        <span className="text-3xl sm:text-5xl font-bold text-primary-a0 text-center">
                           {timeRemaining?.seconds || 0}
                         </span>
                         <span className="text-lg sm:text-xl text-center">
@@ -356,7 +356,7 @@ export default function OrganizerEvent() {
                 </div>
                 <Link
                   to={`/app/organizer/check-in/${eventId}`}
-                  className="mt-4 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold w-full text-center"
+                  className="mt-4 bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold w-full text-center"
                 >
                   Go To Check In
                 </Link>
@@ -533,7 +533,7 @@ export default function OrganizerEvent() {
                           }`}
                         >
                           <button
-                            className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold"
+                            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
                             onClick={(e) =>
                               handleOpenOrganizerUserView(e, index)
                             }
@@ -553,7 +553,7 @@ export default function OrganizerEvent() {
               <h2 className="text-2xl font-bold text-center mb-2">Projects</h2>
               <div className="flex flex-row w-full mb-4">
                 <button
-                  className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 roudned-lg font-bold w-1/3 rounded-lg"
+                  className="bg-primary-a0 hover:bg-primary-a1 p-2 font-bold w-1/3 rounded-lg"
                   onClick={handleReleaseJudging}
                 >
                   Release Judging
@@ -592,7 +592,7 @@ export default function OrganizerEvent() {
                       </p>
                       <Link
                         to={`/app/organizer/project/${project.id}`}
-                        className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold w-full"
+                        className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold w-full"
                       >
                         View Project
                       </Link>
@@ -613,7 +613,7 @@ export default function OrganizerEvent() {
             <div className="flex w-full justify-center">
               <Link
                 to="/app/organizer/events"
-                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 font-bold p-2 rounded-lg"
+                className="bg-primary-a0 hover:bg-primary-a1 font-bold p-2 rounded-lg"
               >
                 Back to Events
               </Link>

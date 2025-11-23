@@ -294,7 +294,7 @@ export default function OrganizerProject() {
                     href={project.codeURL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-center font-bold"
+                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 text-center font-bold"
                   >
                     View Code
                   </a>
@@ -304,7 +304,7 @@ export default function OrganizerProject() {
                     href={project.demoURL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-center font-bold"
+                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 text-center font-bold"
                   >
                     View Demo
                   </a>
@@ -330,7 +330,7 @@ export default function OrganizerProject() {
                     key={feedback.id}
                     className={`p-2 rounded-lg w-1/3 md:w-1/4 text-center font-bold ${
                       index === selectedJudgeFeedback
-                        ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                        ? "bg-primary-a0 hover:bg-primary-a1"
                         : "bg-surface-a2 hover:bg-surface-a3"
                     }`}
                     onClick={() => setSelectedJudgeFeedback(index)}

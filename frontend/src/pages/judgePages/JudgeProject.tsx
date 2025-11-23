@@ -263,7 +263,7 @@ export default function JudgeProject() {
                     href={project.codeURL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-center font-bold"
+                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 text-center font-bold"
                   >
                     View Code
                   </a>
@@ -273,7 +273,7 @@ export default function JudgeProject() {
                     href={project.demoURL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 text-center font-bold"
+                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 text-center font-bold"
                   >
                     View Demo
                   </a>
@@ -368,7 +368,7 @@ export default function JudgeProject() {
                 <div className="flex flex-row mt-2">
                   <button
                     type="submit"
-                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 font-bold text-lg"
+                    className="w-full p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 font-bold text-lg"
                   >
                     {project.judgeFeedback
                       ? "Update Feedback"
@@ -377,7 +377,7 @@ export default function JudgeProject() {
                   {project.judgeFeedback && (
                     <button
                       type="button"
-                      className="w-full ml-2 p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 font-bold text-lg"
+                      className="w-full ml-2 p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 font-bold text-lg"
                       onClick={() => {
                         setCreativityScore(
                           project.judgeFeedback!.creativityScore

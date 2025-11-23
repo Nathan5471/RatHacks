@@ -187,7 +187,7 @@ export default function Settings() {
             </select>
             <button
               onClick={saveSelectedTheme}
-              className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg w-20 ml-1"
+              className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-20 ml-1"
             >
               Save
             </button>
@@ -291,7 +291,7 @@ export default function Settings() {
               onClick={() => setIsGovSchool(true)}
               className={`${
                 isGovSchool
-                  ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                  ? "bg-primary-a0 hover:bg-primary-a1"
                   : "bg-surface-a2 hover:bg-surface-3"
               } p-2 rounded-lg w-1/2 mr-1`}
             >
@@ -302,7 +302,7 @@ export default function Settings() {
               onClick={() => setIsGovSchool(false)}
               className={`${
                 isGovSchool === false
-                  ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                  ? "bg-primary-a0 hover:bg-primary-a1"
                   : "bg-surface-a2 hover:bg-surface-a3"
               } p-2 rounded-lg w-1/2`}
             >
@@ -331,7 +331,7 @@ export default function Settings() {
               onClick={() => setPreviousHackathon(true)}
               className={`${
                 previousHackathon === true
-                  ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                  ? "bg-primary-a0 hover:bg-primary-a1"
                   : "bg-surface-a2 hover:bg-surface-a3"
               } p-2 rounded-lg w-1/2 mr-1`}
             >
@@ -342,7 +342,7 @@ export default function Settings() {
               onClick={() => setPreviousHackathon(false)}
               className={`${
                 previousHackathon === false
-                  ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                  ? "bg-primary-a0 hover:bg-primary-a1"
                   : "bg-surface-a2 hover:bg-surface-a3"
               } p-2 rounded-lg w-1/2`}
             >
@@ -465,7 +465,7 @@ export default function Settings() {
           />
           <button
             type="submit"
-            className="mt-4 p-2 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 rounded-lg text-xl font-bold"
+            className="mt-4 p-2 bg-primary-a0 hover:bg-primary-a1 rounded-lg text-xl font-bold"
           >
             Save Changes
           </button>

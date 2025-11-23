@@ -153,7 +153,7 @@ export default function OrganizerWorkshops() {
             </div>
             <div className="flex items-center">
               <button
-                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1"
                 onClick={handleOpenCreateWorkshop}
               >
                 Create Workshop
@@ -200,7 +200,7 @@ export default function OrganizerWorkshops() {
             </div>
             <div className="flex items-center">
               <button
-                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                className="ml-auto p-2 rounded-lg sm:text-lg font-bold text-center bg-primary-a0 hover:bg-primary-a1"
                 onClick={handleOpenCreateWorkshop}
               >
                 Create Workshop
@@ -253,7 +253,7 @@ export default function OrganizerWorkshops() {
           </div>
           <div className="flex items-center">
             <button
-              className="ml-auto p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+              className="ml-auto p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1"
               onClick={handleOpenCreateWorkshop}
             >
               Create Workshop
@@ -293,12 +293,12 @@ export default function OrganizerWorkshops() {
                   <div className="flex flex-row mt-auto">
                     <Link
                       to={`/app/organizer/workshop/${workshop.id}`}
-                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
                     >
                       Open
                     </Link>
                     <button
-                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold text-center w-full"
+                      className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold text-center w-full"
                       onClick={(e) => handleOpenEditWorkshop(e, workshop.id)}
                     >
                       Edit

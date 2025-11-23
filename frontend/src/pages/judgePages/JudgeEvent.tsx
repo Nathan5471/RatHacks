@@ -139,7 +139,7 @@ export default function JudgeEvent() {
             </p>
             <Link
               to="/app/judge/events"
-              className="mt-4 w-45 bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold text-center"
+              className="mt-4 w-45 bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center"
             >
               Back to Events
             </Link>
@@ -185,7 +185,7 @@ export default function JudgeEvent() {
               />
               <Link
                 to="/app/judge/events"
-                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full mt-auto"
+                className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full mt-auto"
               >
                 Back to Events
               </Link>
@@ -219,7 +219,7 @@ export default function JudgeEvent() {
               <button
                 className={`p-2 rounded-lg ${
                   projectFilter === "notJudged"
-                    ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                    ? "bg-primary-a0 hover:bg-primary-a1"
                     : "bg-surface-a1 hover:bg-surface-a2"
                 }`}
                 onClick={() => setProjectFilter("notJudged")}
@@ -229,7 +229,7 @@ export default function JudgeEvent() {
               <button
                 className={`ml-2 p-2 rounded-lg ${
                   projectFilter === "judged"
-                    ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                    ? "bg-primary-a0 hover:bg-primary-a1"
                     : "bg-surface-a1 hover:bg-surface-a2"
                 }`}
                 onClick={() => setProjectFilter("judged")}
@@ -239,7 +239,7 @@ export default function JudgeEvent() {
               <button
                 className={`ml-2 p-2 rounded-lg ${
                   projectFilter === "all"
-                    ? "bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1"
+                    ? "bg-primary-a0 hover:bg-primary-a1"
                     : "bg-surface-a1 hover:bg-surface-a2"
                 }`}
                 onClick={() => setProjectFilter("all")}
@@ -267,7 +267,7 @@ export default function JudgeEvent() {
                     <p className="mb-2">{project.description}</p>
                     <Link
                       to={`/app/judge/project/${project.id}`}
-                      className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold text-center w-full mt-2"
+                      className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-center w-full mt-2"
                     >
                       {project.judged === false
                         ? "Judge Project"

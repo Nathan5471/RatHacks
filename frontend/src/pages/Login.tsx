@@ -45,7 +45,7 @@ export default function Login() {
         className="flex flex-col w-80 bg-surface-a1 rounded-lg p-4 m-4"
         onSubmit={(e) => handleLogin(e)}
       >
-        <h1 className="text-4xl font-bold text-center mb-4 text-primary-a0 spooky:text-spooky-a0 space:text-space-a0">
+        <h1 className="text-4xl font-bold text-center mb-4 text-primary-a0">
           Login
         </h1>
         <label htmlFor="email" className="text-2xl">
@@ -90,16 +90,13 @@ export default function Login() {
         {error && <p className="text-red-500 mt-2">{error}</p>}
         <button
           type="submit"
-          className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 mt-4 rounded-lg"
+          className="bg-primary-a0 hover:bg-primary-a1 p-2 mt-4 rounded-lg"
         >
           Login
         </button>
         <p className="mt-2 text-center text-gray-200">
           Don't have an account?{" "}
-          <Link
-            to="/register"
-            className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 hover:underline"
-          >
+          <Link to="/register" className="text-primary-a0 hover:underline">
             Register here.
           </Link>
         </p>
@@ -107,7 +104,7 @@ export default function Login() {
           Forgot your password?{" "}
           <Link
             to="/reset-password"
-            className="text-primary-a0 spooky:text-spooky-a0 space:text-space-a0 hover:underline"
+            className="text-primary-a0 hover:underline"
           >
             Reset it here.
           </Link>

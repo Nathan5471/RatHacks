@@ -299,18 +299,18 @@ export default function OrganizerEvent() {
             <div className="flex flex-row w-full mt-auto">
               <Link
                 to="/app/organizer/emails"
-                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
+                className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"
               >
                 Back to Emails
               </Link>
               <button
-                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                 onClick={handleSendEmail}
               >
                 Send
               </button>
               <button
-                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                 onClick={handleOpenEditEmail}
               >
                 Edit
@@ -355,7 +355,7 @@ export default function OrganizerEvent() {
 
                 {email.sent ? (
                   <div className="flex gap-1">
-                    <span className="font-bold italic text-primary-a0 spooky:text-spooky-a0 space:text-space-a0">
+                    <span className="font-bold italic text-primary-a0">
                       Sent
                     </span>
                   </div>
@@ -438,7 +438,7 @@ export default function OrganizerEvent() {
                           }`}
                         >
                           <button
-                            className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 p-2 rounded-lg font-bold"
+                            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
                             onClick={(e) =>
                               handleOpenOrganizerUserView(e, index)
                             }
@@ -461,7 +461,7 @@ export default function OrganizerEvent() {
             <div className="flex w-full justify-center">
               <Link
                 to="/app/organizer/emails"
-                className="bg-primary-a0 hover:bg-primary-a1 spooky:bg-spooky-a0 spooky:hover:bg-spooky-a1 space:bg-space-a0 space:hover:bg-space-a1 font-bold p-2 rounded-lg"
+                className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold text-white"
               >
                 Back to Emails
               </Link>
