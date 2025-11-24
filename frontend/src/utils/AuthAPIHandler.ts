@@ -159,6 +159,11 @@ export const getAllUsers = async () => {
   return response.data;
 };
 
+export const getStats = async () => {
+  const response = await api.get("/stats");
+  return response.data;
+};
+
 export const updateUser = async (userData: {
   firstName: string;
   lastName: string;
