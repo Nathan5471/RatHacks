@@ -5,6 +5,7 @@ interface User {
   email: string;
   emailVerified: boolean;
   accountType: string;
+  theme?: "default" | "spooky" | "space" | "framework";
   firstName: string;
   lastName: string;
   schoolDivision: string;
@@ -44,6 +45,11 @@ export default function OrganizerUserView({ user }: { user: User }) {
       <p className="text-lg sm:text-xl text-left">
         Email Verified: {user.emailVerified ? "Yes" : "No"}
       </p>
+      {user.theme && (
+        <p className="text-lg sm:text-xl text-left">
+          Theme: {user.theme.charAt(0).toUpperCase() + user.theme.slice(1)}
+        </p>
+      )}
       <p className="text-lg sm:text-xl text-left">
         School Division: {user.schoolDivision}
       </p>

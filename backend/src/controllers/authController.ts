@@ -621,6 +621,7 @@ export const getAllUsers = async (req: any, res: any) => {
       email: user.email,
       emailVerified: user.emailVerified,
       accountType: user.accountType,
+      theme: user.theme,
       firstName: user.firstName,
       lastName: user.lastName,
       schoolDivision: user.schoolDivision,

@@ -1407,6 +1407,9 @@ paths:
                         accountType:
                           type: string
                           enum: ["student", "organizer", "judge"]
+                        theme:
+                          type: string
+                          enum: ["default", "spooky", "space", "framework"]
                         firstName:
                           type: string
                         lastName:
@@ -1449,6 +1452,7 @@ paths:
                         - email
                         - emailVerified
                         - accountType
+                        - theme
                         - firstName
                         - lastName
                         - schoolDivision

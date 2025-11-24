@@ -13,6 +13,7 @@ export default function OrganizerUsers() {
     email: string;
     emailVerified: boolean;
     accountType: "student" | "organizer" | "judge";
+    theme: "default" | "spooky" | "space" | "framework";
     firstName: string;
     lastName: string;
     schoolDivision: string;
@@ -47,6 +48,17 @@ export default function OrganizerUsers() {
   >("all");
   const [previousHackathonFilter, setPreviousHackathonFilter] = useState<
     "all" | "yes" | "no"
+  >("all");
+  const [accountTypeFilter, setAccountTypeFilter] = useState<
+    "all" | "student" | "organizer" | "judge"
+  >("all");
+  const [emailVerifiedFilter, setEmailVerifiedFilter] = useState<
+    "all" | "yes" | "no"
+  >("all");
+  const [schoolDivisionFilter, setSchoolDivisionFilter] =
+    useState<string>("all");
+  const [themeFilter, setThemeFilter] = useState<
+    "all" | "default" | "spooky" | "space" | "framework"
   >("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -106,12 +118,52 @@ export default function OrganizerUsers() {
           : user.previousHackathon === false
       );
     }
+    if (accountTypeFilter !== "all") {
+      filteredUsers = filteredUsers.filter(
+        (user) => user.accountType === accountTypeFilter
+      );
+    }
+    if (emailVerifiedFilter !== "all") {
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.emailVerified === (emailVerifiedFilter === "yes" ? true : false)
+      );
+    }
+    if (schoolDivisionFilter !== "all") {
+      const schoolDivisions = [
+        "Bedford County",
+        "Botetourt County",
+        "Craig County",
+        "Floyd County",
+        "Franklin County",
+        "Roanoke City",
+        "Roanoke County",
+        "Salem City",
+      ];
+      if (schoolDivisionFilter === "other") {
+        filteredUsers = filteredUsers.filter(
+          (user) => !schoolDivisions.includes(user.schoolDivision)
+        );
+      }
+      filteredUsers = filteredUsers.filter(
+        (user) => user.schoolDivision === schoolDivisionFilter
+      );
+    }
+    if (themeFilter !== "all") {
+      filteredUsers = filteredUsers.filter(
+        (user) => user.theme === themeFilter
+      );
+    }
     setDisplayedUsers(filteredUsers);
   }, [
     searchTerm,
     gradeLevelFilter,
     attendsGovSchoolFilter,
     previousHackathonFilter,
+    accountTypeFilter,
+    emailVerifiedFilter,
+    schoolDivisionFilter,
+    themeFilter,
     users,
   ]);
 
@@ -280,6 +332,83 @@ export default function OrganizerUsers() {
                 <option value="all">Previous Hackathon: All</option>
                 <option value="yes">Previous Hackathon: Yes</option>
                 <option value="no">Previous Hackathon: No</option>
+              </select>
+            </div>
+            <div className="flex flex-col lg:flex-row mb-4 w-full justify-between">
+              <select
+                id="accountType"
+                name="accountType"
+                value={accountTypeFilter}
+                onChange={(e) => {
+                  setAccountTypeFilter(
+                    e.target.value as "all" | "student" | "organizer" | "judge"
+                  );
+                }}
+                className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
+              >
+                <option value="all">Account Type: All</option>
+                <option value="student">Account Type: Student</option>
+                <option value="organizer">Account Type: Organizer</option>
+                <option value="judge">Account Type: Judge</option>
+              </select>
+              <select
+                id="emailVerified"
+                name="emailVerified"
+                value={emailVerifiedFilter}
+                onChange={(e) =>
+                  setEmailVerifiedFilter(e.target.value as "all" | "yes" | "no")
+                }
+                className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
+              >
+                <option value="all">Email Verified: All</option>
+                <option value="yes">Email Verified: Yes</option>
+                <option value="no">Email Verified: No</option>
+              </select>
+              <select
+                id="schoolDivision"
+                name="schoolDivision"
+                value={schoolDivisionFilter}
+                onChange={(e) => setSchoolDivisionFilter(e.target.value)}
+                className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
+              >
+                <option value="all">School Division: All</option>
+                {[
+                  "Bedford County",
+                  "Botetourt County",
+                  "Craig County",
+                  "Floyd County",
+                  "Franklin County",
+                  "Roanoke City",
+                  "Roanoke County",
+                  "Salem City",
+                ].map((division) => (
+                  <option key={division} value={division}>
+                    School Division: {division}
+                  </option>
+                ))}
+                <option value="other">School Division: Other</option>
+              </select>
+              <select
+                id="theme"
+                name="theme"
+                value={themeFilter}
+                onChange={(e) => {
+                  setThemeFilter(
+                    e.target.value as
+                      | "all"
+                      | "default"
+                      | "spooky"
+                      | "space"
+                      | "framework"
+                  );
+                }}
+                className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
+              >
+                <option value="all">Theme: All</option>
+                <option value="default">Theme: Default</option>
+                <option value="spooky">Theme: Spooky</option>
+                <option value="space">Theme: Space</option>
+                <option value="framework">Theme: Framework</option>
               </select>
             </div>
             {displayedUsers.length > 0 ? (
