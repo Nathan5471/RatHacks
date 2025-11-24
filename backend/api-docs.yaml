@@ -3493,6 +3493,8 @@ paths:
                       judgedProjects:
                         type: number
                         min: 0
+                      releasedJudging:
+                        type: boolean
                       averageCreativityScore:
                         type: number
                         format: float
@@ -3537,6 +3539,12 @@ paths:
                       - teams
                       - projects
                       - judgedProjects
+                      - releasedJudging
+                      - averageCreativityScore
+                      - averageFunctionalityScore
+                      - averageTechnicalityScore
+                      - averageInterfaceScore
+                      - averageScore
                       - createdBy
                       - createdAt
                 required:

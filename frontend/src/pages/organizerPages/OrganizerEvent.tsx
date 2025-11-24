@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
 import { useOverlay } from "../../contexts/OverlayContext";
-import {
-  organizerGetEventById,
-  releaseJudging,
-} from "../../utils/EventAPIHandler";
+import { organizerGetEventById } from "../../utils/EventAPIHandler";
 import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditEvent from "../../components/EditEvent";
 import DeleteEvent from "../../components/DeleteEvent";
 import OrganizerUserView from "../../components/OrganizerUserView";
+import ReleaseJudging from "../../components/ReleaseJudging";
 import LinkDetectedText from "../../components/LinkDetectedText";
 
 export default function OrganizerEvent() {
@@ -75,6 +72,7 @@ export default function OrganizerEvent() {
     teams: Team[];
     projects: Project[];
     judgedProjects: number;
+    releasedJudging: boolean;
     averageCreativityScore: number;
     averageFunctionalityScore: number;
     averageTechnicalityScore: number;
@@ -177,24 +175,15 @@ export default function OrganizerEvent() {
     }
   };
 
-  const handleReleaseJudging = async () => {
+  const handleOpenReleaseJudging = async () => {
     if (!eventId) return;
-    try {
-      await releaseJudging(eventId);
-      toast.success("Successfully released judging");
-      const updatedEvent = await organizerGetEventById(eventId);
-      setEvent(updatedEvent.event);
-    } catch (error: unknown) {
-      console.error("Error releasing judging:", error);
-      const errorMessage =
-        typeof error === "object" &&
-        error !== null &&
-        "message" in error &&
-        typeof error.message === "string"
-          ? error.message
-          : "An unknown error occurred";
-      toast.error(`Failed to release judging: ${errorMessage}`);
-    }
+    openOverlay(
+      <ReleaseJudging
+        eventId={eventId}
+        eventName={event ? event.name : ""}
+        setReload={setReload}
+      />
+    );
   };
 
   if (loading) {
@@ -601,12 +590,18 @@ export default function OrganizerEvent() {
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">Projects</h2>
               <div className="flex flex-row w-full mb-4">
-                <button
-                  className="bg-primary-a0 hover:bg-primary-a1 p-2 font-bold w-1/3 rounded-lg"
-                  onClick={handleReleaseJudging}
-                >
-                  Release Judging
-                </button>
+                {!event.releasedJudging ? (
+                  <button
+                    className="bg-primary-a0 hover:bg-primary-a1 p-2 font-bold w-1/3 rounded-lg"
+                    onClick={handleOpenReleaseJudging}
+                  >
+                    Release Judging
+                  </button>
+                ) : (
+                  <div className="bg-surface-a2 p-2 font-bold w-1/3 rounded-lg flex items-center justify-center">
+                    Judging Released
+                  </div>
+                )}
                 <p className="ml-2 text-xl">
                   Judged Projects: {event.judgedProjects} /{" "}
                   {event.projects.length}
@@ -650,11 +645,6 @@ export default function OrganizerEvent() {
                 </div>
               )}
             </div>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              pauseOnHover={false}
-            />
           </div>
         ) : (
           <div className="flex flex-col">

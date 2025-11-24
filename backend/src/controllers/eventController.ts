@@ -839,6 +839,7 @@ export const organizerGetEventById = async (req: any, res: any) => {
       teams: teams,
       projects: filteredProjects,
       judgedProjects: judgedProjects,
+      releasedJudging: event.releasedJudging,
       averageCreativityScore: totalFeedbacks
         ? averageCreativityScore / totalFeedbacks
         : 0,
