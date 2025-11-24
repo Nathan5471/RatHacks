@@ -360,6 +360,25 @@ export const checkInUser = async (req: any, res: any) => {
       !event.participants.includes(userId) ||
       !userToCheckIn.events.includes(eventId)
     ) {
+      const existingTeam = await prisma.team.findFirst({
+        where: { eventId, members: { has: userId } },
+      });
+      let newTeam;
+      if (!existingTeam) {
+        const teams = await prisma.team.findMany();
+        const currentJoinCodes = teams.map((team) => team.joinCode);
+        let newJoinCode = Math.random().toString(36).substring(2, 8);
+        while (currentJoinCodes.includes(newJoinCode)) {
+          newJoinCode = Math.random().toString(36).substring(2, 8);
+        }
+        newTeam = await prisma.team.create({
+          data: {
+            joinCode: newJoinCode,
+            members: [userId],
+            eventId: eventId,
+          },
+        });
+      }
       await prisma.event.update({
         where: { id: eventId },
         data: {
@@ -369,6 +388,7 @@ export const checkInUser = async (req: any, res: any) => {
           checkedIn: event.checkedIn.includes(userId)
             ? event.checkedIn
             : event.checkedIn.concat(userId),
+          teams: newTeam ? event.teams.concat(newTeam.id) : event.teams,
         },
       });
       await prisma.user.update({
