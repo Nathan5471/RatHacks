@@ -647,6 +647,109 @@ export const getAllUsers = async (req: any, res: any) => {
   }
 };
 
+export const getStats = async (req: any, res: any) => {
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const totalUsers = await prisma.user.count();
+    const verifiedEmailUsers = await prisma.user.count({
+      where: { emailVerified: true },
+    });
+    const govSchoolUsers = await prisma.user.count({
+      where: { isGovSchool: true },
+    });
+    const studentUsers = await prisma.user.count({
+      where: { accountType: "student" },
+    });
+    const organizerUsers = await prisma.user.count({
+      where: { accountType: "organizer" },
+    });
+    const judgeUsers = await prisma.user.count({
+      where: { accountType: "judge" },
+    });
+    const regularTheme = await prisma.user.count({
+      where: { theme: "default" },
+    });
+    const spookyTheme = await prisma.user.count({
+      where: { theme: "spooky" },
+    });
+    const spaceTheme = await prisma.user.count({
+      where: { theme: "space" },
+    });
+    const frameworkTheme = await prisma.user.count({
+      where: { theme: "framework" },
+    });
+    const workshops = await prisma.workshop.findMany();
+    const totalWorkshopParticipants = workshops.reduce((acc, workshop) => {
+      return acc + (workshop.participants ? workshop.participants.length : 0);
+    }, 0);
+    const events = await prisma.event.findMany();
+    const totalEventParticipants = events.reduce((acc, event) => {
+      return acc + (event.participants ? event.participants.length : 0);
+    }, 0);
+    const averageShipRate =
+      events.reduce((acc, event) => {
+        return acc + event.projects.length / (event.participants?.length || 1);
+      }, 0) / events.length;
+    const projects = await prisma.project.count();
+    const judgeFeedbacks = await prisma.judgeFeedback.findMany();
+    const averageCreativityScore =
+      judgeFeedbacks.reduce((acc, feedback) => {
+        return acc + feedback.creativityScore;
+      }, 0) / judgeFeedbacks.length;
+    const averageFunctionalityScore =
+      judgeFeedbacks.reduce((acc, feedback) => {
+        return acc + feedback.functionalityScore;
+      }, 0) / judgeFeedbacks.length;
+    const averageTechnicalityScore =
+      judgeFeedbacks.reduce((acc, feedback) => {
+        return acc + feedback.technicalityScore;
+      }, 0) / judgeFeedbacks.length;
+    const averageInterfaceScore =
+      judgeFeedbacks.reduce((acc, feedback) => {
+        return acc + feedback.interfaceScore;
+      }, 0) / judgeFeedbacks.length;
+    const averageScore =
+      judgeFeedbacks.reduce((acc, feedback) => {
+        return acc + feedback.totalScore;
+      }, 0) / judgeFeedbacks.length;
+
+    return res.status(200).json({
+      message: "Stats retrieved successfully",
+      stats: {
+        totalUsers,
+        verifiedEmailUsers,
+        govSchoolUsers,
+        studentUsers,
+        organizerUsers,
+        judgeUsers,
+        regularTheme,
+        spookyTheme,
+        spaceTheme,
+        frameworkTheme,
+        workshops: workshops.length,
+        totalWorkshopParticipants,
+        events: events.length,
+        totalEventParticipants,
+        averageShipRate,
+        projects,
+        averageCreativityScore,
+        averageFunctionalityScore,
+        averageTechnicalityScore,
+        averageInterfaceScore,
+        averageScore,
+      },
+    });
+  } catch (error) {
+    console.error("Error getting stats:", error);
+    return res.status(500).json({ message: "Failed to get stats" });
+  }
+};
+
 export const updateUser = async (req: any, res: any) => {
   const user = req.user as User;
   const {

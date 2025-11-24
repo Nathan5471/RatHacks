@@ -1516,6 +1516,148 @@ paths:
                     example: Failed to get all users
                 required:
                   - message
+  /api/auth/stats:
+    get:
+      summary: Get all stats
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Successfully got stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Stats retrieved successfully
+                  stats:
+                    type: object
+                    properties:
+                      totalUsers:
+                        type: integer
+                      verifiedEmailUsers:
+                        type: integer
+                      govSchoolUsers:
+                        type: integer
+                      studentUsers:
+                        type: integer
+                      organizerUsers:
+                        type: integer
+                      judgeUsers:
+                        type: integer
+                      regularTheme:
+                        type: integer
+                      spookyTheme:
+                        type: integer
+                      spaceTheme:
+                        type: integer
+                      frameworkTheme:
+                        type: integer
+                      workshops:
+                        type: integer
+                      totalWorkshopParticipants:
+                        type: integer
+                      events:
+                        type: integer
+                      totalEventParticipants:
+                        type: integer
+                      averageShipRate:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 1
+                      projects:
+                        type: integer
+                      averageCreativityScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
+                      averageFunctionalityScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
+                      averageTechnicalityScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
+                      averageInterfaceScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
+                      averageScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
+                    required:
+                      - totalUsers
+                      - verifiedEmailUsers
+                      - govSchoolUsers
+                      - studentUsers
+                      - organizerUsers
+                      - judgeUsers
+                      - regularTheme
+                      - spookyTheme
+                      - spaceTheme
+                      - frameworkTheme
+                      - workshops
+                      - totalWorkshopParticipants
+                      - events
+                      - totalEventParticipants
+                      - averageShipRate
+                      - projects
+                      - averageCreativityScore
+                      - averageFunctionalityScore
+                      - averageTechnicalityScore
+                      - averageInterfaceScore
+                      - averageScore
+                required:
+                  - message
+                  - stats
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to get stats
+                required:
+                  - message
   /api/auth/update:
     put:
       summary: Update the current user's information
@@ -3351,6 +3493,31 @@ paths:
                       judgedProjects:
                         type: number
                         min: 0
+                      averageCreativityScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
+                      averageFunctionalityScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
+                      averageTechnicalityScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
+                      averageInterfaceScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
+                      averageScore:
+                        type: number
+                        format: float
+                        minimum: 0
+                        maximum: 10
                       createdBy:
                         type: string
                         format: uuid

@@ -802,6 +802,12 @@ export const organizerGetEventById = async (req: any, res: any) => {
     );
     const filteredProjects = projects.filter((project) => project !== null);
     let judgedProjects = 0;
+    let totalFeedbacks = 0;
+    let averageCreativityScore = 0;
+    let averageFunctionalityScore = 0;
+    let averageTechnicalityScore = 0;
+    let averageInterfaceScore = 0;
+    let averageScore = 0;
     for (const project of filteredProjects) {
       const judgeFeedbacks = await prisma.judgeFeedback.findMany({
         where: { projectId: project.id },
@@ -809,7 +815,16 @@ export const organizerGetEventById = async (req: any, res: any) => {
       if (judgeFeedbacks.length > 0) {
         judgedProjects += 1;
       }
+      for (const feedback of judgeFeedbacks) {
+        totalFeedbacks += 1;
+        averageCreativityScore += feedback.creativityScore;
+        averageFunctionalityScore += feedback.functionalityScore;
+        averageTechnicalityScore += feedback.technicalityScore;
+        averageInterfaceScore += feedback.interfaceScore;
+        averageScore += feedback.totalScore;
+      }
     }
+
     const filledEvent = {
       id: event.id,
       name: event.name,
@@ -824,6 +839,19 @@ export const organizerGetEventById = async (req: any, res: any) => {
       teams: teams,
       projects: filteredProjects,
       judgedProjects: judgedProjects,
+      averageCreativityScore: totalFeedbacks
+        ? averageCreativityScore / totalFeedbacks
+        : 0,
+      averageFunctionalityScore: totalFeedbacks
+        ? averageFunctionalityScore / totalFeedbacks
+        : 0,
+      averageTechnicalityScore: totalFeedbacks
+        ? averageTechnicalityScore / totalFeedbacks
+        : 0,
+      averageInterfaceScore: totalFeedbacks
+        ? averageInterfaceScore / totalFeedbacks
+        : 0,
+      averageScore: totalFeedbacks ? averageScore / totalFeedbacks : 0,
       createdBy: event.createdBy,
       createdAt: event.createdAt,
     };

@@ -17,6 +17,7 @@ import {
   checkInvite,
   getInvites,
   getAllUsers,
+  getStats,
   updateUser,
   updatePassword,
   updateTheme,
@@ -351,6 +352,9 @@ router.get("/current-user", authenticate, (req: any, res: any) => {
 });
 
 router.get("/all", authenticate, getAllUsers);
+
+// I am putting this here because I don't want to make 2 new files just for stats
+router.get("/stats", authenticate, getStats);
 
 router.put("/update", authenticate, async (req: any, res: any) => {
   const {
