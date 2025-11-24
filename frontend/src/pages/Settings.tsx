@@ -15,7 +15,7 @@ export default function Settings() {
   const { user, theme, logout, handleUpdateTheme } = useAuth();
   const { openOverlay } = useOverlay();
   const [selectedTheme, setSelectedTheme] = useState<
-    "default" | "spooky" | "space"
+    "default" | "spooky" | "space" | "framework"
   >(theme);
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
@@ -175,7 +175,7 @@ export default function Settings() {
               value={selectedTheme}
               onChange={(e) =>
                 setSelectedTheme(
-                  e.target.value as "default" | "spooky" | "space"
+                  e.target.value as "default" | "spooky" | "space" | "framework"
                 )
               }
               className="p-2 rounded-lg text-lg bg-surface-a2 w-full"
@@ -184,6 +184,7 @@ export default function Settings() {
               <option value="default">default</option>
               <option value="spooky">spooky</option>
               <option value="space">space</option>
+              <option value="framework">framework</option>
             </select>
             <button
               onClick={saveSelectedTheme}

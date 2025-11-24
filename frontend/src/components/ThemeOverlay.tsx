@@ -6,9 +6,12 @@ export default function ThemeOverlay() {
   const objectRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [velocity, setVelocity] = useState({ dx: 2, dy: 2 });
+  const [frameworkColor, setFrameworkColor] = useState<
+    "green" | "purple" | "pink"
+  >("green");
 
   useEffect(() => {
-    if (!["spooky", "space"].includes(theme)) return;
+    if (!["spooky", "space", "framework"].includes(theme)) return;
     let animationFrameId: number;
 
     const animate = () => {
@@ -23,10 +26,14 @@ export default function ThemeOverlay() {
       let { x, y } = position;
       let { dx, dy } = velocity;
 
+      let updateFramework = false;
+
       if (x + objectRectangle.width >= width || x < 0) {
+        updateFramework = true;
         dx *= -1;
       }
       if (y + objectRectangle.height >= height || y < 0) {
+        updateFramework = true;
         dy *= -1;
       }
 
@@ -36,15 +43,31 @@ export default function ThemeOverlay() {
       setPosition({ x, y });
       setVelocity({ dx, dy });
 
+      if (theme === "framework" && updateFramework) {
+        if (frameworkColor === "green") {
+          document.documentElement.classList.remove("framework-green");
+          document.documentElement.classList.add("framework-purple");
+          setFrameworkColor("purple");
+        } else if (frameworkColor === "purple") {
+          document.documentElement.classList.remove("framework-purple");
+          document.documentElement.classList.add("framework-pink");
+          setFrameworkColor("pink");
+        } else if (frameworkColor === "pink") {
+          document.documentElement.classList.remove("framework-pink");
+          document.documentElement.classList.add("framework-green");
+          setFrameworkColor("green");
+        }
+      }
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
     animationFrameId = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [position, velocity, theme]);
+  }, [position, velocity, theme, frameworkColor]);
 
-  if (theme === "spooky" || theme === "space") {
+  if (theme === "spooky" || theme === "space" || theme === "framework") {
     return (
       <div className="fixed top-0 left-0 w-screen h-screen pointer-events-none z-52">
         <div
@@ -57,6 +80,19 @@ export default function ThemeOverlay() {
           )}
           {theme === "space" && (
             <img src="/alienUFO.png" alt="Alien UFO" className="w-24 h-auto" />
+          )}
+          {theme === "framework" && (
+            <img
+              src={
+                frameworkColor === "green"
+                  ? "/framework12Green.jpg"
+                  : frameworkColor === "purple"
+                  ? "/framework12Purple.jpg"
+                  : "/framework12Pink.jpg"
+              }
+              alt="Framework 12"
+              className="w-24 h-auto"
+            />
           )}
         </div>
         {theme === "space" && (

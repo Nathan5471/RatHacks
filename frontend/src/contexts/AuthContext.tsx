@@ -28,10 +28,12 @@ interface AuthContextType {
       }
     | null
     | undefined;
-  theme: "default" | "spooky" | "space";
+  theme: "default" | "spooky" | "space" | "framework";
   getUser: () => void;
   logout: () => void;
-  handleUpdateTheme: (theme: "default" | "spooky" | "space") => void;
+  handleUpdateTheme: (
+    theme: "default" | "spooky" | "space" | "framework"
+  ) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -48,7 +50,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (theme) {
         setTheme(theme);
         if (theme !== "default") {
-          document.documentElement.classList.add(theme);
+          if (theme === "framework") {
+            document.documentElement.classList.add("framework-green");
+          } else {
+            document.documentElement.classList.add(theme);
+          }
         }
       } else {
         setTheme("default");
@@ -58,8 +64,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (userData.theme) {
         document.documentElement.classList.remove("spooky");
         document.documentElement.classList.remove("space");
+        document.documentElement.classList.remove("framework-green");
+        document.documentElement.classList.remove("framework-purple");
+        document.documentElement.classList.remove("framework-pink");
         if (userData.theme !== "default") {
-          document.documentElement.classList.add(userData.theme);
+          if (userData.theme === "framework") {
+            document.documentElement.classList.add("framework-green");
+          } else {
+            document.documentElement.classList.add(userData.theme);
+          }
         }
         setTheme(userData.theme as AuthContextType["theme"]);
         localStorage.setItem("theme", userData.theme);
@@ -77,8 +90,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleUpdateTheme = async (theme: AuthContextType["theme"]) => {
     document.documentElement.classList.remove("spooky");
     document.documentElement.classList.remove("space");
+    document.documentElement.classList.remove("framework-green");
+    document.documentElement.classList.remove("framework-purple");
+    document.documentElement.classList.remove("framework-pink");
     if (theme !== "default") {
-      document.documentElement.classList.add(theme);
+      if (theme === "framework") {
+        document.documentElement.classList.add("framework-green");
+      } else {
+        document.documentElement.classList.add(theme);
+      }
     }
     setTheme(theme);
     localStorage.setItem("theme", theme);

@@ -24,6 +24,7 @@ enum Theme {
   default
   spooky
   space
+  framework
 }
 
 enum Status {

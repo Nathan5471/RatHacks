@@ -736,7 +736,9 @@ export const updatePassword = async (req: any, res: any) => {
 };
 
 export const updateTheme = async (req: any, res: any) => {
-  const { theme } = req.body as { theme: "default" | "spooky" | "space" };
+  const { theme } = req.body as {
+    theme: "default" | "spooky" | "space" | "framework";
+  };
   const user = req.user as User;
 
   if (user.theme === theme) {
