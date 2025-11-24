@@ -75,6 +75,11 @@ export default function OrganizerEvent() {
     teams: Team[];
     projects: Project[];
     judgedProjects: number;
+    averageCreativityScore: number;
+    averageFunctionalityScore: number;
+    averageTechnicalityScore: number;
+    averageInterfaceScore: number;
+    averageScore: number;
     createdBy: string;
     createdAt: string;
   }
@@ -548,6 +553,50 @@ export default function OrganizerEvent() {
               ) : (
                 <p className="text-center">No participants registered yet.</p>
               )}
+            </div>
+            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+              <h2 className="text-2xl font-bold text-center mb-2">Stats</h2>
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
+                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                  <span className="text-2xl text-primary-a0 font-bold">
+                    {Math.round(
+                      (event.projects.length / event.teams.length) * 100
+                    ) || 0}
+                    %
+                  </span>
+                  <span className="text-lg">Ship Rate</span>
+                </div>
+                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                  <span className="text-2xl text-primary-a0 font-bold">
+                    {Math.round(event.averageCreativityScore)}
+                  </span>
+                  <span className="text-lg">Creativity</span>
+                </div>
+                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                  <span className="text-2xl text-primary-a0 font-bold">
+                    {Math.round(event.averageFunctionalityScore)}
+                  </span>
+                  <span className="text-lg">Functionality</span>
+                </div>
+                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                  <span className="text-2xl text-primary-a0 font-bold">
+                    {Math.round(event.averageTechnicalityScore)}
+                  </span>
+                  <span className="text-lg">Technicality</span>
+                </div>
+                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                  <span className="text-2xl text-primary-a0 font-bold">
+                    {Math.round(event.averageInterfaceScore)}
+                  </span>
+                  <span className="text-lg">Interface</span>
+                </div>
+                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                  <span className="text-2xl text-primary-a0 font-bold">
+                    {Math.round(event.averageScore)}
+                  </span>
+                  <span className="text-lg">Overall</span>
+                </div>
+              </div>
             </div>
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">Projects</h2>
