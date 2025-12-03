@@ -201,7 +201,12 @@ export default function Home() {
               <span className="text-lg sm:text-xl font-bold">Cayleb Wang</span>
               <span className="sm:text-lg">Rat Hacks Organizer</span>
             </div>
-            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
+            <a
+              href="https://elipeters.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col p-4 bg-surface-a1 rounded-lg"
+            >
               <img
                 src="/eliPeters.jpg"
                 alt="Eli Peters"
@@ -209,7 +214,7 @@ export default function Home() {
               />
               <span className="text-lg sm:text-xl font-bold">Eli Peters</span>
               <span className="sm:text-lg">Rat Hacks Organizer</span>
-            </div>
+            </a>
             <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
                 src="/mattoxJalbert.jpg"
