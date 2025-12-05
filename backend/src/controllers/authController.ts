@@ -694,30 +694,35 @@ export const getStats = async (req: any, res: any) => {
     }, 0);
     const averageShipRate =
       events.reduce((acc, event) => {
-        return acc + event.projects.length / (event.participants?.length || 1);
+        return acc + event.projects.length / (event.teams?.length || 1);
       }, 0) / events.length;
     const projects = await prisma.project.count();
     const judgeFeedbacks = await prisma.judgeFeedback.findMany();
-    const averageCreativityScore =
+    const averageCreativityScore = (
       judgeFeedbacks.reduce((acc, feedback) => {
         return acc + feedback.creativityScore;
-      }, 0) / judgeFeedbacks.length;
-    const averageFunctionalityScore =
+      }, 0) / judgeFeedbacks.length
+    ).toFixed(2);
+    const averageFunctionalityScore = (
       judgeFeedbacks.reduce((acc, feedback) => {
         return acc + feedback.functionalityScore;
-      }, 0) / judgeFeedbacks.length;
-    const averageTechnicalityScore =
+      }, 0) / judgeFeedbacks.length
+    ).toFixed(2);
+    const averageTechnicalityScore = (
       judgeFeedbacks.reduce((acc, feedback) => {
         return acc + feedback.technicalityScore;
-      }, 0) / judgeFeedbacks.length;
-    const averageInterfaceScore =
+      }, 0) / judgeFeedbacks.length
+    ).toFixed(2);
+    const averageInterfaceScore = (
       judgeFeedbacks.reduce((acc, feedback) => {
         return acc + feedback.interfaceScore;
-      }, 0) / judgeFeedbacks.length;
-    const averageScore =
+      }, 0) / judgeFeedbacks.length
+    ).toFixed(2);
+    const averageScore = (
       judgeFeedbacks.reduce((acc, feedback) => {
         return acc + feedback.totalScore;
-      }, 0) / judgeFeedbacks.length;
+      }, 0) / judgeFeedbacks.length
+    ).toFixed(2);
 
     return res.status(200).json({
       message: "Stats retrieved successfully",
