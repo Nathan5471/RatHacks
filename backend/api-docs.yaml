@@ -5703,13 +5703,48 @@ paths:
                       demoURL:
                         type: string
                         format: uri
-                      submittedAt:
-                        type: string
-                        format: date-time
+                      members:
+                        type: array
+                        items:
+                          type: string
+                      judgeFeedback:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            judge:
+                              type: string
+                            creativityScore:
+                              type: number
+                              min: 1
+                              max: 10
+                            functionalityScore:
+                              type: number
+                              min: 1
+                              max: 10
+                            technicalityScore:
+                              type: number
+                              min: 1
+                              max: 10
+                            interfaceScore:
+                              type: number
+                              min: 1
+                              max: 10
+                            totalScore:
+                              type: number
+                              min: 4
+                              max: 40
+                            feedback:
+                              type: string
                     required:
                       - id
                       - name
                       - description
+                      - members
+                      - judgeFeedback
         400:
           description: Bad request
           content:

@@ -9,6 +9,7 @@ import {
   judgeGetProjectById,
 } from "../controllers/projectController";
 import authenticate from "../middleware/authenticate";
+import nonRequiredAuthenticate from "../middleware/nonRequiredAuthenticate";
 import upload from "../middleware/upload";
 
 const router = express.Router();
@@ -135,15 +136,19 @@ router.put(
   }
 );
 
-router.get("/get/:projectId", async (req: any, res: any) => {
-  const { projectId } = req.params as { projectId: string };
+router.get(
+  "/get/:projectId",
+  nonRequiredAuthenticate,
+  async (req: any, res: any) => {
+    const { projectId } = req.params as { projectId: string };
 
-  if (!projectId) {
-    return res.status(400).json({ message: "Project ID is required" });
+    if (!projectId) {
+      return res.status(400).json({ message: "Project ID is required" });
+    }
+
+    await getProjectById(req, res);
   }
-
-  await getProjectById(req, res);
-});
+);
 
 router.get(
   "/organizer/:projectId",

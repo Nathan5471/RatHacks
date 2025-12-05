@@ -269,6 +269,7 @@ export const updateProject = async (req: any, res: any) => {
 
 export const getProjectById = async (req: any, res: any) => {
   const { projectId } = req.params as { projectId: string };
+  const user = req.user as User | null;
 
   try {
     const project = await prisma.project.findUnique({
@@ -278,6 +279,50 @@ export const getProjectById = async (req: any, res: any) => {
     });
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
+    }
+    const event = await prisma.event.findUnique({
+      where: { id: project.eventId },
+    });
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    const team = await prisma.team.findUnique({
+      where: { id: project.teamId },
+    });
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+    const members = await Promise.all(
+      team.members.map(async (memberId) => {
+        const member = await prisma.user.findUnique({
+          where: { id: memberId },
+        });
+        if (!member) return null;
+        return `${member.firstName} ${member.lastName}`;
+      })
+    );
+    const filteredMembers = members.filter((member) => member !== null);
+    let projectFeedback = [];
+    if (event.releasedJudging && user && team.members.includes(user.id)) {
+      const projectFeedbackData = await prisma.judgeFeedback.findMany({
+        where: { projectId },
+      });
+      for (const feedback of projectFeedbackData) {
+        const judge = await prisma.user.findUnique({
+          where: { id: feedback.judgeId },
+        });
+        if (!judge) continue;
+        projectFeedback.push({
+          id: feedback.id,
+          judge: `${judge.firstName} ${judge.lastName}`,
+          creativityScore: feedback.creativityScore,
+          functionalityScore: feedback.functionalityScore,
+          technicalityScore: feedback.technicalityScore,
+          interfaceScore: feedback.interfaceScore,
+          totalScore: feedback.totalScore,
+          feedback: feedback.feedback,
+        });
+      }
     }
 
     return res.status(200).json({
@@ -294,7 +339,8 @@ export const getProjectById = async (req: any, res: any) => {
           ? `/api/uploads/${project.videoPath}`
           : null,
         demoURL: project.demoURL,
-        submittedAt: project.submittedAt,
+        members: filteredMembers,
+        judgeFeedback: projectFeedback,
       },
     });
   } catch (error) {
