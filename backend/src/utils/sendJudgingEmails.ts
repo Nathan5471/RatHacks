@@ -42,7 +42,7 @@ const sendJudgingEmails = async (eventId: string) => {
             ranking: project.ranking as 1 | 2 | 3,
             eventName: event.name,
             projectName: project.name,
-            feedbackLink: `${FRONTEND_URL}/project/${project.id}`,
+            feedbackLink: `${FRONTEND_URL}/app/project/${project.id}`,
             email: member.email,
           });
         }, index * 1000);
@@ -55,7 +55,7 @@ const sendJudgingEmails = async (eventId: string) => {
             firstName: member.firstName,
             eventName: event.name,
             projectName: project.name,
-            feedbackLink: `${FRONTEND_URL}/project/${project.id}`,
+            feedbackLink: `${FRONTEND_URL}/app/project/${project.id}`,
             email: member.email,
           });
         }, index * 1000);

@@ -690,6 +690,30 @@ export const getEventById = async (req: any, res: any) => {
         };
       }
     }
+    const projects = await Promise.all(
+      event.projects.map(async (projectId) => {
+        const project = await prisma.project.findUnique({
+          where: { id: projectId },
+        });
+        if (!project) return null;
+        if (project.eventId !== event.id) return null;
+        if (!project.submittedAt) return null;
+        return {
+          id: project.id,
+          name: project.name,
+          description: project.description,
+          codeURL: project.codeURL,
+          screenshotURL: project.screenshotPath
+            ? `/api/uploads/${project.screenshotPath}`
+            : null,
+          videoURL: project.videoPath
+            ? `/api/uploads/${project.videoPath}`
+            : null,
+          demoURL: project.demoURL,
+          ranking: event.releasedJudging ? project.ranking : null,
+        };
+      })
+    );
 
     return res.status(200).json({
       message: "Event loaded successfully",
@@ -704,6 +728,7 @@ export const getEventById = async (req: any, res: any) => {
         status: event.status,
         participantCount: event.participants.length,
         team: removedUneccesaryFieldsTeam,
+        projects: projects.filter((project) => project !== null),
       },
     });
   } catch (error) {

@@ -38,6 +38,7 @@ import ResetPassword from "./pages/ResetPassword";
 import OrganizerRegister from "./pages/organizerPages/OrganizerRegister";
 import JudgeRegister from "./pages/judgePages/JudgeRegister";
 import VerifyEmail from "./pages/VerifyEmail";
+import Project from "./pages/Project";
 import Overlay from "./components/Overlay";
 import ThemeOverlay from "./components/ThemeOverlay";
 
@@ -123,6 +124,7 @@ function App() {
           <Route path="/invite/organizer" element={<OrganizerRegister />} />
           <Route path="/invite/judge" element={<JudgeRegister />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/app/project/:projectId" element={<Project />} />
         </Routes>
         <Overlay />
         <ThemeOverlay />

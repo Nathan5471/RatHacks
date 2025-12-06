@@ -340,6 +340,10 @@ export const getProjectById = async (req: any, res: any) => {
           : null,
         demoURL: project.demoURL,
         members: filteredMembers,
+        event: {
+          id: event.id,
+          name: event.name,
+        },
         judgeFeedback: projectFeedback,
       },
     });

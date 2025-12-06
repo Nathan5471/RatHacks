@@ -3233,6 +3233,39 @@ paths:
                           - joinCode
                           - members
                           - submittedProject
+                      projects:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            codeURL:
+                              type: string
+                              format: uri
+                            screenshotURL:
+                              type: string
+                              format: uri
+                            videoURL:
+                              type: string
+                              format: uri
+                            demoURL:
+                              type: string
+                              format: uri
+                            ranking:
+                              type: number
+                          required:
+                            - id
+                            - name
+                            - description
+                            - codeURL
+                            - screenshotURL
+                            - videoURL
                     required:
                       - id
                       - name
@@ -3243,6 +3276,7 @@ paths:
                       - submissionDeadline
                       - status
                       - participantCount
+                      - projects
                 required:
                   - message
                   - event
@@ -5707,6 +5741,14 @@ paths:
                         type: array
                         items:
                           type: string
+                      event:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          name:
+                            type: string
                       judgeFeedback:
                         type: array
                         items:

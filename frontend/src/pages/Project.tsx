@@ -1,38 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useOverlay } from "../../contexts/OverlayContext";
-import { organizerGetProjectById } from "../../utils/ProjectAPIHandler";
-import { formatDate } from "date-fns";
+import { getProjectById } from "../utils/ProjectAPIHandler";
 import { IoMenu } from "react-icons/io5";
-import OrganizerUserView from "../../components/OrganizerUserView";
-import OrganizerNavbar from "../../components/OrganizerNavbar";
+import AppNavbar from "../components/AppNavbar";
 
 export default function OrganizerProject() {
   const { projectId } = useParams();
-  const { openOverlay } = useOverlay();
-  interface Participant {
-    id: string;
-    email: string;
-    emailVerified: boolean;
-    accountType: "student" | "organizer" | "judge";
-    firstName: string;
-    lastName: string;
-    schoolDivision: string;
-    gradeLevel: "nine" | "ten" | "eleven" | "twelve";
-    isGovSchool: boolean;
-    techStack: string;
-    previousHackathon: boolean;
-    parentFirstName: string;
-    parentLastName: string;
-    parentEmail: string;
-    parentPhoneNumber: string;
-    contactFirstName: string;
-    contactLastName: string;
-    contactRelationship: string;
-    contactPhoneNumber: string;
-    checkedIn: boolean;
-    createdAt: string;
-  }
   interface JudgeFeedback {
     id: string;
     judge: string; // FirstName LastName
@@ -42,7 +15,6 @@ export default function OrganizerProject() {
     interfaceScore: number;
     totalScore: number;
     feedback: string;
-    createdAt: string;
   }
   interface Project {
     id: string;
@@ -52,17 +24,12 @@ export default function OrganizerProject() {
     screenshotURL: string | null;
     videoURL: string | null;
     demoURL: string | null;
-    team: {
-      id: string;
-      joinCode: string;
-      members: Participant[];
-    };
+    members: string[];
     event: {
       id: string;
       name: string;
     };
     judgeFeedback: JudgeFeedback[];
-    submittedAt: string;
   }
   const [project, setProject] = useState<Project | null>(null);
   const [selectedJudgeFeedback, setSelectedJudgeFeedback] = useState(0);
@@ -74,7 +41,7 @@ export default function OrganizerProject() {
     const fetchProject = async () => {
       if (projectId) {
         try {
-          const projectData = await organizerGetProjectById(projectId);
+          const projectData = await getProjectById(projectId);
           setProject(projectData.project);
         } catch (error: unknown) {
           const errorMessage =
@@ -93,17 +60,6 @@ export default function OrganizerProject() {
     fetchProject();
   }, [projectId]);
 
-  const handleOpenOrganizerUserView = (userId: string) => {
-    const user = project?.team.members.find((member) => member.id === userId);
-    if (user) {
-      openOverlay(<OrganizerUserView user={user} />);
-    } else {
-      console.warn(
-        "User not found in project team for opening organizer user view."
-      );
-    }
-  };
-
   if (loading) {
     return (
       <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
@@ -117,7 +73,7 @@ export default function OrganizerProject() {
             className="w-1/2 sm:w-1/3 md:w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <OrganizerNavbar />
+            <AppNavbar />
           </div>
         </div>
         <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
@@ -148,10 +104,10 @@ export default function OrganizerProject() {
             className="w-1/2 sm:w-1/3 md:w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <OrganizerNavbar />
+            <AppNavbar />
           </div>
         </div>
-        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center justify-center">
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
           <button
             className={`absolute top-4 left-4 md:hidden ${
               navbarOpen ? "hidden" : ""
@@ -181,10 +137,10 @@ export default function OrganizerProject() {
             className="w-1/2 sm:w-1/3 md:w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <OrganizerNavbar />
+            <AppNavbar />
           </div>
         </div>
-        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center justify-center">
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
           <button
             className={`absolute top-4 left-4 md:hidden ${
               navbarOpen ? "hidden" : ""
@@ -214,7 +170,7 @@ export default function OrganizerProject() {
           className="w-1/2 sm:w-1/3 md:w-full"
           onClick={(e) => e.stopPropagation()}
         >
-          <OrganizerNavbar />
+          <AppNavbar />
         </div>
       </div>
       <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
@@ -245,53 +201,25 @@ export default function OrganizerProject() {
               <h2 className="text-2xl font-bold text-center">{project.name}</h2>
               <p className="text-sm text-surface-a4">
                 Made by{" "}
-                {project.team.members.map((member, index) => {
-                  if (length === 1) {
-                    <span
-                      key={member.id}
-                      onClick={() => handleOpenOrganizerUserView(member.id)}
-                      className="hover:underline cursor-pointer"
-                    ></span>;
+                {project.members.map((member, index) => {
+                  if (project.members.length === 1) {
+                    <span key={index}>{member}</span>;
                   }
-                  if (index === project.team.members.length - 1) {
+                  if (index === project.members.length - 1) {
+                    return <span key={index}>{member}</span>;
+                  }
+                  if (index === project.members.length - 2) {
                     return (
-                      <span
-                        key={member.id}
-                        onClick={() => handleOpenOrganizerUserView(member.id)}
-                        className="hover:underline cursor-pointer"
-                      >
-                        {member.firstName} {member.lastName}
+                      <span key={index}>
+                        {member}
+                        {project.members.length > 2 ? "," : ""} and{" "}
                       </span>
                     );
                   }
-                  if (index === project.team.members.length - 2) {
-                    return (
-                      <span
-                        key={member.id}
-                        onClick={() => handleOpenOrganizerUserView(member.id)}
-                        className="hover:underline cursor-pointer"
-                      >
-                        {member.firstName} {member.lastName}
-                        {project.team.members.length > 2 ? "," : ""} and{" "}
-                      </span>
-                    );
-                  }
-                  return (
-                    <span
-                      key={member.id}
-                      onClick={() => handleOpenOrganizerUserView(member.id)}
-                      className="hover:underline cursor-pointer"
-                    >
-                      {member.firstName} {member.lastName},{" "}
-                    </span>
-                  );
+                  return <span key={index}>{member}, </span>;
                 })}
               </p>
               <p className="text-lg">{project.description}</p>
-              <p className="text-sm">
-                Submitted at{" "}
-                {formatDate(project.submittedAt, "EEEE, MMMM d yyyy h:mm a")}
-              </p>
               <div className="w-full flex flex-row mt-2 sm:mt-auto gap-2">
                 {project.codeURL && (
                   <a

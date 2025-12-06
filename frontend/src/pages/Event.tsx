@@ -23,6 +23,16 @@ export default function Event() {
     submittedProject: boolean;
     project: string | null;
   }
+  interface Project {
+    id: string;
+    name: string;
+    description: string;
+    codeURL: string;
+    screenshotURL: string | null;
+    videoURL: string | null;
+    demoURL: string | null;
+    ranking: number | null;
+  }
   interface Event {
     id: string;
     name: string;
@@ -34,6 +44,7 @@ export default function Event() {
     status: "upcoming" | "ongoing" | "completed";
     participantCount: number;
     team: Team | null;
+    projects: Project[];
   }
   const [event, setEvent] = useState<Event | null>(null);
   const [refresh, setRefresh] = useState(false);
@@ -425,6 +436,48 @@ export default function Event() {
                   </div>
                 </div>
               )}
+            {event.projects.length > 0 && (
+              <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+                <h2 className="text-2xl font-bold text-center mb-2">
+                  Projects
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {event.projects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="relative bg-surface-a2 p-4 rounded-lg"
+                    >
+                      {project.screenshotURL && (
+                        <img
+                          src={`${window.location.origin}${project.screenshotURL}`}
+                          alt={`${project.name} Screenshot`}
+                          className="w-full h-auto mb-4 rounded-lg"
+                        />
+                      )}
+                      <h3 className="text-xl font-bold mb-2">{project.name}</h3>
+                      <p className="mb-2">{project.description}</p>
+                      <Link
+                        to={`/app/project/${project.id}`}
+                        className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold w-full"
+                      >
+                        View Project
+                      </Link>
+                      {project.ranking && project.ranking < 4 && (
+                        <div className="absolute top-0 left-2">
+                          {project.ranking === 1 && (
+                            <img
+                              src="/1stmedal.png"
+                              alt="1st Place"
+                              className="w-16 h-auto"
+                            />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="w-2/3 flex flex-col">
