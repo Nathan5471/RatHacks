@@ -463,11 +463,25 @@ export default function Event() {
                         View Project
                       </Link>
                       {project.ranking && project.ranking < 4 && (
-                        <div className="absolute top-0 left-2">
+                        <div className="absolute top-0 left-2 pointer-events-none">
                           {project.ranking === 1 && (
                             <img
                               src="/1stmedal.png"
                               alt="1st Place"
+                              className="w-16 h-auto"
+                            />
+                          )}
+                          {project.ranking === 2 && (
+                            <img
+                              src="/2ndmedal.png"
+                              alt="2nd Place"
+                              className="w-16 h-auto"
+                            />
+                          )}
+                          {project.ranking === 3 && (
+                            <img
+                              src="/3rdmedal.png"
+                              alt="3rd Place"
                               className="w-16 h-auto"
                             />
                           )}

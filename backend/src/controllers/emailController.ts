@@ -1,6 +1,7 @@
 import { GradeLevel, User } from "@prisma/client";
 import prisma from "../prisma/client";
 import sendCustomEmail from "../utils/sendCustomEmail";
+import { marked } from "marked";
 
 export const createEmail = async (req: any, res: any) => {
   const { name, messageSubject, messageBody, sendAll, filterBy, subFilterBy } =
@@ -239,9 +240,9 @@ export const getReceipientsByFilter = async (req: any, res: any) => {
 
 export const sendEmail = async (req: any, res: any) => {
   const { id } = req.params as { id: any };
-  const user = req.user as User;
+  const organizer = req.user as User;
 
-  if (user.accountType !== "organizer") {
+  if (organizer.accountType !== "organizer") {
     return res.status(403).json({ message: "Unauthorized" });
   }
 
@@ -289,35 +290,44 @@ export const sendEmail = async (req: any, res: any) => {
         .json({ message: `No participants found in ${email.filterBy}` });
     }
 
-    receipientData = receipientData.map((receipient) => receipient.id);
-
-    // Send notification emails to participants (2 every second)
-    const participants = await Promise.all(
-      receipientData.map(async (participantId) => {
-        const participant = await prisma.user.findUnique({
-          where: { id: participantId },
-        });
-        return participant;
-      })
-    );
-    const filteredParticipants = participants.filter(
-      (participant) => participant !== null
-    );
-    const emailVerifiedParticipants = filteredParticipants.filter(
+    const emailVerifiedParticipants = receipientData.filter(
       (participant) => participant.emailVerified === true
     );
-    const organizer = user;
-    if (!organizer) return;
     const hasRatHacksEmail = organizer.email.endsWith("@rathacks.com") ?? false;
 
-    emailVerifiedParticipants.forEach((participant, index) => {
+    const renderer = new marked.Renderer();
+    renderer.heading = ({ text, depth }) => {
+      const sizes = {
+        1: "36px",
+        2: "30px",
+        3: "24px",
+        4: "20px",
+        5: "18px",
+      };
+      return `<h${depth} style="font-size: ${
+        sizes[depth as 1 | 2 | 3 | 4 | 5] || "16px"
+      }; font-weight: bold; margin: 0 0 10px;">${text}</h${depth}>`;
+    };
+    renderer.list = (token) => {
+      const items = token.items
+        .map((item) => `<li style="margin-bottom: 5px;">${item.text}</li>`)
+        .join("");
+      return `<${token.ordered ? "ol" : "ul"} style="list-style:${
+        token.ordered ? "decimal" : "disc"
+      }; padding-left:20px;">${items}</ul>`;
+    };
+
+    emailVerifiedParticipants.forEach(async (participant, index) => {
+      const filledMessageBody = email.messageBody
+        .replace("{firstName}", participant.firstName)
+        .replace("{lastName}", participant.lastName);
+      const html = await marked(filledMessageBody, { renderer });
       setTimeout(() => {
         sendCustomEmail({
           email: participant.email,
-          receiverFirstName: participant.firstName,
-          messageBody: email.messageBody,
-          senderName: organizer.firstName,
+          messageBody: html,
           messageSubject: email.messageSubject,
+          senderName: hasRatHacksEmail ? organizer.firstName : "Nathan",
           senderEmail: hasRatHacksEmail
             ? organizer.email
             : "nathan@rathacks.com",
@@ -332,9 +342,7 @@ export const sendEmail = async (req: any, res: any) => {
       },
     });
 
-    return res
-      .status(200)
-      .json({ message: "Email sent successfully" });
+    return res.status(200).json({ message: "Email sent successfully" });
   } catch (error) {
     console.error("Error sending emails", error);
     return res.status(500).json({ message: "Failed to send emails" });

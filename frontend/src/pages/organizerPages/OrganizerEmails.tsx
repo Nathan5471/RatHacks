@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import { useOverlay } from "../../contexts/OverlayContext";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
@@ -228,15 +229,63 @@ export default function OrganizerEmails() {
                 className="flex flex-col sm:flex-row bg-surface-a1 w-full sm:w-5/6 mt-2 mb-4 p-4 rounded-lg"
               >
                 <div className="flex w-full justify-between">
-                  <div className="flex flex-col w-3/4">
+                  <div className="flex flex-col w-3/4 max-h-48">
                     <h2 className="text-3xl font-bold">{email.name}</h2>
                     <h2 className="text-xl font-bold">
                       {email.messageSubject}
                     </h2>
-                    <p className="text-lg line-clamp-2">{email.messageBody}</p>
+                    <div className="overflow-auto bg-surface-a2 p-2 rounded-lg mt-2 mr-2">
+                      <ReactMarkdown
+                        components={{
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                          h1: ({ node, ...props }) => (
+                            <h1 className="text-4xl font-bold" {...props} />
+                          ),
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                          h2: ({ node, ...props }) => (
+                            <h2 className="text-3xl font-bold" {...props} />
+                          ),
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                          h3: ({ node, ...props }) => (
+                            <h3 className="text-2xl font-semibold" {...props} />
+                          ),
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                          h4: ({ node, ...props }) => (
+                            <h4 className="text-xl font-semibold" {...props} />
+                          ),
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                          h5: ({ node, ...props }) => (
+                            <h5 className="text-lg font-semibold" {...props} />
+                          ),
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                          a: ({ node, ...props }) => (
+                            <a
+                              className="text-primary-a0 hover:underline"
+                              {...props}
+                            />
+                          ),
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                          ul: ({ node, ...props }) => (
+                            <ul
+                              className="list-disc list-inside my-2"
+                              {...props}
+                            />
+                          ),
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                          ol: ({ node, ...props }) => (
+                            <ol
+                              className="list-decimal list-inside my-2"
+                              {...props}
+                            />
+                          ),
+                        }}
+                      >
+                        {email.messageBody}
+                      </ReactMarkdown>
+                    </div>
                   </div>
 
-                  <div className="flex flex-col mt-auto gap-2 items-center w-1/4">
+                  <div className="flex flex-col gap-2 items-center w-1/4">
                     <Link
                       to={`/app/organizer/email/${email.id}`}
                       className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 rounded-lg font-bold text-center w-full"

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import { useOverlay } from "../../contexts/OverlayContext";
 import {
   organizerGetEmailById,
@@ -324,7 +325,50 @@ export default function OrganizerEvent() {
             </div>
             <div className="flex flex-col sm:flex-row bg-surface-a1 mt-4 p-4 rounded-lg">
               <div className="flex flex-col w-full sm:w-2/3">
-                <p className="text-lg mb-2">{email.messageBody}</p>
+                <ReactMarkdown
+                  components={{
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    h1: ({ node, ...props }) => (
+                      <h1 className="text-4xl font-bold" {...props} />
+                    ),
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    h2: ({ node, ...props }) => (
+                      <h2 className="text-3xl font-bold" {...props} />
+                    ),
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    h3: ({ node, ...props }) => (
+                      <h3 className="text-2xl font-semibold" {...props} />
+                    ),
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    h4: ({ node, ...props }) => (
+                      <h4 className="text-xl font-semibold" {...props} />
+                    ),
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    h5: ({ node, ...props }) => (
+                      <h5 className="text-lg font-semibold" {...props} />
+                    ),
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    a: ({ node, ...props }) => (
+                      <a
+                        className="text-primary-a0 hover:underline"
+                        {...props}
+                      />
+                    ),
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    ul: ({ node, ...props }) => (
+                      <ul className="list-disc list-inside my-2" {...props} />
+                    ),
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    ol: ({ node, ...props }) => (
+                      <ol
+                        className="list-decimal list-inside my-2"
+                        {...props}
+                      />
+                    ),
+                  }}
+                >
+                  {email.messageBody}
+                </ReactMarkdown>
               </div>
               <div className="flex flex-col w-full sm:w-1/3 sm:ml-2 justify-center">
                 {email.messageSubject && (

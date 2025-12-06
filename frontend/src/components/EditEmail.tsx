@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import { useOverlay } from "../contexts/OverlayContext";
 import { organizerGetEmailById, updateEmail } from "../utils/EmailAPIHandler";
 import { organizerGetAllEvents } from "../utils/EventAPIHandler";
@@ -15,6 +16,9 @@ export default function EditEmail({
   const [messageSubject, setMessageSubject] = useState("");
   const [name, setName] = useState("");
   const [messageBody, setMessageBody] = useState("");
+  const [viewSelection, setViewSelection] = useState<"edit" | "preview">(
+    "edit"
+  );
   const [filterBy, setFilterBy] = useState<string | null>(null);
   const [subFilterBy, setSubFilterBy] = useState<string | null>(null);
   const [sendAll, setSendAll] = useState<boolean>(false);
@@ -281,14 +285,82 @@ export default function EditEmail({
         <label htmlFor="messageBody" className="text-2xl mt-2">
           Body
         </label>
-        <textarea
-          id="messageBody"
-          name="messageBody"
-          value={messageBody}
-          onChange={(e) => setMessageBody(e.target.value)}
-          className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
-          required
-        />
+        <div className="flex flex-row mt-1">
+          <button
+            type="button"
+            className={`p-2 rounded-lg font-bold w-full mr-2 ${
+              viewSelection === "edit"
+                ? "bg-primary-a0 hover:bg-primary-a1"
+                : "bg-surface-a2 hover:bg-surface-a3"
+            }`}
+            onClick={() => setViewSelection("edit")}
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            className={`p-2 rounded-lg font-bold w-full ${
+              viewSelection === "preview"
+                ? "bg-primary-a0 hover:bg-primary-a1"
+                : "bg-surface-a2 hover:bg-surface-a3"
+            }`}
+            onClick={() => setViewSelection("preview")}
+          >
+            Preview
+          </button>
+        </div>
+        {viewSelection === "edit" && (
+          <textarea
+            id="messageBody"
+            name="messageBody"
+            value={messageBody}
+            onChange={(e) => setMessageBody(e.target.value)}
+            className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
+            required
+          />
+        )}
+        {viewSelection === "preview" && (
+          <div className="p-2 rounded-lg bg-surface-a2 w-full mt-1 overflow-auto max-h-96">
+            <ReactMarkdown
+              components={{
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                h1: ({ node, ...props }) => (
+                  <h1 className="text-4xl font-bold" {...props} />
+                ),
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                h2: ({ node, ...props }) => (
+                  <h2 className="text-3xl font-bold" {...props} />
+                ),
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                h3: ({ node, ...props }) => (
+                  <h3 className="text-2xl font-semibold" {...props} />
+                ),
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                h4: ({ node, ...props }) => (
+                  <h4 className="text-xl font-semibold" {...props} />
+                ),
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                h5: ({ node, ...props }) => (
+                  <h5 className="text-lg font-semibold" {...props} />
+                ),
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                a: ({ node, ...props }) => (
+                  <a className="text-primary-a0 hover:underline" {...props} />
+                ),
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                ul: ({ node, ...props }) => (
+                  <ul className="list-disc list-inside my-2" {...props} />
+                ),
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                ol: ({ node, ...props }) => (
+                  <ol className="list-decimal list-inside my-2" {...props} />
+                ),
+              }}
+            >
+              {messageBody}
+            </ReactMarkdown>
+          </div>
+        )}
         <div className="flex mt-2 w-full gap-2">
           <label htmlFor="sendAll" className="text-2xl text-nowrap">
             Send All?
