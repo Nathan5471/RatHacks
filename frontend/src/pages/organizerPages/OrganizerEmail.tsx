@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { useOverlay } from "../../contexts/OverlayContext";
@@ -7,6 +7,8 @@ import {
   getAllReceipients,
   getReceipientsByFilter,
   sendEmail,
+  activateEmail,
+  deactivateEmail,
 } from "../../utils/EmailAPIHandler";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
@@ -30,6 +32,7 @@ export default function OrganizerEvent() {
     filterBy: string | null;
     subFilterBy: string | null;
     sendOnJoin: boolean | null;
+    active: boolean;
     sentTo: string[];
     sentTimes: string[];
     createdAt: string;
@@ -223,6 +226,51 @@ export default function OrganizerEvent() {
     }
   };
 
+  const handleActivateEmail = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    if (!emailId) return;
+    try {
+      await activateEmail(emailId);
+      setTimeout(() => {
+        setReload((prev) => !prev);
+      }, 1500);
+      setTimeout(() => {
+        setReload((prev) => !prev);
+      }, 5000); // Extra reload incase emails aren't sent out completely in 1.5 seconds
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unknown error occurred";
+      console.error("Error activating email:", errorMessage);
+    }
+  };
+
+  const handleDeactivateEmail = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    if (!emailId) return;
+    try {
+      await deactivateEmail(emailId);
+      setReload((prev) => !prev);
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unknown error occurred";
+      console.error("Error deactivating email:", errorMessage);
+    }
+  };
+
   const handleOpenOrganizerUserView = (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number
@@ -300,12 +348,30 @@ export default function OrganizerEvent() {
               >
                 Back to Emails
               </Link>
-              <button
-                className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
-                onClick={handleSendEmail}
-              >
-                Send
-              </button>
+              {!email.sendOnJoin && (
+                <button
+                  className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                  onClick={handleSendEmail}
+                >
+                  Send
+                </button>
+              )}
+              {email.sendOnJoin &&
+                (email.active ? (
+                  <button
+                    className="bg-red-500 hover:bg-red-600 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                    onClick={handleDeactivateEmail}
+                  >
+                    Deactivate
+                  </button>
+                ) : (
+                  <button
+                    className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                    onClick={handleActivateEmail}
+                  >
+                    Activate
+                  </button>
+                ))}
               <button
                 className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                 onClick={handleOpenEditEmail}
@@ -393,19 +459,34 @@ export default function OrganizerEvent() {
                   </div>
                 )}
 
-                {email.sentTo.length > 0 ? (
-                  <div className="flex gap-1">
-                    <span className="font-bold italic text-primary-a0">
-                      Sent
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex gap-1">
-                    <span className="font-bold italic text-red-500">
-                      Not Sent
-                    </span>
-                  </div>
-                )}
+                {!email.sendOnJoin &&
+                  (email.sentTo.length > 0 ? (
+                    <div className="flex gap-1">
+                      <span className="font-bold italic text-primary-a0">
+                        Sent
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex gap-1">
+                      <span className="font-bold italic text-red-500">
+                        Not Sent
+                      </span>
+                    </div>
+                  ))}
+                {email.sendOnJoin &&
+                  (email.active ? (
+                    <div className="flex gap-1">
+                      <span className="font-bold italic text-primary-a0">
+                        Active
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex gap-1">
+                      <span className="font-bold italic text-red-500">
+                        Inactive
+                      </span>
+                    </div>
+                  ))}
               </div>
             </div>
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">

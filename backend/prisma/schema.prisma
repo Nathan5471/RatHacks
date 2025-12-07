@@ -153,6 +153,7 @@ model Email {
   filterBy       String?
   subFilterBy    String?
   sendOnJoin     Boolean    @default(false)
+  active         Boolean    @default(false) // This is for sendOnJoin emails to indicate if they should be used
   sentTo         String[] // User Ids
   sentTimes      DateTime[] // Timestamps of when each email per user was sent (length should match sentTo)
   createdAt      DateTime   @default(now())

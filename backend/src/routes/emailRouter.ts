@@ -10,6 +10,8 @@ import {
   getReceipientsByFilter,
   getAllReceipients,
   sendEmail,
+  activateEmail,
+  deactivateEmail,
 } from "../controllers/emailController";
 
 const router = express.Router();
@@ -100,6 +102,26 @@ router.post("/send-email/:id", authenticate, async (req: any, res: any) => {
   }
 
   await sendEmail(req, res);
+});
+
+router.post("/activate/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Email ID is required" });
+  }
+
+  await activateEmail(req, res);
+});
+
+router.post("/deactivate/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Email ID is required" });
+  }
+
+  await deactivateEmail(req, res);
 });
 
 router.get("/organizer/:id", authenticate, async (req: any, res: any) => {

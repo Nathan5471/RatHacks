@@ -74,6 +74,16 @@ export const sendEmail = async (id: string) => {
   return response.data;
 };
 
+export const activateEmail = async (id: string) => {
+  const response = await api.post(`/activate/${id}`);
+  return response.data;
+};
+
+export const deactivateEmail = async (id: string) => {
+  const response = await api.post(`/deactivate/${id}`);
+  return response.data;
+};
+
 export const getAllReceipients = async () => {
   const response = await api.get("/receipient-all");
   return response.data;

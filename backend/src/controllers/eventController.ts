@@ -2,6 +2,8 @@ import { User } from "@prisma/client";
 import prisma from "../prisma/client";
 import sortEvents from "../utils/sortEvents";
 import sendJudgingEmails from "../utils/sendJudgingEmails";
+import { marked } from "marked";
+import sendCustomEmail from "../utils/sendCustomEmail";
 
 export const createEvent = async (req: any, res: any) => {
   const {
@@ -96,7 +98,64 @@ export const joinEvent = async (req: any, res: any) => {
         events: user.events?.concat(id) || [id],
       },
     });
-    return res.status(200).json({ message: "Joined event successfully" });
+    res.status(200).json({ message: "Joined event successfully" });
+
+    const joinEmails = await prisma.email.findMany({
+      where: {
+        filterBy: "event",
+        subFilterBy: event.id,
+        sendOnJoin: true,
+        active: true,
+      },
+    });
+    for (const email of joinEmails) {
+      if (email.sentTo.includes(user.id)) continue;
+      const renderer = new marked.Renderer();
+      renderer.heading = ({ text, depth }) => {
+        const sizes = {
+          1: "36px",
+          2: "30px",
+          3: "24px",
+          4: "20px",
+          5: "18px",
+        };
+        return `<h${depth} style="font-size: ${
+          sizes[depth as 1 | 2 | 3 | 4 | 5] || "16px"
+        }; font-weight: bold; margin: 0 0 10px;">${text}</h${depth}>`;
+      };
+      renderer.list = (token) => {
+        const items = token.items
+          .map((item) => `<li style="margin-bottom: 5px;">${item.text}</li>`)
+          .join("");
+        return `<${token.ordered ? "ol" : "ul"} style="list-style: ${
+          token.ordered ? "decimal" : "disc"
+        }; padding-left:20px;">${items}</${token.ordered ? "ol" : "ul"}>`;
+      };
+
+      const filledMessageBody = email.messageBody
+        .replace("{firstName}", user.firstName)
+        .replace("{lastName}", user.lastName);
+      const html = await marked.parse(filledMessageBody, { renderer });
+
+      await sendCustomEmail({
+        email: user.email,
+        messageBody: html,
+        messageSubject: email.messageSubject,
+        senderName: "nathan",
+        senderEmail: "nathan@rathacks.com",
+      });
+      await prisma.email.update({
+        where: { id: email.id },
+        data: {
+          sentTo: {
+            push: user.id,
+          },
+          sentTimes: {
+            push: new Date(),
+          },
+        },
+      });
+    }
   } catch (error) {
     console.error("Error joining event:", error);
     return res.status(500).json({ message: "Failed to join event" });

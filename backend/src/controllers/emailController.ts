@@ -108,7 +108,13 @@ export const updateEmail = async (req: any, res: any) => {
         sendAll,
         filterBy,
         subFilterBy,
-        sendOnJoin: sendOnJoin ?? false,
+        sendOnJoin:
+          !sendAll &&
+          (filterBy === "event" || filterBy === "workshop") &&
+          subFilterBy &&
+          sendOnJoin !== null
+            ? sendOnJoin
+            : false,
       },
     });
     return res.status(200).json({ message: "Email updated successfully" });
@@ -311,9 +317,9 @@ export const sendEmail = async (req: any, res: any) => {
       const items = token.items
         .map((item) => `<li style="margin-bottom: 5px;">${item.text}</li>`)
         .join("");
-      return `<${token.ordered ? "ol" : "ul"} style="list-style:${
+      return `<${token.ordered ? "ol" : "ul"} style="list-style: ${
         token.ordered ? "decimal" : "disc"
-      }; padding-left:20px;">${items}</ul>`;
+      }; padding-left: 20px;">${items}</${token.ordered ? "ol" : "ul"}>`;
     };
 
     unsentRecipients.forEach(async (participant, index) => {
@@ -326,7 +332,9 @@ export const sendEmail = async (req: any, res: any) => {
           email: participant.email,
           messageBody: html,
           messageSubject: email.messageSubject,
-          senderName: hasRatHacksEmail ? organizer.firstName : "Nathan",
+          senderName: hasRatHacksEmail
+            ? organizer.firstName.toLowerCase()
+            : "nathan",
           senderEmail: hasRatHacksEmail
             ? organizer.email
             : "nathan@rathacks.com",
@@ -345,5 +353,153 @@ export const sendEmail = async (req: any, res: any) => {
   } catch (error) {
     console.error("Error sending emails", error);
     return res.status(500).json({ message: "Failed to send emails" });
+  }
+};
+
+export const activateEmail = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const email = await prisma.email.findUnique({
+      where: { id },
+    });
+    if (!email) {
+      return res.status(404).json({ message: "Email not found" });
+    }
+    if (!email.sendOnJoin) {
+      return res
+        .status(400)
+        .json({ message: "Can't activate a non sendOnJoin email" });
+    }
+    if (email.active === true) {
+      return res.status(200).json({ message: "Email already activated" });
+    }
+    await prisma.email.update({
+      where: { id },
+      data: {
+        active: true,
+      },
+    });
+    res.status(200).json({ message: "Email activated successfully" });
+
+    let receipientData;
+    switch (
+      email.filterBy // Should only be possible with workshops and events
+    ) {
+      case "workshop":
+        receipientData = await prisma.user.findMany({
+          where: { workshops: { has: email.subFilterBy } },
+        });
+        break;
+      case "event":
+        receipientData = await prisma.user.findMany({
+          where: { events: { has: email.subFilterBy } },
+        });
+        break;
+    }
+
+    if (!receipientData || receipientData.length == 0) {
+      console.log(`No participants found in ${email.filterBy}`);
+      return;
+    }
+
+    const emailVerifiedRecipients = receipientData.filter(
+      (participant) => participant.emailVerified === true
+    );
+    const unsentRecipients = emailVerifiedRecipients.filter(
+      (participant) => !email.sentTo.includes(participant.id)
+    );
+    const hasRatHacksEmail = user.email.endsWith("@rathacks.com") ?? false;
+
+    const renderer = new marked.Renderer();
+    renderer.heading = ({ text, depth }) => {
+      const sizes = {
+        1: "36px",
+        2: "30px",
+        3: "24px",
+        4: "20px",
+        5: "18px",
+      };
+      return `<h${depth} style="font-size: ${
+        sizes[depth as 1 | 2 | 3 | 4 | 5] || "16px"
+      }; font-weight: bold; margin: 0 0 10px;">${text}</h${depth}>`;
+    };
+    renderer.list = (token) => {
+      const items = token.items
+        .map((item) => `<li style="margin-bottom: 5px;">${item.text}</li>`)
+        .join("");
+      return `<${token.ordered ? "ol" : "ul"} style="list-style: ${
+        token.ordered ? "decimal" : "disc"
+      }; padding-left: 20px;">${items}</${token.ordered ? "ol" : "ul"}>`;
+    };
+
+    unsentRecipients.forEach(async (participant, index) => {
+      const filledMessageBody = email.messageBody
+        .replace("{firstName}", participant.firstName)
+        .replace("{lastName}", participant.lastName);
+      const html = await marked(filledMessageBody, { renderer });
+      setTimeout(async () => {
+        await sendCustomEmail({
+          email: participant.email,
+          messageBody: html,
+          messageSubject: email.messageSubject,
+          senderName: hasRatHacksEmail
+            ? user.firstName.toLowerCase()
+            : "nathan",
+          senderEmail: hasRatHacksEmail ? user.email : "nathan@rathacks.com",
+        });
+        await prisma.email.update({
+          where: { id },
+          data: {
+            sentTo: { push: participant.id },
+            sentTimes: { push: new Date() },
+          },
+        });
+      }, (index / 2) * 1000);
+    });
+  } catch (error) {
+    console.error("Error activating email:", error);
+    return res.status(500).json({ message: "Failed to activate email" });
+  }
+};
+
+export const deactivateEmail = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const email = await prisma.email.findUnique({
+      where: { id },
+    });
+    if (!email) {
+      return res.status(404).json({ message: "Email not found" });
+    }
+    if (!email.sendOnJoin) {
+      return res
+        .status(400)
+        .json({ message: "Can't deactivate a non sendOnJoin email" });
+    }
+    if (email.active === false) {
+      return res.status(200).json({ message: "Email already deactivated" });
+    }
+    await prisma.email.update({
+      where: { id },
+      data: {
+        active: false,
+      },
+    });
+    return res.status(200).json({ message: "Email deactivated successfully" });
+  } catch (error) {
+    console.error("Error deactivating email:", error);
+    return res.status(500).json({ message: "Failed to deactivate email" });
   }
 };
