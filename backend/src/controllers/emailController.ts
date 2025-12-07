@@ -4,15 +4,23 @@ import sendCustomEmail from "../utils/sendCustomEmail";
 import { marked } from "marked";
 
 export const createEmail = async (req: any, res: any) => {
-  const { name, messageSubject, messageBody, sendAll, filterBy, subFilterBy } =
-    req.body as {
-      name: string;
-      messageSubject: string;
-      messageBody: string;
-      sendAll: boolean;
-      filterBy: string | null;
-      subFilterBy: string | null;
-    };
+  const {
+    name,
+    messageSubject,
+    messageBody,
+    sendAll,
+    filterBy,
+    subFilterBy,
+    sendOnJoin,
+  } = req.body as {
+    name: string;
+    messageSubject: string;
+    messageBody: string;
+    sendAll: boolean;
+    filterBy: string | null;
+    subFilterBy: string | null;
+    sendOnJoin: boolean | null;
+  };
   const user = req.user as User;
 
   if (user.accountType !== "organizer") {
@@ -28,6 +36,7 @@ export const createEmail = async (req: any, res: any) => {
         sendAll,
         filterBy,
         subFilterBy,
+        sendOnJoin: sendOnJoin ?? false,
       },
     });
     return res
@@ -66,7 +75,7 @@ export const updateEmail = async (req: any, res: any) => {
     sendAll,
     filterBy,
     subFilterBy,
-    sent,
+    sendOnJoin,
   } = req.body as {
     name: string;
     messageSubject: string;
@@ -74,7 +83,7 @@ export const updateEmail = async (req: any, res: any) => {
     sendAll: boolean;
     filterBy: string | null;
     subFilterBy: string | null;
-    sent: boolean;
+    sendOnJoin: boolean | null;
   };
 
   const user = req.user as User;
@@ -99,7 +108,7 @@ export const updateEmail = async (req: any, res: any) => {
         sendAll,
         filterBy,
         subFilterBy,
-        sent,
+        sendOnJoin: sendOnJoin ?? false,
       },
     });
     return res.status(200).json({ message: "Email updated successfully" });
@@ -126,19 +135,9 @@ export const organizerGetEmailById = async (req: any, res: any) => {
       return res.status(404).json({ message: "Email not found" });
     }
 
-    const email = {
-      id: emailData.id,
-      name: emailData.name,
-      messageSubject: emailData.messageSubject,
-      messageBody: emailData.messageBody,
-      sendAll: emailData.sendAll,
-      filterBy: emailData.filterBy,
-      subFilterBy: emailData.subFilterBy,
-      sent: emailData.sent,
-    };
     return res
       .status(200)
-      .json({ message: "Email loaded successfully", email });
+      .json({ message: "Email loaded successfully", email: emailData });
   } catch (error) {
     console.error("Error loading email:", error);
     return res.status(500).json({ message: "Failed to load email" });
@@ -253,9 +252,6 @@ export const sendEmail = async (req: any, res: any) => {
     if (!email) {
       return res.status(404).json({ message: "Workshop not found" });
     }
-    if (email.sent !== false) {
-      return res.status(400).json({ message: "Email already sent" });
-    }
 
     let receipientData;
     switch (email.filterBy) {
@@ -290,8 +286,11 @@ export const sendEmail = async (req: any, res: any) => {
         .json({ message: `No participants found in ${email.filterBy}` });
     }
 
-    const emailVerifiedParticipants = receipientData.filter(
+    const emailVerifiedRecipients = receipientData.filter(
       (participant) => participant.emailVerified === true
+    );
+    const unsentRecipients = emailVerifiedRecipients.filter(
+      (participant) => !email.sentTo.includes(participant.id)
     );
     const hasRatHacksEmail = organizer.email.endsWith("@rathacks.com") ?? false;
 
@@ -317,13 +316,13 @@ export const sendEmail = async (req: any, res: any) => {
       }; padding-left:20px;">${items}</ul>`;
     };
 
-    emailVerifiedParticipants.forEach(async (participant, index) => {
+    unsentRecipients.forEach(async (participant, index) => {
       const filledMessageBody = email.messageBody
         .replace("{firstName}", participant.firstName)
         .replace("{lastName}", participant.lastName);
       const html = await marked(filledMessageBody, { renderer });
-      setTimeout(() => {
-        sendCustomEmail({
+      setTimeout(async () => {
+        await sendCustomEmail({
           email: participant.email,
           messageBody: html,
           messageSubject: email.messageSubject,
@@ -332,14 +331,14 @@ export const sendEmail = async (req: any, res: any) => {
             ? organizer.email
             : "nathan@rathacks.com",
         });
+        await prisma.email.update({
+          where: { id },
+          data: {
+            sentTo: { push: participant.id },
+            sentTimes: { push: new Date() },
+          },
+        });
       }, (index / 2) * 1000);
-    });
-
-    await prisma.email.update({
-      where: { id },
-      data: {
-        sent: true,
-      },
     });
 
     return res.status(200).json({ message: "Email sent successfully" });

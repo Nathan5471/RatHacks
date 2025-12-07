@@ -17,6 +17,7 @@ export default function CreateEmail() {
   );
   const [filterBy, setFilterBy] = useState<string | null>(null);
   const [subFilterBy, setSubFilterBy] = useState<string | null>(null);
+  const [sendOnJoin, setSendOnJoin] = useState<boolean | null>(null);
   const [sendAll, setSendAll] = useState<boolean>(false);
   const [error, setError] = useState("");
   const [events, setEvents] = useState<string[]>([]);
@@ -169,6 +170,7 @@ export default function CreateEmail() {
         sendAll,
         filterBy,
         subFilterBy,
+        sendOnJoin,
       });
       closeOverlay();
       navigate(`/app/organizer/email/${response.id}`);
@@ -346,6 +348,40 @@ export default function CreateEmail() {
             </select>
           </>
         )}
+
+        {!sendAll &&
+          (filterBy === "event" || filterBy === "workshop") &&
+          subFilterBy && (
+            <>
+              <label htmlFor="sendOnJoin" className="text-2xl mt-2">
+                Send On Join?
+              </label>
+              <div className="flex flx-row items-center mt-1">
+                <button
+                  type="button"
+                  className={`p-2 rounded-lg font-bold w-full mr-2 ${
+                    sendOnJoin === true
+                      ? "bg-primary-a0 hover:bg-primary-a1"
+                      : "bg-surface-a2 hover:bg-surface-a3"
+                  }`}
+                  onClick={() => setSendOnJoin(true)}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className={`p-2 rounded-lg font-bold w-full ${
+                    sendOnJoin === false
+                      ? "bg-primary-a0 hover:bg-primary-a1"
+                      : "bg-surface-a2 hover:bg-surface-a3"
+                  }`}
+                  onClick={() => setSendOnJoin(false)}
+                >
+                  No
+                </button>
+              </div>
+            </>
+          )}
 
         {error && <p className="text-red-500 mt-2">{error}</p>}
         <div className="w-full flex flex-row mt-4">

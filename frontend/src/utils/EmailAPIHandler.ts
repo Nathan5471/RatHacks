@@ -22,30 +22,9 @@ export const createEmail = async (data: {
   sendAll: boolean;
   filterBy: string | null;
   subFilterBy: string | null;
+  sendOnJoin: boolean | null;
 }) => {
   const response = await api.post("/create", data);
-  return response.data;
-};
-
-export const joinWorkshop = async (id: string) => {
-  const response = await api.post(`/join/${id}`);
-  return response.data;
-};
-
-export const leaveWorkshop = async (id: string) => {
-  const response = await api.post(`/leave/${id}`);
-  return response.data;
-};
-
-export const addGoogleMeetURL = async (id: string, googleMeetURL: string) => {
-  const response = await api.post(`/add-google-meet-url/${id}`, {
-    googleMeetURL,
-  });
-  return response.data;
-};
-
-export const endWorkshop = async (id: string) => {
-  const response = await api.post(`/end/${id}`);
   return response.data;
 };
 
@@ -58,7 +37,7 @@ export const updateEmail = async (
     sendAll: boolean;
     filterBy: string | null;
     subFilterBy: string | null;
-    sent: boolean;
+    sendOnJoin: boolean | null;
   }
 ) => {
   const response = await api.put(`/update/${id}`, data);

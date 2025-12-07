@@ -145,12 +145,15 @@ model Workshop {
 }
 
 model Email {
-  id             String  @id @default(uuid())
+  id             String     @id @default(uuid())
   name           String
   messageSubject String
   messageBody    String
   sendAll        Boolean
   filterBy       String?
   subFilterBy    String?
-  sent           Boolean @default(false)
+  sendOnJoin     Boolean    @default(false)
+  sentTo         String[] // User Ids
+  sentTimes      DateTime[] // Timestamps of when each email per user was sent (length should match sentTo)
+  createdAt      DateTime   @default(now())
 }

@@ -21,8 +21,8 @@ export default function EditEmail({
   );
   const [filterBy, setFilterBy] = useState<string | null>(null);
   const [subFilterBy, setSubFilterBy] = useState<string | null>(null);
+  const [sendOnJoin, setSendOnJoin] = useState<boolean | null>(null);
   const [sendAll, setSendAll] = useState<boolean>(false);
-  const [sent, setSent] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [events, setEvents] = useState<string[]>([]);
@@ -174,7 +174,10 @@ export default function EditEmail({
           sendAll: boolean;
           filterBy: string | null;
           subFilterBy: string | null;
-          sent: boolean;
+          sendOnJoin: boolean | null;
+          sentTo: string[];
+          sentTimes: string[];
+          createdAt: string;
         }
         const response = await organizerGetEmailById(emailId);
         const email = response.email as EmailData;
@@ -183,8 +186,8 @@ export default function EditEmail({
         setMessageBody(email.messageBody);
         setFilterBy(email.filterBy);
         setSubFilterBy(email.subFilterBy);
+        setSendOnJoin(email.sendOnJoin);
         setSendAll(email.sendAll);
-        setSent(email.sent);
       } catch (error: unknown) {
         const errorMessage =
           typeof error === "object" &&
@@ -212,16 +215,6 @@ export default function EditEmail({
     e.preventDefault();
     setError("");
     try {
-      console.log(
-        "update info",
-        name,
-        messageSubject,
-        messageBody,
-        sendAll,
-        filterBy,
-        subFilterBy,
-        sent
-      );
       await updateEmail(emailId, {
         name,
         messageSubject,
@@ -229,7 +222,7 @@ export default function EditEmail({
         sendAll,
         filterBy,
         subFilterBy,
-        sent,
+        sendOnJoin,
       });
       setReload((prev) => !prev);
       closeOverlay();
@@ -415,6 +408,39 @@ export default function EditEmail({
             </select>
           </>
         )}
+        {!sendAll &&
+          (filterBy === "event" || filterBy === "workshop") &&
+          subFilterBy && (
+            <>
+              <label htmlFor="sendOnJoin" className="text-2xl mt-2">
+                Send On Join?
+              </label>
+              <div className="flex flex-row items-center mt-1">
+                <button
+                  type="button"
+                  className={`p-2 rounded-lg font-bold w-full mr-2 ${
+                    sendOnJoin === true
+                      ? "bg-primary-a0 hover:bg-primary-a1"
+                      : "bg-surface-a2 hover:bg-surface-a3"
+                  }`}
+                  onClick={() => setSendOnJoin(true)}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className={`p-2 rounded-lg font-bold w-full ${
+                    sendOnJoin === false
+                      ? "bg-primary-a0 hover:bg-primary-a1"
+                      : "bg-surface-a2 hover:bg-surface-a3"
+                  }`}
+                  onClick={() => setSendOnJoin(false)}
+                >
+                  No
+                </button>
+              </div>
+            </>
+          )}
 
         {error && <p className="text-red-500 mt-2">{error}</p>}
         <div className="w-full flex flex-row mt-4">

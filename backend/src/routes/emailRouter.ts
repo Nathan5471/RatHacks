@@ -9,21 +9,29 @@ import {
   updateEmail,
   getReceipientsByFilter,
   getAllReceipients,
-  sendEmail
+  sendEmail,
 } from "../controllers/emailController";
 
 const router = express.Router();
 
 router.post("/create", authenticate, async (req: any, res: any) => {
-  const { name, messageSubject, messageBody, sendAll, filterBy, subFilterBy } =
-    req.body as {
-      name: string;
-      messageSubject: string;
-      messageBody: string;
-      sendAll: boolean;
-      filterBy: string | null;
-      subFilterBy: string | null;
-    };
+  const {
+    name,
+    messageSubject,
+    messageBody,
+    sendAll,
+    filterBy,
+    subFilterBy,
+    sendOnJoin,
+  } = req.body as {
+    name: string;
+    messageSubject: string;
+    messageBody: string;
+    sendAll: boolean;
+    filterBy: string | null;
+    subFilterBy: string | null;
+    sendOnJoin: boolean | null;
+  };
 
   if (!name || !messageSubject || !messageBody) {
     return res
@@ -31,7 +39,7 @@ router.post("/create", authenticate, async (req: any, res: any) => {
       .json({ message: "Verify message fields are filled" });
   }
 
-  if (!sendAll && filterBy && !subFilterBy) {
+  if (!sendAll && filterBy && !subFilterBy && sendOnJoin === null) {
     return res
       .status(400)
       .json({ message: "Both filter fields must be filled" });
@@ -41,15 +49,23 @@ router.post("/create", authenticate, async (req: any, res: any) => {
 });
 
 router.put("/update/:id", authenticate, async (req: any, res: any) => {
-  const { name, messageSubject, messageBody, sendAll, filterBy, subFilterBy } =
-    req.body as {
-      name: string;
-      messageSubject: string;
-      messageBody: string;
-      sendAll: boolean;
-      filterBy: string | null;
-      subFilterBy: string | null;
-    };
+  const {
+    name,
+    messageSubject,
+    messageBody,
+    sendAll,
+    filterBy,
+    subFilterBy,
+    sendOnJoin,
+  } = req.body as {
+    name: string;
+    messageSubject: string;
+    messageBody: string;
+    sendAll: boolean;
+    filterBy: string | null;
+    subFilterBy: string | null;
+    sendOnJoin: boolean | null;
+  };
 
   if (!name || !messageSubject || !messageBody) {
     return res
@@ -57,7 +73,7 @@ router.put("/update/:id", authenticate, async (req: any, res: any) => {
       .json({ message: "Verify message fields are filled" });
   }
 
-  if (!sendAll && filterBy && !subFilterBy) {
+  if (!sendAll && filterBy && !subFilterBy && sendOnJoin === null) {
     return res
       .status(400)
       .json({ message: "Both filter fields must be filled" });
@@ -65,7 +81,6 @@ router.put("/update/:id", authenticate, async (req: any, res: any) => {
 
   await updateEmail(req, res);
 });
-
 
 router.get("/organizer-all", authenticate, organizerGetAllEmails);
 
@@ -77,21 +92,15 @@ router.get(
   getReceipientsByFilter
 );
 
-router.post(
-  "/send-email/:id",
-  authenticate,
-  async (req: any, res: any) => {
-    const { id } = req.params as { id: string };
+router.post("/send-email/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
 
-    if (!id) {
-      return res
-        .status(400)
-        .json({ message: "Email ID is required" });
-    }
-
-    await sendEmail(req, res);
+  if (!id) {
+    return res.status(400).json({ message: "Email ID is required" });
   }
-);
+
+  await sendEmail(req, res);
+});
 
 router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };

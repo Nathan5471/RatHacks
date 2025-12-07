@@ -29,7 +29,10 @@ export default function OrganizerEvent() {
     sendAll: boolean;
     filterBy: string | null;
     subFilterBy: string | null;
-    sent: boolean;
+    sendOnJoin: boolean | null;
+    sentTo: string[];
+    sentTimes: string[];
+    createdAt: string;
   }
 
   interface Participant {
@@ -54,13 +57,6 @@ export default function OrganizerEvent() {
     contactPhoneNumber: string;
     createdAt: string;
   }
-
-  const gradeMap = {
-    nine: "9",
-    ten: "10",
-    eleven: "11",
-    twelve: "12",
-  };
 
   const [email, setEmail] = useState<Email | null>(null);
   const [loading, setLoading] = useState(true);
@@ -397,7 +393,7 @@ export default function OrganizerEvent() {
                   </div>
                 )}
 
-                {email.sent ? (
+                {email.sentTo.length > 0 ? (
                   <div className="flex gap-1">
                     <span className="font-bold italic text-primary-a0">
                       Sent
@@ -427,13 +423,10 @@ export default function OrganizerEvent() {
                         Email
                       </th>
                       <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
-                        School Division
+                        Sent
                       </th>
                       <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
-                        Grade Level
-                      </th>
-                      <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
-                        Is RVGS
+                        Sent Time
                       </th>
                       <th className="py-2 px-4 border-b border-surface-a1 text-left"></th>
                     </tr>
@@ -460,21 +453,20 @@ export default function OrganizerEvent() {
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {participant.schoolDivision}
+                          {email.sentTo.includes(participant.id) ? "Yes" : "No"}
                         </td>
                         <td
                           className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {gradeMap[participant.gradeLevel]}
-                        </td>
-                        <td
-                          className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
-                            index % 2 === 0 ? "bg-surface-a3" : ""
-                          }`}
-                        >
-                          {participant.isGovSchool ? "Yes" : "No"}
+                          {email.sentTo.includes(participant.id)
+                            ? new Date(
+                                email.sentTimes[
+                                  email.sentTo.indexOf(participant.id)
+                                ]
+                              ).toLocaleString()
+                            : "N/A"}
                         </td>
                         <td
                           className={`py-2 px-4 border-b border-surface-a1 ${
