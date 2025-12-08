@@ -5,7 +5,7 @@ import {
   judgeProject,
 } from "../../utils/ProjectAPIHandler";
 import { IoMenu } from "react-icons/io5";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import JudgeNavbar from "../../components/JudgeNavbar";
 
 export default function JudgeProject() {
@@ -403,12 +403,6 @@ export default function JudgeProject() {
           )}
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        theme="dark"
-        pauseOnHover={false}
-      />
     </div>
   );
 }

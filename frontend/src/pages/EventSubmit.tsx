@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { getEventById } from "../utils/EventAPIHandler";
 import {
   getProjectById,
@@ -649,12 +649,6 @@ export default function EventSubmit() {
           )}
         </form>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        theme="dark"
-        pauseOnHover={false}
-      />
     </div>
   );
 }

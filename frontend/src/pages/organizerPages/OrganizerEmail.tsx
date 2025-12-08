@@ -6,14 +6,12 @@ import {
   organizerGetEmailById,
   getAllReceipients,
   getReceipientsByFilter,
-  sendEmail,
-  activateEmail,
-  deactivateEmail,
 } from "../../utils/EmailAPIHandler";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditEmail from "../../components/EditEmail";
 import DeleteEmail from "../../components/DeleteEmail";
+import ConfirmSendEmail from "../../components/ConfirmSendEmail";
 import OrganizerUserView from "../../components/OrganizerUserView";
 import { getEventById } from "../../utils/EventAPIHandler";
 import { getWorkshopById } from "../../utils/WorkshopAPIHandler";
@@ -207,70 +205,6 @@ export default function OrganizerEvent() {
     }
   };
 
-  const handleSendEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    try {
-      if (emailId) {
-        await sendEmail(emailId);
-      }
-      setReload((prev) => !prev);
-    } catch (error: unknown) {
-      const errorMessage =
-        typeof error === "object" &&
-        error !== null &&
-        "message" in error &&
-        typeof error.message === "string"
-          ? error.message
-          : "An unkown error accured";
-      console.error(errorMessage);
-    }
-  };
-
-  const handleActivateEmail = async (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
-    if (!emailId) return;
-    try {
-      await activateEmail(emailId);
-      setTimeout(() => {
-        setReload((prev) => !prev);
-      }, 1500);
-      setTimeout(() => {
-        setReload((prev) => !prev);
-      }, 5000); // Extra reload incase emails aren't sent out completely in 1.5 seconds
-    } catch (error: unknown) {
-      const errorMessage =
-        typeof error === "object" &&
-        error !== null &&
-        "message" in error &&
-        typeof error.message === "string"
-          ? error.message
-          : "An unknown error occurred";
-      console.error("Error activating email:", errorMessage);
-    }
-  };
-
-  const handleDeactivateEmail = async (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
-    if (!emailId) return;
-    try {
-      await deactivateEmail(emailId);
-      setReload((prev) => !prev);
-    } catch (error: unknown) {
-      const errorMessage =
-        typeof error === "object" &&
-        error !== null &&
-        "message" in error &&
-        typeof error.message === "string"
-          ? error.message
-          : "An unknown error occurred";
-      console.error("Error deactivating email:", errorMessage);
-    }
-  };
-
   const handleOpenOrganizerUserView = (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number
@@ -351,7 +285,15 @@ export default function OrganizerEvent() {
               {!email.sendOnJoin && (
                 <button
                   className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
-                  onClick={handleSendEmail}
+                  onClick={() =>
+                    openOverlay(
+                      <ConfirmSendEmail
+                        type="send"
+                        email={email}
+                        setReload={setReload}
+                      />
+                    )
+                  }
                 >
                   Send
                 </button>
@@ -360,14 +302,30 @@ export default function OrganizerEvent() {
                 (email.active ? (
                   <button
                     className="bg-red-500 hover:bg-red-600 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
-                    onClick={handleDeactivateEmail}
+                    onClick={() =>
+                      openOverlay(
+                        <ConfirmSendEmail
+                          type="deactivate"
+                          email={email}
+                          setReload={setReload}
+                        />
+                      )
+                    }
                   >
                     Deactivate
                   </button>
                 ) : (
                   <button
                     className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
-                    onClick={handleActivateEmail}
+                    onClick={() =>
+                      openOverlay(
+                        <ConfirmSendEmail
+                          type="activate"
+                          email={email}
+                          setReload={setReload}
+                        />
+                      )
+                    }
                   >
                     Activate
                   </button>

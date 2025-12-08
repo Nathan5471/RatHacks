@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   inviteOrganizer,
   inviteJudge,
@@ -244,12 +244,6 @@ export default function OrganizerDashboard() {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        theme="dark"
-        pauseOnHover={false}
-      />
     </div>
   );
 }

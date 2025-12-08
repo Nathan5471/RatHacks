@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useOverlay } from "../contexts/OverlayContext";
 import { updateUser, logoutUser } from "../utils/AuthAPIHandler";
@@ -501,12 +501,6 @@ export default function Settings() {
           </button>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        theme="dark"
-        pauseOnHover={false}
-      />
     </div>
   );
 }

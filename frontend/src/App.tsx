@@ -41,6 +41,7 @@ import VerifyEmail from "./pages/VerifyEmail";
 import Project from "./pages/Project";
 import Overlay from "./components/Overlay";
 import ThemeOverlay from "./components/ThemeOverlay";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const { user, getUser } = useAuth();
@@ -129,6 +130,12 @@ function App() {
         <Overlay />
         <ThemeOverlay />
       </Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        theme="dark"
+        pauseOnHover={false}
+      />
     </MatomoProvider>
   );
 }
