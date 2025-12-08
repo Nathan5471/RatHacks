@@ -38,6 +38,8 @@ model User {
   email                  String      @unique
   emailToken             String
   emailVerified          Boolean     @default(false)
+  emailLists             String[] // EmailList Ids
+  emailListCode          String?     @default(uuid()) // Unique code for managing email list without being logged in
   lastResendEmailRequest DateTime?
   passwordResetToken     String?
   passwordResetExpiry    DateTime?
@@ -149,6 +151,7 @@ model Email {
   name           String
   messageSubject String
   messageBody    String
+  sendFrom       String?
   sendAll        Boolean
   filterBy       String?
   subFilterBy    String?
@@ -157,4 +160,10 @@ model Email {
   sentTo         String[] // User Ids
   sentTimes      DateTime[] // Timestamps of when each email per user was sent (length should match sentTo)
   createdAt      DateTime   @default(now())
+}
+
+model EmailList {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
 }

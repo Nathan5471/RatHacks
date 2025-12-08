@@ -62,7 +62,7 @@ export default function OrganizerEvent() {
   const [email, setEmail] = useState<Email | null>(null);
   const [loading, setLoading] = useState(true);
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const [receipients, setReceipients] = useState<Participant[]>([]);
+  const [recipients, setRecipients] = useState<Participant[]>([]);
   const [subFilterName, setSubFilterName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function OrganizerEvent() {
       try {
         if (email.sendAll) {
           const response = await getAllReceipients();
-          setReceipients(response.allReceipients);
+          setRecipients(response.allRecipients);
         }
         switch (email.filterBy) {
           case "gradeLevel":
@@ -99,7 +99,7 @@ export default function OrganizerEvent() {
                   email.filterBy,
                   email.subFilterBy
                 );
-                setReceipients(response.receipientData);
+                setRecipients(response.recipientData);
                 setSubFilterName(email.subFilterBy);
               } else {
                 throw Error("subfilter not found");
@@ -113,7 +113,7 @@ export default function OrganizerEvent() {
                   email.filterBy,
                   email.subFilterBy
                 );
-                setReceipients(response.receipientData);
+                setRecipients(response.recipientData);
                 setSubFilterName(email.subFilterBy);
               } else {
                 throw Error("subfilter not found");
@@ -127,7 +127,7 @@ export default function OrganizerEvent() {
                   email.filterBy,
                   email.subFilterBy
                 );
-                setReceipients(response.receipientData);
+                setRecipients(response.recipientData);
 
                 try {
                   const fetchedEvent = await getEventById(email.subFilterBy);
@@ -154,7 +154,7 @@ export default function OrganizerEvent() {
                   email.filterBy,
                   email.subFilterBy
                 );
-                setReceipients(response.receipientData);
+                setRecipients(response.recipientData);
 
                 try {
                   const fetchedWorkshop = await getWorkshopById(
@@ -211,7 +211,7 @@ export default function OrganizerEvent() {
   ) => {
     e.preventDefault();
     if (emailId && email) {
-      openOverlay(<OrganizerUserView user={receipients[index]} />);
+      openOverlay(<OrganizerUserView user={recipients[index]} />);
     }
   };
 
@@ -449,9 +449,9 @@ export default function OrganizerEvent() {
             </div>
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">
-                Receipients ({receipients.length})
+                Recipients ({recipients.length})
               </h2>
-              {receipients.length > 0 ? (
+              {recipients.length > 0 ? (
                 <table className="min-w-full bg-surface-a2 rounded-lg">
                   <thead>
                     <tr>
@@ -471,7 +471,7 @@ export default function OrganizerEvent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {receipients.map((participant, index) => (
+                    {recipients.map((participant, index) => (
                       <tr key={participant.id}>
                         <td
                           className={`py-2 px-4 border-b border-r border-surface-a1 ${

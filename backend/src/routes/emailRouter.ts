@@ -1,5 +1,4 @@
 import express from "express";
-
 import authenticate from "../middleware/authenticate";
 import {
   createEmail,
@@ -12,6 +11,12 @@ import {
   sendEmail,
   activateEmail,
   deactivateEmail,
+  createEmailList,
+  updateEmailList,
+  deleteEmailList,
+  getAllEmailLists,
+  joinEmailList,
+  leaveEmailList,
 } from "../controllers/emailController";
 
 const router = express.Router();
@@ -142,6 +147,82 @@ router.delete("/delete/:id", authenticate, async (req: any, res: any) => {
   }
 
   await deleteEmail(req, res);
+});
+
+router.post("/create-list", authenticate, async (req: any, res: any) => {
+  const { name, description } = req.body as {
+    name: string;
+    description?: string;
+  };
+
+  if (!name) {
+    return res.status(400).json({ message: "Email list name is required" });
+  }
+
+  await createEmailList(req, res);
+});
+
+router.put("/update-list/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const { name } = req.body as {
+    name: string;
+    description?: string;
+  };
+
+  if (!id) {
+    return res.status(400).json({ message: "Email list ID is required" });
+  }
+  if (!name) {
+    return res.status(400).json({ message: "Email list name is required" });
+  }
+
+  await updateEmailList(req, res);
+});
+
+router.delete("/delete-list/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Email list ID is required" });
+  }
+
+  await deleteEmailList(req, res);
+});
+
+router.get("/lists", getAllEmailLists);
+
+router.post("/join-list/:id", async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const { email, code } = req.body as {
+    email: string;
+    code: string;
+  };
+
+  if (!id) {
+    return res.status(400).json({ message: "Email list ID is required" });
+  }
+  if (!email || !code) {
+    return res.status(400).json({ message: "Email and code are required" });
+  }
+
+  await joinEmailList(req, res);
+});
+
+router.post("/leave-list/:id", async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const { email, code } = req.body as {
+    email: string;
+    code: string;
+  };
+
+  if (!id) {
+    return res.status(400).json({ message: "Email list ID is required" });
+  }
+  if (!email || !code) {
+    return res.status(400).json({ message: "Email and code are required" });
+  }
+
+  await leaveEmailList(req, res);
 });
 
 export default router;
