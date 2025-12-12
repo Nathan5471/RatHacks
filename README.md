@@ -30,6 +30,14 @@ email - <kjccr0@hack.af>
 
 password - Student@123
 
+### Siege Week 14
+
+
+
+https://github.com/user-attachments/assets/0c85a1c1-16dd-46ff-8307-6ce9c948ba56
+
+
+
 ## Technologies
 
 The frontend is build in TypeScript React and uses Axios to make called to the backend's API. The Backend is build in TypeScript ExpressJS. It handle tokens with JWT and sends emails through <https://loops.so>. There is a access token and refresh token system to keep users logged in. The database is PostgreSQL and is interfaced through Prisma.
