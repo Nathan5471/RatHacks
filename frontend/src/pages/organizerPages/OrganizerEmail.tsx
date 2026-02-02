@@ -97,7 +97,7 @@ export default function OrganizerEvent() {
               if (email.subFilterBy) {
                 const response = await getReceipientsByFilter(
                   email.filterBy,
-                  email.subFilterBy
+                  email.subFilterBy,
                 );
                 setRecipients(response.recipientData);
                 setSubFilterName(email.subFilterBy);
@@ -111,7 +111,7 @@ export default function OrganizerEvent() {
               if (email.subFilterBy) {
                 const response = await getReceipientsByFilter(
                   email.filterBy,
-                  email.subFilterBy
+                  email.subFilterBy,
                 );
                 setRecipients(response.recipientData);
                 setSubFilterName(email.subFilterBy);
@@ -125,7 +125,7 @@ export default function OrganizerEvent() {
               if (email.subFilterBy) {
                 const response = await getReceipientsByFilter(
                   email.filterBy,
-                  email.subFilterBy
+                  email.subFilterBy,
                 );
                 setRecipients(response.recipientData);
 
@@ -152,15 +152,41 @@ export default function OrganizerEvent() {
               if (email.subFilterBy) {
                 const response = await getReceipientsByFilter(
                   email.filterBy,
-                  email.subFilterBy
+                  email.subFilterBy,
                 );
                 setRecipients(response.recipientData);
 
                 try {
                   const fetchedWorkshop = await getWorkshopById(
-                    email.subFilterBy
+                    email.subFilterBy,
                   );
                   setSubFilterName(fetchedWorkshop.name);
+                } catch (error: unknown) {
+                  const errorMessage =
+                    typeof error === "object" &&
+                    error !== null &&
+                    "message" in error &&
+                    typeof error.message === "string"
+                      ? error.message
+                      : "An unkown error accured";
+                  console.error(errorMessage);
+                }
+              } else {
+                throw Error("subfilter not found");
+              }
+            }
+            break;
+          case "accountType":
+            {
+              if (email.subFilterBy) {
+                const response = await getReceipientsByFilter(
+                  email.filterBy,
+                  email.subFilterBy,
+                );
+                setRecipients(response.recipientData);
+
+                try {
+                  setSubFilterName(email.subFilterBy);
                 } catch (error: unknown) {
                   const errorMessage =
                     typeof error === "object" &&
@@ -200,14 +226,14 @@ export default function OrganizerEvent() {
           emailName={email.name}
           currentPage="email"
           setReload={undefined}
-        />
+        />,
       );
     }
   };
 
   const handleOpenOrganizerUserView = (
     e: React.MouseEvent<HTMLButtonElement>,
-    index: number
+    index: number,
   ) => {
     e.preventDefault();
     if (emailId && email) {
@@ -291,7 +317,7 @@ export default function OrganizerEvent() {
                         type="send"
                         email={email}
                         setReload={setReload}
-                      />
+                      />,
                     )
                   }
                 >
@@ -308,7 +334,7 @@ export default function OrganizerEvent() {
                           type="deactivate"
                           email={email}
                           setReload={setReload}
-                        />
+                        />,
                       )
                     }
                   >
@@ -323,7 +349,7 @@ export default function OrganizerEvent() {
                           type="activate"
                           email={email}
                           setReload={setReload}
-                        />
+                        />,
                       )
                     }
                   >
@@ -503,7 +529,7 @@ export default function OrganizerEvent() {
                             ? new Date(
                                 email.sentTimes[
                                   email.sentTo.indexOf(participant.id)
-                                ]
+                                ],
                               ).toLocaleString()
                             : "N/A"}
                         </td>

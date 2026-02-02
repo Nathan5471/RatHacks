@@ -17,7 +17,7 @@ export default function EditEmail({
   const [name, setName] = useState("");
   const [messageBody, setMessageBody] = useState("");
   const [viewSelection, setViewSelection] = useState<"edit" | "preview">(
-    "edit"
+    "edit",
   );
   const [filterBy, setFilterBy] = useState<string | null>(null);
   const [subFilterBy, setSubFilterBy] = useState<string | null>(null);
@@ -97,7 +97,7 @@ export default function EditEmail({
           fetchedWorkshops.workshops.map((workshop: Workshop) => ({
             name: workshop.name,
             id: workshop.id,
-          }))
+          })),
         ); // array of strings
       } catch (error: unknown) {
         const errorMessage =
@@ -121,7 +121,7 @@ export default function EditEmail({
           fetchedEvents.events.map((event: Event) => ({
             name: event.name,
             id: event.id,
-          }))
+          })),
         );
       } catch (error: unknown) {
         const errorMessage =
@@ -142,6 +142,7 @@ export default function EditEmail({
   filterMap.set("workshop", "Workshop");
   filterMap.set("gradeLevel", "Grade Level");
   filterMap.set("school", "School");
+  filterMap.set("accountType", "Account Type");
 
   const subFilterMap = new Map();
   subFilterMap.set("event", events);
@@ -161,6 +162,11 @@ export default function EditEmail({
     { name: "Roanoke County", id: "Roanoke County" },
     { name: "Salem City", id: "Salem City" },
     { name: "Other", id: "Other" },
+  ]);
+  subFilterMap.set("accountType", [
+    { name: "Student", id: "student" },
+    { name: "Organizer", id: "organizer" },
+    { name: "Judge", id: "judge" },
   ]);
 
   useEffect(() => {
@@ -383,6 +389,7 @@ export default function EditEmail({
               <option value="workshop">Workshop</option>
               <option value="gradeLevel">Grade Level</option>
               <option value="school">School</option>
+              <option value="accountType">Account Type</option>
             </select>
           </>
         )}
@@ -397,7 +404,7 @@ export default function EditEmail({
               className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
               onChange={(e) => setSubFilterBy(e.target.value)}
             >
-              <option value="">Select a {filterMap.get(filterBy)}</option>
+              <option value="">Select {filterMap.get(filterBy)}</option>
               {subFilterMap
                 .get(filterBy)
                 .map((catergory: { name: string; id: string }) => (

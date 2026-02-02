@@ -137,6 +137,7 @@ export default function CreateEmail() {
   filterMap.set("workshop", "Workshop");
   filterMap.set("gradeLevel", "Grade Level");
   filterMap.set("school", "School");
+  filterMap.set("accountType", "Account Type");
 
   const subFilterMap = new Map();
   subFilterMap.set("event", events);
@@ -158,6 +159,12 @@ export default function CreateEmail() {
     { name: "Salem City", id: "Salem City" },
     { name: "Other", id: "Other" },
   ]);
+    subFilterMap.set("accountType", [
+    { name: "Student", id: "student" },
+    { name: "Organizer", id: "organizer" },
+    { name: "Judge", id: "judge" },
+  ]);
+
 
   const handleCreateEmail = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -322,6 +329,7 @@ export default function CreateEmail() {
               <option value="workshop">Workshop</option>
               <option value="gradeLevel">Grade Level</option>
               <option value="school">School</option>
+              <option value="accountType">Account Type</option>
             </select>
           </>
         )}
@@ -337,7 +345,7 @@ export default function CreateEmail() {
               className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
               onChange={(e) => setSubFilterBy(e.target.value)}
             >
-              <option value="">Select a {filterMap.get(filterBy)}</option>
+              <option value="">Select {filterMap.get(filterBy)}</option>
               {subFilterMap
                 .get(filterBy)
                 .map((catergory: { name: string; id: string }) => (

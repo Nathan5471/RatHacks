@@ -1,4 +1,4 @@
-import { GradeLevel, User } from "@prisma/client";
+import { AccountType, GradeLevel, User } from "@prisma/client";
 import prisma from "../prisma/client";
 import sendCustomEmail from "../utils/sendCustomEmail";
 import { marked } from "marked";
@@ -226,6 +226,11 @@ export const getReceipientsByFilter = async (req: any, res: any) => {
           where: { events: { has: id } },
         });
         break;
+      case "accountType":
+        recipientData = await prisma.user.findMany({
+          where: { accountType: id },
+        });
+        break;
       case "emailList":
         recipientData = await prisma.user.findMany({
           where: { emailLists: { has: id } },
@@ -286,6 +291,11 @@ export const sendEmail = async (req: any, res: any) => {
           where: { events: { has: email.subFilterBy } },
         });
         break;
+      case "accountType":
+        recipientData = await prisma.user.findMany({
+          where: { accountType: email.subFilterBy as AccountType },
+        });
+        break;
       case "emailList":
         recipientData = await prisma.user.findMany({
           where: { emailLists: { has: email.subFilterBy } },
@@ -303,10 +313,10 @@ export const sendEmail = async (req: any, res: any) => {
     }
 
     const emailVerifiedRecipients = recipientData.filter(
-      (participant) => participant.emailVerified === true
+      (participant) => participant.emailVerified === true,
     );
     const unsentRecipients = emailVerifiedRecipients.filter(
-      (participant) => !email.sentTo.includes(participant.id)
+      (participant) => !email.sentTo.includes(participant.id),
     );
     const hasRatHacksEmail = organizer.email.endsWith("@rathacks.com") ?? false;
 
@@ -337,26 +347,29 @@ export const sendEmail = async (req: any, res: any) => {
         .replace("{firstName}", participant.firstName)
         .replace("{lastName}", participant.lastName);
       const html = await marked(filledMessageBody, { renderer });
-      setTimeout(async () => {
-        await sendCustomEmail({
-          email: participant.email,
-          messageBody: html,
-          messageSubject: email.messageSubject,
-          senderName: hasRatHacksEmail
-            ? organizer.firstName.toLowerCase()
-            : "nathan",
-          senderEmail: hasRatHacksEmail
-            ? organizer.email
-            : "nathan@rathacks.com",
-        });
-        await prisma.email.update({
-          where: { id },
-          data: {
-            sentTo: { push: participant.id },
-            sentTimes: { push: new Date() },
-          },
-        });
-      }, (index / 2) * 1000);
+      setTimeout(
+        async () => {
+          await sendCustomEmail({
+            email: participant.email,
+            messageBody: html,
+            messageSubject: email.messageSubject,
+            senderName: hasRatHacksEmail
+              ? organizer.firstName.toLowerCase()
+              : "nathan",
+            senderEmail: hasRatHacksEmail
+              ? organizer.email
+              : "nathan@rathacks.com",
+          });
+          await prisma.email.update({
+            where: { id },
+            data: {
+              sentTo: { push: participant.id },
+              sentTimes: { push: new Date() },
+            },
+          });
+        },
+        (index / 2) * 1000,
+      );
     });
 
     return res.status(200).json({ message: "Email sent successfully" });
@@ -419,10 +432,10 @@ export const activateEmail = async (req: any, res: any) => {
     }
 
     const emailVerifiedRecipients = recipientData.filter(
-      (participant) => participant.emailVerified === true
+      (participant) => participant.emailVerified === true,
     );
     const unsentRecipients = emailVerifiedRecipients.filter(
-      (participant) => !email.sentTo.includes(participant.id)
+      (participant) => !email.sentTo.includes(participant.id),
     );
     const hasRatHacksEmail = user.email.endsWith("@rathacks.com") ?? false;
 
@@ -453,24 +466,27 @@ export const activateEmail = async (req: any, res: any) => {
         .replace("{firstName}", participant.firstName)
         .replace("{lastName}", participant.lastName);
       const html = await marked(filledMessageBody, { renderer });
-      setTimeout(async () => {
-        await sendCustomEmail({
-          email: participant.email,
-          messageBody: html,
-          messageSubject: email.messageSubject,
-          senderName: hasRatHacksEmail
-            ? user.firstName.toLowerCase()
-            : "nathan",
-          senderEmail: hasRatHacksEmail ? user.email : "nathan@rathacks.com",
-        });
-        await prisma.email.update({
-          where: { id },
-          data: {
-            sentTo: { push: participant.id },
-            sentTimes: { push: new Date() },
-          },
-        });
-      }, (index / 2) * 1000);
+      setTimeout(
+        async () => {
+          await sendCustomEmail({
+            email: participant.email,
+            messageBody: html,
+            messageSubject: email.messageSubject,
+            senderName: hasRatHacksEmail
+              ? user.firstName.toLowerCase()
+              : "nathan",
+            senderEmail: hasRatHacksEmail ? user.email : "nathan@rathacks.com",
+          });
+          await prisma.email.update({
+            where: { id },
+            data: {
+              sentTo: { push: participant.id },
+              sentTimes: { push: new Date() },
+            },
+          });
+        },
+        (index / 2) * 1000,
+      );
     });
   } catch (error) {
     console.error("Error activating email:", error);
