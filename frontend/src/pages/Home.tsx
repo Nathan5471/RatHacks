@@ -15,7 +15,7 @@ export default function Home() {
   useEffect(() => {
     const calculateTimeRemaining = () => {
       const now = new Date();
-      const eventDate = new Date("2025-11-22T08:00:00");
+      const eventDate = new Date("2026-05-23T10:00:00");
       const difference = eventDate.getTime() - now.getTime();
 
       if (difference <= 0) return null;
@@ -66,11 +66,11 @@ export default function Home() {
         </Link>
       </div>
       <div className="flex flex-col items-center w-screen h-full overflow-y-auto">
-        <h2 className="text-3xl sm:text-6xl mt-6 text-center font-bold">
-          Join us for Rat Hacks 2025!
+        <h2 className="text-2xl sm:text-5xl mt-6 text-center font-bold">
+          Join us for Rat Hacks: Capture The Flag!
         </h2>
-        <p className="text-lg sm:text-2xl mt-4 text-center w-3/4">
-          November 22, 2025 8:00 AM - 8:00 PM
+        <p className="text-xl sm:text-3xl mt-4 text-center w-3/4">
+          May 23, 2026 10:00 AM - 5:00 PM
         </p>
         <div className="flex flex-row mt-4 p-4 justify-center w-2/3">
           <div className="flex flex-col bg-surface-a1 rounded-lg w-45 p-4 mx-2">
@@ -100,22 +100,19 @@ export default function Home() {
         </div>
         <div className="mt-6 text-left w-11/12 text-lg">
           <h2 className="text-4xl font-bold mb-2" id="about">
-            About Rat Hacks
+            About Rat Hacks: CTF
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
-              <h3 className="text-xl font-bold mb-2">What is Rat Hacks?</h3>
+              <h3 className="text-xl font-bold mb-2">What is Rat Hacks: CTF?</h3>
               <p>
-                Rat Hacks is a hackathon hosted by the Roanoke Valley Governor's
-                School (RVGS). It will be held November 22, 2025 from 8:00 AM to
-                8:00 PM. It will be at RVGS, 2104 Grandin Road SW, Roanoke, VA
-                24015.
+                Rat Hacks: Capture The Flag is a cybersecurity event called a capture the flag (CTF). It will be held May 23, 2026 from 10:00 AM to 5:00 PM. It will be at RVGS, 2104 Grandin Road SW, Roanoke, VA 24015.
               </p>
             </div>
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-xl font-bold mb-2">Who can attend?</h3>
               <p>
-                Rat Hacks is open to all high school students in grades 9-12.
+                Rat Hacks: CTF is open to all high school students in grades 9-12.
                 You can join by creating an account and registering for the
                 event! (
                 <Link
@@ -131,25 +128,25 @@ export default function Home() {
               <h3 className="text-xl font-bold mb-2">Teams</h3>
               <p>
                 You can participate as an individual or as part of a team
-                (highly reccomended!). Teams can be up to 4 members. If you
+                (highly reccomended!). Teams can be up to 3 members. If you
                 don't have a team, we will have a team formation session at the
                 start of the event.
               </p>
             </div>
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
-              <h3 className="text-xl font-bold mb-2">Prizes</h3>
+              <h3 className="text-xl font-bold mb-2">Capture The Flag Style</h3>
               <p>
-                There will be prizes for the top 3 projects! First place will
-                receive $100 per member, second place will receive $50 per
-                member, and third place will receive $20 per member.
+                Rat Hacks: CTF will be a jeopardy style CTF. This means that there will 
+                be a variety of challenges in different categories such as web exploitation,
+                reverse engineering, cryptography, and more! Each challenge will be worth a
+                different amount of points based on difficulty. The team with the most amount
+                of points wins!
               </p>
             </div>
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-xl font-bold mb-2">Food & Drinks</h3>
               <p>
-                Food and drinks will be provided for FREE at Rat Hacks! We will
-                have chicken nuggets for lunch and pizza for dinner. There will
-                also be snacks and water throughout the event. If you have any
+                Food and drinks will be provided for FREE at Rat Hacks: CTF! We will be having Chick-fil-a for lunch. Snacks and drinks will be provided throughout the event. If you have any
                 dietary restrictions, please email{" "}
                 <a
                   href="mailto:nathan@rathacks.com"
@@ -161,12 +158,9 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-col w-full h-full bg-surface-a1 rounded-lg p-4">
-              <h3 className="text-xl font-bold mb-2">Judging</h3>
+              <h3 className="text-xl font-bold mb-2">Workshops</h3>
               <p>
-                Projects will be judged throughout the week after Rat Hacks by
-                judges from the tech industry. Winners will be announced in a
-                virtual awards ceremony on Sunday, November 30 at 7:00 PM. You
-                will also receive feedback on your project from the judges.
+                There will be a ton of virtual workshops leading up to Rat Hacks: CTF. There will be workshops for every, even complete begineers! The workshops will prepare you to solve the challenges at Rat Hacks. It is highly encoureged that you attend at least one workshop before attending.
               </p>
             </div>
           </div>
@@ -192,7 +186,7 @@ export default function Home() {
               <span className="text-lg sm:text-xl font-bold">Bear Tyree</span>
               <span className="sm:text-lg">Rat Hacks Organizer</span>
             </div>
-            <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
+            <a href="https://cayleb247.github.io/personal-website/" target="_blank" rel="noopener noreferrer" className="flex flex-col p-4 bg-surface-a1 rounded-lg">
               <img
                 src="/caylebWang.jpg"
                 alt="Cayleb Wang"
@@ -200,7 +194,7 @@ export default function Home() {
               />
               <span className="text-lg sm:text-xl font-bold">Cayleb Wang</span>
               <span className="sm:text-lg">Rat Hacks Organizer</span>
-            </div>
+            </a>
             <a
               href="https://elipeters.org"
               target="_blank"
@@ -233,36 +227,33 @@ export default function Home() {
           <div className="flex flex-col">
             <div className="flex flex-col bg-surface-a1 rounded-lg p-4 my-2 text-xl sm:text-2xl">
               <p>
-                <span className="font-bold">7:50 AM - 8:15 AM</span> - Check In
+                <span className="font-bold">9:50 AM - 10:15 AM</span> - Check In
                 (RVGS)
               </p>
               <p className="mt-2">
-                <span className="font-bold">8:15 AM - 8:30 AM</span> - Opening
+                <span className="font-bold">10:15 AM - 10:30 AM</span> - Opening
                 Ceremony (Lecture Hall)
               </p>
               <p className="mt-2">
-                <span className="font-bold">8:30 AM</span> - Hacking Begins!
-                (Classrooms)
+                <span className="font-bold">10:30 AM</span> - Capture The Flag Begins!
               </p>
               <p className="mt-2">
-                <span className="font-bold">8:30 AM - 9:00 AM</span> - Team
+                <span className="font-bold">10:30 AM - 11:00 AM</span> - Team
                 Formation Session (optional, Lecture Hall)
-              </p>
-              <p className="mt-2">
-                <span className="font-bold">10:00 AM</span> - Ping Pong
-                Tournament Begins! (Lecture Hall)
               </p>
               <p className="mt-2">
                 <span className="font-bold">12:00 PM - 12:30 PM</span> - Lunch,
                 Chicken Nuggets (Lecture Hall)
               </p>
               <p className="mt-2">
-                <span className="font-bold">6:00 PM - 6:30 PM</span> - Dinner,
-                Pizza (Lecture Hall)
+                <span className="font-bold">12:30 PM</span> - Ping Pong
+                Tournament Begins! (Lecture Hall)
               </p>
               <p className="mt-2">
-                <span className="font-bold">8:00 PM</span> - Submit Projects and
-                Go Home!
+                <span className="font-bold">4:30 PM</span> - Capture The Flag Ends
+              </p>
+              <p className="mt-2">
+                <span className="font-bold">4:45 PM - 5:00 PM</span> - Clsoing Ceremony
               </p>
             </div>
           </div>
@@ -271,12 +262,12 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-center">
             <div className="flex flex-col w-full bg-surface-a1 rounded-lg p-4">
-              <h3 className="text-2xl font-bold mb-2">What is a hackathon?</h3>
+              <h3 className="text-2xl font-bold mb-2">What is a capture the flag?</h3>
               <p>
-                A hackathon is an event where you create a project by coding,
-                usually in a team! It can be anything from a website, app, game,
-                etc.. using any language you want. The goal is to learn and have
-                fun. There is not actually any hacking involved.
+                A capture the flag is a cybersecurity event where participants solve
+                cybersecurity challenges to earn points. There will be a variety of
+                categories and there will be a variety of difficulties, so everyone
+                will be able to solve challenges!
               </p>
             </div>
             <div className="flex flex-col w-full bg-surface-a1 rounded-lg p-4">
@@ -284,26 +275,23 @@ export default function Home() {
                 What do I need to bring?
               </h3>
               <p>
-                You should bring a laptop and charger that you can code on. If
-                you don't have a laptop, you can borrow one from us that has
-                Python installed.
+                You should bring a laptop and charger. It is ideal if you can access the
+                terminal, but if you aren't able to, you can use <a href="https://play.picoctf.org/practice" target="_blank" rel="noopener noreferrer" className="text-primary-a0 hover:underline">https://play.picoctf.org/practice</a>.
               </p>
             </div>
             <div className="flex flex-col w-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-2xl font-bold mb-2">
-                I don't know how to code, can I still come?
+                I don't know anything about cybersecurity, can I still come?
               </h3>
               <p>
-                Of course! Rat Hacks is open to any skill level. We also have
-                virtual workshops to teach you how to code before the event. You
-                can access these through your Rat Hacks account.
+                Of course! Rat Hacks: CTF is designed for all skill levels. Although, I highly reccomend you to attend a few workshops so you can have the tools to solve the challenges. There will be lots of workshops for beginners.
               </p>
             </div>
             <div className="flex flex-col w-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-2xl font-bold mb-2">
-                Do I need to code in X language?
+                What resources can I use to prepare for the event?
               </h3>
-              <p>Nope! You can code in any language you want.</p>
+              <p>The best resource is to join the workshops. If you want some extra practice, I highly reccomend <a href="https://play.picoctf.org/practice" target="_blank" rel="noopener noreferrer" className="text-primary-a0 hover:underline">https://play.picoctf.org/practice</a>, it has a lot of great challenges!</p>
             </div>
             <div className="flex flex-col w-full bg-surface-a1 rounded-lg p-4">
               <h3 className="text-2xl font-bold mb-2">
