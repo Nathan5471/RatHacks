@@ -24,6 +24,7 @@ const router = express.Router();
 router.post("/create", authenticate, async (req: any, res: any) => {
   const {
     name,
+    type,
     description,
     location,
     startDate,
@@ -31,6 +32,7 @@ router.post("/create", authenticate, async (req: any, res: any) => {
     submissionDeadline,
   } = req.body as {
     name: string;
+    type: string;
     description: string;
     location: string;
     startDate: string;
@@ -40,6 +42,7 @@ router.post("/create", authenticate, async (req: any, res: any) => {
 
   if (
     !name ||
+    !type ||
     !description ||
     !location ||
     !startDate ||
@@ -48,7 +51,7 @@ router.post("/create", authenticate, async (req: any, res: any) => {
   ) {
     return res.status(400).json({
       message:
-        "Name, description, location, start date, end date, and submission deadline are required",
+        "Name, type, description, location, start date, end date, and submission deadline are required",
     });
   }
   const now = new Date();
@@ -64,6 +67,9 @@ router.post("/create", authenticate, async (req: any, res: any) => {
     return res.status(400).json({
       message: "End date and submission deadline must be after the start date",
     });
+  }
+  if (type !== "hackathon" && type !== "ctf") {
+    return res.status(400).json({ message: "Invalid event type" });
   }
 
   await createEvent(req, res);

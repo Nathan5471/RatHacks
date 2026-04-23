@@ -8,6 +8,7 @@ import sendCustomEmail from "../utils/sendCustomEmail";
 export const createEvent = async (req: any, res: any) => {
   const {
     name,
+    type,
     description,
     location,
     startDate,
@@ -15,6 +16,7 @@ export const createEvent = async (req: any, res: any) => {
     submissionDeadline,
   } = req.body as {
     name: string;
+    type: "hackathon" | "ctf";
     description: string;
     location: string;
     startDate: string;
@@ -31,6 +33,7 @@ export const createEvent = async (req: any, res: any) => {
     const event = await prisma.event.create({
       data: {
         name,
+        type,
         description,
         location,
         startDate: new Date(startDate),
@@ -584,6 +587,7 @@ export const getAllEvents = async (req: any, res: any) => {
     const sortedEvents = sortEvents(allEvents);
     const events = sortedEvents.map((event) => ({
       id: event.id,
+      type: event.type,
       name: event.name,
       description: event.description,
       location: event.location,
@@ -648,6 +652,7 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
         });
         return {
           id: event.id,
+          type: event.type,
           name: event.name,
           description: event.description,
           location: event.location,
@@ -683,7 +688,7 @@ export const judgeGetAllEvents = async (req: any, res: any) => {
 
   try {
     const events = await prisma.event.findMany({
-      where: { status: { not: "upcoming" }, releasedJudging: false },
+      where: { type: "hackathon", status: { not: "upcoming" }, releasedJudging: false },
     });
     const sortedEvents = sortEvents(events);
     const removedUneccessaryFieldsEvents = sortedEvents.map((event) => ({
@@ -778,6 +783,7 @@ export const getEventById = async (req: any, res: any) => {
       message: "Event loaded successfully",
       event: {
         id: event.id,
+        type: event.type,
         name: event.name,
         description: event.description,
         location: event.location,
@@ -911,6 +917,7 @@ export const organizerGetEventById = async (req: any, res: any) => {
 
     const filledEvent = {
       id: event.id,
+      type: event.type,
       name: event.name,
       description: event.description,
       location: event.location,
@@ -994,6 +1001,12 @@ export const judgeGetEventById = async (req: any, res: any) => {
     });
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
+    }
+    if (event.status === "upcoming") {
+      return res.status(400).json({ message: "Event has not started yet" });
+    }
+    if (event.type !== "hackathon") {
+      return res.status(400).json({ message: "Judging not available for this event type" });
     }
     if (event.releasedJudging !== false) {
       return res.status(400).json({ message: "Judging not available" });

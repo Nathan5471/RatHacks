@@ -33,6 +33,11 @@ enum Status {
   completed
 }
 
+enum EventType {
+  hackathon
+  ctf
+}
+
 model User {
   id                     String      @id @default(uuid())
   email                  String      @unique
@@ -116,21 +121,22 @@ model JudgeFeedback {
 }
 
 model Event {
-  id                 String   @id @default(uuid())
+  id                 String    @id @default(uuid())
+  type               EventType @default(hackathon)
   name               String
   description        String
   location           String
   startDate          DateTime
   endDate            DateTime
   submissionDeadline DateTime
-  status             Status   @default(upcoming)
-  releasedJudging    Boolean  @default(false)
-  participants       String[] // User Ids
-  checkedIn          String[] // User Ids
-  teams              String[] // Team Ids
-  projects           String[] // Project Ids
-  createdBy          String // Organizer Id
-  createdAt          DateTime @default(now())
+  status             Status    @default(upcoming)
+  releasedJudging    Boolean   @default(false)
+  participants       String[]  // User Ids
+  checkedIn          String[]  // User Ids
+  teams              String[]  // Team Ids
+  projects           String[]  // Project Ids
+  createdBy          String  // Organizer Id
+  createdAt          DateTime  @default(now())
 }
 
 model Workshop {

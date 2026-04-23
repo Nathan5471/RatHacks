@@ -2019,6 +2019,9 @@ paths:
               properties:
                 name:
                   type: string
+                type:
+                  type: string
+                  enum: ["hackathon", "ctf"]
                 description:
                   type: string
                 location:
@@ -2034,6 +2037,7 @@ paths:
                   format: date-time
               required:
                 - name
+                - type
                 - description
                 - location
                 - startDate
@@ -2741,6 +2745,9 @@ paths:
                         id:
                           type: string
                           format: uuid
+                        type:
+                          type: string
+                          enum: ["hackathon", "ctf"]
                         name:
                           type: string
                         description:
@@ -2764,6 +2771,7 @@ paths:
                           min: 0
                       required:
                         - id
+                        - type
                         - name
                         - description
                         - location
@@ -2837,6 +2845,9 @@ paths:
                         id:
                           type: string
                           format: uuid
+                        type:
+                          type: string
+                          enum: ["hackathon", "ctf"]
                         name:
                           type: string
                         description:
@@ -2980,6 +2991,7 @@ paths:
                           format: date-time
                       required:
                         - id
+                        - type
                         - name
                         - description
                         - location
@@ -3188,6 +3200,9 @@ paths:
                       id:
                         type: string
                         format: uuid
+                      type:
+                        type: string
+                        enum: ["hackathon", "ctf"]
                       name:
                         type: string
                       description:
@@ -3268,6 +3283,7 @@ paths:
                             - videoURL
                     required:
                       - id
+                      - type
                       - name
                       - description
                       - location
@@ -3355,6 +3371,9 @@ paths:
                       id:
                         type: string
                         format: uuid
+                      type:
+                        type: string
+                        enum: ["hackathon", "ctf"]
                       name:
                         type: string
                       description:
@@ -3566,6 +3585,7 @@ paths:
                         format: date-time
                     required:
                       - id
+                      - type
                       - name
                       - description
                       - location
