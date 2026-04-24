@@ -60,6 +60,7 @@ export default function OrganizerEvent() {
   }
   interface Event {
     id: string;
+    type: "hackathon" | "ctf";
     name: string;
     description: string;
     location: string;
@@ -276,6 +277,9 @@ export default function OrganizerEvent() {
               <div className="flex flex-col w-full sm:w-1/3 sm:ml-2">
                 <p>
                   <span className="font-bold">Status:</span> {event.status}
+                </p>
+                <p>
+                  <span className="font-bold">Type:</span> {event.type}
                 </p>
                 <span className="font-bold">Location:</span> {event.location}
                 <span className="font-bold">Start Date:</span>{" "}
@@ -543,7 +547,7 @@ export default function OrganizerEvent() {
                 <p className="text-center">No participants registered yet.</p>
               )}
             </div>
-            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+            {event.type === "hackathon" && (<div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">Stats</h2>
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
                 <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
@@ -586,8 +590,8 @@ export default function OrganizerEvent() {
                   <span className="text-lg">Overall</span>
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+            </div>)}
+            {event.type === "hackathon" && (<div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
               <h2 className="text-2xl font-bold text-center mb-2">Projects</h2>
               <div className="flex flex-row w-full mb-4">
                 {!event.releasedJudging ? (
@@ -644,7 +648,7 @@ export default function OrganizerEvent() {
                   ))}
                 </div>
               )}
-            </div>
+            </div>)}
           </div>
         ) : (
           <div className="flex flex-col">

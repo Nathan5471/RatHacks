@@ -7,6 +7,7 @@ export default function CreateEvent() {
   const navigate = useNavigate();
   const { closeOverlay } = useOverlay();
   const [name, setName] = useState("");
+  const [type, setType] = useState<"hackathon" | "ctf">("hackathon");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -20,6 +21,7 @@ export default function CreateEvent() {
     try {
       const response = await createEvent({
         name,
+        type,
         description,
         location,
         startDate,
@@ -56,6 +58,21 @@ export default function CreateEvent() {
           className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
           required
         />
+        <label htmlFor="type" className="text-2xl mt-2">
+          Event Type
+        </label>
+        <select
+          id="type"
+          name="type"
+          value={type}
+          onChange={(e) => {
+            setType(e.target.value as "hackathon" | "ctf");
+          }}
+          className="p-2 rounded-lg text-lg bg-surface-a2 w-full mt-1"
+        >
+          <option value="hackathon">Hackathon</option>
+          <option value="ctf">Capture The Flag</option>
+        </select>
         <label htmlFor="description" className="text-2xl mt-2">
           Description
         </label>

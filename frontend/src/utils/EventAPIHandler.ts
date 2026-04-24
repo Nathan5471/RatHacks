@@ -17,6 +17,7 @@ api.interceptors.response.use(
 
 export const createEvent = async (eventData: {
   name: string;
+  type: "hackathon" | "ctf";
   description: string;
   location: string;
   startDate: string;

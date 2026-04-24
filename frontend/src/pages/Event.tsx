@@ -35,6 +35,7 @@ export default function Event() {
   }
   interface Event {
     id: string;
+    type: "hackathon" | "ctf";
     name: string;
     description: string;
     location: string;
@@ -265,6 +266,9 @@ export default function Event() {
                 <p>
                   <span className="font-bold">Status:</span> {event.status}
                 </p>
+                <p>
+                  <span className="font-bold">Type:</span> {event.type}
+                </p>
                 <span className="font-bold">Location:</span> {event.location}
                 <span className="font-bold">Start Date:</span>{" "}
                 {formatDate(event.startDate, "EEEE, MMMM d yyyy h:mm a")}
@@ -290,7 +294,7 @@ export default function Event() {
                 )}
                 {event.status === "ongoing" && (
                   <h2 className="text-2xl font-bold text-center mb-2">
-                    Time Remaining to Submit Projects
+                    {event.type === "hackathon" ? "Time Remaining to Submit Projects" : "Time Remaining in CTF"}
                   </h2>
                 )}
                 <div className="flex flex-row w-full justify-center">
@@ -333,9 +337,9 @@ export default function Event() {
                 <div className="flex flex-col sm:flex-row mt-4">
                   <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-full sm:w-2/3 items-center">
                     <h2 className="text-2xl font-bold text-center mb-2">
-                      Project Submission
+                      {event.type === "hackathon" ? "Project Submission" : "CTF Workshops & Resources"}
                     </h2>
-                    <p className="text-lg text-center">
+                    {event.type === "hackathon" && (<p className="text-lg text-center">
                       To submit your project you will need a title, description,
                       a link to your code, a screenshot, a video of your
                       project, and optionally you can include a demo URL. The
@@ -343,8 +347,22 @@ export default function Event() {
                       reccomend talking during your video because it makes them
                       much more fun to watch. If you want help deploy your
                       project, talk to an organizer!
-                    </p>
-                    <Link
+                    </p>)}
+                    {event.type === "ctf" && (<p className="text-lg text-center">
+                      The best way to prepare for the CTF is to attend the 
+                      workshops before the event. These workshops are designed to
+                      prepare you for the challenges in the CTF. There are workshops
+                      for all skill levels, but beginners are heavily encouraged to 
+                      attend at least one workshop in a few different skills. This will
+                      help make sure you have enough challenges you can solve during
+                      the CTF. Pico CTF
+                      (<a
+                        href="https://play.picoctf.org/practice"
+                        className="text-primary-a0 hover:underline"
+                      >play.picoctf.org/practice</a>) is an excellent resource to learn.
+                      It has tons of practice challenges for all skill levels.
+                    </p>)}
+                    {event.type === "hackathon" && (<Link
                       to={`/app/event/submit/${event.id}`}
                       className={`w-2/3 sm:w-1/2 ${
                         event.status === "ongoing" &&
@@ -382,7 +400,7 @@ export default function Event() {
                         new Date(event.submissionDeadline).getTime() <=
                           new Date().getTime() &&
                         "Submission Deadline Passed"}
-                    </Link>
+                    </Link>)}
                   </div>
                   <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-full mt-2 sm:mt-0 sm:w-1/3 sm:ml-2">
                     <h2 className="text-2xl font-bold text-center mb-2">

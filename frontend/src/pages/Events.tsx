@@ -11,6 +11,7 @@ export default function Events() {
   const { user, getUser } = useAuth();
   interface Event {
     id: string;
+    type: "hackathon" | "ctf";
     name: string;
     description: string;
     location: string;
@@ -207,6 +208,9 @@ export default function Events() {
                 <div className="flex flex-col w-full sm:w-1/3 sm:ml-2">
                   <p>
                     <span className="font-bold">Status:</span> {event.status}
+                  </p>
+                  <p>
+                    <span className="font-bold">Type:</span> {event.type}
                   </p>
                   <span className="font-bold">Location:</span> {event.location}
                   <span className="font-bold">Start Date:</span>{" "}

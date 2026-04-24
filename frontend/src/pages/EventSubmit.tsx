@@ -22,6 +22,7 @@ export default function EventSubmit() {
   }
   interface Event {
     id: string;
+    type: "hackathon" | "ctf";
     name: string;
     description: string;
     location: string;
@@ -309,6 +310,50 @@ export default function EventSubmit() {
               className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 rounded-lg mt-2"
             >
               Back to events
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (event.type === "ctf") {
+    return (
+      <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
+        <div
+          className={`${
+            navbarOpen ? "absolute inset-0 z-50 block bg-black/50" : "hidden"
+          } md:block w-full md:w-1/5 lg:w-1/6 h-full`}
+          onClick={() => setNavbarOpen(false)}
+        >
+          <div
+            className="w-1/2 sm:w-1/3 md:w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AppNavbar />
+          </div>
+        </div>
+        <div className="flex flex-col ml-6 md:ml-0 w-[calc(100%-1.5rem)] md:w-4/5 lg:w-5/6 h-full overflow-y-auto p-4 items-center">
+          <button
+            className={`absolute top-4 left-4 md:hidden ${
+              navbarOpen ? "hidden" : ""
+            }`}
+            onClick={() => setNavbarOpen(true)}
+          >
+            <IoMenu className="text-3xl hover:text-4xl" />
+          </button>
+          <div className="flex flex-col p-4 rounded-lg bg-surface-a1">
+            <h2 className="text-4xl text-center">
+              This event is a CTF, not a hackathon!
+            </h2>
+            <p className="mt-4">
+              You can't submit a project to a Capture The Flag event.
+            </p>
+            <Link
+              to={`/app/event/${eventId}`}
+              className="p-2 text-center bg-primary-a0 hover:bg-primary-a1 rounded-lg mt-2"
+            >
+              Back to event
             </Link>
           </div>
         </div>
