@@ -7,6 +7,7 @@ import eventRouter from "./routes/eventRouter";
 import workshopRouter from "./routes/workshopRouter";
 import projectRouter from "./routes/projectRouter";
 import emailRouter from "./routes/emailRouter";
+import backupRouter from "./routes/backupRouter";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -15,11 +16,18 @@ import "./schedulers/eventStatus";
 dotenv.config();
 
 const app = express();
-const corsOptions = {
-  origin: true,
-  credentials: true,
-}; // PLEASE REMEMBER TO CHANGE BEFORE RELEASING
-// Dang, I never changed this :(, I should probably get to this soon.
+let corsOptions = {};
+if (process.env.IS_DEV) {
+  corsOptions = {
+    origin: true,
+    credentials: true,
+  }; // Finally got around to chaging this!
+} else {
+  corsOptions = {
+    origin: "https://rathacks.com",
+    credentials: true,
+  };
+}
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
@@ -30,6 +38,7 @@ app.use("/api/event", eventRouter);
 app.use("/api/workshop", workshopRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/email", emailRouter);
+app.use("/api/backup", backupRouter);
 
 // Images
 app.use("/api/uploads", express.static("uploads"));

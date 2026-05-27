@@ -4,3 +4,4 @@ frontend/dist
 backend/dist
 backend/.env
 backend/uploads
+backend/backups
