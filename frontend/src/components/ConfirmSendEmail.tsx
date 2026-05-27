@@ -50,6 +50,7 @@ export default function ConfirmSendEmail({
         setTimeout(() => {
           setReload((prev) => !prev);
         }, 15000); // You'll have to refresh your self if you're sending more than 30 emails
+        toast.success(`Successfully sent email`);
       } else if (type === "activate") {
         await activateEmail(email.id);
         setTimeout(() => {
@@ -61,11 +62,12 @@ export default function ConfirmSendEmail({
         setTimeout(() => {
           setReload((prev) => !prev);
         }, 15000);
+        toast.success(`Successfully ${type}d email`);
       } else if (type === "deactivate") {
         await deactivateEmail(email.id);
         setReload((prev) => !prev);
+        toast.success(`Successfully ${type}d email`);
       }
-      toast.success(`Successfully ${type}d email`);
       closeOverlay();
     } catch (error: unknown) {
       console.error("Error sending email:", error);
