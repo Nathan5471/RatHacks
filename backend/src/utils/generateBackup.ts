@@ -34,3 +34,5 @@ const generateBackup = () => {
         })
     });
 }
+
+export default generateBackup;
