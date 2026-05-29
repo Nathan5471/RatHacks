@@ -24,7 +24,7 @@ router.post("/load", authenticate, async (req, res) => {
     await load(req, res);
 })
 
-router.post("/upload", authenticate, uploadBackup.single("backup"), validatePGDump, async (req, res) => {
+router.post("/upload", authenticate, uploadBackup.single("backupFile"), validatePGDump, async (req, res) => {
 
 })
 
