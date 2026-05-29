@@ -1,0 +1,51 @@
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+
+const uploadDir = path.join(process.cwd(), "backups");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: (
+    req: any,
+    file: Express.Multer.File,
+    cb: (error: Error | null, destination: string) => void
+  ) => {
+    cb(null, uploadDir);
+  },
+  filename: (
+    req: any,
+    file: Express.Multer.File,
+    cb: (error: Error | null, filename: string) => void
+  ) => {
+    const timestamp = Date.now();
+    const sanitized = file.originalname.replace(/\s+/g, "-");
+    cb(null, `backup-${timestamp}-uploaded-${sanitized}`);
+  },
+});
+
+const fileFilter = (
+  req: any,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback
+) => {
+  const allowedTypes = [
+    "application/octet-stream",
+    "application/x-pgsql-dump",
+  ];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only backup files are allowed"));
+  }
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 500 * 1024 * 1024 }, // 500MB limit
+});
+
+export default upload;

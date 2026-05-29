@@ -1,5 +1,7 @@
 import express from "express";
 import authenticate from "../middleware/authenticate";
+import uploadBackup from "../middleware/uploadBackup";
+import validatePGDump from "../middleware/validatePGDump";
 import {
     generate,
     load,
@@ -22,7 +24,7 @@ router.post("/load", authenticate, async (req, res) => {
     await load(req, res);
 })
 
-router.post("/upload", authenticate, async (req, res) => {
+router.post("/upload", authenticate, uploadBackup.single("backup"), validatePGDump, async (req, res) => {
 
 })
 
