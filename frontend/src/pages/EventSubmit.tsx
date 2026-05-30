@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import UploadFile from "../components/UploadFile";
+import { useOverlay } from "../contexts/OverlayContext";
 import { getEventById } from "../utils/EventAPIHandler";
 import {
   getProjectById,
@@ -13,6 +15,8 @@ import AppNavbar from "../components/AppNavbar";
 
 export default function EventSubmit() {
   const { eventId } = useParams<{ eventId: string }>();
+  const { openOverlay } = useOverlay();
+
   interface Team {
     id: string;
     joinCode: string;
@@ -51,14 +55,8 @@ export default function EventSubmit() {
   const [description, setDescription] = useState("");
   const [codeURL, setCodeURL] = useState("");
   const [demoURL, setDemoURL] = useState("");
-  const [screenshot, setScreenshot] = useState<File | undefined>(undefined);
-  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(
-    null
-  );
-  const screenshotRef = useRef<HTMLInputElement>(null);
-  const [video, setVideo] = useState<File | undefined>(undefined);
-  const [videoPreview, setVideoPreview] = useState<string | null>(null);
-  const videoRef = useRef<HTMLInputElement>(null);
+  const [screenshotURL, setScreenshotURL] = useState("");
+  const [videoURL, setVideoURL] = useState("");
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
@@ -106,8 +104,8 @@ export default function EventSubmit() {
         setDemoURL(
           projectData.project.demoURL ? projectData.project.demoURL : ""
         );
-        setScreenshotPreview(projectData.project.screenshotURL);
-        setVideoPreview(projectData.project.videoURL);
+        setScreenshotURL(projectData.project.screenshotURL ? projectData.project.screenshotURL : "");
+        setVideoURL(projectData.project.videoURL ? projectData.project.videoURL : "");
         setLoading(false);
       } catch (error) {
         console.error("Error fetching project:", error);
@@ -118,45 +116,11 @@ export default function EventSubmit() {
     fetchEventAndProject();
   }, [eventId]);
 
-  const handleChangeScreenshot = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setScreenshotPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      setScreenshot(file);
-    } else {
-      setScreenshot(undefined);
-      setScreenshotPreview(null);
-    }
+  const handleUpload = async (fileType: "screenshot" | "video") => {
+    openOverlay(<UploadFile fileType={fileType} setFileURL={fileType === "screenshot" ? setScreenshotURL : setVideoURL} />);
   };
 
-  const triggerScreenshotInput = () => {
-    screenshotRef.current?.click();
-  };
-
-  const handleChangeVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith("video/")) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setVideoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      setVideo(file);
-    } else {
-      setVideo(undefined);
-      setVideoPreview(null);
-    }
-  };
-
-  const triggerVideoInput = () => {
-    videoRef.current?.click();
-  };
-
-  const handleCreateProject = async (e: React.FormEvent) => {
+  const handleCreateProject = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     if (!eventId) return;
@@ -166,8 +130,8 @@ export default function EventSubmit() {
         description,
         codeURL,
         demoURL,
-        screenshot,
-        video,
+        screenshotURL,
+        videoURL,
         eventId,
       })) as { message: string; projectId: string };
       toast.success("Created project successfully!");
@@ -199,8 +163,8 @@ export default function EventSubmit() {
         description,
         codeURL,
         demoURL,
-        screenshot,
-        video,
+        screenshotURL,
+        videoURL,
       });
       toast.success("Project updated successfully!");
     } catch (error: unknown) {
@@ -575,25 +539,16 @@ export default function EventSubmit() {
           <label htmlFor="screenshot" className="text-2xl mt-2">
             Screenshot (optional, required to submit)
           </label>
-          <input
-            type="file"
-            accept="image/*"
-            id="screenshot"
-            name="screenshot"
-            onChange={handleChangeScreenshot}
-            ref={screenshotRef}
-            className="hidden"
-          />
-          {screenshotPreview ? (
+          {screenshotURL ? (
             <div className="relative w-full aspect-video group mt-1">
               <img
-                src={screenshotPreview}
+                src={screenshotURL}
                 alt="Select Screenshot Preview"
-                onClick={triggerScreenshotInput}
+                onClick={() => handleUpload("screenshot")}
                 className="w-full aspect-video object-cover"
               />
               <div
-                onClick={triggerScreenshotInput}
+                onClick={() => handleUpload("screenshot")}
                 className="absolute inset-0 bg-black/0 group-hover:bg-black/35 flex cursor-point items-center justify-center"
               >
                 <span className="text-gray-200/0 font-medium text-3xl group-hover:text-gray-200">
@@ -603,7 +558,7 @@ export default function EventSubmit() {
             </div>
           ) : (
             <div
-              onClick={triggerScreenshotInput}
+              onClick={() => handleUpload("screenshot")}
               className="flex w-full aspect-video bg-surface-a2 hover:bg-surface-a3 items-center justify-center text-center mt-1"
             >
               <p className="text-2xl">Upload Screenshot</p>
@@ -620,30 +575,21 @@ export default function EventSubmit() {
               rel="noopener noreferrer"
               className="text-primary-a0 hover:underline break-all"
             >
-              https://tools.rotato.app/compress
+              https://8mb.video
             </a>{" "}
             to compress your video.
           </p>
-          <input
-            type="file"
-            accept="video/*"
-            id="video"
-            name="video"
-            onChange={handleChangeVideo}
-            ref={videoRef}
-            className="hidden"
-          />
-          {videoPreview ? (
+          {videoURL ? (
             <div className="relative w-full aspect-video group mt-1">
               <video
-                src={videoPreview}
-                onClick={triggerVideoInput}
+                src={videoURL}
+                onClick={() => handleUpload("video")}
                 className="w-full aspect-video object-cover"
                 autoPlay
                 loop
               />
               <div
-                onClick={triggerVideoInput}
+                onClick={() => handleUpload("video")}
                 className="absolute inset-0 bg-black/0 group-hover:bg-black/35 flex cursor-point items-center justify-center"
               >
                 <span className="text-gray-200/0 font-medium text-3xl group-hover:text-gray-200">
@@ -653,7 +599,7 @@ export default function EventSubmit() {
             </div>
           ) : (
             <div
-              onClick={triggerVideoInput}
+              onClick={() => handleUpload("video")}
               className="flex w-full aspect-video bg-surface-a2 hover:bg-surface-a3 items-center justify-center text-center mt-1"
             >
               <p className="text-2xl">Upload Video</p>

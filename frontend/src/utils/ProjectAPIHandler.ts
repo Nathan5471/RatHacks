@@ -20,26 +20,12 @@ export const createProject = async (projectData: {
   description: string;
   codeURL: string;
   demoURL: string;
-  screenshot?: File;
-  video?: File;
+  screenshotURL: string;
+  videoURL: string;
   eventId: string;
 }) => {
-  const formData = new FormData();
-  formData.append("name", projectData.name);
-  formData.append("description", projectData.description);
-  formData.append("codeURL", projectData.codeURL);
-  formData.append("demoURL", projectData.demoURL);
-  if (projectData.screenshot) {
-    formData.append("screenshot", projectData.screenshot);
-  }
-  if (projectData.video) {
-    formData.append("video", projectData.video);
-  }
-  formData.append("eventId", projectData.eventId);
 
-  const response = await api.post("/create", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const response = await api.post("/create", projectData);
   return response.data;
 };
 
@@ -69,25 +55,17 @@ export const updateProject = async (
     description: string;
     codeURL: string;
     demoURL: string;
-    screenshot?: File;
-    video?: File;
+    screenshotURL: string;
+    videoURL: string;
   }
 ) => {
-  const formData = new FormData();
-  formData.append("name", projectData.name);
-  formData.append("description", projectData.description);
-  formData.append("codeURL", projectData.codeURL);
-  formData.append("demoURL", projectData.demoURL);
-  if (projectData.screenshot) {
-    formData.append("screenshot", projectData.screenshot);
-  }
-  if (projectData.video) {
-    formData.append("video", projectData.video);
-  }
 
-  const response = await api.put(`/update/${projectId}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const response = await api.put(`/update/${projectId}`, projectData);
+  return response.data;
+};
+
+export const generateUploadLink = async (fileExtension: string) => {
+  const response = await api.get(`/uploadLink/${fileExtension}`);
   return response.data;
 };
 
