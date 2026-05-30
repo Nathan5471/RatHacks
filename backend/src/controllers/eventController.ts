@@ -767,12 +767,8 @@ export const getEventById = async (req: any, res: any) => {
           name: project.name,
           description: project.description,
           codeURL: project.codeURL,
-          screenshotURL: project.screenshotPath
-            ? `/api/uploads/${project.screenshotPath}`
-            : null,
-          videoURL: project.videoPath
-            ? `/api/uploads/${project.videoPath}`
-            : null,
+          screenshotURL: project.screenshotURL,
+          videoURL: project.videoURL,
           demoURL: project.demoURL,
           ranking: event.releasedJudging ? project.ranking : null,
         };
@@ -878,12 +874,8 @@ export const organizerGetEventById = async (req: any, res: any) => {
           name: project.name,
           description: project.description,
           codeURL: project.codeURL,
-          screenshotURL: project.screenshotPath
-            ? `/api/uploads/${project.screenshotPath}`
-            : null,
-          videoURL: project.videoPath
-            ? `/api/uploads/${project.videoPath}`
-            : null,
+          screenshotURL: project.screenshotURL,
+          videoURL: project.videoURL,
           demoURL: project.demoURL,
           team: filteredMembers,
           submittedAt: project.submittedAt,
@@ -1042,12 +1034,8 @@ export const judgeGetEventById = async (req: any, res: any) => {
           name: project.name,
           description: project.description,
           codeURL: project.codeURL,
-          screenshotURL: project.screenshotPath
-            ? `/api/uploads/${project.screenshotPath}`
-            : null,
-          videoURL: project.videoPath
-            ? `/api/uploads/${project.videoPath}`
-            : null,
+          screenshotURL: project.screenshotURL,
+          videoURL: project.videoURL,
           demoURL: project.demoURL,
           team: filteredMembers,
           judged: judgeFeedback ? true : false,

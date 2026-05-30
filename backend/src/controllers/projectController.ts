@@ -1,18 +1,18 @@
 import { User } from "@prisma/client";
 import prisma from "../prisma/client";
-import { resolveSoa } from "dns";
+import { AwsClient } from "aws4fetch";
 
 export const createProject = async (req: any, res: any) => {
-  const { name, description, codeURL, demoURL, eventId } = req.body as {
+  const { name, description, codeURL, demoURL, screenshotURL, videoURL, eventId } = req.body as {
     name: string;
     description: string;
     codeURL: string | null;
     demoURL: string | null;
+    screenshotURL: string | null;
+    videoURL: string | null;
     eventId: string;
   };
   const user = req.user as User;
-  const screenshot = req.screenshot as string | null;
-  const video = req.video as string | null;
 
   try {
     const event = await prisma.event.findUnique({
@@ -42,8 +42,8 @@ export const createProject = async (req: any, res: any) => {
         description,
         codeURL,
         demoURL,
-        screenshotPath: screenshot,
-        videoPath: video,
+        screenshotURL,
+        videoURL,
         eventId: event.id,
         teamId: team.id,
       },
@@ -93,7 +93,7 @@ export const submitProject = async (req: any, res: any) => {
     if (project.submittedAt) {
       return res.status(400).json({ message: "Project already submitteded" });
     }
-    if (!project.codeURL || !project.screenshotPath || !project.videoPath) {
+    if (!project.codeURL || !project.screenshotURL || !project.videoURL) {
       return res.status(400).json({
         message: "Code URL, Screenshot, and Video are required to submit",
       });
@@ -202,14 +202,14 @@ export const leaveFeedback = async (req: any, res: any) => {
 
 export const updateProject = async (req: any, res: any) => {
   const { projectId } = req.params as { projectId: string };
-  const { name, description, codeURL, demoURL } = req.body as {
+  const { name, description, codeURL, demoURL, screenshotURL, videoURL } = req.body as {
     name: string;
     description: string;
     codeURL: string | null;
     demoURL: string | null;
+    screenshotURL: string | null;
+    videoURL: string | null;
   };
-  const screenshot = req.screenshot as string | null;
-  const video = req.video as string | null;
   const user = req.user as User;
 
   try {
@@ -242,30 +242,39 @@ export const updateProject = async (req: any, res: any) => {
         description,
         codeURL,
         demoURL,
+        screenshotURL,
+        videoURL,
       },
     });
-    if (screenshot) {
-      await prisma.project.update({
-        where: { id: project.id },
-        data: {
-          screenshotPath: screenshot,
-        },
-      });
-    }
-    if (video) {
-      await prisma.project.update({
-        where: { id: project.id },
-        data: {
-          videoPath: video,
-        },
-      });
-    }
     return res.status(200).json({ message: "Event upadted sucessfully" });
   } catch (error) {
     console.error("Error updating project:", error);
     return res.status(500).json({ message: "Failed to update project" });
   }
 };
+
+export const generateUploadLink = async (req: any, res: any) => {
+  const filename = `user-upload-${Date.now()}`;
+  const accessKeyId = process.env.R2_ACCESS_KEY_ID;
+  const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
+  const baseURL = process.env.R2_BASE_URL;
+  const publicBaseURL = process.env.R2_PUBLIC_BASE_URL;
+  if (!accessKeyId || !secretAccessKey || !baseURL || !publicBaseURL) {
+    console.error("R2 credentials are not set in environment variables");
+    return res.status(500).json({ message: "Failed to generate upload link" });
+  }
+  const r2 = new AwsClient({
+    accessKeyId,
+    secretAccessKey,
+  })
+  const url = new URL(`${baseURL}/${filename}`);
+  url.searchParams.append("X-Amz_Expires", "3600");
+  const signed = await r2.sign(
+    new Request(url, { method: "PUT" }),
+    { aws: { signQuery: true } }
+  )
+  return res.status(200).json({ uploadURL: signed.url, postUploadURL: `${publicBaseURL}/${filename}` });
+}
 
 export const getProjectById = async (req: any, res: any) => {
   const { projectId } = req.params as { projectId: string };
@@ -332,12 +341,8 @@ export const getProjectById = async (req: any, res: any) => {
         name: project.name,
         description: project.description,
         codeURL: project.codeURL,
-        screenshotURL: project.screenshotPath
-          ? `/api/uploads/${project.screenshotPath}`
-          : null,
-        videoURL: project.videoPath
-          ? `/api/uploads/${project.videoPath}`
-          : null,
+        screenshotURL: project.screenshotURL,
+        videoURL: project.videoURL,
         demoURL: project.demoURL,
         members: filteredMembers,
         event: {
@@ -442,12 +447,8 @@ export const organizerGetProjectById = async (req: any, res: any) => {
         name: project.name,
         description: project.description,
         codeURL: project.codeURL,
-        screenshotURL: project.screenshotPath
-          ? `/api/uploads/${project.screenshotPath}`
-          : null,
-        videoURL: project.videoPath
-          ? `/api/uploads/${project.videoPath}`
-          : null,
+        screenshotURL: project.screenshotURL,
+        videoURL: project.videoURL,
         demoURL: project.demoURL,
         submittedAt: project.submittedAt,
         team: {
@@ -517,12 +518,8 @@ export const judgeGetProjectById = async (req: any, res: any) => {
         name: project.name,
         description: project.description,
         codeURL: project.codeURL,
-        screenshotURL: project.screenshotPath
-          ? `/api/uploads/${project.screenshotPath}`
-          : null,
-        videoURL: project.videoPath
-          ? `/api/uploads/${project.videoPath}`
-          : null,
+        screenshotURL: project.screenshotURL,
+        videoURL: project.videoURL,
         demoURL: project.demoURL,
         submittedAt: project.submittedAt,
         team: filteredMembers,

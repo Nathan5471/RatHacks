@@ -95,8 +95,8 @@ model Project {
   name           String
   description    String
   codeURL        String?
-  screenshotPath String?
-  videoPath      String?
+  screenshotURL  String?
+  videoURL       String?
   demoURL        String?
   eventId        String
   teamId         String
