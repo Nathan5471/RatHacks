@@ -40,9 +40,6 @@ app.use("/api/project", projectRouter);
 app.use("/api/email", emailRouter);
 app.use("/api/backup", backupRouter);
 
-// Images
-app.use("/api/uploads", express.static("uploads"));
-
 // SwaggerUI Docs
 const swaggerDocument = YAML.load("./api-docs.yaml");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

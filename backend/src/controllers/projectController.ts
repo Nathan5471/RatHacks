@@ -254,7 +254,8 @@ export const updateProject = async (req: any, res: any) => {
 };
 
 export const generateUploadLink = async (req: any, res: any) => {
-  const filename = `user-upload-${Date.now()}`;
+  const { fileExtension } = req.params as { fileExtension: string };
+  const filename = `user-upload-${Date.now()}.${fileExtension}`;
   const accessKeyId = process.env.R2_ACCESS_KEY_ID;
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
   const baseURL = process.env.R2_BASE_URL;
@@ -263,17 +264,22 @@ export const generateUploadLink = async (req: any, res: any) => {
     console.error("R2 credentials are not set in environment variables");
     return res.status(500).json({ message: "Failed to generate upload link" });
   }
-  const r2 = new AwsClient({
-    accessKeyId,
-    secretAccessKey,
-  })
-  const url = new URL(`${baseURL}/${filename}`);
-  url.searchParams.append("X-Amz_Expires", "3600");
-  const signed = await r2.sign(
-    new Request(url, { method: "PUT" }),
-    { aws: { signQuery: true } }
-  )
-  return res.status(200).json({ uploadURL: signed.url, postUploadURL: `${publicBaseURL}/${filename}` });
+  try {
+    const r2 = new AwsClient({
+      accessKeyId,
+      secretAccessKey,
+    })
+    const url = new URL(`${baseURL}/${filename}`);
+    url.searchParams.append("X-Amz_Expires", "3600");
+    const signed = await r2.sign(
+      new Request(url, { method: "PUT" }),
+      { aws: { signQuery: true } }
+    )
+    return res.status(200).json({ uploadURL: signed.url, postUploadURL: `${publicBaseURL}/${filename}` });
+  } catch (error) {
+    console.error("Error generating upload link:", error);
+    return res.status(500).json({ message: "Failed to generate upload link" });
+  }
 }
 
 export const getProjectById = async (req: any, res: any) => {

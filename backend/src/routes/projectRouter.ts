@@ -122,7 +122,19 @@ router.put(
   }
 );
 
-router.get("/uploadLink/:filename", authenticate, generateUploadLink);
+router.get("/uploadLink/:fileExtension", authenticate, async (req: any, res: any) => {
+  const { fileExtension } = req.params as { fileExtension: string };
+
+  if (!fileExtension) {
+    return res.status(400).json({ message: "File extension is required" });
+  }
+
+  if (!["png", "jpg", "jpeg", "webp", "mp4", "webm"].includes(fileExtension.toLowerCase())) {
+    return res.status(400).json({ message: "Invalid file extension" });
+  }
+
+  await generateUploadLink(req, res);
+});
 
 router.get(
   "/get/:projectId",

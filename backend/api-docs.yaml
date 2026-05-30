@@ -5306,12 +5306,12 @@ paths:
                 demoURL:
                   type: string
                   format: uri
-                screenshot:
+                screenshotURL:
                   type: string
-                  format: binary
-                video:
+                  format: uri
+                videoURL:
                   type: string
-                  format: binary
+                  format: uri
                 eventId:
                   type: string
                   format: uuid
@@ -5632,12 +5632,12 @@ paths:
                 demoURL:
                   type: string
                   format: uri
-                screenshot:
+                screenshotURL:
                   type: string
-                  format: binary
-                video:
+                  format: uri
+                videoURL:
                   type: string
-                  format: binary
+                  format: uri
               required:
                 - name
                 - description
@@ -5710,6 +5710,73 @@ paths:
                   message:
                     type: string
                     example: Failed to update project
+                required:
+                  - message
+  /api/project/uploadLink/{fileExtension}:
+    get:
+      summary: Get a signed URL to upload a screenshot or video
+      tags:
+        - Projects
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: fileExtension
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: ["png", "jpg", "jpeg", "webp", "mp4", "webm"]
+      responses:
+        200:
+          description: Successfully generated upload link
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uploadURL:
+                    type: string
+                    format: uri
+                  postUploadURL:
+                    type: string
+                    format: uri
+                required:
+                  - uploadURL
+                  - postUploadURL
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: File extension is required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to generate upload link
                 required:
                   - message
   /api/project/get/{projectId}:
