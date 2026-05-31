@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import migrateUploadedFiles from "./utils/migrateUploadedFiles";
 import authRouter from "./routes/authRouter";
 import eventRouter from "./routes/eventRouter";
 import workshopRouter from "./routes/workshopRouter";
@@ -31,6 +32,11 @@ if (process.env.IS_DEV) {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
+// Perform file migration
+migrateUploadedFiles().catch((error) => {
+  console.error('Error during file migration:', error);
+});
 
 // API Routes
 app.use("/api/auth", authRouter);
