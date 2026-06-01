@@ -133,6 +133,7 @@ function App() {
           <Route path="/invite/judge" element={<JudgeRegister />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/app/project/:projectId" element={<Project />} />
+          <Route path="/project/:projectId" element={<Project />} />
         </Routes>
         <Overlay />
         <ThemeOverlay />

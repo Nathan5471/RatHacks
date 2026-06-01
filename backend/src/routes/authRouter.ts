@@ -148,7 +148,7 @@ router.post(
       });
     }
     await resendVerificationEmail(req, res);
-  }
+  },
 );
 
 router.post("/reset-password", async (req: any, res: any) => {
@@ -199,7 +199,7 @@ router.post(
     }
 
     await inviteOrganizer(req, res);
-  }
+  },
 );
 
 router.post("/organizer/register", async (req: any, res: any) => {
@@ -241,7 +241,7 @@ router.post(
     }
 
     await inviteJudge(req, res);
-  }
+  },
 );
 
 router.post("/judge/register", async (req: any, res: any) => {

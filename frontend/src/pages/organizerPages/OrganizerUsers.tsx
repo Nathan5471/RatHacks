@@ -3,6 +3,11 @@ import Fuse from "fuse.js";
 import { useOverlay } from "../../contexts/OverlayContext";
 import { getAllUsers } from "../../utils/AuthAPIHandler";
 import { IoMenu } from "react-icons/io5";
+import {
+  RiArrowUpDownFill,
+  RiArrowUpFill,
+  RiArrowDownFill,
+} from "react-icons/ri";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import OrganizerUserView from "../../components/OrganizerUserView";
 
@@ -60,6 +65,10 @@ export default function OrganizerUsers() {
   const [themeFilter, setThemeFilter] = useState<
     "all" | "default" | "spooky" | "space" | "framework"
   >("all");
+  const [sortSelection, setSortSelection] = useState<
+    "name" | "email" | "schoolDivision" | "gradeLevel" | "isGovSchool"
+  >("name");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -100,7 +109,7 @@ export default function OrganizerUsers() {
     }
     if (gradeLevelFilter !== "all") {
       filteredUsers = filteredUsers.filter(
-        (user) => user.gradeLevel === gradeLevelFilter
+        (user) => user.gradeLevel === gradeLevelFilter,
       );
     }
     // For these next two, I used === false to not include organizers/judges (they have null values)
@@ -108,25 +117,25 @@ export default function OrganizerUsers() {
       filteredUsers = filteredUsers.filter((user) =>
         attendsGovSchoolFilter === "yes"
           ? user.isGovSchool
-          : user.isGovSchool === false
+          : user.isGovSchool === false,
       );
     }
     if (previousHackathonFilter !== "all") {
       filteredUsers = filteredUsers.filter((user) =>
         previousHackathonFilter === "yes"
           ? user.previousHackathon
-          : user.previousHackathon === false
+          : user.previousHackathon === false,
       );
     }
     if (accountTypeFilter !== "all") {
       filteredUsers = filteredUsers.filter(
-        (user) => user.accountType === accountTypeFilter
+        (user) => user.accountType === accountTypeFilter,
       );
     }
     if (emailVerifiedFilter !== "all") {
       filteredUsers = filteredUsers.filter(
         (user) =>
-          user.emailVerified === (emailVerifiedFilter === "yes" ? true : false)
+          user.emailVerified === (emailVerifiedFilter === "yes" ? true : false),
       );
     }
     if (schoolDivisionFilter !== "all") {
@@ -142,19 +151,20 @@ export default function OrganizerUsers() {
       ];
       if (schoolDivisionFilter === "other") {
         filteredUsers = filteredUsers.filter(
-          (user) => !schoolDivisions.includes(user.schoolDivision)
+          (user) => !schoolDivisions.includes(user.schoolDivision),
         );
       }
       filteredUsers = filteredUsers.filter(
-        (user) => user.schoolDivision === schoolDivisionFilter
+        (user) => user.schoolDivision === schoolDivisionFilter,
       );
     }
     if (themeFilter !== "all") {
       filteredUsers = filteredUsers.filter(
-        (user) => user.theme === themeFilter
+        (user) => user.theme === themeFilter,
       );
     }
-    setDisplayedUsers(filteredUsers);
+    const sortedUsers = handleSort(filteredUsers);
+    setDisplayedUsers(sortedUsers);
   }, [
     searchTerm,
     gradeLevelFilter,
@@ -165,7 +175,72 @@ export default function OrganizerUsers() {
     schoolDivisionFilter,
     themeFilter,
     users,
+    sortSelection,
+    sortDirection,
   ]);
+
+  const handleChangeSort = (
+    selection:
+      | "name"
+      | "email"
+      | "schoolDivision"
+      | "gradeLevel"
+      | "isGovSchool",
+  ) => {
+    if (sortSelection === selection) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortSelection(selection);
+      setSortDirection("asc");
+    }
+  };
+
+  const handleSort = (usersToSort: User[]) => {
+    if (sortSelection === "name") {
+      return usersToSort.sort((a, b) => {
+        const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+        const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+        if (nameA < nameB) return sortDirection === "asc" ? -1 : 1;
+        if (nameA > nameB) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+    } else if (sortSelection === "email") {
+      return usersToSort.sort((a, b) => {
+        const emailA = a.email.toLowerCase();
+        const emailB = b.email.toLowerCase();
+        if (emailA < emailB) return sortDirection === "asc" ? -1 : 1;
+        if (emailA > emailB) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+    } else if (sortSelection === "schoolDivision") {
+      return usersToSort.sort((a, b) => {
+        const divisionA = a.schoolDivision.toLowerCase();
+        const divisionB = b.schoolDivision.toLowerCase();
+        if (divisionA < divisionB) return sortDirection === "asc" ? -1 : 1;
+        if (divisionA > divisionB) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+    } else if (sortSelection === "gradeLevel") {
+      return usersToSort.sort((a, b) => {
+        const gradeA = parseInt(gradeMap[a.gradeLevel]);
+        const gradeB = parseInt(gradeMap[b.gradeLevel]);
+        if (gradeA < gradeB) return sortDirection === "asc" ? -1 : 1;
+        if (gradeA > gradeB) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+    } else if (sortSelection === "isGovSchool") {
+      return usersToSort.sort((a, b) => {
+        if (a.isGovSchool === b.isGovSchool) return 0;
+        if (a.isGovSchool && !b.isGovSchool)
+          return sortDirection === "asc" ? -1 : 1;
+        if (!a.isGovSchool && b.isGovSchool)
+          return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+    } else {
+      return usersToSort;
+    }
+  };
 
   const handleOpenOrganizerUserView = (e: React.MouseEvent, user: User) => {
     e.preventDefault();
@@ -292,7 +367,7 @@ export default function OrganizerUsers() {
                       | "nine"
                       | "ten"
                       | "eleven"
-                      | "twelve"
+                      | "twelve",
                   )
                 }
                 className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
@@ -309,7 +384,7 @@ export default function OrganizerUsers() {
                 value={attendsGovSchoolFilter}
                 onChange={(e) =>
                   setAttendsGovSchoolFilter(
-                    e.target.value as "all" | "yes" | "no"
+                    e.target.value as "all" | "yes" | "no",
                   )
                 }
                 className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
@@ -324,7 +399,7 @@ export default function OrganizerUsers() {
                 value={previousHackathonFilter}
                 onChange={(e) =>
                   setPreviousHackathonFilter(
-                    e.target.value as "all" | "yes" | "no"
+                    e.target.value as "all" | "yes" | "no",
                   )
                 }
                 className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
@@ -341,7 +416,7 @@ export default function OrganizerUsers() {
                 value={accountTypeFilter}
                 onChange={(e) => {
                   setAccountTypeFilter(
-                    e.target.value as "all" | "student" | "organizer" | "judge"
+                    e.target.value as "all" | "student" | "organizer" | "judge",
                   );
                 }}
                 className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
@@ -399,7 +474,7 @@ export default function OrganizerUsers() {
                       | "default"
                       | "spooky"
                       | "space"
-                      | "framework"
+                      | "framework",
                   );
                 }}
                 className="mt-1 lg:mt-0 p-2 rounded-lg bg-surface-a2"
@@ -416,19 +491,89 @@ export default function OrganizerUsers() {
                 <thead>
                   <tr>
                     <th className="py-2 px-4 border-b border-r border-surface-a1 text-left">
-                      Name
+                      <div
+                        className="inline-flex items-center gap-1 cursor-pointer"
+                        onClick={() => handleChangeSort("name")}
+                      >
+                        <span>Name</span>
+                        {sortSelection === "name" ? (
+                          sortDirection === "asc" ? (
+                            <RiArrowUpFill />
+                          ) : (
+                            <RiArrowDownFill />
+                          )
+                        ) : (
+                          <RiArrowUpDownFill />
+                        )}
+                      </div>
                     </th>
                     <th className="hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
-                      Email
+                      <div
+                        className="inline-flex items-center gap-1 cursor-pointer"
+                        onClick={() => handleChangeSort("email")}
+                      >
+                        <span>Email</span>
+                        {sortSelection === "email" ? (
+                          sortDirection === "asc" ? (
+                            <RiArrowUpFill />
+                          ) : (
+                            <RiArrowDownFill />
+                          )
+                        ) : (
+                          <RiArrowUpDownFill />
+                        )}
+                      </div>
                     </th>
                     <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
-                      School Division
+                      <div
+                        className="inline-flex items-center gap-1 cursor-pointer"
+                        onClick={() => handleChangeSort("schoolDivision")}
+                      >
+                        <span>School Division</span>
+                        {sortSelection === "schoolDivision" ? (
+                          sortDirection === "asc" ? (
+                            <RiArrowUpFill />
+                          ) : (
+                            <RiArrowDownFill />
+                          )
+                        ) : (
+                          <RiArrowUpDownFill />
+                        )}
+                      </div>
                     </th>
                     <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
-                      Grade Level
+                      <div
+                        className="inline-flex items-center gap-1 cursor-pointer"
+                        onClick={() => handleChangeSort("gradeLevel")}
+                      >
+                        <span>Grade Level</span>
+                        {sortSelection === "gradeLevel" ? (
+                          sortDirection === "asc" ? (
+                            <RiArrowUpFill />
+                          ) : (
+                            <RiArrowDownFill />
+                          )
+                        ) : (
+                          <RiArrowUpDownFill />
+                        )}
+                      </div>
                     </th>
                     <th className="hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 text-left">
-                      Is RVGS
+                      <div
+                        className="inline-flex items-center gap-1 cursor-pointer"
+                        onClick={() => handleChangeSort("isGovSchool")}
+                      >
+                        <span>Is RVGS</span>
+                        {sortSelection === "isGovSchool" ? (
+                          sortDirection === "asc" ? (
+                            <RiArrowUpFill />
+                          ) : (
+                            <RiArrowDownFill />
+                          )
+                        ) : (
+                          <RiArrowUpDownFill />
+                        )}
+                      </div>
                     </th>
                     <th className="py-2 px-4 border-b border-r border-surface-a1 text-left"></th>
                   </tr>
