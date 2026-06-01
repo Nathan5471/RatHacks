@@ -22,6 +22,7 @@ import OrganizerWorkshops from "./pages/organizerPages/OrganizerWorkshops";
 import OrganizerWorkshop from "./pages/organizerPages/OrganizerWorkshop";
 import OrganizerEvents from "./pages/organizerPages/OrganizerEvents";
 import OrganizerEvent from "./pages/organizerPages/OrganizerEvent";
+import OrganizerBackups from "./pages/organizerPages/OrganizerBackups";
 import CheckIn from "./pages/organizerPages/CheckIn";
 import OrganizerProject from "./pages/organizerPages/OrganizerProject";
 import OrganizerEmails from "./pages/organizerPages/OrganizerEmails";
@@ -108,6 +109,7 @@ function App() {
               element={<OrganizerEmail />}
             />
             <Route path="/app/organizer/stats" element={<OrganizerStats />} />
+            <Route path="/app/organizer/backups" element={<OrganizerBackups />} />
           </Route>
           <Route element={<JudgeRoute />}>
             <Route path="/app/judge" element={<JudgeDashboard />} />
