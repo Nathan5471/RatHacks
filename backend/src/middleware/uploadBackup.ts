@@ -11,30 +11,26 @@ const storage = multer.diskStorage({
   destination: (
     req: any,
     file: Express.Multer.File,
-    cb: (error: Error | null, destination: string) => void
+    cb: (error: Error | null, destination: string) => void,
   ) => {
     cb(null, uploadDir);
   },
   filename: (
     req: any,
     file: Express.Multer.File,
-    cb: (error: Error | null, filename: string) => void
+    cb: (error: Error | null, filename: string) => void,
   ) => {
-    const timestamp = Date.now();
-    const sanitized = file.originalname.replace(/\s+/g, "-");
-    cb(null, `backup-${timestamp}-uploaded-${sanitized}`);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    cb(null, `backup-${timestamp}-uploaded.dump`);
   },
 });
 
 const fileFilter = (
   req: any,
   file: Express.Multer.File,
-  cb: multer.FileFilterCallback
+  cb: multer.FileFilterCallback,
 ) => {
-  const allowedTypes = [
-    "application/octet-stream",
-    "application/x-pgsql-dump",
-  ];
+  const allowedTypes = ["application/octet-stream", "application/x-pgsql-dump"];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {

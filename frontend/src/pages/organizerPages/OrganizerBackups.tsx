@@ -5,7 +5,9 @@ import {
   downloadBackup,
 } from "../../utils/BackupAPIHandler";
 import { useOverlay } from "../../contexts/OverlayContext";
+import UploadBackup from "../../components/UploadBackup";
 import ConfirmLoadBackup from "../../components/ConfirmLoadBackup";
+import DeleteBackup from "../../components/DeleteBackup";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 
@@ -15,6 +17,7 @@ export default function OrganizerBackups() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [navbarOpen, setNavbarOpen] = useState(false);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const fetchBackups = async () => {
@@ -36,12 +39,12 @@ export default function OrganizerBackups() {
       }
     };
     fetchBackups();
-  }, []);
+  }, [reload]);
 
   const handleGenerateBackup = async () => {
     try {
       await generateBackup();
-      setBackups(await getAllBackups());
+      setReload((prev) => !prev);
     } catch (error) {
       console.error("Error generating backup:", error);
       const errorMessage =
@@ -53,6 +56,10 @@ export default function OrganizerBackups() {
           : "An unknown error occurred";
       setError(errorMessage);
     }
+  };
+
+  const handleUploadBackup = () => {
+    openOverlay(<UploadBackup setReload={setReload} />);
   };
 
   const handleDownloadBackup = async (backupName: string) => {
@@ -80,6 +87,10 @@ export default function OrganizerBackups() {
 
   const handleOpenLoadBackup = (backupName: string) => {
     openOverlay(<ConfirmLoadBackup backupName={backupName} />);
+  };
+
+  const handleDeleteBackup = (backupName: string) => {
+    openOverlay(<DeleteBackup backupName={backupName} setReload={setReload} />);
   };
 
   if (loading) {
@@ -187,7 +198,10 @@ export default function OrganizerBackups() {
             >
               Generate Backup
             </button>
-            <button className="ml-2 p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1">
+            <button
+              className="ml-2 p-2 rounded-lg sm:text-xl font-bold text-center bg-primary-a0 hover:bg-primary-a1"
+              onClick={handleUploadBackup}
+            >
               Upload
             </button>
           </div>
@@ -213,6 +227,12 @@ export default function OrganizerBackups() {
                   onClick={() => handleOpenLoadBackup(backup)}
                 >
                   Load
+                </button>
+                <button
+                  className="ml-2 p-2 rounded-lg sm:text-lg font-bold text-center bg-red-500 hover:bg-red-600"
+                  onClick={() => handleDeleteBackup(backup)}
+                >
+                  Delete
                 </button>
               </div>
             ))}
