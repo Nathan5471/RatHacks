@@ -33,6 +33,7 @@ import JudgeEvents from "./pages/judgePages/JudgeEvents";
 import JudgeEvent from "./pages/judgePages/JudgeEvent";
 import JudgeProject from "./pages/judgePages/JudgeProject";
 import Home from "./pages/Home";
+import PastEvents from "./pages/PastEvents";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
@@ -109,7 +110,10 @@ function App() {
               element={<OrganizerEmail />}
             />
             <Route path="/app/organizer/stats" element={<OrganizerStats />} />
-            <Route path="/app/organizer/backups" element={<OrganizerBackups />} />
+            <Route
+              path="/app/organizer/backups"
+              element={<OrganizerBackups />}
+            />
           </Route>
           <Route element={<JudgeRoute />}>
             <Route path="/app/judge" element={<JudgeDashboard />} />
@@ -121,6 +125,7 @@ function App() {
             />
           </Route>
           <Route path="/" element={<Home />} />
+          <Route path="/past-events" element={<PastEvents />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />

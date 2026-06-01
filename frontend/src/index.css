@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "dream-planner";
+  src: url("/dreamplanner.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "ember-fire";
+  src: url("/ember-fire.otf") format("opentype");
+}
+
 @custom-variant spooky (&:where(.spooky, .spooky *));
 @custom-variant space (&:where(.space, .space *));
 
@@ -16,6 +26,8 @@
   --color-surface-a3: #575757;
   --color-surface-a4: #717171;
   --color-surface-a5: #8b8b8b;
+  --font-dream-planner: "dream-planner", sans-serif;
+  --font-ember-fire: "ember-fire", sans-serif;
 }
 
 .spooky {
