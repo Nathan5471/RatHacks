@@ -385,6 +385,63 @@ export const sendEmail = async (req: any, res: any) => {
   }
 };
 
+export const sendTestEmail = async (req: any, res: any) => {
+  const { id } = req.params as { id: any };
+  const organizer = req.user as User;
+
+  if (organizer.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+  try {
+    const email = await prisma.email.findUnique({
+      where: { id },
+    });
+    if (!email) {
+      return res.status(404).json({ message: "Workshop not found" });
+    }
+
+    const renderer = new marked.Renderer();
+    renderer.heading = ({ text, depth }) => {
+      const sizes = {
+        1: "36px",
+        2: "30px",
+        3: "24px",
+        4: "20px",
+        5: "18px",
+      };
+      return `<h${depth} style="font-size: ${
+        sizes[depth as 1 | 2 | 3 | 4 | 5] || "16px"
+      }; font-weight: bold; margin: 0 0 10px;">${text}</h${depth}>`;
+    };
+    renderer.list = (token) => {
+      const items = token.items
+        .map((item) => `<li style="margin-bottom: 5px;">${item.text}</li>`)
+        .join("");
+      return `<${token.ordered ? "ol" : "ul"} style="list-style: ${
+        token.ordered ? "decimal" : "disc"
+      }; padding-left: 20px;">${items}</${token.ordered ? "ol" : "ul"}>`;
+    };
+    const filledMessageBody = email.messageBody
+      .replace("{firstName}", organizer.firstName)
+      .replace("{lastName}", organizer.lastName);
+    const html = await marked(filledMessageBody, { renderer });
+    const hasRatHacksEmail = organizer.email.endsWith("@rathacks.com") ?? false;
+    await sendCustomEmail({
+      email: organizer.email,
+      messageBody: html,
+      messageSubject: email.messageSubject,
+      senderName: hasRatHacksEmail
+        ? organizer.firstName.toLowerCase()
+        : "nathan",
+      senderEmail: hasRatHacksEmail ? organizer.email : "nathan@rathacks.com",
+    });
+    return res.status(200).json({ message: "Test email sent successfully" });
+  } catch (error) {
+    console.error("Error sending test email", error);
+    return res.status(500).json({ message: "Failed to send test email" });
+  }
+};
+
 export const activateEmail = async (req: any, res: any) => {
   const { id } = req.params as { id: string };
   const user = req.user as User;

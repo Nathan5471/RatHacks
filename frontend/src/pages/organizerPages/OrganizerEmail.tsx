@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import { toast } from "react-toastify";
 import { useOverlay } from "../../contexts/OverlayContext";
 import {
   organizerGetEmailById,
   getAllRecipients,
   getRecipientsByFilter,
+  sendTestEmail,
 } from "../../utils/EmailAPIHandler";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
@@ -244,6 +246,26 @@ export default function OrganizerEvent() {
     }
   };
 
+  const handleSendTestEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      if (emailId) {
+        sendTestEmail(emailId);
+        toast.success("Successfully sent test email");
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error &&
+        typeof error.message === "string"
+          ? error.message
+          : "An unkown error accured";
+      console.error(errorMessage);
+      toast.error("Failed to send test email");
+    }
+  };
+
   if (loading) {
     return (
       <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
@@ -359,6 +381,12 @@ export default function OrganizerEvent() {
                     Activate
                   </button>
                 ))}
+              <button
+                className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
+                onClick={handleSendTestEmail}
+              >
+                Send Test
+              </button>
               <button
                 className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-2 rounded-lg font-bold w-full"
                 onClick={handleOpenEditEmail}

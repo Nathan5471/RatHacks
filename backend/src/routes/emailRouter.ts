@@ -9,6 +9,7 @@ import {
   getRecipientsByFilter,
   getAllRecipients,
   sendEmail,
+  sendTestEmail,
   activateEmail,
   deactivateEmail,
   createEmailList,
@@ -107,6 +108,16 @@ router.post("/send-email/:id", authenticate, async (req: any, res: any) => {
   }
 
   await sendEmail(req, res);
+});
+
+router.post("/send-test/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Email ID is required" });
+  }
+
+  await sendTestEmail(req, res);
 });
 
 router.post("/activate/:id", authenticate, async (req: any, res: any) => {

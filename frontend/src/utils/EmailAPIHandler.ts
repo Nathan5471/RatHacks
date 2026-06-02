@@ -74,6 +74,11 @@ export const sendEmail = async (id: string) => {
   return response.data;
 };
 
+export const sendTestEmail = async (id: string) => {
+  const response = await api.post(`/send-test/${id}`);
+  return response.data;
+};
+
 export const activateEmail = async (id: string) => {
   const response = await api.post(`/activate/${id}`);
   return response.data;
