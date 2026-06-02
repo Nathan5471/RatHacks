@@ -9,6 +9,7 @@ import {
   getRecipientsByFilter,
   getAllRecipients,
   sendEmail,
+  sendEmailToCustomRecipients,
   sendTestEmail,
   activateEmail,
   deactivateEmail,
@@ -109,6 +110,37 @@ router.post("/send-email/:id", authenticate, async (req: any, res: any) => {
 
   await sendEmail(req, res);
 });
+
+router.post(
+  "/send-email/:id/customRecipients",
+  authenticate,
+  async (req: any, res: any) => {
+    const { id } = req.params as { id: string };
+    const { recipients } = req.body as {
+      recipients: { email: string; firstName: string; lastName: string }[];
+    };
+
+    if (!id) {
+      return res.status(400).json({ message: "Email ID is required" });
+    }
+
+    if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
+      return res.status(400).json({ message: "Recipients are required" });
+    }
+
+    let invalidRecipients = recipients.filter(
+      (recipient) =>
+        !recipient.email || !recipient.firstName || !recipient.lastName,
+    );
+    if (invalidRecipients.length > 0) {
+      return res.status(400).json({
+        message: "Each recipient must have an email, first name, and last name",
+      });
+    }
+
+    await sendEmailToCustomRecipients(req, res);
+  },
+);
 
 router.post("/send-test/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };

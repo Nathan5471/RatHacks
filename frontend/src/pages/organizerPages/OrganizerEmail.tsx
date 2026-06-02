@@ -14,6 +14,7 @@ import OrganizerNavbar from "../../components/OrganizerNavbar";
 import EditEmail from "../../components/EditEmail";
 import DeleteEmail from "../../components/DeleteEmail";
 import ConfirmSendEmail from "../../components/ConfirmSendEmail";
+import SendEmailCustomRecipients from "../../components/SendEmailCustomRecipients";
 import OrganizerUserView from "../../components/OrganizerUserView";
 import { getEventById } from "../../utils/EventAPIHandler";
 import { getWorkshopById } from "../../utils/WorkshopAPIHandler";
@@ -91,8 +92,6 @@ export default function OrganizerEvent() {
       try {
         if (email.sendAll) {
           const response = await getAllRecipients();
-          console.log(response);
-          console.log(response.allRecipients);
           setRecipients(response.allRecipients);
           return;
         }
@@ -264,6 +263,13 @@ export default function OrganizerEvent() {
       console.error(errorMessage);
       toast.error("Failed to send test email");
     }
+  };
+
+  const handleSendEmailToCustomRecipients = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    e.preventDefault();
+    openOverlay(<SendEmailCustomRecipients email={email as Email} />);
   };
 
   if (loading) {
@@ -505,9 +511,17 @@ export default function OrganizerEvent() {
               </div>
             </div>
             <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
-              <h2 className="text-2xl font-bold text-center mb-2">
-                Recipients ({recipients.length})
-              </h2>
+              <div className="flex flex-row mb-2">
+                <h2 className="text-2xl font-bold text-center">
+                  Recipients ({recipients.length})
+                </h2>
+                <button
+                  className="bg-primary-a0 hover:bg-primary-a1 p-1 sm:p-2 ml-auto rounded-lg font-bold w-full sm:w-auto"
+                  onClick={handleSendEmailToCustomRecipients}
+                >
+                  Send to Custom Recipients
+                </button>
+              </div>
               {recipients.length > 0 ? (
                 <table className="min-w-full bg-surface-a2 rounded-lg">
                   <thead>

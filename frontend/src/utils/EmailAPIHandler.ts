@@ -74,6 +74,16 @@ export const sendEmail = async (id: string) => {
   return response.data;
 };
 
+export const sendEmailToCustomRecipients = async (
+  id: string,
+  recipients: { email: string; firstName: string; lastName: string }[],
+) => {
+  const response = await api.post(`/send-email/${id}/customRecipients`, {
+    recipients,
+  });
+  return response.data;
+};
+
 export const sendTestEmail = async (id: string) => {
   const response = await api.post(`/send-test/${id}`);
   return response.data;
