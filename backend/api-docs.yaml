@@ -1394,81 +1394,7 @@ paths:
                   users:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                        email:
-                          type: string
-                          format: email
-                        emailVerified:
-                          type: boolean
-                        accountType:
-                          type: string
-                          enum: ["student", "organizer", "judge"]
-                        theme:
-                          type: string
-                          enum: ["default", "spooky", "space", "framework"]
-                        firstName:
-                          type: string
-                        lastName:
-                          type: string
-                        schoolDivision:
-                          type: string
-                        gradeLevel:
-                          type: string
-                          enum: ["nine", "ten", "eleven", "twelve"]
-                        isGovSchool:
-                          type: boolean
-                        techStack:
-                          type: string
-                        previousHackathon:
-                          type: boolean
-                        parentFirstName:
-                          type: string
-                        parentLastName:
-                          type: string
-                        parentEmail:
-                          type: string
-                          format: email
-                        parentPhoneNumber:
-                          type: string
-                          example: 5408531056
-                        contactFirstName:
-                          type: string
-                        contactLastName:
-                          type: string
-                        contactRelationship:
-                          type: string
-                        contactPhoneNumber:
-                          type: string
-                          example: 5408531056
-                        createdAt:
-                          type: string
-                          format: date-time
-                      required:
-                        - id
-                        - email
-                        - emailVerified
-                        - accountType
-                        - theme
-                        - firstName
-                        - lastName
-                        - schoolDivision
-                        - gradeLevel
-                        - isGovSchool
-                        - techStack
-                        - previousHackathon
-                        - parentFirstName
-                        - parentLastName
-                        - parentEmail
-                        - parentPhoneNumber
-                        - contactFirstName
-                        - contactLastName
-                        - contactRelationship
-                        - contactPhoneNumber
-                        - createdAt
+                      $ref: "#/components/schemas/User"
                 required:
                   - message
                   - users
@@ -2869,85 +2795,7 @@ paths:
                         participants:
                           type: array
                           items:
-                            type: object
-                            properties:
-                              id:
-                                type: string
-                                format: uuid
-                              email:
-                                type: string
-                                format: email
-                              emailVerified:
-                                type: boolean
-                              accountType:
-                                type: string
-                                enum: ["student", "organizer", "judge"]
-                              firstName:
-                                type: string
-                              lastName:
-                                type: string
-                              schoolDivision:
-                                type: string
-                              gradeLevel:
-                                type: string
-                                enum:
-                                  [
-                                    "nine",
-                                    "ten",
-                                    "eleven",
-                                    "twelve",
-                                    "organizer",
-                                    "judge",
-                                  ]
-                              isGovSchool:
-                                type: boolean
-                              techStack:
-                                type: string
-                              previousHackathon:
-                                type: boolean
-                              parentFirstName:
-                                type: string
-                              parentLastName:
-                                type: string
-                              parentEmail:
-                                type: string
-                                format: email
-                              parentPhoneNumber:
-                                type: string
-                                example: 5408531056
-                              contactFirstName:
-                                type: string
-                              contactLastName:
-                                type: string
-                              contactRelationship:
-                                type: string
-                              contactPhoneNumber:
-                                type: string
-                                example: 5408531056
-                              createdAt:
-                                type: string
-                                format: date-time
-                            required:
-                              - id
-                              - email
-                              - emailVerified
-                              - accountType
-                              - firstName
-                              - lastName
-                              - schoolDivision
-                              - gradeLevel
-                              - isGovSchool
-                              - techStack
-                              - previousHackathon
-                              - parentFirstName
-                              - parentLastName
-                              - parentEmail
-                              - parentPhoneNumber
-                              - contactFirstName
-                              - contactLastName
-                              - contactRelationship
-                              - contactPhoneNumber
-                              - createdAt
+                            $ref: "#/components/schemas/User"
                         checkedInParticipants:
                           type: number
                           min: 0
@@ -3395,88 +3243,7 @@ paths:
                       participants:
                         type: array
                         items:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                              format: uuid
-                            email:
-                              type: string
-                              format: email
-                            emailVerified:
-                              type: boolean
-                            accountType:
-                              type: string
-                              enum: ["student", "organizer", "judge"]
-                            firstName:
-                              type: string
-                            lastName:
-                              type: string
-                            schoolDivision:
-                              type: string
-                            gradeLevel:
-                              type: string
-                              enum:
-                                [
-                                  "nine",
-                                  "ten",
-                                  "eleven",
-                                  "twelve",
-                                  "organizer",
-                                  "judge",
-                                ]
-                            isGovSchool:
-                              type: boolean
-                            techStack:
-                              type: string
-                            previousHackathon:
-                              type: boolean
-                            parentFirstName:
-                              type: string
-                            parentLastName:
-                              type: string
-                            parentEmail:
-                              type: string
-                              format: email
-                            parentPhoneNumber:
-                              type: string
-                              example: 5408531056
-                            contactFirstName:
-                              type: string
-                            contactLastName:
-                              type: string
-                            contactRelationship:
-                              type: string
-                            contactPhoneNumber:
-                              type: string
-                              example: 5408531056
-                            checkedIn:
-                              type: boolean
-                            createdAt:
-                              type: string
-                              format: date-time
-                          required:
-                            - id
-                            - email
-                            - emailVerified
-                            - accountType
-                            - firstName
-                            - lastName
-                            - schoolDivision
-                            - gradeLevel
-                            - isGovSchool
-                            - techStack
-                            - previousHackathon
-                            - parentFirstName
-                            - parentLastName
-                            - parentEmail
-                            - parentPhoneNumber
-                            - contactFirstName
-                            - contactLastName
-                            - contactRelationship
-                            - contactPhoneNumber
-                            - checkedIn
-                            - createdAt
+                          $ref: "#/components/schemas/User"
                       checkedInParticipants:
                         type: number
                         min: 0
@@ -6346,6 +6113,411 @@ paths:
                     example: Failed to get project
                 required:
                   - message
+  /api/email/create:
+    post:
+      summary: Create a new email
+      tags:
+        - Email
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                messageSubject:
+                  type: string
+                messageBody:
+                  type: string
+                sendAll:
+                  type: boolean
+                filterBy:
+                  type: string
+                  enum:
+                    [
+                      "gradeLevel",
+                      "school",
+                      "workshop",
+                      "event",
+                      "accountType",
+                      "emailList",
+                    ]
+                subFilterBy:
+                  type: string
+                sendOnJoin:
+                  type: boolean
+              required:
+                - name
+                - messageSubject
+                - messageBody
+                - sendAll
+      responses:
+        201:
+          description: Email created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email created successfully
+                  id:
+                    type: string
+                    format: uuid
+                required:
+                  - message
+                  - id
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Name, message subject, message body, and sendAll are required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to create email
+                required:
+                  - message
+  /api/email/update/{id}:
+    put:
+      summary: Update an email
+      tags:
+        - Email
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                messageSubject:
+                  type: string
+                messageBody:
+                  type: string
+                sendAll:
+                  type: boolean
+                filterBy:
+                  type: string
+                  enum:
+                    [
+                      "gradeLevel",
+                      "school",
+                      "workshop",
+                      "event",
+                      "accountType",
+                      "emailList",
+                    ]
+                subFilterBy:
+                  type: string
+                sendOnJoin:
+                  type: boolean
+              required:
+                - name
+                - messageSubject
+                - messageBody
+                - sendAll
+      responses:
+        200:
+          description: Email updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email updated successfully
+                required:
+                  - message
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Name, message subject, message body, and sendAll are required
+                required:
+                  - message
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        404:
+          description: Email not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email not found
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to update email
+                required:
+                  - message
+  /api/email/organizer-all:
+    get:
+      summary: Organizer get all emails
+      tags:
+        - Email
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Emails fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Emails loaded successfully
+                  allEmails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+                        messageSubject:
+                          type: string
+                        messageBody:
+                          type: string
+                        sendFrom:
+                          type: string
+                        sendAll:
+                          type: boolean
+                        filterBy:
+                          type: string
+                          enum:
+                            [
+                              "gradeLevel",
+                              "school",
+                              "workshop",
+                              "event",
+                              "accountType",
+                              "emailList",
+                            ]
+                        subFilterBy:
+                          type: string
+                        sendOnJoin:
+                          type: boolean
+                        active:
+                          type: boolean
+                        sentTo:
+                          type: array
+                          items:
+                            type: string
+                        sentTimes:
+                          type: array
+                          items:
+                            type: string
+                            format: date-time
+                        createdAt:
+                          type: string
+                          format: date-time
+                      required:
+                        - id
+                        - name
+                        - messageSubject
+                        - messageBody
+                        - sendAll
+                        - sendOnJoin
+                        - active
+                        - sentTo
+                        - sentTimes
+                        - createdAt
+                required:
+                  - message
+                  - allEmails
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+                required:
+                  - message
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to fetch emails
+                required:
+                  - message
+  /api/email/recipient-all:
+    get:
+      description: Get all possible recipients
+      tags:
+        - Email
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Recipients fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Emails loaded successfully
+                  allRecipients:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+                required:
+                  - message
+                  - allRecipients
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Unauthorized
+              required:
+                - message
+      403:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Unauthorized
+              required:
+                - message
+      500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Failed to fetch recipients
+              required:
+                - message
   /api/backup/generate:
     post:
       summary: Generate a backup of the database
@@ -6717,7 +6889,6 @@ paths:
                     example: Failed to download backup
                 required:
                   - message
-  /api/backup/{backupName}:
     delete:
       summary: Delete a backup of the database
       tags:
@@ -6811,3 +6982,80 @@ components:
       type: apiKey
       in: cookie
       name: token
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        emailVerified:
+          type: boolean
+        accountType:
+          type: string
+          enum: ["student", "organizer", "judge"]
+        theme:
+          type: string
+          enum: ["default", "spooky", "space", "framework"]
+        firstName:
+          type: string
+        lastName:
+          type: string
+        schoolDivision:
+          type: string
+        gradeLevel:
+          type: string
+          enum: ["nine", "ten", "eleven", "twelve"]
+        isGovSchool:
+          type: boolean
+        techStack:
+          type: string
+        previousHackathon:
+          type: boolean
+        parentFirstName:
+          type: string
+        parentLastName:
+          type: string
+        parentEmail:
+          type: string
+          format: email
+        parentPhoneNumber:
+          type: string
+          example: 5408531056
+        contactFirstName:
+          type: string
+        contactLastName:
+          type: string
+        contactRelationship:
+          type: string
+        contactPhoneNumber:
+          type: string
+          example: 5408531056
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - email
+        - emailVerified
+        - accountType
+        - theme
+        - firstName
+        - lastName
+        - schoolDivision
+        - gradeLevel
+        - isGovSchool
+        - techStack
+        - previousHackathon
+        - parentFirstName
+        - parentLastName
+        - parentEmail
+        - parentPhoneNumber
+        - contactFirstName
+        - contactLastName
+        - contactRelationship
+        - contactPhoneNumber
+        - createdAt
