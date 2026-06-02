@@ -10,9 +10,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     return Promise.reject(
-      error.response ? error.response.data : { message: "Network Error" }
+      error.response ? error.response.data : { message: "Network Error" },
     );
-  }
+  },
 );
 
 export const createEmail = async (data: {
@@ -38,7 +38,7 @@ export const updateEmail = async (
     filterBy: string | null;
     subFilterBy: string | null;
     sendOnJoin: boolean | null;
-  }
+  },
 ) => {
   const response = await api.put(`/update/${id}`, data);
   return response.data;
@@ -84,22 +84,22 @@ export const deactivateEmail = async (id: string) => {
   return response.data;
 };
 
-export const getAllReceipients = async () => {
+export const getAllRecipients = async () => {
   const response = await api.get("/receipient-all");
   return response.data;
 };
 
-export const getReceipientsByEvent = async (id: string) => {
+export const getRecipientsByEvent = async (id: string) => {
   const response = await api.get(`/receipient-by-event/${id}`);
   return response.data;
 };
 
-export const getReceipientsByWorkshop = async (id: string) => {
+export const getRecipientsByWorkshop = async (id: string) => {
   const response = await api.get(`/receipient-by-workshop/${id}`);
   return response.data;
 };
 
-export const getReceipientsByFilter = async (filter: string, id: string) => {
+export const getRecipientsByFilter = async (filter: string, id: string) => {
   const response = await api.get(`/receipient-by-filter/${filter}/${id}`);
   return response.data;
 };

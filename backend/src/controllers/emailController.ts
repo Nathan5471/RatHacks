@@ -57,9 +57,14 @@ export const organizerGetAllEmails = async (req: any, res: any) => {
 
   try {
     const allEmails = await prisma.email.findMany();
+    const sortedEmails = allEmails.sort((a, b) => {
+      if (a.createdAt > b.createdAt) return -1;
+      if (a.createdAt < b.createdAt) return 1;
+      return 0;
+    });
     return res
       .status(200)
-      .json({ message: "Emails loaded successfully", allEmails });
+      .json({ message: "Emails loaded successfully", allEmails: sortedEmails });
   } catch (error) {
     console.error("Error loading workshops for organizer:", error);
     return res.status(500).json({ message: "Failed to load workshops" });
@@ -176,7 +181,7 @@ export const deleteEmail = async (req: any, res: any) => {
   }
 };
 
-export const getAllReceipients = async (req: any, res: any) => {
+export const getAllRecipients = async (req: any, res: any) => {
   const user = req.user as User;
 
   if (user.accountType !== "organizer") {
@@ -184,18 +189,19 @@ export const getAllReceipients = async (req: any, res: any) => {
   }
 
   try {
-    const allReceipients = await prisma.user.findMany();
+    const allRecipients = await prisma.user.findMany();
 
-    return res
-      .status(200)
-      .json({ message: "Emails loaded successfully", allReceipients });
+    return res.status(200).json({
+      message: "Emails loaded successfully",
+      allRecipients,
+    });
   } catch (error) {
     console.error("Error loading workshops for organizer:", error);
     return res.status(500).json({ message: "Failed to load workshops" });
   }
 };
 
-export const getReceipientsByFilter = async (req: any, res: any) => {
+export const getRecipientsByFilter = async (req: any, res: any) => {
   const user = req.user as User;
   const { filter, id } = req.params as { filter: string; id: any };
 

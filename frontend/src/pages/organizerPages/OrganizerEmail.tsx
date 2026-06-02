@@ -4,8 +4,8 @@ import ReactMarkdown from "react-markdown";
 import { useOverlay } from "../../contexts/OverlayContext";
 import {
   organizerGetEmailById,
-  getAllReceipients,
-  getReceipientsByFilter,
+  getAllRecipients,
+  getRecipientsByFilter,
 } from "../../utils/EmailAPIHandler";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
@@ -82,20 +82,23 @@ export default function OrganizerEvent() {
   }, [emailId, reload]);
 
   useEffect(() => {
-    const fetchReceipients = async () => {
+    const fetchRecipients = async () => {
       if (!email) {
         return;
       }
       try {
         if (email.sendAll) {
-          const response = await getAllReceipients();
+          const response = await getAllRecipients();
+          console.log(response);
+          console.log(response.allRecipients);
           setRecipients(response.allRecipients);
+          return;
         }
         switch (email.filterBy) {
           case "gradeLevel":
             {
               if (email.subFilterBy) {
-                const response = await getReceipientsByFilter(
+                const response = await getRecipientsByFilter(
                   email.filterBy,
                   email.subFilterBy,
                 );
@@ -109,7 +112,7 @@ export default function OrganizerEvent() {
           case "school":
             {
               if (email.subFilterBy) {
-                const response = await getReceipientsByFilter(
+                const response = await getRecipientsByFilter(
                   email.filterBy,
                   email.subFilterBy,
                 );
@@ -123,7 +126,7 @@ export default function OrganizerEvent() {
           case "event":
             {
               if (email.subFilterBy) {
-                const response = await getReceipientsByFilter(
+                const response = await getRecipientsByFilter(
                   email.filterBy,
                   email.subFilterBy,
                 );
@@ -150,7 +153,7 @@ export default function OrganizerEvent() {
           case "workshop":
             {
               if (email.subFilterBy) {
-                const response = await getReceipientsByFilter(
+                const response = await getRecipientsByFilter(
                   email.filterBy,
                   email.subFilterBy,
                 );
@@ -179,7 +182,7 @@ export default function OrganizerEvent() {
           case "accountType":
             {
               if (email.subFilterBy) {
-                const response = await getReceipientsByFilter(
+                const response = await getRecipientsByFilter(
                   email.filterBy,
                   email.subFilterBy,
                 );
@@ -207,7 +210,7 @@ export default function OrganizerEvent() {
         console.error("Error fetching event:", error);
       }
     };
-    fetchReceipients();
+    fetchRecipients();
   }, [reload, email]);
 
   const handleOpenEditEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -552,7 +555,7 @@ export default function OrganizerEvent() {
                   </tbody>
                 </table>
               ) : (
-                <p className="text-center">No Receipients with Filters</p>
+                <p className="text-center">No Recipients with Filters</p>
               )}
             </div>
           </div>

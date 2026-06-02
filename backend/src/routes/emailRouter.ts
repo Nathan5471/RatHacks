@@ -6,8 +6,8 @@ import {
   organizerGetEmailById,
   deleteEmail,
   updateEmail,
-  getReceipientsByFilter,
-  getAllReceipients,
+  getRecipientsByFilter,
+  getAllRecipients,
   sendEmail,
   activateEmail,
   deactivateEmail,
@@ -91,12 +91,12 @@ router.put("/update/:id", authenticate, async (req: any, res: any) => {
 
 router.get("/organizer-all", authenticate, organizerGetAllEmails);
 
-router.get("/receipient-all", authenticate, getAllReceipients);
+router.get("/receipient-all", authenticate, getAllRecipients);
 
 router.get(
   "/receipient-by-filter/:filter/:id",
   authenticate,
-  getReceipientsByFilter
+  getRecipientsByFilter,
 );
 
 router.post("/send-email/:id", authenticate, async (req: any, res: any) => {
