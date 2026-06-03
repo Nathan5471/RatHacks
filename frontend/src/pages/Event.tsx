@@ -277,7 +277,7 @@ export default function Event() {
                 <span className="font-bold">Submission Deadline:</span>{" "}
                 {formatDate(
                   event.submissionDeadline,
-                  "EEEE, MMMM d yyyy h:mm a"
+                  "EEEE, MMMM d yyyy h:mm a",
                 )}
                 <p>
                   <span className="font-bold">Participants:</span>{" "}
@@ -294,7 +294,9 @@ export default function Event() {
                 )}
                 {event.status === "ongoing" && (
                   <h2 className="text-2xl font-bold text-center mb-2">
-                    {event.type === "hackathon" ? "Time Remaining to Submit Projects" : "Time Remaining in CTF"}
+                    {event.type === "hackathon"
+                      ? "Time Remaining to Submit Projects"
+                      : "Time Remaining in CTF"}
                   </h2>
                 )}
                 <div className="flex flex-row w-full justify-center">
@@ -337,70 +339,83 @@ export default function Event() {
                 <div className="flex flex-col sm:flex-row mt-4">
                   <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-full sm:w-2/3 items-center">
                     <h2 className="text-2xl font-bold text-center mb-2">
-                      {event.type === "hackathon" ? "Project Submission" : "CTF Workshops & Resources"}
+                      {event.type === "hackathon"
+                        ? "Project Submission"
+                        : "CTF Workshops & Resources"}
                     </h2>
-                    {event.type === "hackathon" && (<p className="text-lg text-center">
-                      To submit your project you will need a title, description,
-                      a link to your code, a screenshot, a video of your
-                      project, and optionally you can include a demo URL. The
-                      video should show off all of your project. I highly
-                      reccomend talking during your video because it makes them
-                      much more fun to watch. If you want help deploy your
-                      project, talk to an organizer!
-                    </p>)}
-                    {event.type === "ctf" && (<p className="text-lg text-center">
-                      The best way to prepare for the CTF is to attend the 
-                      workshops before the event. These workshops are designed to
-                      prepare you for the challenges in the CTF. There are workshops
-                      for all skill levels, but beginners are heavily encouraged to 
-                      attend at least one workshop in a few different skills. This will
-                      help make sure you have enough challenges you can solve during
-                      the CTF. Pico CTF
-                      (<a
-                        href="https://play.picoctf.org/practice"
-                        className="text-primary-a0 hover:underline"
-                      >play.picoctf.org/practice</a>) is an excellent resource to learn.
-                      It has tons of practice challenges for all skill levels.
-                    </p>)}
-                    {event.type === "hackathon" && (<Link
-                      to={`/app/event/submit/${event.id}`}
-                      className={`w-2/3 sm:w-1/2 ${
-                        event.status === "ongoing" &&
-                        new Date().getTime() <=
-                          new Date(event.submissionDeadline).getTime() &&
-                        !event.team.submittedProject
-                          ? "bg-primary-a0 hover:bg-primary-a1"
-                          : "bg-surface-a2 cursor-not-allowed"
-                      } mt-4 rounded-lg p-2 font-bold text-center`}
-                      onClick={(e) => {
-                        if (
-                          !(
-                            event.status === "ongoing" &&
-                            new Date().getTime() <=
-                              new Date(event.submissionDeadline).getTime() &&
-                            !event.team?.submittedProject
-                          )
-                        ) {
-                          e.preventDefault();
-                        }
-                      }}
-                    >
-                      {event.status === "upcoming" && "Submitting Not Open Yet"}
-                      {event.status === "ongoing" &&
-                        new Date().getTime() <=
-                          new Date(event.submissionDeadline).getTime() &&
-                        !event.team.submittedProject &&
-                        "Submit Project"}
-                      {event.status === "ongoing" &&
-                        new Date().getTime() <=
-                          new Date(event.submissionDeadline).getTime() &&
-                        event.team.submittedProject &&
-                        "Project Submitted!"}
-                      {event.status === "ongoing" &&
-                        new Date(event.submissionDeadline).getTime() <=
-                          new Date().getTime() &&
-                        "Submission Deadline Passed"}
-                    </Link>)}
+                    {event.type === "hackathon" && (
+                      <p className="text-lg text-center">
+                        To submit your project you will need a title,
+                        description, a link to your code, a screenshot, a video
+                        of your project, and optionally you can include a demo
+                        URL. The video should show off all of your project. I
+                        highly reccomend talking during your video because it
+                        makes them much more fun to watch. If you want help
+                        deploy your project, talk to an organizer!
+                      </p>
+                    )}
+                    {event.type === "ctf" && (
+                      <p className="text-lg text-center">
+                        The best way to prepare for the CTF is to attend the
+                        workshops before the event. These workshops are designed
+                        to prepare you for the challenges in the CTF. There are
+                        workshops for all skill levels, but beginners are
+                        heavily encouraged to attend at least one workshop in a
+                        few different skills. This will help make sure you have
+                        enough challenges you can solve during the CTF. Pico CTF
+                        (
+                        <a
+                          href="https://play.picoctf.org/practice"
+                          className="text-primary-a0 hover:underline"
+                        >
+                          play.picoctf.org/practice
+                        </a>
+                        ) is an excellent resource to learn. It has tons of
+                        practice challenges for all skill levels.
+                      </p>
+                    )}
+                    {event.type === "hackathon" && (
+                      <Link
+                        to={`/app/event/submit/${event.id}`}
+                        className={`w-2/3 sm:w-1/2 ${
+                          event.status === "ongoing" &&
+                          new Date().getTime() <=
+                            new Date(event.submissionDeadline).getTime() &&
+                          !event.team.submittedProject
+                            ? "bg-primary-a0 hover:bg-primary-a1"
+                            : "bg-surface-a2 cursor-not-allowed"
+                        } mt-4 rounded-lg p-2 font-bold text-center`}
+                        onClick={(e) => {
+                          if (
+                            !(
+                              event.status === "ongoing" &&
+                              new Date().getTime() <=
+                                new Date(event.submissionDeadline).getTime() &&
+                              !event.team?.submittedProject
+                            )
+                          ) {
+                            e.preventDefault();
+                          }
+                        }}
+                      >
+                        {event.status === "upcoming" &&
+                          "Submitting Not Open Yet"}
+                        {event.status === "ongoing" &&
+                          new Date().getTime() <=
+                            new Date(event.submissionDeadline).getTime() &&
+                          !event.team.submittedProject &&
+                          "Submit Project"}
+                        {event.status === "ongoing" &&
+                          new Date().getTime() <=
+                            new Date(event.submissionDeadline).getTime() &&
+                          event.team.submittedProject &&
+                          "Project Submitted!"}
+                        {event.status === "ongoing" &&
+                          new Date(event.submissionDeadline).getTime() <=
+                            new Date().getTime() &&
+                          "Submission Deadline Passed"}
+                      </Link>
+                    )}
                   </div>
                   <div className="flex flex-col bg-surface-a1 p-4 rounded-lg w-full mt-2 sm:mt-0 sm:w-1/3 sm:ml-2">
                     <h2 className="text-2xl font-bold text-center mb-2">
@@ -467,7 +482,7 @@ export default function Event() {
                     >
                       {project.screenshotURL && (
                         <img
-                          src={`${window.location.origin}${project.screenshotURL}`}
+                          src={`${project.screenshotURL}`}
                           alt={`${project.name} Screenshot`}
                           className="w-full h-auto mb-4 rounded-lg"
                         />

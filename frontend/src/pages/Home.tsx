@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function Home() {
   const { user } = useAuth();
-  const [timeRemaining, setTimeRemaining] = useState<{
+  const [, setTimeRemaining] = useState<{
     days: number;
     hours: number;
     minutes: number;

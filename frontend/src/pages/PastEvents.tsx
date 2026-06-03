@@ -46,13 +46,15 @@ export default function PastEvents() {
         </Link>
       </div>
       <div className="flex flex-col items-center w-screen h-full overflow-y-auto">
-        <h2 className="text-2xl sm:text-5xl mt-6 text-center font-bold">
+        <h2 className="text-2xl sm:text-5xl mt-6 text-center font-bold mb-4">
           Past Events
         </h2>
         <div className="flex flex-col bg-surface-a1 w-full p-4">
           <h3 className="text-xl sm:text-3xl mb-1">
-            <span className="font-bold text-primary-a0">Rat Hacks: CTF</span> -
-            May 23, 2026 (10:00 AM - 5:00 PM)
+            <span className="font-bold text-primary-a0">
+              Rat Hacks: CTF 2026
+            </span>{" "}
+            - May 23, 2026 (10:00 AM - 5:00 PM)
           </h3>
           <p className="sm:text-lg mb-4">Participants: 5</p>
           <p className="text-lg sm:text-xl">
@@ -205,7 +207,7 @@ export default function PastEvents() {
         </div>
         <div className="flex flex-col bg-surface-a1 w-full p-4">
           <h3 className="text-xl sm:text-3xl mb-1">
-            <span className="font-bold text-primary-a0">Rat Hacks</span> -
+            <span className="font-bold text-primary-a0">Rat Hacks 2025</span> -
             November 22, 2025 (8:00 AM - 8:00 PM)
           </h3>
           <div className="flex flex-col sm:flex-row items-center mb-4">
@@ -249,8 +251,8 @@ export default function PastEvents() {
         </div>
         <div className="flex flex-col bg-[#f4f4f4ff] w-full p-4 text-black">
           <h3 className="text-xl sm:text-3xl mb-1">
-            <span className="font-bold text-[#144922ff]">Rat Hacks</span> -
-            November 22, 2025 (8:00 AM - 8:00 PM)
+            <span className="font-bold text-[#144922ff]">Rat Hacks</span> - May
+            24, 2025 (8:00 AM - 8:00 PM)
           </h3>
           <p className="sm:text-lg mb-4">Participants: 14</p>
           <p className="text-lg sm:text-xl">

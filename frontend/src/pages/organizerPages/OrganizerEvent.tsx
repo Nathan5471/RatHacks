@@ -161,14 +161,14 @@ export default function OrganizerEvent() {
           eventName={event.name}
           currentPage="event"
           setReload={undefined}
-        />
+        />,
       );
     }
   };
 
   const handleOpenOrganizerUserView = (
     e: React.MouseEvent<HTMLButtonElement>,
-    index: number
+    index: number,
   ) => {
     e.preventDefault();
     if (eventId && event) {
@@ -183,7 +183,7 @@ export default function OrganizerEvent() {
         eventId={eventId}
         eventName={event ? event.name : ""}
         setReload={setReload}
-      />
+      />,
     );
   };
 
@@ -289,7 +289,7 @@ export default function OrganizerEvent() {
                 <span className="font-bold">Submission Deadline:</span>{" "}
                 {formatDate(
                   event.submissionDeadline,
-                  "EEEE, MMMM d yyyy h:mm a"
+                  "EEEE, MMMM d yyyy h:mm a",
                 )}
                 <p>
                   <span className="font-bold">Participants:</span>{" "}
@@ -406,7 +406,7 @@ export default function OrganizerEvent() {
                           {team.members[0]
                             ? event.participants.find(
                                 (participant) =>
-                                  participant.id === team.members[0]
+                                  participant.id === team.members[0],
                               )?.firstName
                             : "N/A"}
                         </td>
@@ -418,7 +418,7 @@ export default function OrganizerEvent() {
                           {team.members[1]
                             ? event.participants.find(
                                 (participant) =>
-                                  participant.id === team.members[1]
+                                  participant.id === team.members[1],
                               )?.firstName
                             : "N/A"}
                         </td>
@@ -430,7 +430,7 @@ export default function OrganizerEvent() {
                           {team.members[2]
                             ? event.participants.find(
                                 (participant) =>
-                                  participant.id === team.members[2]
+                                  participant.id === team.members[2],
                               )?.firstName
                             : "N/A"}
                         </td>
@@ -442,7 +442,7 @@ export default function OrganizerEvent() {
                           {team.members[3]
                             ? event.participants.find(
                                 (participant) =>
-                                  participant.id === team.members[3]
+                                  participant.id === team.members[3],
                               )?.firstName
                             : "N/A"}
                         </td>
@@ -547,108 +547,116 @@ export default function OrganizerEvent() {
                 <p className="text-center">No participants registered yet.</p>
               )}
             </div>
-            {event.type === "hackathon" && (<div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
-              <h2 className="text-2xl font-bold text-center mb-2">Stats</h2>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
-                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
-                  <span className="text-2xl text-primary-a0 font-bold">
-                    {Math.round(
-                      (event.projects.length / event.teams.length) * 100
-                    ) || 0}
-                    %
-                  </span>
-                  <span className="text-lg">Ship Rate</span>
-                </div>
-                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
-                  <span className="text-2xl text-primary-a0 font-bold">
-                    {Math.round(event.averageCreativityScore)}
-                  </span>
-                  <span className="text-lg">Creativity</span>
-                </div>
-                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
-                  <span className="text-2xl text-primary-a0 font-bold">
-                    {Math.round(event.averageFunctionalityScore)}
-                  </span>
-                  <span className="text-lg">Functionality</span>
-                </div>
-                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
-                  <span className="text-2xl text-primary-a0 font-bold">
-                    {Math.round(event.averageTechnicalityScore)}
-                  </span>
-                  <span className="text-lg">Technicality</span>
-                </div>
-                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
-                  <span className="text-2xl text-primary-a0 font-bold">
-                    {Math.round(event.averageInterfaceScore)}
-                  </span>
-                  <span className="text-lg">Interface</span>
-                </div>
-                <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
-                  <span className="text-2xl text-primary-a0 font-bold">
-                    {Math.round(event.averageScore)}
-                  </span>
-                  <span className="text-lg">Overall</span>
+            {event.type === "hackathon" && (
+              <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+                <h2 className="text-2xl font-bold text-center mb-2">Stats</h2>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
+                  <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                    <span className="text-2xl text-primary-a0 font-bold">
+                      {Math.round(
+                        (event.projects.length / event.teams.length) * 100,
+                      ) || 0}
+                      %
+                    </span>
+                    <span className="text-lg">Ship Rate</span>
+                  </div>
+                  <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                    <span className="text-2xl text-primary-a0 font-bold">
+                      {Math.round(event.averageCreativityScore)}
+                    </span>
+                    <span className="text-lg">Creativity</span>
+                  </div>
+                  <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                    <span className="text-2xl text-primary-a0 font-bold">
+                      {Math.round(event.averageFunctionalityScore)}
+                    </span>
+                    <span className="text-lg">Functionality</span>
+                  </div>
+                  <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                    <span className="text-2xl text-primary-a0 font-bold">
+                      {Math.round(event.averageTechnicalityScore)}
+                    </span>
+                    <span className="text-lg">Technicality</span>
+                  </div>
+                  <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                    <span className="text-2xl text-primary-a0 font-bold">
+                      {Math.round(event.averageInterfaceScore)}
+                    </span>
+                    <span className="text-lg">Interface</span>
+                  </div>
+                  <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+                    <span className="text-2xl text-primary-a0 font-bold">
+                      {Math.round(event.averageScore)}
+                    </span>
+                    <span className="text-lg">Overall</span>
+                  </div>
                 </div>
               </div>
-            </div>)}
-            {event.type === "hackathon" && (<div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
-              <h2 className="text-2xl font-bold text-center mb-2">Projects</h2>
-              <div className="flex flex-row w-full mb-4">
-                {!event.releasedJudging ? (
-                  <button
-                    className="bg-primary-a0 hover:bg-primary-a1 p-2 font-bold w-1/3 rounded-lg"
-                    onClick={handleOpenReleaseJudging}
-                  >
-                    Release Judging
-                  </button>
+            )}
+            {event.type === "hackathon" && (
+              <div className="flex flex-col mt-4 bg-surface-a1 p-4 rounded-lg">
+                <h2 className="text-2xl font-bold text-center mb-2">
+                  Projects
+                </h2>
+                <div className="flex flex-row w-full mb-4">
+                  {!event.releasedJudging ? (
+                    <button
+                      className="bg-primary-a0 hover:bg-primary-a1 p-2 font-bold w-1/3 rounded-lg"
+                      onClick={handleOpenReleaseJudging}
+                    >
+                      Release Judging
+                    </button>
+                  ) : (
+                    <div className="bg-surface-a2 p-2 font-bold w-1/3 rounded-lg flex items-center justify-center">
+                      Judging Released
+                    </div>
+                  )}
+                  <p className="ml-2 text-xl">
+                    Judged Projects: {event.judgedProjects} /{" "}
+                    {event.projects.length}
+                  </p>
+                </div>
+                {event.projects.length === 0 ? (
+                  <p className="text-center">No projects submitted yet.</p>
                 ) : (
-                  <div className="bg-surface-a2 p-2 font-bold w-1/3 rounded-lg flex items-center justify-center">
-                    Judging Released
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {event.projects.map((project) => (
+                      <div
+                        key={project.id}
+                        className="bg-surface-a2 p-4 rounded-lg"
+                      >
+                        {project.screenshotURL && (
+                          <img
+                            src={`${project.screenshotURL}`}
+                            alt={`${project.name} Screenshot`}
+                            className="w-full h-auto mb-4 rounded-lg"
+                          />
+                        )}
+                        <h3 className="text-xl font-bold mb-2">
+                          {project.name}
+                        </h3>
+                        <p className="mb-2">{project.description}</p>
+                        <p className="mb-2">
+                          Submitted:{" "}
+                          {project.submittedAt
+                            ? formatDate(
+                                new Date(project.submittedAt),
+                                "EEEE, MMMM d yyyy h:mm a",
+                              )
+                            : "N/A"}
+                        </p>
+                        <Link
+                          to={`/app/organizer/project/${project.id}`}
+                          className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold w-full"
+                        >
+                          View Project
+                        </Link>
+                      </div>
+                    ))}
                   </div>
                 )}
-                <p className="ml-2 text-xl">
-                  Judged Projects: {event.judgedProjects} /{" "}
-                  {event.projects.length}
-                </p>
               </div>
-              {event.projects.length === 0 ? (
-                <p className="text-center">No projects submitted yet.</p>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {event.projects.map((project) => (
-                    <div
-                      key={project.id}
-                      className="bg-surface-a2 p-4 rounded-lg"
-                    >
-                      {project.screenshotURL && (
-                        <img
-                          src={`${window.location.origin}${project.screenshotURL}`}
-                          alt={`${project.name} Screenshot`}
-                          className="w-full h-auto mb-4 rounded-lg"
-                        />
-                      )}
-                      <h3 className="text-xl font-bold mb-2">{project.name}</h3>
-                      <p className="mb-2">{project.description}</p>
-                      <p className="mb-2">
-                        Submitted:{" "}
-                        {project.submittedAt
-                          ? formatDate(
-                              new Date(project.submittedAt),
-                              "EEEE, MMMM d yyyy h:mm a"
-                            )
-                          : "N/A"}
-                      </p>
-                      <Link
-                        to={`/app/organizer/project/${project.id}`}
-                        className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold w-full"
-                      >
-                        View Project
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>)}
+            )}
           </div>
         ) : (
           <div className="flex flex-col">

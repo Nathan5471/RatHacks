@@ -6,7 +6,7 @@ This is a website for Rat Hacks. It's homepage provides information for the upco
 
 ## Features
 
-Participants get to have an account that manages signing up for events and workshops. They are able to edit their data through a settings page and perform actions like logging out of their accounts. Organizer can create and manage events and workshops. Organizers also are able to see the users and send out emails within the website. There are judge accounts that are able to leave feedback on projects.
+Participants get to have an account that manages signing up for events and workshops. They are able to edit their data through a settings page and perform actions like logging out of their accounts. When submitting participants upload their screenshot and video to a Cloudlfare R2 bucket. Organizer can create and manage events and workshops. Organizers also are able to see the users and send out emails within the website. Organizers are easily able to create backups, upload backups, and load from backups. There are judge accounts that are able to leave feedback on projects.
 
 ## Demo
 
@@ -30,13 +30,15 @@ email - <kjccr0@hack.af>
 
 password - Student@123
 
-### Siege Week 14
+## Horizons Nexus
 
+### Backup Feature
 
+### Cloudflare R2 Feature
 
-https://github.com/user-attachments/assets/0c85a1c1-16dd-46ff-8307-6ce9c948ba56
+### New Web Page
 
-
+I added a new wepage at <https://demo.rathacks.com/past-events>. I contains all of the past events in the order that they were hosted. It also has pictures from the events where we took them.
 
 ## Technologies
 

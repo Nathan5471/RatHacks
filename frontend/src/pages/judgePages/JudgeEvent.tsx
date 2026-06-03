@@ -48,7 +48,7 @@ export default function JudgeEvent() {
           const data = await judgeGetEventById(eventId);
           setEvent(data.event);
           setFilteredProjects(
-            data.event.projects.filter((project: Project) => !project.judged)
+            data.event.projects.filter((project: Project) => !project.judged),
           );
         }
       } catch (error) {
@@ -198,14 +198,14 @@ export default function JudgeEvent() {
               <span className="font-bold">Start Date:</span>{" "}
               {formatDate(
                 new Date(event.startDate),
-                "EEEE, MMMM d yyyy h:mm a"
+                "EEEE, MMMM d yyyy h:mm a",
               )}
               <span className="font-bold">End Date:</span>{" "}
               {formatDate(new Date(event.endDate), "EEEE, MMMM d yyyy h:mm a")}
               <span className="font-bold">Submission Deadline:</span>{" "}
               {formatDate(
                 new Date(event.submissionDeadline),
-                "EEEE, MMMM d yyyy h:mm a"
+                "EEEE, MMMM d yyyy h:mm a",
               )}
               <p>
                 <span className="font-bold">Participants:</span>{" "}
@@ -258,7 +258,7 @@ export default function JudgeEvent() {
                   >
                     {project.screenshotURL && (
                       <img
-                        src={`${window.location.origin}${project.screenshotURL}`}
+                        src={`${project.screenshotURL}`}
                         alt={`${project.name} Screenshot`}
                         className="w-full h-auto mb-2 rounded-lg"
                       />
