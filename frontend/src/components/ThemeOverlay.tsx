@@ -76,19 +76,19 @@ export default function ThemeOverlay() {
           style={{ left: position.x, top: position.y }}
         >
           {theme === "spooky" && (
-            <img src="/ghost.png" alt="Spooky Ghost" className="w-24 h-auto" />
+            <img src="/ghost.webp" alt="Spooky Ghost" className="w-24 h-auto" />
           )}
           {theme === "space" && (
-            <img src="/alienUFO.png" alt="Alien UFO" className="w-24 h-auto" />
+            <img src="/alienUFO.webp" alt="Alien UFO" className="w-24 h-auto" />
           )}
           {theme === "framework" && (
             <img
               src={
                 frameworkColor === "green"
-                  ? "/framework12Green.jpg"
+                  ? "/framework12Green.webp"
                   : frameworkColor === "purple"
-                  ? "/framework12Purple.jpg"
-                  : "/framework12Pink.jpg"
+                    ? "/framework12Purple.webp"
+                    : "/framework12Pink.webp"
               }
               alt="Framework 12"
               className="w-24 h-auto"
@@ -97,7 +97,7 @@ export default function ThemeOverlay() {
         </div>
         {theme === "space" && (
           <img
-            src="/stars.png"
+            src="/stars.webp"
             alt="Starry Background"
             className="w-screen h-screen object-cover"
           />

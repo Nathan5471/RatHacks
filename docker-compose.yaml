@@ -24,7 +24,8 @@ services:
       - LOOPS_PLACING_TEMPLATE_ID=
     restart: unless-stopped
     volumes:
-      - uploads:/backend/uploads
+      - uploads:/backend/uploads # Remove this after all files are migrated to R2
+      - backups:/backend/backups
     depends_on:
       - postgres
   postgres:
@@ -41,5 +42,6 @@ services:
       - pgdata:/var/lib/postgresql
 
 volumes:
-  uploads:
+  uploads: # Remove this after all files are migrated to R2
+  backups:
   pgdata:

@@ -118,7 +118,7 @@ export default function PastEvents() {
               <div className="grid grid-cols-5 items-center mt-2">
                 <div className="flex flex-col p-2 bg-[#FFA23C] rounded-lg">
                   <img
-                    src="/nathanCloutier.jpg"
+                    src="/nathanCloutier.webp"
                     alt="Nathan Cloutier"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -129,7 +129,7 @@ export default function PastEvents() {
                 </div>
                 <div className="flex flex-col p-2 bg-[#FFA23C] rounded-lg mx-1">
                   <img
-                    src="/bearTyree.jpg"
+                    src="/bearTyree.webp"
                     alt="Bear Tyree"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -145,7 +145,7 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#FFA23C] rounded-lg mx-1"
                 >
                   <img
-                    src="/caylebWang.jpg"
+                    src="/caylebWang.webp"
                     alt="Cayleb Wang"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -161,7 +161,7 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#FFA23C] rounded-lg mx-1"
                 >
                   <img
-                    src="/eliPeters.jpg"
+                    src="/eliPeters.webp"
                     alt="Eli Peters"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -172,7 +172,7 @@ export default function PastEvents() {
                 </a>
                 <div className="flex flex-col p-2 bg-[#FFA23C] rounded-lg mx-1">
                   <img
-                    src="/mattoxJalbert.jpg"
+                    src="/mattoxJalbert.webp"
                     alt="Mattox Jalbert"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />

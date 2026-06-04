@@ -206,6 +206,8 @@ export default function OrganizerUsers() {
       });
     } else if (sortSelection === "email") {
       return usersToSort.sort((a, b) => {
+        if (!a.email) return sortDirection === "asc" ? -1 : 1;
+        if (!b.email) return sortDirection === "asc" ? 1 : -1;
         const emailA = a.email.toLowerCase();
         const emailB = b.email.toLowerCase();
         if (emailA < emailB) return sortDirection === "asc" ? -1 : 1;
@@ -214,6 +216,8 @@ export default function OrganizerUsers() {
       });
     } else if (sortSelection === "schoolDivision") {
       return usersToSort.sort((a, b) => {
+        if (!a.schoolDivision) return sortDirection === "asc" ? -1 : 1;
+        if (!b.schoolDivision) return sortDirection === "asc" ? 1 : -1;
         const divisionA = a.schoolDivision.toLowerCase();
         const divisionB = b.schoolDivision.toLowerCase();
         if (divisionA < divisionB) return sortDirection === "asc" ? -1 : 1;
@@ -222,6 +226,8 @@ export default function OrganizerUsers() {
       });
     } else if (sortSelection === "gradeLevel") {
       return usersToSort.sort((a, b) => {
+        if (!a.gradeLevel) return sortDirection === "asc" ? -1 : 1;
+        if (!b.gradeLevel) return sortDirection === "asc" ? 1 : -1;
         const gradeA = parseInt(gradeMap[a.gradeLevel]);
         const gradeB = parseInt(gradeMap[b.gradeLevel]);
         if (gradeA < gradeB) return sortDirection === "asc" ? -1 : 1;

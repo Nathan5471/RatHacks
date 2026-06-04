@@ -35,7 +35,7 @@ const migrateUploadedFiles = async () => {
     for (const file of files) {
       const filePath = path.join(previousUploadPath, file);
       const fileBuffer = fs.readFileSync(filePath);
-      const newFilename = `user-upload-${Date.now()}.${path.extname(file)}`;
+      const newFilename = `user-upload-${Date.now()}${path.extname(file)}`;
       const uploadURL = `${baseURL}/${newFilename}`;
       const finalURL = `${publicURL}/${newFilename}`;
       const response = await r2.fetch(uploadURL, {
