@@ -46,7 +46,11 @@ I added a new wepage at <https://demo.rathacks.com/past-events>. It contains all
 
 ## Technologies
 
-The frontend is build in TypeScript React and uses Axios to make called to the backend's API. The Backend is build in TypeScript ExpressJS. It handle tokens with JWT and sends emails through <https://loops.so>. There is a access token and refresh token system to keep users logged in. The database is PostgreSQL and is interfaced through Prisma.
+The frontend is build in TypeScript React and uses Axios to make called to the backend's API. The Backend is build in TypeScript ExpressJS. It handle tokens with JWT and sends emails through <https://loops.so>. There is a access token and refresh token system to keep users logged in. The database is PostgreSQL and is interfaced through Prisma. 
+
+### AI Usage
+
+GitHub Copilot Tab Complete was used in the making of this project.
 
 ## Deployment
 
