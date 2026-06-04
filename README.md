@@ -32,13 +32,17 @@ password - Student@123
 
 ## Horizons Nexus
 
+### Cloudflare R2 Feature
+
+https://github.com/user-attachments/assets/0bc1631c-b0f7-4634-b22c-dc6b6de0b860
+
 ### Backup Feature
 
-### Cloudflare R2 Feature
+https://github.com/user-attachments/assets/98f07ae5-c4c2-45ea-a684-227e8cab9644
 
 ### New Web Page
 
-I added a new wepage at <https://demo.rathacks.com/past-events>. I contains all of the past events in the order that they were hosted. It also has pictures from the events where we took them.
+I added a new wepage at <https://demo.rathacks.com/past-events>. It contains all of the past events in the order that they were hosted. It also has pictures from the events where we took them.
 
 ## Technologies
 
