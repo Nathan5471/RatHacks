@@ -3,7 +3,15 @@ import prisma from "../prisma/client";
 import { AwsClient } from "aws4fetch";
 
 export const createProject = async (req: any, res: any) => {
-  const { name, description, codeURL, demoURL, screenshotURL, videoURL, eventId } = req.body as {
+  const {
+    name,
+    description,
+    codeURL,
+    demoURL,
+    screenshotURL,
+    videoURL,
+    eventId,
+  } = req.body as {
     name: string;
     description: string;
     codeURL: string | null;
@@ -202,14 +210,15 @@ export const leaveFeedback = async (req: any, res: any) => {
 
 export const updateProject = async (req: any, res: any) => {
   const { projectId } = req.params as { projectId: string };
-  const { name, description, codeURL, demoURL, screenshotURL, videoURL } = req.body as {
-    name: string;
-    description: string;
-    codeURL: string | null;
-    demoURL: string | null;
-    screenshotURL: string | null;
-    videoURL: string | null;
-  };
+  const { name, description, codeURL, demoURL, screenshotURL, videoURL } =
+    req.body as {
+      name: string;
+      description: string;
+      codeURL: string | null;
+      demoURL: string | null;
+      screenshotURL: string | null;
+      videoURL: string | null;
+    };
   const user = req.user as User;
 
   try {
@@ -255,7 +264,7 @@ export const updateProject = async (req: any, res: any) => {
 
 export const generateUploadLink = async (req: any, res: any) => {
   const { fileExtension } = req.params as { fileExtension: string };
-  const filename = `user-upload-${Date.now()}.${fileExtension}`;
+  const filename = `user-upload-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExtension}`;
   const accessKeyId = process.env.R2_ACCESS_KEY_ID;
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
   const baseURL = process.env.R2_BASE_URL;
@@ -268,19 +277,23 @@ export const generateUploadLink = async (req: any, res: any) => {
     const r2 = new AwsClient({
       accessKeyId,
       secretAccessKey,
-    })
+    });
     const url = new URL(`${baseURL}/${filename}`);
     url.searchParams.append("X-Amz_Expires", "3600");
-    const signed = await r2.sign(
-      new Request(url, { method: "PUT" }),
-      { aws: { signQuery: true } }
-    )
-    return res.status(200).json({ uploadURL: signed.url, postUploadURL: `${publicBaseURL}/${filename}` });
+    const signed = await r2.sign(new Request(url, { method: "PUT" }), {
+      aws: { signQuery: true },
+    });
+    return res
+      .status(200)
+      .json({
+        uploadURL: signed.url,
+        postUploadURL: `${publicBaseURL}/${filename}`,
+      });
   } catch (error) {
     console.error("Error generating upload link:", error);
     return res.status(500).json({ message: "Failed to generate upload link" });
   }
-}
+};
 
 export const getProjectById = async (req: any, res: any) => {
   const { projectId } = req.params as { projectId: string };
@@ -314,7 +327,7 @@ export const getProjectById = async (req: any, res: any) => {
         });
         if (!member) return null;
         return `${member.firstName} ${member.lastName}`;
-      })
+      }),
     );
     const filteredMembers = members.filter((member) => member !== null);
     let projectFeedback = [];
@@ -421,7 +434,7 @@ export const organizerGetProjectById = async (req: any, res: any) => {
           contactPhoneNumber: member.contactPhoneNumber,
           createdAt: member.createdAt,
         };
-      })
+      }),
     );
     const filteredMembers = members.filter((member) => member !== null);
     const judgeFeedback = await prisma.judgeFeedback.findMany({
@@ -443,7 +456,7 @@ export const organizerGetProjectById = async (req: any, res: any) => {
           feedback: feedback.feedback,
           createdAt: feedback.createdAt,
         };
-      })
+      }),
     );
 
     return res.status(200).json({
@@ -511,7 +524,7 @@ export const judgeGetProjectById = async (req: any, res: any) => {
         });
         if (!member) return null;
         return `${member.firstName} ${member.lastName}`;
-      })
+      }),
     );
     const filteredMembers = members.filter((member) => member !== null);
     const judgeFeedback = await prisma.judgeFeedback.findFirst({

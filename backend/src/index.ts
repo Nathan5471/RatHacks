@@ -33,11 +33,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
-// Perform file migration
-migrateUploadedFiles().catch((error) => {
-  console.error('Error during file migration:', error);
-});
-
 // API Routes
 app.use("/api/auth", authRouter);
 app.use("/api/event", eventRouter);
@@ -57,7 +52,7 @@ if (process.env.IS_DEV) {
     createProxyMiddleware({
       target: "http://localhost:5173",
       changeOrigin: true,
-    })
+    }),
   );
 } else {
   app.use(express.static("public"));
@@ -75,4 +70,9 @@ if (process.env.IS_DEV) {
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
+
+  // Perform file migration
+  migrateUploadedFiles().catch((error) => {
+    console.error("Error during file migration:", error);
+  });
 });

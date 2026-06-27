@@ -1,5 +1,6 @@
 import { AwsClient } from "aws4fetch";
 import fs from "fs";
+import { Readable } from "stream";
 import path from "path";
 import prisma from "../prisma/client";
 
@@ -13,7 +14,6 @@ const mimeTypes: { [key: string]: string } = {
 };
 
 const migrateUploadedFiles = async () => {
-  const movedFiles: { [key: string]: string } = {}; // original filename -> new URL
   const previousUploadPath = path.join(process.cwd(), "uploads");
   if (!fs.existsSync(previousUploadPath)) {
     return; // Skip if already migrated
@@ -31,64 +31,73 @@ const migrateUploadedFiles = async () => {
       secretAccessKey,
     });
     let updatedFileCount = 0;
+    let updatedLinkCount = 0;
+    let failedUploads = 0;
     const files = fs.readdirSync(previousUploadPath);
     for (const file of files) {
       const filePath = path.join(previousUploadPath, file);
-      const fileBuffer = fs.readFileSync(filePath);
-      const newFilename = `user-upload-${Date.now()}${path.extname(file)}`;
+      const fileStats = fs.statSync(filePath); // Need this for the file size
+      const fileStream = fs.createReadStream(filePath);
+      const webStream = Readable.toWeb(fileStream);
+      const newFilename = `user-upload-${Date.now()}-${Math.random().toString(36).substring(2, 8)}${path.extname(file)}`;
       const uploadURL = `${baseURL}/${newFilename}`;
       const finalURL = `${publicURL}/${newFilename}`;
-      const response = await r2.fetch(uploadURL, {
-        method: "PUT",
-        headers: {
-          "Content-Type": mimeTypes[path.extname(file)],
-        },
-        body: fileBuffer,
-      });
-      if (!response.ok) {
-        console.error(`Failed to upload ${file} to R2:`, await response.text());
-        continue;
+      try {
+        const response = await r2.fetch(uploadURL, {
+          method: "PUT",
+          headers: {
+            "Content-Type":
+              mimeTypes[path.extname(file)] || "application/octet-stream",
+            "Content-Length": fileStats.size.toString(),
+          },
+          // I used 'as any' here because they have different TS definitions
+          body: webStream as any,
+        });
+        if (!response.ok) {
+          console.error(
+            `Failed to upload ${file} to R2:`,
+            await response.text(),
+          );
+          failedUploads++;
+          continue;
+        }
+        fs.unlinkSync(filePath);
+        updatedFileCount++;
+        const screenshotUpdates = await prisma.project.updateMany({
+          where: {
+            OR: [
+              { screenshotURL: file },
+              { screenshotURL: { endsWith: `/${file}` } },
+            ],
+          },
+          data: {
+            screenshotURL: finalURL,
+          },
+        });
+        const videoUpdates = await prisma.project.updateMany({
+          where: {
+            OR: [{ videoURL: file }, { videoURL: { endsWith: `/${file}` } }],
+          },
+          data: {
+            videoURL: finalURL,
+          },
+        });
+        updatedLinkCount += screenshotUpdates.count + videoUpdates.count;
+      } catch (error) {
+        console.error(`Error uploading ${file} to R2:`, error);
+        failedUploads++;
       }
-      movedFiles[file] = finalURL;
-      fs.unlinkSync(filePath);
-      updatedFileCount++;
     }
     console.log(`Migrated ${updatedFileCount} files to R2`);
-    let updatedProjectCount = 0;
-    const projects = await prisma.project.findMany();
-    for (const project of projects) {
-      let updated = false;
-      if (
-        project.screenshotURL &&
-        !project.screenshotURL.startsWith(publicURL)
-      ) {
-        const newURL = movedFiles[path.basename(project.screenshotURL)];
-        if (newURL) {
-          await prisma.project.update({
-            where: { id: project.id },
-            data: { screenshotURL: newURL },
-          });
-          updated = true;
-        }
-      }
-      if (project.videoURL && !project.videoURL.startsWith(publicURL)) {
-        const newURL = movedFiles[path.basename(project.videoURL)];
-        if (newURL) {
-          await prisma.project.update({
-            where: { id: project.id },
-            data: { videoURL: newURL },
-          });
-          updated = true;
-        }
-      }
-      if (updated) {
-        updatedProjectCount++;
-      }
+    console.log(`Updated ${updatedLinkCount} links in the database`);
+    if (failedUploads === 0) {
+      fs.rmdirSync(previousUploadPath);
+      console.log(
+        "All files uploaded successfully, removed the 'uploads' directory",
+      );
+    } else {
+      console.warn(`There were ${failedUploads} failed uploads`);
     }
-    console.log(
-      `Updated ${updatedProjectCount} project records with new file URLs`,
-    );
-    fs.rmdirSync(previousUploadPath);
   } catch (error) {
     console.error("Error migrating uploaded files:", error);
   }
