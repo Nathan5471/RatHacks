@@ -9,6 +9,7 @@ import workshopRouter from "./routes/workshopRouter";
 import projectRouter from "./routes/projectRouter";
 import emailRouter from "./routes/emailRouter";
 import backupRouter from "./routes/backupRouter";
+import analyticsRouter from "./routes/analyticsRouter";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -40,6 +41,7 @@ app.use("/api/workshop", workshopRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/email", emailRouter);
 app.use("/api/backup", backupRouter);
+app.use("/api/analytics", analyticsRouter);
 
 // SwaggerUI Docs
 const swaggerDocument = YAML.load("./api-docs.yaml");
