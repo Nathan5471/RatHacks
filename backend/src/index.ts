@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import useragent from "express-useragent";
 import migrateUploadedFiles from "./utils/migrateUploadedFiles";
 import authRouter from "./routes/authRouter";
 import eventRouter from "./routes/eventRouter";
@@ -10,6 +11,8 @@ import projectRouter from "./routes/projectRouter";
 import emailRouter from "./routes/emailRouter";
 import backupRouter from "./routes/backupRouter";
 import analyticsRouter from "./routes/analyticsRouter";
+import nonRequiredAuthenticate from "./middleware/nonRequiredAuthenticate";
+import pageViewTracker from "./middleware/pageViewTracker";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -33,6 +36,7 @@ if (process.env.IS_DEV) {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+app.use(useragent.express());
 
 // API Routes
 app.use("/api/auth", authRouter);
@@ -51,6 +55,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 if (process.env.IS_DEV) {
   app.use(
     "/",
+    nonRequiredAuthenticate,
+    pageViewTracker,
     createProxyMiddleware({
       target: "http://localhost:5173",
       changeOrigin: true,
@@ -59,15 +65,20 @@ if (process.env.IS_DEV) {
 } else {
   app.use(express.static("public"));
 
-  app.use((req: any, res: any) => {
-    res.sendFile("./public/index.html", { root: "." }, (error: any) => {
-      if (error) {
-        console.error("Error sending index.html:", error);
+  app.use(
+    "/",
+    nonRequiredAuthenticate,
+    pageViewTracker,
+    (req: any, res: any) => {
+      res.sendFile("./public/index.html", { root: "." }, (error: any) => {
+        if (error) {
+          console.error("Error sending index.html:", error);
 
-        res.status(500).send("Page not found");
-      }
-    });
-  });
+          res.status(500).send("Page not found");
+        }
+      });
+    },
+  );
 }
 
 app.listen(3000, () => {

@@ -182,10 +182,11 @@ model Session {
   pageViews       PageView[]
   sessionLength   Int?
   sessionStart    DateTime   @default(now())
-  sessionEnd      DateTime?
+  sessionEnd      DateTime   @default(now())
   operatingSystem String?
   browser         String?
   deviceType      String?
+  deviceId        String     @default(uuid())
   ip              String?
 }
 
