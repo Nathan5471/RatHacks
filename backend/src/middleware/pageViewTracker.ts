@@ -20,6 +20,9 @@ const pageViewTracker = async (req: any, res: any, next: any) => {
     ) {
       session = null;
     }
+    if (session && session.deviceId !== deviceId) {
+      session = null;
+    }
   }
 
   if (!session) {
