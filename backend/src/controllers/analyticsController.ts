@@ -1,6 +1,78 @@
 import prisma from "../prisma/client";
 import { User } from "@prisma/client";
 
+export const trackUrl = async (req: any, res: any) => {
+  const { url } = req.body;
+  const sessionId = (req.cookies.sessionId as string) || undefined;
+  const deviceId = (req.cookies.deviceId as string) || undefined;
+  const user = (req.user as User) || null;
+
+  let session = null;
+
+  if (sessionId) {
+    session = await prisma.session.findUnique({
+      where: {
+        id: sessionId,
+      },
+    });
+    if (
+      session &&
+      new Date().getTime() - new Date(session.sessionEnd).getTime() >
+        5 * 60 * 1000
+    ) {
+      session = null;
+    }
+    if (session && session.deviceId !== deviceId) {
+      session = null;
+    }
+  }
+
+  if (!session) {
+    session = await prisma.session.create({
+      data: {
+        userId: user?.id,
+        operatingSystem: req.useragent.os,
+        browser: req.useragent.browser,
+        deviceType: req.useragent.isMobile ? "mobile" : "desktop",
+        deviceId: deviceId ? deviceId : undefined,
+        ip: req.ip,
+      },
+    });
+  }
+
+  await prisma.pageView.create({
+    data: {
+      url: url,
+      userId: user?.id,
+      sessionId: session.id,
+    },
+  });
+
+  const newSessionEnd = new Date();
+  await prisma.session.update({
+    where: {
+      id: session.id,
+    },
+    data: {
+      sessionLength:
+        new Date(newSessionEnd).getTime() -
+        new Date(session.sessionStart).getTime(),
+      sessionEnd: newSessionEnd,
+    },
+  });
+
+  res.cookie("sessionId", session.id, {
+    httpOnly: true,
+    sameSite: "strict",
+  });
+  res.cookie("deviceId", session.deviceId, {
+    httpOnly: true,
+    sameSite: "strict",
+  });
+
+  return res.status(200).json({ message: "URL tracked successfully" });
+};
+
 export const handleHeartbeat = async (req: any, res: any) => {
   const { sessionId, deviceId } = req.cookies;
   const user = (req.user as User) || null;

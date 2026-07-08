@@ -15,6 +15,11 @@ api.interceptors.response.use(
   },
 );
 
+export const trackUrl = async (url: string) => {
+  const response = await api.post("/trackUrl", { url });
+  return response.data;
+};
+
 export const sendHeartbeat = async () => {
   const response = await api.post(
     "/heartbeat",

@@ -11,8 +11,6 @@ import projectRouter from "./routes/projectRouter";
 import emailRouter from "./routes/emailRouter";
 import backupRouter from "./routes/backupRouter";
 import analyticsRouter from "./routes/analyticsRouter";
-import nonRequiredAuthenticate from "./middleware/nonRequiredAuthenticate";
-import pageViewTracker from "./middleware/pageViewTracker";
 import YAML from "yamljs";
 import swaggerUi from "swagger-ui-express";
 import { createProxyMiddleware } from "http-proxy-middleware";
@@ -55,8 +53,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 if (process.env.IS_DEV) {
   app.use(
     "/",
-    nonRequiredAuthenticate,
-    pageViewTracker,
     createProxyMiddleware({
       target: "http://localhost:5173",
       changeOrigin: true,
@@ -65,20 +61,15 @@ if (process.env.IS_DEV) {
 } else {
   app.use(express.static("public"));
 
-  app.use(
-    "/",
-    nonRequiredAuthenticate,
-    pageViewTracker,
-    (req: any, res: any) => {
-      res.sendFile("./public/index.html", { root: "." }, (error: any) => {
-        if (error) {
-          console.error("Error sending index.html:", error);
+  app.use("/", (req: any, res: any) => {
+    res.sendFile("./public/index.html", { root: "." }, (error: any) => {
+      if (error) {
+        console.error("Error sending index.html:", error);
 
-          res.status(500).send("Page not found");
-        }
-      });
-    },
-  );
+        res.status(500).send("Page not found");
+      }
+    });
+  });
 }
 
 app.listen(3000, () => {

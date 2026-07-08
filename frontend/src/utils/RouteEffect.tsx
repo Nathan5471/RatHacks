@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { trackUrl } from "./AnalyticsAPIHandler";
 
 export default function RouteEffect() {
   const location = useLocation();
@@ -42,6 +43,10 @@ export default function RouteEffect() {
       title = routeTitles[location.pathname] || "Rat Hacks";
     }
     document.title = title;
+
+    trackUrl(location.pathname).catch((error) => {
+      console.error("Error tracking URL:", error);
+    });
   }, [location]);
 
   return null;

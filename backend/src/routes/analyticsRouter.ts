@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  trackUrl,
   handleHeartbeat,
   getDayAnalytics,
   getWeekAnalytics,
@@ -13,6 +14,20 @@ import nonRequiredAuthenticate from "../middleware/nonRequiredAuthenticate";
 import authenticate from "../middleware/authenticate";
 
 const router = express.Router();
+
+router.post(
+  "/trackUrl",
+  nonRequiredAuthenticate,
+  async (req: any, res: any) => {
+    const { url } = req.body;
+
+    if (!url) {
+      return res.status(400).json({ error: "URL is required" });
+    }
+
+    await trackUrl(req, res);
+  },
+);
 
 router.post(
   "/heartbeat",
