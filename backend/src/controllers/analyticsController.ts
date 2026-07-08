@@ -172,3 +172,218 @@ export const getCustomRangeAnalytics = async (req: any, res: any) => {
     pageViews: userCleanedPageViews,
   });
 };
+
+export const getAllTimeAnalytics = async (req: any, res: any) => {
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  const sessionStats = await prisma.session.aggregate({
+    _count: {
+      id: true,
+      deviceId: true,
+    },
+    _avg: {
+      sessionLength: true,
+    },
+  });
+  const deviceBreakdown = await prisma.session.groupBy({
+    by: ["deviceType"],
+    _count: {
+      id: true,
+    },
+  });
+  const osBreakdown = await prisma.session.groupBy({
+    by: ["operatingSystem"],
+    _count: {
+      id: true,
+    },
+  });
+  const browserBreakdown = await prisma.session.groupBy({
+    by: ["browser"],
+    _count: {
+      id: true,
+    },
+  });
+  const topPages = await prisma.pageView.groupBy({
+    by: ["url"],
+    _count: {
+      id: true,
+    },
+  });
+
+  return res.status(200).json({
+    message: "All time analytics loaded successfully",
+    sessionStats,
+    deviceBreakdown,
+    osBreakdown,
+    browserBreakdown,
+    topPages,
+  });
+};
+
+export const loadSession = async (req: any, res: any) => {
+  const { sessionId } = req.params;
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  const session = await prisma.session.findUnique({
+    where: {
+      id: sessionId,
+    },
+    include: {
+      user: true,
+      pageViews: true,
+    },
+  });
+
+  if (!session) {
+    return res.status(404).json({ error: "Session not found" });
+  }
+
+  const userCleanedSession = {
+    ...session,
+    user: {
+      id: session.user?.id,
+      email: session.user?.email,
+      emailVerified: session.user?.emailVerified,
+      accountType: session.user?.accountType,
+      firstName: session.user?.firstName,
+      lastName: session.user?.lastName,
+      schoolDivision: session.user?.schoolDivision,
+      gradeLevel: session.user?.gradeLevel,
+      isGovSchool: session.user?.isGovSchool,
+      techStack: session.user?.techStack,
+      previousHackathon: session.user?.previousHackathon,
+      parentFirstName: session.user?.parentFirstName,
+      parentLastName: session.user?.parentLastName,
+      parentEmail: session.user?.parentEmail,
+      parentPhoneNumber: session.user?.parentPhoneNumber,
+      contactFirstName: session.user?.contactFirstName,
+      contactLastName: session.user?.contactLastName,
+      contactRelationship: session.user?.contactRelationship,
+      contactPhoneNumber: session.user?.contactPhoneNumber,
+      createdAt: session.user?.createdAt,
+    },
+  };
+
+  return res.status(200).json({
+    message: "Session loaded successfully",
+    session: userCleanedSession,
+  });
+};
+
+export const loadUserSessions = async (req: any, res: any) => {
+  const { userId } = req.params;
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  const targetUser = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!targetUser) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  const sessions = await prisma.session.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      user: true,
+      pageViews: true,
+    },
+  });
+
+  const userCleanedSessions = sessions.map((session) => ({
+    ...session,
+    user: {
+      id: session.user?.id,
+      email: session.user?.email,
+      emailVerified: session.user?.emailVerified,
+      accountType: session.user?.accountType,
+      firstName: session.user?.firstName,
+      lastName: session.user?.lastName,
+      schoolDivision: session.user?.schoolDivision,
+      gradeLevel: session.user?.gradeLevel,
+      isGovSchool: session.user?.isGovSchool,
+      techStack: session.user?.techStack,
+      previousHackathon: session.user?.previousHackathon,
+      parentFirstName: session.user?.parentFirstName,
+      parentLastName: session.user?.parentLastName,
+      parentEmail: session.user?.parentEmail,
+      parentPhoneNumber: session.user?.parentPhoneNumber,
+      contactFirstName: session.user?.contactFirstName,
+      contactLastName: session.user?.contactLastName,
+      contactRelationship: session.user?.contactRelationship,
+      contactPhoneNumber: session.user?.contactPhoneNumber,
+      createdAt: session.user?.createdAt,
+    },
+  }));
+
+  return res.status(200).json({
+    message: "User sessions loaded successfully",
+    sessions: userCleanedSessions,
+  });
+};
+
+export const loadDeviceSessions = async (req: any, res: any) => {
+  const { deviceId } = req.params;
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  const sessions = await prisma.session.findMany({
+    where: {
+      deviceId: deviceId,
+    },
+    include: {
+      user: true,
+      pageViews: true,
+    },
+  });
+
+  const userCleanedSessions = sessions.map((session) => ({
+    ...session,
+    user: {
+      id: session.user?.id,
+      email: session.user?.email,
+      emailVerified: session.user?.emailVerified,
+      accountType: session.user?.accountType,
+      firstName: session.user?.firstName,
+      lastName: session.user?.lastName,
+      schoolDivision: session.user?.schoolDivision,
+      gradeLevel: session.user?.gradeLevel,
+      isGovSchool: session.user?.isGovSchool,
+      techStack: session.user?.techStack,
+      previousHackathon: session.user?.previousHackathon,
+      parentFirstName: session.user?.parentFirstName,
+      parentLastName: session.user?.parentLastName,
+      parentEmail: session.user?.parentEmail,
+      parentPhoneNumber: session.user?.parentPhoneNumber,
+      contactFirstName: session.user?.contactFirstName,
+      contactLastName: session.user?.contactLastName,
+      contactRelationship: session.user?.contactRelationship,
+      contactPhoneNumber: session.user?.contactPhoneNumber,
+      createdAt: session.user?.createdAt,
+    },
+  }));
+
+  return res.status(200).json({
+    message: "Device sessions loaded successfully",
+    sessions: userCleanedSessions,
+  });
+};

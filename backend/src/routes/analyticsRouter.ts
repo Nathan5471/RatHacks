@@ -4,6 +4,10 @@ import {
   getDayAnalytics,
   getWeekAnalytics,
   getCustomRangeAnalytics,
+  getAllTimeAnalytics,
+  loadSession,
+  loadUserSessions,
+  loadDeviceSessions,
 } from "../controllers/analyticsController";
 import nonRequiredAuthenticate from "../middleware/nonRequiredAuthenticate";
 import authenticate from "../middleware/authenticate";
@@ -87,9 +91,7 @@ router.get(
   },
 );
 
-router.get("/all", authenticate, async (req: any, res: any) => {
-  // Implement the stuff
-});
+router.get("/all", authenticate, getAllTimeAnalytics);
 
 router.get("/session/:sessionId", authenticate, async (req: any, res: any) => {
   const { sessionId } = req.params;
@@ -98,7 +100,7 @@ router.get("/session/:sessionId", authenticate, async (req: any, res: any) => {
     return res.status(400).json({ error: "Session ID is required" });
   }
 
-  // Implement the stuff
+  await loadSession(req, res);
 });
 
 router.get("/user/:userId", authenticate, async (req: any, res: any) => {
@@ -108,7 +110,7 @@ router.get("/user/:userId", authenticate, async (req: any, res: any) => {
     return res.status(400).json({ error: "User ID is required" });
   }
 
-  // Implement the stuff
+  await loadUserSessions(req, res);
 });
 
 router.get("/device/:deviceId", authenticate, async (req: any, res: any) => {
@@ -118,7 +120,7 @@ router.get("/device/:deviceId", authenticate, async (req: any, res: any) => {
     return res.status(400).json({ error: "Device ID is required" });
   }
 
-  // Implement the stuff
+  await loadDeviceSessions(req, res);
 });
 
 export default router;
