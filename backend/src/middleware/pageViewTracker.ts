@@ -76,7 +76,7 @@ const pageViewTracker = async (req: any, res: any, next: any) => {
     },
   });
 
-  req.cookie("sessionId", session.id, {
+  res.cookie("sessionId", session.id, {
     httpOnly: true,
     sameSite: "strict",
   });

@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@mitresthen/matomo-tracker-react':
-        specifier: ^0.1.1
-        version: 0.1.1(react@19.2.5)
       '@tailwindcss/vite':
         specifier: ^4.1.12
         version: 4.2.4(vite@7.3.2(jiti@2.6.1)(lightningcss@1.32.0))
@@ -399,14 +396,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
-
-  '@mitresthen/matomo-tracker-react@0.1.1':
-    resolution: {integrity: sha512-1Z+Sup9uuX5TrGe+s86mL6iKpLDA2QCdioCrbUr7I+dRiu/fvH5WAV4/akECKvx5bTOXdVlhoCsbVX29HCS0Hw==}
-    peerDependencies:
-      react: '>= 16.8.0'
-
-  '@mitresthen/matomo-tracker@0.1.1':
-    resolution: {integrity: sha512-fzEgWlqfwSE/aSTT4qC8ATp9L2SUfvnecWhi/uQSisqtTQN0YLlLjfqDDwEhzXkwLO0n2TcH0loAi9g7X9D3ug==}
 
   '@rolldown/pluginutils@1.0.0-rc.3':
     resolution: {integrity: sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q==}
@@ -2016,13 +2005,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
-
-  '@mitresthen/matomo-tracker-react@0.1.1(react@19.2.5)':
-    dependencies:
-      '@mitresthen/matomo-tracker': 0.1.1
-      react: 19.2.5
-
-  '@mitresthen/matomo-tracker@0.1.1': {}
 
   '@rolldown/pluginutils@1.0.0-rc.3': {}
 

@@ -1,10 +1,7 @@
 import { useEffect } from "react";
 import { useAuth } from "./contexts/AuthContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import {
-  MatomoProvider,
-  createInstance,
-} from "@mitresthen/matomo-tracker-react";
+import { sendHeartbeat } from "./utils/AnalyticsAPIHandler";
 import RouteEffect from "./utils/RouteEffect";
 import AuthenticatedRoute from "./utils/AuthenticatedRoute";
 import OrganizerRoute from "./utils/OrganizerRoute";
@@ -47,15 +44,21 @@ import { ToastContainer } from "react-toastify";
 
 function App() {
   const { user, getUser } = useAuth();
-  const instance = createInstance({
-    urlBase: "https://matomo.rathacks.com/",
-    siteId: 1,
-    heartBeat: {
-      active: true,
-      seconds: 10,
-    },
-    linkTracking: true,
-  });
+
+  useEffect(() => {
+    const triggerHeartbeat = async () => {
+      try {
+        await sendHeartbeat();
+      } catch (error) {
+        console.log("Error sending heartbeat:", error);
+      }
+    };
+
+    triggerHeartbeat();
+    const heartbeatInterval = setInterval(triggerHeartbeat, 30000);
+
+    return () => clearInterval(heartbeatInterval);
+  }, []);
 
   useEffect(() => {
     if (user === undefined) {
@@ -64,7 +67,7 @@ function App() {
   }, [user, getUser]);
 
   return (
-    <MatomoProvider value={instance}>
+    <>
       <Router>
         <RouteEffect />
         <Routes>
@@ -144,7 +147,7 @@ function App() {
         theme="dark"
         pauseOnHover={false}
       />
-    </MatomoProvider>
+    </>
   );
 }
 
