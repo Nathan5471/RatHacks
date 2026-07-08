@@ -50,3 +50,125 @@ export const handleHeartbeat = async (req: any, res: any) => {
 
   return res.status(200).json({ message: "Heartbeat received <3" });
 };
+
+export const getDayAnalytics = async (req: any, res: any) => {
+  const { date } = req.query;
+  const user = req.user as User;
+  const dateObject = new Date(date);
+  dateObject.setHours(0, 0, 0, 0);
+  const endDateObject = new Date(dateObject);
+  endDateObject.setHours(23, 59, 59, 999);
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  const dayPageViews = await prisma.pageView.findMany({
+    where: {
+      createdAt: {
+        gte: dateObject,
+        lt: endDateObject,
+      },
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  const userCleanedPageViews = dayPageViews.map((view) => ({
+    ...view,
+    user: {
+      id: view.user?.id,
+      firstName: view.user?.firstName,
+      lastName: view.user?.lastName,
+    },
+  }));
+
+  return res.status(200).json({
+    message: `Day analytics for ${date} loaded successfully`,
+    pageViews: userCleanedPageViews,
+  });
+};
+
+export const getWeekAnalytics = async (req: any, res: any) => {
+  const { startDate } = req.params;
+  const user = req.user as User;
+  const startDateObject = new Date(startDate);
+  startDateObject.setHours(0, 0, 0, 0);
+  const endDateObject = new Date(startDateObject);
+  endDateObject.setDate(startDateObject.getDate() + 6);
+  endDateObject.setHours(23, 59, 59, 999);
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  const weekPageViews = await prisma.pageView.findMany({
+    where: {
+      createdAt: {
+        gte: startDateObject,
+        lt: endDateObject,
+      },
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  const userCleanedPageViews = weekPageViews.map((view) => ({
+    ...view,
+    user: {
+      id: view.user?.id,
+      firstName: view.user?.firstName,
+      lastName: view.user?.lastName,
+    },
+  }));
+
+  return res.status(200).json({
+    message: `Week analytics for ${startDate} loaded successfully`,
+    pageViews: userCleanedPageViews,
+  });
+};
+
+export const getCustomRangeAnalytics = async (req: any, res: any) => {
+  const { startDate, endDate } = req.params;
+  const user = req.user as User;
+  const startDateObject = new Date(startDate);
+  startDateObject.setHours(0, 0, 0, 0);
+  const endDateObject = new Date(endDate);
+  endDateObject.setHours(23, 59, 59, 999);
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  if (startDateObject > endDateObject) {
+    return res.status(400).json({ error: "Invalid date range" });
+  }
+
+  const customRangePageViews = await prisma.pageView.findMany({
+    where: {
+      createdAt: {
+        gte: startDateObject,
+        lt: endDateObject,
+      },
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  const userCleanedPageViews = customRangePageViews.map((view) => ({
+    ...view,
+    user: {
+      id: view.user?.id,
+      firstName: view.user?.firstName,
+      lastName: view.user?.lastName,
+    },
+  }));
+
+  return res.status(200).json({
+    message: `Custom range analytics for ${startDate} to ${endDate} loaded successfully`,
+    pageViews: userCleanedPageViews,
+  });
+};
