@@ -104,8 +104,8 @@ export default function Home() {
             className="flex flex-col p-4 bg-surface-a1 rounded-lg"
           >
             <img
-              src="/caylebWang.webp"
-              alt="Cayleb Wang"
+              src="/calebWang.webp"
+              alt="Caleb Wang"
               className="w-full h-56 object-cover rounded-lg mb-2"
             />
             <span className="text-lg sm:text-xl font-bold">Caleb Wang</span>

@@ -20,27 +20,9 @@ export default function PastEvents() {
         >
           Rat Hacks
         </a>
-        <HashLink
-          to="/#about"
-          className="ml-auto text-pretty sm:text-lg lg:text-xl p-2 sm:p-4 hover:underline items-center flex font-bold"
-        >
-          About
-        </HashLink>
-        <HashLink
-          to="/#schedule"
-          className="text-pretty sm:text-lg lg:text-xl p-2 sm:p-4 hover:underline items-center flex font-bold"
-        >
-          Schedule
-        </HashLink>
-        <HashLink
-          to="/#faq"
-          className="text-pretty sm:text-lg lg:text-xl p-2 sm:p-4 hover:underline items-center flex font-bold"
-        >
-          FAQ
-        </HashLink>
         <Link
           to={user ? "/app" : "/login"}
-          className="text-pretty sm:text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center justify-center items-center flex font-bold m-4 p-2 w-1/6"
+          className="text-pretty sm:text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center justify-center items-center flex font-bold ml-auto m-4 p-2 w-1/6"
         >
           {user ? "Go to App" : "Login"}
         </Link>
@@ -56,13 +38,106 @@ export default function PastEvents() {
             </span>{" "}
             - May 23, 2026 (10:00 AM - 5:00 PM)
           </h3>
-          <p className="sm:text-lg mb-4">Participants: 5</p>
-          <p className="text-lg sm:text-xl">
+          <p className="text-lg sm:text-xl mb-4">
             Rat Hacks: Capture The Flag 2026 is the first Capture The Flag
             hosted by the Rat Hacks team at the Roanoke Valley Governor's
             School. Lunch was the classic Chick-fil-A chicken nuggets! Everyone
             solved tons of challenges and had a great time.
           </p>
+          <div className="flex flex-col sm:flex-row items-center">
+            <div className="flex flex-col sm:w-3/4">
+              <h4 className="text-xl sm:text-2xl font-bold text-primary-a0">
+                Organizers
+              </h4>
+              <div className="grid grid-cols-5 items-center mt-2">
+                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg">
+                  <img
+                    src="/nathanCloutier.webp"
+                    alt="Nathan Cloutier"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Nathan Cloutier
+                  </span>
+                  <span>Rat Hacks Director</span>
+                </div>
+                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1">
+                  <img
+                    src="/bearTyree.webp"
+                    alt="Bear Tyree"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Bear Tyree
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </div>
+                <a
+                  href="https://cayleb247.github.io/personal-website/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1"
+                >
+                  <img
+                    src="/calebWang.webp"
+                    alt="Caleb Wang"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Caleb Wang
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </a>
+                <a
+                  href="https://elipeters.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1"
+                >
+                  <img
+                    src="/eliPeters.webp"
+                    alt="Eli Peters"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Eli Peters
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </a>
+                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1">
+                  <img
+                    src="/mattoxJalbert.webp"
+                    alt="Mattox Jalbert"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Mattox Jalbert
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col w-full h-full sm:w-1/4">
+              <h4 className="text-xl sm:text-2xl font-bold font-dream-planner">
+                Stats
+              </h4>
+              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-5xl sm:text-3xl">
+                  <span className="font-bold">5</span> Participants
+                </p>
+              </div>
+              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-5xl sm:text-3xl">
+                  <span className="font-bold">5</span> Categories
+                </p>
+              </div>
+              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-5xl sm:text-3xl ">
+                  <span className="font-bold">28</span> Challenges
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col bg-[#53BFFF] w-full p-4">
           <h3 className="text-2xl sm:text-4xl font-dream-planner mb-1">
@@ -125,7 +200,9 @@ export default function PastEvents() {
                   <span className="text-lg sm:text-xl font-bold font-dream-planner">
                     NATHAN CLOUTIER
                   </span>
-                  <span className="font-ember-fire">Lead Organizer</span>
+                  <span className="font-ember-fire md:text-lg">
+                    Lead Organizer
+                  </span>
                 </div>
                 <div className="flex flex-col p-2 bg-[#FFA23C] rounded-lg mx-1">
                   <img
@@ -136,7 +213,7 @@ export default function PastEvents() {
                   <span className="text-lg sm:text-xl font-bold font-dream-planner">
                     BEAR TYREE
                   </span>
-                  <span className="sm:text-lg font-ember-fire">Organizer</span>
+                  <span className="font-ember-fire md:text-lg">Organizer</span>
                 </div>
                 <a
                   href="https://cayleb247.github.io/personal-website/"
@@ -145,14 +222,14 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#FFA23C] rounded-lg mx-1"
                 >
                   <img
-                    src="/caylebWang.webp"
-                    alt="Cayleb Wang"
+                    src="/calebWang.webp"
+                    alt="Caleb Wang"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
                   <span className="text-lg sm:text-xl font-bold font-dream-planner">
                     CALEB WANG
                   </span>
-                  <span className="sm:text-lg font-ember-fire">Organizer</span>
+                  <span className="font-ember-fire md:text-lg">Organizer</span>
                 </a>
                 <a
                   href="https://elipeters.org"
@@ -168,7 +245,7 @@ export default function PastEvents() {
                   <span className="text-lg sm:text-xl font-bold font-dream-planner">
                     ELI PETERS
                   </span>
-                  <span className="sm:text-lg font-ember-fire">Organizer</span>
+                  <span className="font-ember-fire md:text-lg">Organizer</span>
                 </a>
                 <div className="flex flex-col p-2 bg-[#FFA23C] rounded-lg mx-1">
                   <img
@@ -179,7 +256,7 @@ export default function PastEvents() {
                   <span className="text-lg sm:text-xl font-bold font-dream-planner">
                     MATTOX JALBERT
                   </span>
-                  <span className="sm:text-lg font-ember-fire">Organizer</span>
+                  <span className="font-ember-fire md:text-lg">Organizer</span>
                 </div>
               </div>
             </div>
@@ -248,14 +325,105 @@ export default function PastEvents() {
               />
             </div>
           </div>
+          <div className="flex flex-col sm:flex-row items-center">
+            <div className="flex flex-col sm:w-3/4">
+              <h4 className="text-xl sm:text-2xl font-bold text-primary-a0">
+                Organizers
+              </h4>
+              <div className="grid grid-cols-5 items-center mt-2">
+                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg">
+                  <img
+                    src="/nathanCloutier.webp"
+                    alt="Nathan Cloutier"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Nathan Cloutier
+                  </span>
+                  <span>Rat Hacks Director</span>
+                </div>
+                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1">
+                  <img
+                    src="/bearTyree.webp"
+                    alt="Bear Tyree"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Bear Tyree
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </div>
+                <a
+                  href="https://cayleb247.github.io/personal-website/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1"
+                >
+                  <img
+                    src="/calebWang.webp"
+                    alt="Caleb Wang"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Caleb Wang
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </a>
+                <a
+                  href="https://elipeters.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1"
+                >
+                  <img
+                    src="/eliPeters.webp"
+                    alt="Eli Peters"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Eli Peters
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </a>
+                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1">
+                  <img
+                    src="/mattoxJalbert.webp"
+                    alt="Mattox Jalbert"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Mattox Jalbert
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col w-full h-full sm:w-1/4">
+              <h4 className="text-xl sm:text-2xl font-bold font-dream-planner">
+                Stats
+              </h4>
+              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-5xl sm:text-3xl">
+                  <span className="font-bold">17</span> Participants
+                </p>
+              </div>
+              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-5xl sm:text-3xl">
+                  <span className="font-bold">5</span> Projects Submitted
+                </p>
+              </div>
+              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-5xl sm:text-3xl ">"Improve Your Life"</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col bg-[#f4f4f4ff] w-full p-4 text-black">
+        <div className="flex flex-col bg-[#f4f4f4] w-full p-4 text-black font-sans">
           <h3 className="text-xl sm:text-3xl mb-1">
-            <span className="font-bold text-[#144922ff]">Rat Hacks</span> - May
+            <span className="font-bold text-[#144922]">Rat Hacks</span> - May
             24, 2025 (8:00 AM - 8:00 PM)
           </h3>
-          <p className="sm:text-lg mb-4">Participants: 14</p>
-          <p className="text-lg sm:text-xl">
+          <p className="text-lg sm:text-xl mb-4">
             This was the FIRST EVER RAT HACKS!!! This is the first hackathon
             available to high schoolers in the area hosted at the Roanoke Valley
             Governor's School. Participants worked in groups of up to 4 to make
@@ -264,6 +432,73 @@ export default function PastEvents() {
             tournament during the hackathon. Lunch was Chick-fil-A and dinner
             was pizza from Domino's.
           </p>
+          <div className="flex flex-col sm:flex-row items-center">
+            <div className="flex flex-col sm:w-3/4">
+              <h4 className="text-xl sm:text-2xl font-bold text-[#144922]">
+                Organizers
+              </h4>
+              <div className="grid grid-cols-5 items-center mt-2 text-[#f4f4f4]">
+                <div className="flex flex-col p-2 bg-[#144922] rounded-lg">
+                  <img
+                    src="/nathanCloutier.webp"
+                    alt="Nathan Cloutier"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Nathan Cloutier
+                  </span>
+                  <span>Rat Hacks Director</span>
+                </div>
+                <div className="flex flex-col p-2 bg-[#144922] rounded-lg mx-1">
+                  <img
+                    src="/elijahHarl.webp"
+                    alt="Elijah Harl"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Elijah Harl
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </div>
+                <a
+                  href="https://elipeters.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col p-2 bg-[#144922] rounded-lg mx-1"
+                >
+                  <img
+                    src="/eliPeters.webp"
+                    alt="Eli Peters"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-lg sm:text-xl font-bold">
+                    Eli Peters
+                  </span>
+                  <span>Rat Hacks Organizer</span>
+                </a>
+              </div>
+            </div>
+            <div className="flex flex-col w-full h-full sm:w-1/4">
+              <h4 className="text-xl sm:text-2xl font-bold text-[#144922]">
+                Stats
+              </h4>
+              <div className="flex w-full h-15 bg-[#144922] rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-5xl sm:text-3xl text-[#f4f4f4]">
+                  <span className="font-bold">14</span> Participants
+                </p>
+              </div>
+              <div className="flex w-full h-15 bg-[#144922] rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-5xl sm:text-3xl text-[#f4f4f4]">
+                  <span className="font-bold">7</span> Projects Submitted
+                </p>
+              </div>
+              <div className="flex w-full h-15 bg-[#144922] rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-5xl sm:text-3xl text-[#f4f4f4]">
+                  "Educational Tools"
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col items-center p-4 w-screen h-full bg-surface-a1">
           <p className="text-center sm:text-lg">
