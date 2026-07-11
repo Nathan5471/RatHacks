@@ -32,21 +32,17 @@ password - Student@123
 
 ## Horizons Nexus
 
-### Cloudflare R2 Feature
+### Improved Past Events Page
 
-https://github.com/user-attachments/assets/0bc1631c-b0f7-4634-b22c-dc6b6de0b860
+I brought every event in the past events page up to speed with the Campfire Roanoke one by adding "Organizers" and "Stats" section to all of them. I also added a "Sponsors" section to everyone as well that shows all of the parterns/sponsors of each event. I also rewrote all of the descriptions/paragraphs about the events to sound a bit better.
 
-### Backup Feature
+### Analytics
 
-https://github.com/user-attachments/assets/98f07ae5-c4c2-45ea-a684-227e8cab9644
-
-### New Web Page
-
-I added a new wepage at <https://demo.rathacks.com/past-events>. It contains all of the past events in the order that they were hosted. It also has pictures from the events where we took them.
+I swtiched from Matomo to using my own custom analytics. Currently it function by tracking page views and sending heartbeats. View sessions contain all page views of that session and can be extended once a heartbeat is sent. There is a page for organizers to view some statistics.
 
 ## Technologies
 
-The frontend is build in TypeScript React and uses Axios to make called to the backend's API. The Backend is build in TypeScript ExpressJS. It handle tokens with JWT and sends emails through <https://loops.so>. There is a access token and refresh token system to keep users logged in. The database is PostgreSQL and is interfaced through Prisma. 
+The frontend is build in TypeScript React and uses Axios to make called to the backend's API. The Backend is build in TypeScript ExpressJS. It handle tokens with JWT and sends emails through <https://loops.so>. There is a access token and refresh token system to keep users logged in. The database is PostgreSQL and is interfaced through Prisma.
 
 ### AI Usage
 

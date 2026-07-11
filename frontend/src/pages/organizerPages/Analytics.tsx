@@ -69,7 +69,6 @@ interface FilteredData {
 }
 
 export default function Analytics() {
-  const [filteredError, setFilteredError] = useState<string | null>(null);
   const [filter, setFilter] = useState<"day" | "week" | "custom">("day");
   const [startDate, setStartDate] = useState(
     new Date().toISOString().slice(0, 10),
