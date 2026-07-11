@@ -33,6 +33,14 @@ export default function OrganizerNavbar() {
         Stats
       </Link>
       <Link
+        to="/app/organizer/analytics"
+        className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
+          path === "/app/organizer/analytics" ? "text-primary-a0" : ""
+        } bg-surface-a2 hover:bg-surface-a3`}
+      >
+        Analytics
+      </Link>
+      <Link
         to="/app/organizer/emails"
         className={`p-2 sm:p-3 mx-2 mt-2 md:m-2 rounded-lg text-xl text-center font-bold ${
           path === "/app/organizer/emails" ? "text-primary-a0" : ""
