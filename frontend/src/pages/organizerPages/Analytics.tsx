@@ -4,8 +4,6 @@ import {
   getWeekAnalytics,
   getCustomRangeAnalytics,
   getAllAnalytics,
-  getUserSessions,
-  getDeviceSessions,
 } from "../../utils/AnalyticsAPIHandler";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import { IoMenu } from "react-icons/io5";
@@ -58,7 +56,7 @@ interface FilteredData {
     {
       id: string;
       userId: string | null;
-      createdAt: Date;
+      createdAt: string;
       url: string;
       sessionId: string | null;
       user: {
@@ -71,12 +69,14 @@ interface FilteredData {
 }
 
 export default function Analytics() {
-  const [allTimeError, setAllTimeError] = useState<string | null>(null);
-  const [loadingFiltered, setLoadingFiltered] = useState(false);
   const [filteredError, setFilteredError] = useState<string | null>(null);
   const [filter, setFilter] = useState<"day" | "week" | "custom">("day");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(null); // Only used for custom range
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().slice(0, 10),
+  );
+  const [endDate, setEndDate] = useState<string>(
+    new Date().toISOString().slice(0, 10),
+  ); // Only used for custom range
   const [allTimeData, setAllTimeData] = useState<AllTimeData | null>(null);
   const [filteredData, setFilteredData] = useState<FilteredData | null>(null);
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -100,26 +100,17 @@ export default function Analytics() {
 
   useEffect(() => {
     const fetchFilteredData = async () => {
-      setLoadingFiltered(true);
       let fetchedData;
       if (filter === "day") {
-        fetchedData = await getDayAnalytics(
-          startDate.toISOString().slice(0, 10),
-        );
+        fetchedData = await getDayAnalytics(startDate);
       } else if (filter === "week") {
-        fetchedData = await getWeekAnalytics(
-          startDate.toISOString().slice(0, 10),
-        );
-      } else if (filter === "custom" && endDate) {
-        fetchedData = await getCustomRangeAnalytics(
-          startDate.toISOString().slice(0, 10),
-          endDate.toISOString().slice(0, 10),
-        );
+        fetchedData = await getWeekAnalytics(startDate);
+      } else if (filter === "custom") {
+        fetchedData = await getCustomRangeAnalytics(startDate, endDate);
       }
       if (fetchedData) {
         setFilteredData(fetchedData);
       }
-      setLoadingFiltered(false);
     };
 
     fetchFilteredData();
@@ -193,10 +184,12 @@ export default function Analytics() {
                   <div className="flex flex-col m-2 items-center">
                     <div className="flex p-2 rounded-lg bg-surface-a2">
                       <span className="font-bold text-6xl text-primary-a0">
-                        {allTimeData.sessionStats._avg.sessionLength.toFixed(0)}
+                        {(
+                          allTimeData.sessionStats._avg.sessionLength / 1000
+                        ).toFixed(0)}
                       </span>
                     </div>
-                    <h3 className="text-xl">Average Session Length</h3>
+                    <h3 className="text-xl">Average Session Length (s)</h3>
                   </div>
                 </div>
                 <div className="flex flex-row">
@@ -267,10 +260,88 @@ export default function Analytics() {
             {filter.charAt(0).toUpperCase() + filter.slice(1)} Stats
           </h2>
           <div className="w-full bg-surface-a1 p-4 rounded-lg">
-            {loadingFiltered ? (
+            <div className="flex flex-row mb-2">
+              <select
+                name="filter"
+                id="filter"
+                value={filter}
+                onChange={(e) =>
+                  setFilter(e.target.value as "day" | "week" | "custom")
+                }
+                className="bg-surface-a2 rounded-lg p-2"
+              >
+                <option value="day">Day</option>
+                <option value="week">Week</option>
+                <option value="custom">Custom Range</option>
+              </select>
+              <input
+                type="date"
+                id="startDate"
+                name="startDate"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="bg-surface-a2 rounded-lg p-2 ml-2"
+              />
+              {filter === "custom" && (
+                <input
+                  type="date"
+                  id="endDate"
+                  name="endDate"
+                  value={endDate as string}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="bg-surface-a2 rounded-lg p-2 ml-2"
+                />
+              )}
+            </div>
+            {!filteredData ? (
               <p>Loading...</p>
             ) : (
-              <p>{filter.charAt(0).toUpperCase() + filter.slice(1)} Stats</p>
+              <div className="flex w-full overflow-y-auto max-h-100">
+                <table className="w-full rounded-lg">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2"></th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2">
+                        URL
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2">
+                        Name
+                      </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2">
+                        Date
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredData.pageViews.map((item, index) => (
+                      <tr key={item.id}>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}
+                        >
+                          {index + 1}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}
+                        >
+                          {item.url}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}
+                        >
+                          {item.user ? item.user.firstName : "N/A"}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}
+                        >
+                          {new Date(item.createdAt).toLocaleDateString() +
+                            " - " +
+                            new Date(item.createdAt).toLocaleTimeString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </div>

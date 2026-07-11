@@ -125,9 +125,9 @@ export const handleHeartbeat = async (req: any, res: any) => {
 
 export const getDayAnalytics = async (req: any, res: any) => {
   const { date } = req.params;
+  const [year, month, day] = date.split("-").map(Number);
   const user = req.user as User;
-  const dateObject = new Date(date);
-  dateObject.setHours(0, 0, 0, 0);
+  const dateObject = new Date(year, month - 1, day, 0, 0, 0, 0);
   const endDateObject = new Date(dateObject);
   endDateObject.setHours(23, 59, 59, 999);
 
@@ -156,9 +156,13 @@ export const getDayAnalytics = async (req: any, res: any) => {
     },
   }));
 
+  const sortedPageViews = userCleanedPageViews.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   return res.status(200).json({
     message: `Day analytics for ${date} loaded successfully`,
-    pageViews: userCleanedPageViews,
+    pageViews: sortedPageViews,
   });
 };
 
@@ -196,9 +200,13 @@ export const getWeekAnalytics = async (req: any, res: any) => {
     },
   }));
 
+  const sortedPageViews = userCleanedPageViews.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   return res.status(200).json({
     message: `Week analytics for ${startDate} loaded successfully`,
-    pageViews: userCleanedPageViews,
+    pageViews: sortedPageViews,
   });
 };
 
@@ -239,9 +247,13 @@ export const getCustomRangeAnalytics = async (req: any, res: any) => {
     },
   }));
 
+  const sortedPageViews = userCleanedPageViews.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   return res.status(200).json({
     message: `Custom range analytics for ${startDate} to ${endDate} loaded successfully`,
-    pageViews: userCleanedPageViews,
+    pageViews: sortedPageViews,
   });
 };
 
