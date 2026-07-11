@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { HashLink } from "react-router-hash-link";
 import { useAuth } from "../contexts/AuthContext";
 import { IoArrowForwardCircle, IoArrowBackCircle } from "react-icons/io5";
 
@@ -33,7 +32,7 @@ export default function PastEvents() {
         </h2>
         <div className="flex flex-col bg-surface-a1 w-full p-4">
           <h3 className="text-xl sm:text-3xl mb-1">
-            <span className="font-bold text-primary-a0">
+            <span className="font-bold text-[#17bd3d]">
               Rat Hacks: CTF 2026
             </span>{" "}
             - May 23, 2026 (10:00 AM - 5:00 PM)
@@ -41,16 +40,16 @@ export default function PastEvents() {
           <p className="text-lg sm:text-xl mb-4">
             Rat Hacks: Capture The Flag 2026 is the first Capture The Flag
             hosted by the Rat Hacks team at the Roanoke Valley Governor's
-            School. Lunch was the classic Chick-fil-A chicken nuggets! Everyone
-            solved tons of challenges and had a great time.
+            School. Everyone had a great time trying to solve all of the
+            different challenges!
           </p>
-          <div className="flex flex-col sm:flex-row items-center">
+          <div className="flex flex-col sm:flex-row items-center mb-4">
             <div className="flex flex-col sm:w-3/4">
-              <h4 className="text-xl sm:text-2xl font-bold text-primary-a0">
+              <h4 className="text-xl sm:text-2xl font-bold text-[#17bd3d]">
                 Organizers
               </h4>
               <div className="grid grid-cols-5 items-center mt-2">
-                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg">
+                <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
                     src="/nathanCloutier.webp"
                     alt="Nathan Cloutier"
@@ -61,7 +60,7 @@ export default function PastEvents() {
                   </span>
                   <span>Rat Hacks Director</span>
                 </div>
-                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1">
+                <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg mx-1">
                   <img
                     src="/bearTyree.webp"
                     alt="Bear Tyree"
@@ -76,7 +75,7 @@ export default function PastEvents() {
                   href="https://cayleb247.github.io/personal-website/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1"
+                  className="flex flex-col p-2 bg-[#17bd3d] rounded-lg mx-1"
                 >
                   <img
                     src="/calebWang.webp"
@@ -92,7 +91,7 @@ export default function PastEvents() {
                   href="https://elipeters.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1"
+                  className="flex flex-col p-2 bg-[#17bd3d] rounded-lg mx-1"
                 >
                   <img
                     src="/eliPeters.webp"
@@ -104,7 +103,7 @@ export default function PastEvents() {
                   </span>
                   <span>Rat Hacks Organizer</span>
                 </a>
-                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1">
+                <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg mx-1">
                   <img
                     src="/mattoxJalbert.webp"
                     alt="Mattox Jalbert"
@@ -121,21 +120,41 @@ export default function PastEvents() {
               <h4 className="text-xl sm:text-2xl font-bold font-dream-planner">
                 Stats
               </h4>
-              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+              <div className="flex w-full h-15 bg-[#17bd3d] rounded-lg justify-center items-center text-center mx-1 my-1">
                 <p className="text-5xl sm:text-3xl">
                   <span className="font-bold">5</span> Participants
                 </p>
               </div>
-              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+              <div className="flex w-full h-15 bg-[#17bd3d] rounded-lg justify-center items-center text-center mx-1 my-1">
                 <p className="text-5xl sm:text-3xl">
                   <span className="font-bold">5</span> Categories
                 </p>
               </div>
-              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+              <div className="flex w-full h-15 bg-[#17bd3d] rounded-lg justify-center items-center text-center mx-1 my-1">
                 <p className="text-5xl sm:text-3xl ">
                   <span className="font-bold">28</span> Challenges
                 </p>
               </div>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <h4 className="text-xl sm:text-2xl font-bold text-[#17bd3d]">
+              Sponsors
+            </h4>
+            <div className="flex flex-wrap gap-4">
+              <a
+                className="flex flex-col items-center bg-[#17bd3d] p-2 rounded-lg"
+                href="https://www.rvgs.k12.va.us/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1710281903/rvgsk12vaus/drpn8vmnyao4u7eydlxk/RVGSBanner.png"
+                  alt="RVGS Logo"
+                  className="w-48 h-32 object-contain bg-[#f4f4f4] p-1"
+                />
+                <span className="text-lg sm:text-xl text-white">RVGS</span>
+              </a>
             </div>
           </div>
         </div>
@@ -147,12 +166,12 @@ export default function PastEvents() {
           <div className="flex flex-col sm:flex-row items-center mb-4">
             <p className="text-xl sm:text-2xl font-ember-fire sm:w-1/2">
               Campfire Roanoke was the first overnight high school game jam in
-              Roanoke hosted at the Science Museum of Western Virgiinia by the
+              Roanoke hosted at the Science Museum of Western Virginia by the
               Rat Hacks team! Participants were allowed to work in groups of up
               to 3 to make a game around the theme "Beneath the Surface". Every
               team was able to submit a game, while eating awesome food from
-              Jersey Mikes, Chick-fil-A, Domino's, and Sam's Club! The highlight
-              from the event was the opening ceremony held in the eye
+              Jersey Mikes, Chick-fil-A, Domino's, and Sam's Club! Campfire
+              Roanoke started out with an awesome opening ceremony in the eye
               planetarium.
             </p>
             <div className="relative flex flex-col items-center sm:w-1/2 sm:ml-4 h-64">
@@ -185,7 +204,7 @@ export default function PastEvents() {
               />
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row items-center">
+          <div className="flex flex-col sm:flex-row items-center mb-4">
             <div className="flex flex-col sm:w-3/4">
               <h4 className="text-xl sm:text-2xl font-bold font-dream-planner">
                 ORGANIZERS
@@ -281,10 +300,62 @@ export default function PastEvents() {
               </div>
             </div>
           </div>
+          <div className="flex flex-col">
+            <h4 className="text-xl sm:text-2xl font-bold font-dream-planner">
+              SPONSORS
+            </h4>
+            <div className="flex flex-wrap gap-4">
+              <a
+                className="flex flex-col items-center bg-[#FFA23C] p-2 rounded-lg"
+                href="https://hackclub.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://assets.hackclub.com/flag-standalone.png"
+                  alt="Hack Club Flag"
+                  className="w-48 h-32 object-contain"
+                />
+                <span className="text-lg sm:text-xl font-ember-fire">
+                  Hack Club
+                </span>
+              </a>
+              <a
+                className="flex flex-col items-center bg-[#FFA23C] p-2 rounded-lg"
+                href="https://smwv.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://smwv.org/wp-content/uploads/2021/01/cropped-SMWV-Logo-large.png"
+                  alt="Science Museum of Western Virginia Logo"
+                  className="w-48 h-32 object-contain"
+                />
+                <span className="text-lg sm:text-xl font-ember-fire">
+                  Science Museum of Western Virginia
+                </span>
+              </a>
+              <a
+                className="flex flex-col items-center bg-[#FFA23C] p-2 rounded-lg"
+                href="https://www.ferrum.edu/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://www.ferrum.edu/wp-content/themes/ferrum-theme/dist/img/ferrum_college_logo_2C.png"
+                  alt="Ferrum College Logo"
+                  className="w-48 h-32 object-contain"
+                />
+                <span className="text-lg sm:text-xl font-ember-fire">
+                  Ferrum College
+                </span>
+              </a>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col bg-surface-a1 w-full p-4">
           <h3 className="text-xl sm:text-3xl mb-1">
-            <span className="font-bold text-primary-a0">Rat Hacks 2025</span> -
+            <span className="font-bold text-[#17bd3d]">Rat Hacks 2025</span> -
             November 22, 2025 (8:00 AM - 8:00 PM)
           </h3>
           <div className="flex flex-col sm:flex-row items-center mb-4">
@@ -292,8 +363,11 @@ export default function PastEvents() {
               This is the second hackathon hosted by Rat Hacks at the Roanoke
               Valley Governor's School. Participants worked in groups of up to 4
               to make a coding project in 12 hours around the theme "Something
-              to Improve your Life". For lunch and dinner, we had Chick-fil-A
-              and Domino's. Everyone was able to submit a project.
+              to Improve your Life". Team made everyting from to-do lists, while
+              another team made an empathy bot. Everyone was able to have a
+              great time with the ping pong tournament, Chick-fil-a, and
+              Domino's! By the end, every team had submitted a project and
+              created something really cool!
             </p>
             <div className="relative flex flex-col items-center sm:w-1/2 sm:ml-4 h-64">
               <img
@@ -325,13 +399,13 @@ export default function PastEvents() {
               />
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row items-center">
+          <div className="flex flex-col sm:flex-row items-center mb-4">
             <div className="flex flex-col sm:w-3/4">
-              <h4 className="text-xl sm:text-2xl font-bold text-primary-a0">
+              <h4 className="text-xl sm:text-2xl font-bold text-[#17bd3d]">
                 Organizers
               </h4>
               <div className="grid grid-cols-5 items-center mt-2">
-                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg">
+                <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
                     src="/nathanCloutier.webp"
                     alt="Nathan Cloutier"
@@ -342,7 +416,7 @@ export default function PastEvents() {
                   </span>
                   <span>Rat Hacks Director</span>
                 </div>
-                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1">
+                <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg mx-1">
                   <img
                     src="/bearTyree.webp"
                     alt="Bear Tyree"
@@ -357,7 +431,7 @@ export default function PastEvents() {
                   href="https://cayleb247.github.io/personal-website/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1"
+                  className="flex flex-col p-2 bg-[#17bd3d] rounded-lg mx-1"
                 >
                   <img
                     src="/calebWang.webp"
@@ -373,7 +447,7 @@ export default function PastEvents() {
                   href="https://elipeters.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1"
+                  className="flex flex-col p-2 bg-[#17bd3d] rounded-lg mx-1"
                 >
                   <img
                     src="/eliPeters.webp"
@@ -385,7 +459,7 @@ export default function PastEvents() {
                   </span>
                   <span>Rat Hacks Organizer</span>
                 </a>
-                <div className="flex flex-col p-2 bg-primary-a0 rounded-lg mx-1">
+                <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg mx-1">
                   <img
                     src="/mattoxJalbert.webp"
                     alt="Mattox Jalbert"
@@ -402,19 +476,39 @@ export default function PastEvents() {
               <h4 className="text-xl sm:text-2xl font-bold font-dream-planner">
                 Stats
               </h4>
-              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+              <div className="flex w-full h-15 bg-[#17bd3d] rounded-lg justify-center items-center text-center mx-1 my-1">
                 <p className="text-5xl sm:text-3xl">
                   <span className="font-bold">17</span> Participants
                 </p>
               </div>
-              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+              <div className="flex w-full h-15 bg-[#17bd3d] rounded-lg justify-center items-center text-center mx-1 my-1">
                 <p className="text-5xl sm:text-3xl">
                   <span className="font-bold">5</span> Projects Submitted
                 </p>
               </div>
-              <div className="flex w-full h-15 bg-primary-a0 rounded-lg justify-center items-center text-center mx-1 my-1">
+              <div className="flex w-full h-15 bg-[#17bd3d] rounded-lg justify-center items-center text-center mx-1 my-1">
                 <p className="text-5xl sm:text-3xl ">"Improve Your Life"</p>
               </div>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <h4 className="text-xl sm:text-2xl font-bold text-[#17bd3d]">
+              Sponsors
+            </h4>
+            <div className="flex flex-wrap gap-4">
+              <a
+                className="flex flex-col items-center bg-[#17bd3d] p-2 rounded-lg"
+                href="https://www.rvgs.k12.va.us/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1710281903/rvgsk12vaus/drpn8vmnyao4u7eydlxk/RVGSBanner.png"
+                  alt="RVGS Logo"
+                  className="w-48 h-32 object-contain bg-[#f4f4f4] p-1"
+                />
+                <span className="text-lg sm:text-xl text-white">RVGS</span>
+              </a>
             </div>
           </div>
         </div>
@@ -424,15 +518,18 @@ export default function PastEvents() {
             24, 2025 (8:00 AM - 8:00 PM)
           </h3>
           <p className="text-lg sm:text-xl mb-4">
-            This was the FIRST EVER RAT HACKS!!! This is the first hackathon
-            available to high schoolers in the area hosted at the Roanoke Valley
-            Governor's School. Participants worked in groups of up to 4 to make
-            a coding project in 12 hours around the theme "Education Tools."
-            This was also the start of our tradition of having a Ping Pong
-            tournament during the hackathon. Lunch was Chick-fil-A and dinner
-            was pizza from Domino's.
+            This was the first Rat Hacks hackathons and it was the first
+            hackathon available to high schoolers in the area. Participants
+            spent 12 hours at the Roanoke Valley Governor's School working in
+            teams of up to 4 to make a coding project. Hackers interpreted the
+            theme, "Educational Tools," by making everything from flash card
+            apps to scholarship scrapers. This event sparked the tradition of
+            hosting a ping pong tournament at all of our events. Everyone was
+            fueled by some amazing food from Chick-fil-a and Domino's! By the
+            end, every team had submitted a project and created something really
+            cool!
           </p>
-          <div className="flex flex-col sm:flex-row items-center">
+          <div className="flex flex-col sm:flex-row items-center mb-4">
             <div className="flex flex-col sm:w-3/4">
               <h4 className="text-xl sm:text-2xl font-bold text-[#144922]">
                 Organizers
@@ -497,6 +594,26 @@ export default function PastEvents() {
                   "Educational Tools"
                 </p>
               </div>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <h4 className="text-xl sm:text-2xl font-bold text-[#144922]">
+              Sponsors
+            </h4>
+            <div className="flex flex-wrap gap-4">
+              <a
+                className="flex flex-col items-center bg-[#144922] p-2 rounded-lg"
+                href="https://www.rvgs.k12.va.us/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_2/v1710281903/rvgsk12vaus/drpn8vmnyao4u7eydlxk/RVGSBanner.png"
+                  alt="RVGS Logo"
+                  className="w-48 h-32 object-contain bg-[#f4f4f4] p-1"
+                />
+                <span className="text-lg sm:text-xl text-[#f4f4f4]">RVGS</span>
+              </a>
             </div>
           </div>
         </div>
