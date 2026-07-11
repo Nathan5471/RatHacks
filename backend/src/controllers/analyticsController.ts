@@ -124,7 +124,7 @@ export const handleHeartbeat = async (req: any, res: any) => {
 };
 
 export const getDayAnalytics = async (req: any, res: any) => {
-  const { date } = req.query;
+  const { date } = req.params;
   const user = req.user as User;
   const dateObject = new Date(date);
   dateObject.setHours(0, 0, 0, 0);
@@ -255,10 +255,24 @@ export const getAllTimeAnalytics = async (req: any, res: any) => {
   const sessionStats = await prisma.session.aggregate({
     _count: {
       id: true,
-      deviceId: true,
     },
     _avg: {
       sessionLength: true,
+    },
+  });
+  const pageViews = await prisma.pageView.aggregate({
+    _count: {
+      id: true,
+    },
+  });
+  const pagesPerSession = pageViews._count.id / sessionStats._count.id;
+  const last2Minutes = new Date();
+  last2Minutes.setMinutes(last2Minutes.getMinutes() - 2);
+  const activeUsers = await prisma.session.count({
+    where: {
+      sessionEnd: {
+        gte: last2Minutes,
+      },
     },
   });
   const deviceBreakdown = await prisma.session.groupBy({
@@ -279,20 +293,16 @@ export const getAllTimeAnalytics = async (req: any, res: any) => {
       id: true,
     },
   });
-  const topPages = await prisma.pageView.groupBy({
-    by: ["url"],
-    _count: {
-      id: true,
-    },
-  });
 
   return res.status(200).json({
     message: "All time analytics loaded successfully",
     sessionStats,
+    pageViews,
+    pagesPerSession,
+    activeUsers,
     deviceBreakdown,
     osBreakdown,
     browserBreakdown,
-    topPages,
   });
 };
 
