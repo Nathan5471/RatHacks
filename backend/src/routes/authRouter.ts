@@ -21,7 +21,9 @@ import {
   updateUser,
   updatePassword,
   updateTheme,
+  updateAccountType,
   deleteUser,
+  organizerDeleteUser,
 } from "../controllers/authController";
 import authenticate from "../middleware/authenticate";
 import { User } from "@prisma/client";
@@ -451,6 +453,42 @@ router.put("/update-theme", authenticate, async (req: any, res: any) => {
   await updateTheme(req, res);
 });
 
+router.put(
+  "/organizer/update-account-type",
+  authenticate,
+  async (req: any, res: any) => {
+    const { id, accountType } = req.body;
+
+    if (!id || !accountType) {
+      return res
+        .status(400)
+        .json({ message: "ID and account type are required" });
+    }
+
+    if (!["student", "judge", "organizer"].includes(accountType)) {
+      return res
+        .status(400)
+        .json({ message: "Account type must be student, judge, or organizer" });
+    }
+
+    await updateAccountType(req, res);
+  },
+);
+
 router.delete("/delete", authenticate, deleteUser);
+
+router.delete(
+  "/organizer/delete/:id",
+  authenticate,
+  async (req: any, res: any) => {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "ID is required" });
+    }
+
+    await organizerDeleteUser(req, res);
+  },
+);
 
 export default router;

@@ -489,10 +489,10 @@ export const logout = async (req: any, res: any) => {
         where: { id: user.id },
         data: {
           validAccessTokens: user.validAccessTokens?.filter(
-            (token: string) => token !== accessToken
+            (token: string) => token !== accessToken,
           ),
           validRefreshTokens: user.validRefreshTokens?.filter(
-            (token: string) => token !== refreshToken
+            (token: string) => token !== refreshToken,
           ),
         },
       });
@@ -867,6 +867,43 @@ export const updateTheme = async (req: any, res: any) => {
   }
 };
 
+export const updateAccountType = async (req: any, res: any) => {
+  const { id, accountType } = req.body as {
+    id: string;
+    accountType: "student" | "judge" | "organizer";
+  };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const userToUpdate = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!userToUpdate) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        accountType,
+      },
+    });
+    return res
+      .status(200)
+      .json({ message: "Account type updated successfully" });
+  } catch (error) {
+    console.error("Error updating account type:", error);
+    return res.status(500).json({ message: "Failed to update account type" });
+  }
+};
+
 export const deleteUser = async (req: any, res: any) => {
   const user = req.user as User;
 
@@ -882,7 +919,7 @@ export const deleteUser = async (req: any, res: any) => {
         where: { id: eventId },
         data: {
           participants: event.participants.filter(
-            (userId) => userId !== user.id
+            (userId) => userId !== user.id,
           ),
         },
       });
@@ -898,7 +935,7 @@ export const deleteUser = async (req: any, res: any) => {
         where: { id: workshopId },
         data: {
           participants: workshop.participants.filter(
-            (userId) => userId !== user.id
+            (userId) => userId !== user.id,
           ),
         },
       });
@@ -909,6 +946,67 @@ export const deleteUser = async (req: any, res: any) => {
     });
     res.clearCookie("token");
     res.clearCookie("refreshToken");
+    return res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return res.status(500).json({ message: "Failed to delete user" });
+  }
+};
+
+export const organizerDeleteUser = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const userToDelete = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!userToDelete) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await userToDelete.events.forEach(async (eventId) => {
+      const event = await prisma.event.findUnique({
+        where: { id: eventId },
+      });
+      if (!event) {
+        return;
+      }
+      await prisma.event.update({
+        where: { id: eventId },
+        data: {
+          participants: event.participants.filter(
+            (userId) => userId !== userToDelete.id,
+          ),
+        },
+      });
+    });
+    await userToDelete.workshops.forEach(async (workshopId) => {
+      const workshop = await prisma.workshop.findUnique({
+        where: { id: workshopId },
+      });
+      if (!workshop) {
+        return;
+      }
+      await prisma.workshop.update({
+        where: { id: workshopId },
+        data: {
+          participants: workshop.participants.filter(
+            (userId) => userId !== userToDelete.id,
+          ),
+        },
+      });
+    });
+
+    await prisma.user.delete({
+      where: { id: userToDelete.id },
+    });
+
     return res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     console.error("Error deleting user:", error);
