@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get update \
     && apt-get install -y postgresql-client-18 \
     && rm -rf /var/lib/apt/lists/*
-RUN npx prisma generate
+RUN DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder" npx prisma generate
 RUN npm run build
 
 EXPOSE 3000
