@@ -10,9 +10,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     return Promise.reject(
-      error.response ? error.response.data : { message: "Network Error" }
+      error.response ? error.response.data : { message: "Network Error" },
     );
-  }
+  },
 );
 
 export const register = async (userData: {
@@ -66,7 +66,7 @@ export const resetPassword = async (email: string) => {
 export const setNewPassword = async (
   email: string,
   token: string,
-  newPassword: string
+  newPassword: string,
 ) => {
   const response = await api.post("/set-new-password", {
     email,
@@ -193,7 +193,7 @@ export const updatePassword = async (newPassword: string) => {
 };
 
 export const updateTheme = async (
-  theme: "default" | "spooky" | "space" | "framework"
+  theme: "default" | "spooky" | "space" | "framework",
 ) => {
   const response = await api.put("/update-theme", {
     theme,
@@ -201,7 +201,23 @@ export const updateTheme = async (
   return response.data;
 };
 
+export const changeAccountType = async (
+  id: string,
+  newAccountType: "student" | "judge" | "organizer",
+) => {
+  const response = await api.put("/organizer/update-account-type", {
+    id,
+    accountType: newAccountType,
+  });
+  return response.data;
+};
+
 export const deleteUser = async () => {
   const response = await api.delete("/delete");
+  return response.data;
+};
+
+export const organizerDeleteUser = async (userId: string) => {
+  const response = await api.delete(`/organizer/delete/${userId}`);
   return response.data;
 };

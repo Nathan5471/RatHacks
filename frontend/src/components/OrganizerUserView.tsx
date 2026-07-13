@@ -1,10 +1,12 @@
 import { useOverlay } from "../contexts/OverlayContext";
+import OrganizerChangeAccountType from "../components/OrganizerChangeAccountType";
+import OrganizerDeleteUser from "../components/OrganizerDeleteUser";
 
 interface User {
   id: string;
   email: string;
   emailVerified: boolean;
-  accountType: string;
+  accountType: "student" | "judge" | "organizer";
   theme?: "default" | "spooky" | "space" | "framework";
   firstName: string;
   lastName: string;
@@ -25,8 +27,14 @@ interface User {
   createdAt: string;
 }
 
-export default function OrganizerUserView({ user }: { user: User }) {
-  const { closeOverlay } = useOverlay();
+export default function OrganizerUserView({
+  user,
+  setRefreshData,
+}: {
+  user: User;
+  setRefreshData: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const { closeOverlay, openOverlay } = useOverlay();
   const gradeMap = {
     nine: "9",
     ten: "10",
@@ -34,6 +42,29 @@ export default function OrganizerUserView({ user }: { user: User }) {
     twelve: "12",
     organizer: "Organizer",
     judge: "Judge",
+  };
+
+  const openChangeAccountTypeOverlay = () => {
+    openOverlay(
+      <OrganizerChangeAccountType
+        id={user.id}
+        firstName={user.firstName}
+        lastName={user.lastName}
+        currentAccountType={user.accountType}
+        setRefreshData={setRefreshData}
+      />,
+    );
+  };
+
+  const openDeleteUserOverlay = () => {
+    openOverlay(
+      <OrganizerDeleteUser
+        id={user.id}
+        firstName={user.firstName}
+        lastName={user.lastName}
+        setRefreshData={setRefreshData}
+      />,
+    );
   };
 
   return (
@@ -44,6 +75,9 @@ export default function OrganizerUserView({ user }: { user: User }) {
       <p className="text-lg sm:text-xl text-left">Email: {user.email}</p>
       <p className="text-lg sm:text-xl text-left">
         Email Verified: {user.emailVerified ? "Yes" : "No"}
+      </p>
+      <p className="text-lg sml:text-xl text-left">
+        Account Type: {user.accountType}
       </p>
       {user.theme && (
         <p className="text-lg sm:text-xl text-left">
@@ -89,6 +123,20 @@ export default function OrganizerUserView({ user }: { user: User }) {
       <p className="text-lg sm:text-xl text-left">
         Account Created: {new Date(user.createdAt).toLocaleString()}
       </p>
+      <div className="flex flex-col sm:flex-row sm:space-x-4">
+        <button
+          className="bg-primary-a0 hover:bg-primary-a1 font-bold p-2 rounded-lg mt-4 w-full sm:w-1/2"
+          onClick={openChangeAccountTypeOverlay}
+        >
+          Change Account Type
+        </button>
+        <button
+          className="bg-red-500 hover:bg-red-400 font-bold p-2 rounded-lg mt-4 w-full sm:w-1/2"
+          onClick={openDeleteUserOverlay}
+        >
+          Delete User
+        </button>
+      </div>
       <button
         className="bg-primary-a0 hover:bg-primary-a1 font-bold p-2 rounded-lg mt-4"
         onClick={closeOverlay}

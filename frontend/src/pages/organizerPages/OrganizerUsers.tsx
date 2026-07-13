@@ -69,6 +69,7 @@ export default function OrganizerUsers() {
     "name" | "email" | "schoolDivision" | "gradeLevel" | "isGovSchool"
   >("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [refreshData, setRefreshData] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -96,7 +97,7 @@ export default function OrganizerUsers() {
       }
     };
     fetchUsers();
-  }, []);
+  }, [refreshData]);
 
   useEffect(() => {
     let filteredUsers = [...users];
@@ -250,7 +251,9 @@ export default function OrganizerUsers() {
 
   const handleOpenOrganizerUserView = (e: React.MouseEvent, user: User) => {
     e.preventDefault();
-    openOverlay(<OrganizerUserView user={user} />);
+    openOverlay(
+      <OrganizerUserView user={user} setRefreshData={setRefreshData} />,
+    );
   };
 
   if (loading) {
