@@ -9,7 +9,18 @@ import OrganizerNavbar from "../../components/OrganizerNavbar";
 import OrganizerViewSession from "../../components/OrganizerViewSession";
 import { useOverlay } from "../../contexts/OverlayContext";
 import { IoMenu } from "react-icons/io5";
-import { PieChart, Pie, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import {
+  PieChart,
+  Pie,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
 
 interface AllTimeData {
   sessionStats: {
@@ -51,6 +62,7 @@ interface AllTimeData {
       browser: string;
     },
   ];
+  pageViewsPerDay: { [key: string]: number };
 }
 
 interface FilteredData {
@@ -257,6 +269,27 @@ export default function Analytics() {
                     </ResponsiveContainer>
                   </div>
                 </div>
+                <h3 className="text-xl font-bold mt-4">Page Views Per Day</h3>
+                <ResponsiveContainer width="100%" height={350}>
+                  <LineChart
+                    data={Object.entries(allTimeData.pageViewsPerDay).map(
+                      ([date, count]) => ({ date, pageViews: count }),
+                    )}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip contentStyle={{ backgroundColor: "#575757" }} />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="pageViews"
+                      className="stroke-primary-a0" // For some reason this only works when both of these lines are present
+                      stroke="var(--primary-a0)"
+                      strokeWidth={3}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
             )}
           </div>

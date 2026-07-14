@@ -306,6 +306,26 @@ export const getAllTimeAnalytics = async (req: any, res: any) => {
     },
   });
 
+  const date30DaysAgo = new Date();
+  date30DaysAgo.setDate(date30DaysAgo.getDate() - 30);
+  const pageViews30Days = await prisma.pageView.findMany({
+    where: {
+      createdAt: {
+        gte: date30DaysAgo,
+      },
+    },
+  });
+  const pageViewsPerDay: { [key: string]: number } = {};
+  for (let i = 0; i < 30; i++) {
+    const currentDate = new Date(date30DaysAgo);
+    currentDate.setDate(currentDate.getDate() + i);
+    pageViewsPerDay[currentDate.toISOString().split("T")[0]] = 0;
+  }
+  for (const view of pageViews30Days) {
+    const viewDate = view.createdAt.toISOString().split("T")[0];
+    pageViewsPerDay[viewDate] = (pageViewsPerDay[viewDate] || 0) + 1;
+  }
+
   return res.status(200).json({
     message: "All time analytics loaded successfully",
     sessionStats,
@@ -315,6 +335,7 @@ export const getAllTimeAnalytics = async (req: any, res: any) => {
     deviceBreakdown,
     osBreakdown,
     browserBreakdown,
+    pageViewsPerDay,
   });
 };
 
