@@ -40,7 +40,7 @@ export default function OrganizerEmails() {
           "message" in error &&
           typeof error.message === "string"
             ? error.message
-            : "An unkown error accured";
+            : "An unknown error occurred";
         setError(errorMessage);
       } finally {
         setLoading(false);
@@ -56,7 +56,7 @@ export default function OrganizerEmails() {
 
   const handleOpenEditEmail = (
     e: React.MouseEvent<HTMLButtonElement>,
-    emailId: string
+    emailId: string,
   ) => {
     e.preventDefault();
     openOverlay(<EditEmail emailId={emailId} setReload={setReload} />);
@@ -65,7 +65,7 @@ export default function OrganizerEmails() {
   const handleOpenDeleteEmail = (
     e: React.MouseEvent<HTMLButtonElement>,
     emailId: string,
-    emailName: string
+    emailName: string,
   ) => {
     e.preventDefault();
     openOverlay(
@@ -74,7 +74,7 @@ export default function OrganizerEmails() {
         emailName={emailName}
         currentPage="emails"
         setReload={setReload}
-      />
+      />,
     );
   };
 

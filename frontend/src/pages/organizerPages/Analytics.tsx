@@ -6,6 +6,8 @@ import {
   getAllAnalytics,
 } from "../../utils/AnalyticsAPIHandler";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
+import OrganizerViewSession from "../../components/OrganizerViewSession";
+import { useOverlay } from "../../contexts/OverlayContext";
 import { IoMenu } from "react-icons/io5";
 import { PieChart, Pie, ResponsiveContainer, Tooltip, Legend } from "recharts";
 
@@ -58,7 +60,7 @@ interface FilteredData {
       userId: string | null;
       createdAt: string;
       url: string;
-      sessionId: string | null;
+      sessionId: string;
       user: {
         id: string | undefined;
         firstName: string | undefined;
@@ -87,6 +89,7 @@ export default function Analytics() {
     "#b666d2",
   ]; // Soft Pink, Sea Blue, Sap Green, Deep Orange, Lilac Color
   // ^ I picked these colors from eggradeints.com, the best color website out there
+  const { openOverlay } = useOverlay();
 
   useEffect(() => {
     const fetchAllTimeData = async () => {
@@ -114,6 +117,10 @@ export default function Analytics() {
 
     fetchFilteredData();
   }, [filter, startDate, endDate]);
+
+  const handleOpenViewSession = (sessionId: string) => {
+    openOverlay(<OrganizerViewSession sessionId={sessionId} />);
+  };
 
   return (
     <div className="relative w-screen h-screen flex flex-col sm:flex-row bg-surface-a0 text-white">
@@ -309,6 +316,9 @@ export default function Analytics() {
                       <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2">
                         Date
                       </th>
+                      <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2">
+                        Session
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -335,6 +345,18 @@ export default function Analytics() {
                           {new Date(item.createdAt).toLocaleDateString() +
                             " - " +
                             new Date(item.createdAt).toLocaleTimeString()}
+                        </td>
+                        <td
+                          className={`py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}
+                        >
+                          <button
+                            className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full"
+                            onClick={() =>
+                              handleOpenViewSession(item.sessionId)
+                            }
+                          >
+                            View
+                          </button>
                         </td>
                       </tr>
                     ))}

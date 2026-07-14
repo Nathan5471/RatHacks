@@ -49,12 +49,17 @@ export const getCustomRangeAnalytics = async (
   startDate: string,
   endDate: string,
 ) => {
-  const response = await api.get(`/custom-range/${startDate}/${endDate}`);
+  const response = await api.get(`/custom/${startDate}/${endDate}`);
   return response.data;
 };
 
 export const getAllAnalytics = async () => {
   const response = await api.get(`/all`);
+  return response.data;
+};
+
+export const getSession = async (sessionId: string) => {
+  const response = await api.get(`/session/${sessionId}`);
   return response.data;
 };
 
