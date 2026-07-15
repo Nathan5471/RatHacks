@@ -11,20 +11,22 @@ import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
 import LinkDetectedText from "../components/LinkDetectedText";
+import axios from "axios";
+
+interface Workshop {
+  id: string;
+  name: string;
+  description: string;
+  googleMeetURL: string;
+  startDate: string;
+  endDate: string;
+  status: "upcoming" | "ongoing" | "completed";
+  participantCount: number;
+  organizer: string;
+}
 
 export default function Workshops() {
   const { user, getUser } = useAuth();
-  interface Workshop {
-    id: string;
-    name: string;
-    description: string;
-    googleMeetURL: string;
-    startDate: string;
-    endDate: string;
-    status: "upcoming" | "ongoing" | "completed";
-    participantCount: number;
-    organizer: string;
-  }
   const [workshops, setWorkshops] = useState<Workshop[]>([]);
   const [displayedWorkshops, setDisplayedWorkshops] = useState<Workshop[]>([]);
   const [search, setSearch] = useState("");
@@ -33,13 +35,22 @@ export default function Workshops() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchWorkshops = async () => {
       setError("");
       try {
-        const response = await getAllWorkshops();
+        const response = await getAllWorkshops(controller.signal);
         setWorkshops(response.workshops);
         setDisplayedWorkshops(response.workshops);
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -53,6 +64,10 @@ export default function Workshops() {
       }
     };
     fetchWorkshops();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   useEffect(() => {
@@ -67,7 +82,7 @@ export default function Workshops() {
 
   const handleJoin = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    workshopId: string
+    workshopId: string,
   ) => {
     e.preventDefault();
     try {
@@ -80,7 +95,7 @@ export default function Workshops() {
 
   const handleLeave = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    workshopId: string
+    workshopId: string,
   ) => {
     e.preventDefault();
     try {

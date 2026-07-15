@@ -32,7 +32,7 @@ export default function OrganizerUserView({
   setRefreshData,
 }: {
   user: User;
-  setRefreshData: React.Dispatch<React.SetStateAction<boolean>>;
+  setRefreshData?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { closeOverlay, openOverlay } = useOverlay();
   const gradeMap = {

@@ -11,7 +11,7 @@ export default function OrganizerDeleteUser({
   id: string;
   firstName: string;
   lastName: string;
-  setRefreshData: React.Dispatch<React.SetStateAction<boolean>>;
+  setRefreshData?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { closeOverlay } = useOverlay();
 
@@ -19,7 +19,9 @@ export default function OrganizerDeleteUser({
     try {
       await organizerDeleteUser(id);
       toast.success(`${firstName} ${lastName} has been deleted.`);
-      setRefreshData((prev) => !prev);
+      if (setRefreshData) {
+        setRefreshData((prev) => !prev);
+      }
       closeOverlay();
     } catch (error) {
       console.error("Error deleting user:", error);

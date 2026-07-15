@@ -6,6 +6,7 @@ import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
 import LinkDetectedText from "../components/LinkDetectedText";
+import axios from "axios";
 
 export default function Events() {
   const { user, getUser } = useAuth();
@@ -27,12 +28,21 @@ export default function Events() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEvents = async () => {
       setError("");
       try {
-        const response = await getAllEvents();
+        const response = await getAllEvents(controller.signal);
         setEvents(response.events);
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -46,11 +56,15 @@ export default function Events() {
       }
     };
     fetchEvents();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   const handleJoin = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    eventId: string
+    eventId: string,
   ) => {
     e.preventDefault();
     try {
@@ -63,7 +77,7 @@ export default function Events() {
 
   const handleLeave = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    eventId: string
+    eventId: string,
   ) => {
     e.preventDefault();
     try {
@@ -220,7 +234,7 @@ export default function Events() {
                   <span className="font-bold">Submission Deadline:</span>{" "}
                   {formatDate(
                     event.submissionDeadline,
-                    "EEEE, MMMM d yyyy h:mm a"
+                    "EEEE, MMMM d yyyy h:mm a",
                   )}
                   <p>
                     <span className="font-bold">Participants:</span>{" "}

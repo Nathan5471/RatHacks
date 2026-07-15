@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useOverlay } from "../contexts/OverlayContext";
 import { getDeviceSessions } from "../utils/AnalyticsAPIHandler";
 import OrganizerViewSession from "../components/OrganizerViewSession";
+import axios from "axios";
 
 interface User {
   id: string;
@@ -61,11 +62,23 @@ export default function OrganizerViewDeviceSessions({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchSessions = async () => {
       try {
-        const sessionData = await getDeviceSessions(deviceId);
+        const sessionData = await getDeviceSessions(
+          deviceId,
+          controller.signal,
+        );
         setSessions(sessionData.sessions);
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -77,6 +90,10 @@ export default function OrganizerViewDeviceSessions({
       }
     };
     fetchSessions();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   const handleOpenSession = (session: Session) => {

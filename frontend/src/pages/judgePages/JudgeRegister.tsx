@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { checkJudgeInvite, registerJudge } from "../../utils/AuthAPIHandler";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import axios from "axios";
 
 export default function JudgeRegister() {
   const [serachParams] = useSearchParams();
@@ -15,16 +16,25 @@ export default function JudgeRegister() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [status, setStatus] = useState<"loading" | "invalid" | "registering">(
-    "loading"
+    "loading",
   );
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const checkInvite = async () => {
       try {
-        await checkJudgeInvite(email, token);
+        await checkJudgeInvite(email, token, controller.signal);
         setStatus("registering");
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Invite check error:", error);
         setStatus("invalid");
       }
@@ -36,6 +46,10 @@ export default function JudgeRegister() {
     if (status === "loading") {
       checkInvite();
     }
+
+    return () => {
+      controller.abort();
+    };
   }, [email, token, status]);
 
   const handleRegister = async (e: React.FormEvent) => {

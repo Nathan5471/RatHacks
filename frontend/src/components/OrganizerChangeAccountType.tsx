@@ -14,7 +14,7 @@ export default function OrganizerChangeAccountType({
   firstName: string;
   lastName: string;
   currentAccountType: "student" | "judge" | "organizer";
-  setRefreshData: React.Dispatch<React.SetStateAction<boolean>>;
+  setRefreshData?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [newAccountType, setNewAccountType] = useState<
     "student" | "judge" | "organizer"
@@ -27,7 +27,9 @@ export default function OrganizerChangeAccountType({
       toast.success(
         `${firstName} ${lastName}'s account type has been changed.`,
       );
-      setRefreshData((prev) => !prev);
+      if (setRefreshData) {
+        setRefreshData((prev) => !prev);
+      }
       closeOverlay();
     } catch (error) {
       console.error("Error changing account type:", error);

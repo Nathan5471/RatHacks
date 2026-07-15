@@ -21,6 +21,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import axios from "axios";
 
 interface AllTimeData {
   sessionStats: {
@@ -105,30 +106,66 @@ export default function Analytics() {
   const { openOverlay } = useOverlay();
 
   useEffect(() => {
-    const fetchAllTimeData = async () => {
-      const fetchedData = await getAllAnalytics();
-      setAllTimeData(fetchedData);
-    };
+    const controller = new AbortController();
 
+    const fetchAllTimeData = async () => {
+      const controller = new AbortController();
+
+      try {
+        const fetchedData = await getAllAnalytics(controller.signal);
+        setAllTimeData(fetchedData);
+      } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+        console.error("Error fetching all-time data:", error);
+      }
+    };
     fetchAllTimeData();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchFilteredData = async () => {
-      let fetchedData;
-      if (filter === "day") {
-        fetchedData = await getDayAnalytics(startDate);
-      } else if (filter === "week") {
-        fetchedData = await getWeekAnalytics(startDate);
-      } else if (filter === "custom") {
-        fetchedData = await getCustomRangeAnalytics(startDate, endDate);
-      }
-      if (fetchedData) {
-        setFilteredData(fetchedData);
+      try {
+        let fetchedData;
+        if (filter === "day") {
+          fetchedData = await getDayAnalytics(startDate, controller.signal);
+        } else if (filter === "week") {
+          fetchedData = await getWeekAnalytics(startDate, controller.signal);
+        } else if (filter === "custom") {
+          fetchedData = await getCustomRangeAnalytics(
+            startDate,
+            endDate,
+            controller.signal,
+          );
+        }
+        if (fetchedData) {
+          setFilteredData(fetchedData);
+        }
+      } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+        console.error("Error fetching filtered data:", error);
       }
     };
-
     fetchFilteredData();
+
+    return () => {
+      controller.abort();
+    };
   }, [filter, startDate, endDate]);
 
   const handleOpenViewSession = (sessionId: string) => {

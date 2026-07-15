@@ -10,6 +10,7 @@ import {
 } from "react-icons/ri";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import OrganizerUserView from "../../components/OrganizerUserView";
+import axios from "axios";
 
 export default function OrganizerUsers() {
   const { openOverlay } = useOverlay();
@@ -75,15 +76,23 @@ export default function OrganizerUsers() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchUsers = async () => {
       try {
-        const userData = (await getAllUsers()) as {
+        const userData = (await getAllUsers(controller.signal)) as {
           message: string;
           users: User[];
         };
         setUsers(userData.users);
         setDisplayedUsers(userData.users);
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -97,6 +106,10 @@ export default function OrganizerUsers() {
       }
     };
     fetchUsers();
+
+    return () => {
+      controller.abort();
+    };
   }, [refreshData]);
 
   useEffect(() => {

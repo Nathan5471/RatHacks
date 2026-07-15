@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { verifyEmail } from "../utils/AuthAPIHandler";
 import { useAuth } from "../contexts/AuthContext";
+import axios from "axios";
 
 export default function VerifyEmail() {
   const { user } = useAuth();
@@ -9,16 +10,25 @@ export default function VerifyEmail() {
   const email = searchParams.get("email") || "";
   const token = searchParams.get("token") || "";
   const [status, setStatus] = useState<"verifying" | "success" | "error">(
-    "verifying"
+    "verifying",
   );
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const verify = async () => {
       try {
-        await verifyEmail(email, token);
+        await verifyEmail(email, token, controller.signal);
         setStatus("success");
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Verification error:", error);
         setStatus("error");
         const errorMessage =
@@ -39,6 +49,10 @@ export default function VerifyEmail() {
     if (status === "verifying") {
       verify();
     }
+
+    return () => {
+      controller.abort();
+    };
   }, [email, token, status]);
 
   if (status === "verifying") {

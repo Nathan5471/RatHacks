@@ -8,6 +8,7 @@ import CreateEmail from "../../components/CreateEmail";
 import EditEmail from "../../components/EditEmail";
 import DeleteEmail from "../../components/DeleteEmail";
 import { organizerGetAllEmails } from "../../utils/EmailAPIHandler";
+import axios from "axios";
 
 export default function OrganizerEmails() {
   const { openOverlay } = useOverlay();
@@ -29,11 +30,20 @@ export default function OrganizerEmails() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEmails = async () => {
       try {
-        const fetchedEmails = await organizerGetAllEmails();
+        const fetchedEmails = await organizerGetAllEmails(controller.signal);
         setEmails(fetchedEmails.allEmails as Email[]);
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -47,6 +57,10 @@ export default function OrganizerEmails() {
       }
     };
     fetchEmails();
+
+    return () => {
+      controller.abort();
+    };
   }, [reload]);
 
   const handleOpenCreateEmail = (e: React.MouseEvent<HTMLButtonElement>) => {

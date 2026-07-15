@@ -1,11 +1,14 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { trackUrl } from "./AnalyticsAPIHandler";
+import axios from "axios";
 
 export default function RouteEffect() {
   const location = useLocation();
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const routeTitles: { [key: string]: string } = {
       "/": "Rat Hacks",
       "/login": "Rat Hacks | Login",
@@ -44,9 +47,20 @@ export default function RouteEffect() {
     }
     document.title = title;
 
-    trackUrl(location.pathname).catch((error) => {
+    trackUrl(location.pathname, controller.signal).catch((error) => {
+      if (
+        axios.isCancel(error) ||
+        (error instanceof Error && error.name === "CanceledError")
+      ) {
+        return;
+      }
+
       console.error("Error tracking URL:", error);
     });
+
+    return () => {
+      controller.abort();
+    };
   }, [location]);
 
   return null;

@@ -5,6 +5,7 @@ import { judgeGetAllEvents } from "../../utils/EventAPIHandler";
 import JudgeNavbar from "../../components/JudgeNavbar";
 import { formatDate } from "date-fns";
 import LinkDetectedText from "../../components/LinkDetectedText";
+import axios from "axios";
 
 export default function JudgeEvents() {
   interface Event {
@@ -25,17 +26,30 @@ export default function JudgeEvents() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEvents = async () => {
       try {
-        const data = await judgeGetAllEvents();
+        const data = await judgeGetAllEvents(controller.signal);
         setEvents(data.events);
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching events:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchEvents();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   if (loading) {
@@ -129,7 +143,7 @@ export default function JudgeEvents() {
                   <span className="font-bold">Submission Deadline:</span>{" "}
                   {formatDate(
                     event.submissionDeadline,
-                    "EEEE, MMMM d yyyy, h:mm a"
+                    "EEEE, MMMM d yyyy, h:mm a",
                   )}
                   <p>
                     <span className="font-bold">Participants:</span>{" "}

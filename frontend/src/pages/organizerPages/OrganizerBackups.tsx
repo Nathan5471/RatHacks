@@ -10,6 +10,7 @@ import ConfirmLoadBackup from "../../components/ConfirmLoadBackup";
 import DeleteBackup from "../../components/DeleteBackup";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
+import axios from "axios";
 
 export default function OrganizerBackups() {
   const { openOverlay } = useOverlay();
@@ -20,11 +21,20 @@ export default function OrganizerBackups() {
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchBackups = async () => {
       try {
-        const data = await getAllBackups();
+        const data = await getAllBackups(controller.signal);
         setBackups(data.backups);
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching backups:", error);
         const errorMessage =
           typeof error === "object" &&
@@ -39,6 +49,10 @@ export default function OrganizerBackups() {
       }
     };
     fetchBackups();
+
+    return () => {
+      controller.abort();
+    };
   }, [reload]);
 
   const handleGenerateBackup = async () => {

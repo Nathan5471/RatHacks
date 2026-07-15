@@ -10,6 +10,7 @@ import { formatDate } from "date-fns";
 import { IoMenu, IoTrash } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CancelInvite from "../../components/CancelInvite";
+import axios from "axios";
 
 export default function OrganizerDashboard() {
   const { openOverlay } = useOverlay();
@@ -26,31 +27,44 @@ export default function OrganizerDashboard() {
   const [inviteJudgeEmail, setInviteJudgeEmail] = useState("");
   const [inviteJudgeError, setInviteJudgeError] = useState("");
   const [outgoingJudgeInvites, setOutgoingJudgeInvites] = useState<Invite[]>(
-    []
+    [],
   );
   const [refreshInvites, setRefreshInvites] = useState(false);
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchInvites = async () => {
       try {
-        const invites = (await getInvites()) as {
+        const invites = (await getInvites(controller.signal)) as {
           message: string;
           invites: Invite[];
         };
         const organizerInvites = invites.invites.filter(
-          (invite) => invite.role === "organizer"
+          (invite) => invite.role === "organizer",
         );
         const judgeInvites = invites.invites.filter(
-          (invite) => invite.role === "judge"
+          (invite) => invite.role === "judge",
         );
         setOutgoingOrganizerInvites(organizerInvites);
         setOutgoingJudgeInvites(judgeInvites);
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Failed to fetch invites:", error);
       }
     };
     fetchInvites();
+
+    return () => {
+      controller.abort();
+    };
   }, [refreshInvites]);
 
   const handleInviteOrganizer = async (e: React.FormEvent) => {
@@ -169,7 +183,7 @@ export default function OrganizerDashboard() {
                           Expires:{" "}
                           {formatDate(
                             invite.expires,
-                            "EEEE, MMMM d yyyy h:mm a"
+                            "EEEE, MMMM d yyyy h:mm a",
                           )}
                         </p>
                       </div>
@@ -226,7 +240,7 @@ export default function OrganizerDashboard() {
                           Expires:{" "}
                           {formatDate(
                             invite.expires,
-                            "EEEE, MMMM d yyyy h:mm a"
+                            "EEEE, MMMM d yyyy h:mm a",
                           )}
                         </p>
                       </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getStats } from "../../utils/AuthAPIHandler";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
+import axios from "axios";
 
 export default function OrganizerStats() {
   interface Stats {
@@ -33,12 +34,21 @@ export default function OrganizerStats() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchStats = async () => {
       try {
-        const data = await getStats();
+        const data = await getStats(controller.signal);
         console.log("Fetched stats:", data);
         setStats(data.stats);
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching stats:", error);
         const errorMessage =
           typeof error === "object" &&
@@ -53,6 +63,10 @@ export default function OrganizerStats() {
       }
     };
     fetchStats();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   if (loading) {
@@ -225,7 +239,7 @@ export default function OrganizerStats() {
             <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
               <span className="text-xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
                 {Math.round(
-                  (stats.verifiedEmailUsers / stats.totalUsers) * 100
+                  (stats.verifiedEmailUsers / stats.totalUsers) * 100,
                 )}
                 %
               </span>

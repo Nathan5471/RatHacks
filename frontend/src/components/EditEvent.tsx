@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useOverlay } from "../contexts/OverlayContext";
 import { organizerGetEventById, updateEvent } from "../utils/EventAPIHandler";
+import axios from "axios";
 
 export default function EditEvent({
   eventId,
@@ -27,6 +28,8 @@ export default function EditEvent({
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEventData = async () => {
       setError("");
       try {
@@ -38,7 +41,10 @@ export default function EditEvent({
           endDate: string;
           submissionDeadline: string;
         }
-        const response = await organizerGetEventById(eventId);
+        const response = await organizerGetEventById(
+          eventId,
+          controller.signal,
+        );
         const event = response.event as EventData;
         setName(event.name);
         setDescription(event.description);
@@ -47,6 +53,13 @@ export default function EditEvent({
         setEndDate(formatDateForInput(event.endDate));
         setSubmissionDeadline(formatDateForInput(event.submissionDeadline));
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -60,6 +73,10 @@ export default function EditEvent({
       }
     };
     fetchEventData();
+
+    return () => {
+      controller.abort();
+    };
   }, [eventId]);
 
   const handleUpdateEvent = async (e: React.FormEvent) => {

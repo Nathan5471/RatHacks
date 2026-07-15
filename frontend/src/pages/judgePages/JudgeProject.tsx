@@ -7,6 +7,7 @@ import {
 import { IoMenu } from "react-icons/io5";
 import { toast } from "react-toastify";
 import JudgeNavbar from "../../components/JudgeNavbar";
+import axios from "axios";
 
 export default function JudgeProject() {
   const { projectId } = useParams() as {
@@ -49,24 +50,36 @@ export default function JudgeProject() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const handleFetchProject = async () => {
       if (!projectId) return;
       setError("");
       try {
-        const projectData = await judgeGetProjectById(projectId);
+        const projectData = await judgeGetProjectById(
+          projectId,
+          controller.signal,
+        );
         setProject(projectData.project);
         if (projectData.project.judgeFeedback) {
           setCreativityScore(projectData.project.judgeFeedback.creativityScore);
           setFunctionalityScore(
-            projectData.project.judgeFeedback.functionalityScore
+            projectData.project.judgeFeedback.functionalityScore,
           );
           setTechnicalityScore(
-            projectData.project.judgeFeedback.technicalityScore
+            projectData.project.judgeFeedback.technicalityScore,
           );
           setInterfaceScore(projectData.project.judgeFeedback.interfaceScore);
           setFeedback(projectData.project.judgeFeedback.feedback);
         }
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Failed to get project:", error);
         const errorMessage =
           typeof error === "object" &&
@@ -81,6 +94,10 @@ export default function JudgeProject() {
       }
     };
     handleFetchProject();
+
+    return () => {
+      controller.abort();
+    };
   }, [projectId]);
 
   const handleJudgeProject = async (e: React.FormEvent) => {
@@ -249,7 +266,7 @@ export default function JudgeProject() {
                   className="w-full h-auto rounded-lg"
                 />
               ) : (
-                <div className="w-full aspect-16/9 bg-surface-a4 flex text-center justify-center items-center text-2xl font-bold rounded-lg">
+                <div className="w-full aspect-video bg-surface-a4 flex text-center justify-center items-center text-2xl font-bold rounded-lg">
                   No Image Provided
                 </div>
               )}
@@ -380,16 +397,16 @@ export default function JudgeProject() {
                       className="w-full ml-2 p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 font-bold text-lg"
                       onClick={() => {
                         setCreativityScore(
-                          project.judgeFeedback!.creativityScore
+                          project.judgeFeedback!.creativityScore,
                         );
                         setFunctionalityScore(
-                          project.judgeFeedback!.functionalityScore
+                          project.judgeFeedback!.functionalityScore,
                         );
                         setTechnicalityScore(
-                          project.judgeFeedback!.technicalityScore
+                          project.judgeFeedback!.technicalityScore,
                         );
                         setInterfaceScore(
-                          project.judgeFeedback!.interfaceScore
+                          project.judgeFeedback!.interfaceScore,
                         );
                         setFeedback(project.judgeFeedback!.feedback);
                       }}

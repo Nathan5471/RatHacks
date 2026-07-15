@@ -5,6 +5,7 @@ import { useOverlay } from "../contexts/OverlayContext";
 import { createEmail } from "../utils/EmailAPIHandler";
 import { organizerGetAllEvents } from "../utils/EventAPIHandler";
 import { organizerGetAllWorkshops } from "../utils/WorkshopAPIHandler";
+import axios from "axios";
 
 export default function CreateEmail() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function CreateEmail() {
   const [name, setName] = useState("");
   const [messageBody, setMessageBody] = useState("");
   const [viewSelection, setViewSelection] = useState<"edit" | "preview">(
-    "edit"
+    "edit",
   );
   const [filterBy, setFilterBy] = useState<string | null>(null);
   const [subFilterBy, setSubFilterBy] = useState<string | null>(null);
@@ -85,16 +86,27 @@ export default function CreateEmail() {
   }
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchWorkshops = async () => {
       try {
-        const fetchedWorkshops = await organizerGetAllWorkshops();
+        const fetchedWorkshops = await organizerGetAllWorkshops(
+          controller.signal,
+        );
         setWorkshops(
           fetchedWorkshops.workshops.map((workshop: Workshop) => ({
             name: workshop.name,
             id: workshop.id,
-          }))
+          })),
         ); // array of strings
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -106,19 +118,32 @@ export default function CreateEmail() {
       }
     };
     fetchWorkshops();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEvents = async () => {
       try {
-        const fetchedEvents = await organizerGetAllEvents();
+        const fetchedEvents = await organizerGetAllEvents(controller.signal);
         setEvents(
           fetchedEvents.events.map((event: Event) => ({
             name: event.name,
             id: event.id,
-          }))
+          })),
         );
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -130,6 +155,10 @@ export default function CreateEmail() {
       }
     };
     fetchEvents();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   const filterMap = new Map();
@@ -159,12 +188,11 @@ export default function CreateEmail() {
     { name: "Salem City", id: "Salem City" },
     { name: "Other", id: "Other" },
   ]);
-    subFilterMap.set("accountType", [
+  subFilterMap.set("accountType", [
     { name: "Student", id: "student" },
     { name: "Organizer", id: "organizer" },
     { name: "Judge", id: "judge" },
   ]);
-
 
   const handleCreateEmail = async (e: React.FormEvent) => {
     e.preventDefault();

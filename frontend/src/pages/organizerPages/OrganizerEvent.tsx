@@ -10,6 +10,7 @@ import DeleteEvent from "../../components/DeleteEvent";
 import OrganizerUserView from "../../components/OrganizerUserView";
 import ReleaseJudging from "../../components/ReleaseJudging";
 import LinkDetectedText from "../../components/LinkDetectedText";
+import axios from "axios";
 
 export default function OrganizerEvent() {
   const { openOverlay } = useOverlay();
@@ -100,19 +101,35 @@ export default function OrganizerEvent() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEvent = async () => {
       try {
         if (eventId) {
-          const response = await organizerGetEventById(eventId);
+          const response = await organizerGetEventById(
+            eventId,
+            controller.signal,
+          );
           setEvent(response.event);
         }
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching event:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchEvent();
+
+    return () => {
+      controller.abort();
+    };
   }, [eventId, reload]);
 
   useEffect(() => {
@@ -172,7 +189,12 @@ export default function OrganizerEvent() {
   ) => {
     e.preventDefault();
     if (eventId && event) {
-      openOverlay(<OrganizerUserView user={event.participants[index]} />);
+      openOverlay(
+        <OrganizerUserView
+          user={event.participants[index]}
+          setRefreshData={setReload}
+        />,
+      );
     }
   };
 

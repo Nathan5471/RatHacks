@@ -3,34 +3,36 @@ import { useParams } from "react-router-dom";
 import { getProjectById } from "../utils/ProjectAPIHandler";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
+import axios from "axios";
+
+interface JudgeFeedback {
+  id: string;
+  judge: string; // FirstName LastName
+  creativityScore: number;
+  functionalityScore: number;
+  technicalityScore: number;
+  interfaceScore: number;
+  totalScore: number;
+  feedback: string;
+}
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+  codeURL: string | null;
+  screenshotURL: string | null;
+  videoURL: string | null;
+  demoURL: string | null;
+  members: string[];
+  event: {
+    id: string;
+    name: string;
+  };
+  judgeFeedback: JudgeFeedback[];
+}
 
 export default function OrganizerProject() {
   const { projectId } = useParams();
-  interface JudgeFeedback {
-    id: string;
-    judge: string; // FirstName LastName
-    creativityScore: number;
-    functionalityScore: number;
-    technicalityScore: number;
-    interfaceScore: number;
-    totalScore: number;
-    feedback: string;
-  }
-  interface Project {
-    id: string;
-    name: string;
-    description: string;
-    codeURL: string | null;
-    screenshotURL: string | null;
-    videoURL: string | null;
-    demoURL: string | null;
-    members: string[];
-    event: {
-      id: string;
-      name: string;
-    };
-    judgeFeedback: JudgeFeedback[];
-  }
   const [project, setProject] = useState<Project | null>(null);
   const [selectedJudgeFeedback, setSelectedJudgeFeedback] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -38,12 +40,24 @@ export default function OrganizerProject() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchProject = async () => {
       if (projectId) {
         try {
-          const projectData = await getProjectById(projectId);
+          const projectData = await getProjectById(
+            projectId,
+            controller.signal,
+          );
           setProject(projectData.project);
         } catch (error: unknown) {
+          if (
+            axios.isCancel(error) ||
+            (error instanceof Error && error.name === "CanceledError")
+          ) {
+            return;
+          }
+
           const errorMessage =
             typeof error === "object" &&
             error !== null &&
@@ -58,6 +72,10 @@ export default function OrganizerProject() {
       }
     };
     fetchProject();
+
+    return () => {
+      controller.abort();
+    };
   }, [projectId]);
 
   if (loading) {
@@ -192,7 +210,7 @@ export default function OrganizerProject() {
                   className="w-full h-auto rounded-lg"
                 />
               ) : (
-                <div className="w-full aspect-16/9 bg-surface-a4 flex text-center justify-center items-center text-2xl font-bold rounded-lg">
+                <div className="w-full aspect-video bg-surface-a4 flex text-center justify-center items-center text-2xl font-bold rounded-lg">
                   No Image Provided
                 </div>
               )}

@@ -7,6 +7,7 @@ import {
 } from "../utils/AuthAPIHandler";
 import { Link } from "react-router-dom";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import axios from "axios";
 
 export default function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -24,11 +25,20 @@ export default function ResetPassword() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const verifyToken = async () => {
       try {
-        await checkResetPassword(queryEmail, queryToken);
+        await checkResetPassword(queryEmail, queryToken, controller.signal);
         setValidToken(true);
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Invalid reset token:", error);
         setValidToken(false);
       } finally {
@@ -38,6 +48,10 @@ export default function ResetPassword() {
     if (queryEmail && queryToken) {
       verifyToken();
     }
+
+    return () => {
+      controller.abort();
+    };
   }, [queryEmail, queryToken]);
 
   const handleSendResetLink = async (e: React.FormEvent) => {

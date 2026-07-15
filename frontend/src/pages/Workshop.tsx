@@ -10,20 +10,22 @@ import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
 import LinkDetectedText from "../components/LinkDetectedText";
+import axios from "axios";
+
+interface Workshop {
+  id: string;
+  name: string;
+  description: string;
+  googleMeetURL: string;
+  startDate: string;
+  endDate: string;
+  participantCount: number;
+  organizer: string;
+}
 
 export default function Workshop() {
   const { workshopId } = useParams<{ workshopId: string }>();
   const { user, getUser } = useAuth();
-  interface Workshop {
-    id: string;
-    name: string;
-    description: string;
-    googleMeetURL: string;
-    startDate: string;
-    endDate: string;
-    participantCount: number;
-    organizer: string;
-  }
   const [workshop, setWorkshop] = useState<Workshop | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRemaining, setTimeRemaining] = useState<{
@@ -35,19 +37,32 @@ export default function Workshop() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchWorkshop = async () => {
       try {
         if (workshopId) {
-          const response = await getWorkshopById(workshopId);
+          const response = await getWorkshopById(workshopId, controller.signal);
           setWorkshop(response.workshop);
         }
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching workshop:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchWorkshop();
+
+    return () => {
+      controller.abort();
+    };
   }, [workshopId]);
 
   useEffect(() => {

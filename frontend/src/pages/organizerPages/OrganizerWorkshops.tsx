@@ -10,6 +10,7 @@ import CreateWorkshop from "../../components/CreateWorkshop";
 import EditWorkshop from "../../components/EditWorkshop";
 import DeleteWorkshop from "../../components/DeleteWorkshop";
 import LinkDetectedText from "../../components/LinkDetectedText";
+import axios from "axios";
 
 export default function OrganizerWorkshops() {
   const { openOverlay } = useOverlay();
@@ -59,12 +60,23 @@ export default function OrganizerWorkshops() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchWorkshops = async () => {
       try {
-        const fetchedWorkshops = await organizerGetAllWorkshops();
+        const fetchedWorkshops = await organizerGetAllWorkshops(
+          controller.signal,
+        );
         setWorkshops(fetchedWorkshops.workshops as Workshop[]);
         setDisplayedWorkshops(fetchedWorkshops.workshops as Workshop[]);
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -78,6 +90,10 @@ export default function OrganizerWorkshops() {
       }
     };
     fetchWorkshops();
+
+    return () => {
+      controller.abort();
+    };
   }, [reload]);
 
   useEffect(() => {
@@ -97,7 +113,7 @@ export default function OrganizerWorkshops() {
 
   const handleOpenEditWorkshop = (
     e: React.MouseEvent<HTMLButtonElement>,
-    workshopId: string
+    workshopId: string,
   ) => {
     e.preventDefault();
     openOverlay(<EditWorkshop workshopId={workshopId} setReload={setReload} />);
@@ -106,7 +122,7 @@ export default function OrganizerWorkshops() {
   const handleOpenDeleteWorkshop = (
     e: React.MouseEvent<HTMLButtonElement>,
     workshopId: string,
-    workshopName: string
+    workshopName: string,
   ) => {
     e.preventDefault();
     openOverlay(
@@ -115,7 +131,7 @@ export default function OrganizerWorkshops() {
         workshopName={workshopName}
         currentPage="workshops"
         setReload={setReload}
-      />
+      />,
     );
   };
 

@@ -13,6 +13,7 @@ import EditWorkshop from "../../components/EditWorkshop";
 import DeleteWorkshop from "../../components/DeleteWorkshop";
 import OrganizerUserView from "../../components/OrganizerUserView";
 import LinkDetectedText from "../../components/LinkDetectedText";
+import axios from "axios";
 
 export default function OrganizerWorkshop() {
   const { openOverlay } = useOverlay();
@@ -73,19 +74,35 @@ export default function OrganizerWorkshop() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEvent = async () => {
       try {
         if (workshopId) {
-          const response = await organizerGetWorkshopById(workshopId);
+          const response = await organizerGetWorkshopById(
+            workshopId,
+            controller.signal,
+          );
           setWorkshop(response.workshop as Workshop);
         }
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching workshop:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchEvent();
+
+    return () => {
+      controller.abort();
+    };
   }, [workshopId, reload]);
 
   useEffect(() => {
@@ -117,7 +134,7 @@ export default function OrganizerWorkshop() {
     e.preventDefault();
     if (workshopId) {
       openOverlay(
-        <EditWorkshop workshopId={workshopId} setReload={setReload} />
+        <EditWorkshop workshopId={workshopId} setReload={setReload} />,
       );
     }
   };
@@ -131,13 +148,13 @@ export default function OrganizerWorkshop() {
           workshopName={workshop.name}
           currentPage="workshop"
           setReload={undefined}
-        />
+        />,
       );
     }
   };
 
   const handleAddGoogleMeetURL = async (
-    e: React.FormEvent<HTMLFormElement>
+    e: React.FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
     if (!workshopId) return;
@@ -163,7 +180,7 @@ export default function OrganizerWorkshop() {
 
   const handleOpenUserView = (
     e: React.MouseEvent<HTMLButtonElement>,
-    index: number
+    index: number,
   ) => {
     e.preventDefault();
     if (workshopId && workshop) {

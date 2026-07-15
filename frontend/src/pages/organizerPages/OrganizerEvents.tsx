@@ -9,6 +9,7 @@ import CreateEvent from "../../components/CreateEvent";
 import EditEvent from "../../components/EditEvent";
 import DeleteEvent from "../../components/DeleteEvent";
 import LinkDetectedText from "../../components/LinkDetectedText";
+import axios from "axios";
 
 export default function OrganizerEvents() {
   const { openOverlay } = useOverlay();
@@ -66,11 +67,20 @@ export default function OrganizerEvents() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEvents = async () => {
       try {
-        const fetchedEvents = await organizerGetAllEvents();
+        const fetchedEvents = await organizerGetAllEvents(controller.signal);
         setEvents(fetchedEvents.events as Event[]);
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -84,6 +94,10 @@ export default function OrganizerEvents() {
       }
     };
     fetchEvents();
+
+    return () => {
+      controller.abort();
+    };
   }, [reload]);
 
   const handleOpenCreateEvent = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -93,7 +107,7 @@ export default function OrganizerEvents() {
 
   const handleOpenEditEvent = (
     e: React.MouseEvent<HTMLButtonElement>,
-    eventId: string
+    eventId: string,
   ) => {
     e.preventDefault();
     openOverlay(<EditEvent eventId={eventId} setReload={setReload} />);
@@ -102,7 +116,7 @@ export default function OrganizerEvents() {
   const handleOpenDeleteEvent = (
     e: React.MouseEvent<HTMLButtonElement>,
     eventId: string,
-    eventName: string
+    eventName: string,
   ) => {
     e.preventDefault();
     openOverlay(
@@ -111,7 +125,7 @@ export default function OrganizerEvents() {
         eventName={eventName}
         currentPage="events"
         setReload={setReload}
-      />
+      />,
     );
   };
 
@@ -309,7 +323,7 @@ export default function OrganizerEvents() {
                   <span className="font-bold">Submission Deadline:</span>{" "}
                   {formatDate(
                     event.submissionDeadline,
-                    "EEEE, MMMM d yyyy h:mm a"
+                    "EEEE, MMMM d yyyy h:mm a",
                   )}
                   <p>
                     <span className="font-bold">Participants:</span>{" "}

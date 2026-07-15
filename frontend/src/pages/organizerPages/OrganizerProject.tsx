@@ -6,6 +6,7 @@ import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import OrganizerUserView from "../../components/OrganizerUserView";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
+import axios from "axios";
 
 export default function OrganizerProject() {
   const { projectId } = useParams();
@@ -71,12 +72,24 @@ export default function OrganizerProject() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchProject = async () => {
       if (projectId) {
         try {
-          const projectData = await organizerGetProjectById(projectId);
+          const projectData = await organizerGetProjectById(
+            projectId,
+            controller.signal,
+          );
           setProject(projectData.project);
         } catch (error: unknown) {
+          if (
+            axios.isCancel(error) ||
+            (error instanceof Error && error.name === "CanceledError")
+          ) {
+            return;
+          }
+
           const errorMessage =
             typeof error === "object" &&
             error !== null &&
@@ -91,6 +104,10 @@ export default function OrganizerProject() {
       }
     };
     fetchProject();
+
+    return () => {
+      controller.abort();
+    };
   }, [projectId]);
 
   const handleOpenOrganizerUserView = (userId: string) => {
@@ -99,7 +116,7 @@ export default function OrganizerProject() {
       openOverlay(<OrganizerUserView user={user} />);
     } else {
       console.warn(
-        "User not found in project team for opening organizer user view."
+        "User not found in project team for opening organizer user view.",
       );
     }
   };
@@ -236,7 +253,7 @@ export default function OrganizerProject() {
                   className="w-full h-auto rounded-lg"
                 />
               ) : (
-                <div className="w-full aspect-16/9 bg-surface-a4 flex text-center justify-center items-center text-2xl font-bold rounded-lg">
+                <div className="w-full aspect-video bg-surface-a4 flex text-center justify-center items-center text-2xl font-bold rounded-lg">
                   No Image Provided
                 </div>
               )}

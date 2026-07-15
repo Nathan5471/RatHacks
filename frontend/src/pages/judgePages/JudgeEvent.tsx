@@ -5,6 +5,7 @@ import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import JudgeNavbar from "../../components/JudgeNavbar";
 import LinkDetectedText from "../../components/LinkDetectedText";
+import axios from "axios";
 
 export default function JudgeEvent() {
   const { eventId } = useParams();
@@ -42,22 +43,35 @@ export default function JudgeEvent() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEvent = async () => {
       try {
         if (eventId) {
-          const data = await judgeGetEventById(eventId);
+          const data = await judgeGetEventById(eventId, controller.signal);
           setEvent(data.event);
           setFilteredProjects(
             data.event.projects.filter((project: Project) => !project.judged),
           );
         }
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching event:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchEvent();
+
+    return () => {
+      controller.abort();
+    };
   }, [eventId]);
 
   useEffect(() => {

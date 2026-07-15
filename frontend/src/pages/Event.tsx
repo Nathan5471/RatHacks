@@ -12,41 +12,43 @@ import { formatDate } from "date-fns";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
 import LinkDetectedText from "../components/LinkDetectedText";
+import axios from "axios";
+
+interface Team {
+  id: string;
+  joinCode: string;
+  members: string[];
+  submittedProject: boolean;
+  project: string | null;
+}
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+  codeURL: string;
+  screenshotURL: string | null;
+  videoURL: string | null;
+  demoURL: string | null;
+  ranking: number | null;
+}
+interface Event {
+  id: string;
+  type: "hackathon" | "ctf";
+  name: string;
+  description: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  submissionDeadline: string;
+  status: "upcoming" | "ongoing" | "completed";
+  participantCount: number;
+  team: Team | null;
+  projects: Project[];
+}
 
 export default function Event() {
   const { eventId } = useParams<{ eventId: string }>();
   const { user, getUser } = useAuth();
-  interface Team {
-    id: string;
-    joinCode: string;
-    members: string[];
-    submittedProject: boolean;
-    project: string | null;
-  }
-  interface Project {
-    id: string;
-    name: string;
-    description: string;
-    codeURL: string;
-    screenshotURL: string | null;
-    videoURL: string | null;
-    demoURL: string | null;
-    ranking: number | null;
-  }
-  interface Event {
-    id: string;
-    type: "hackathon" | "ctf";
-    name: string;
-    description: string;
-    location: string;
-    startDate: string;
-    endDate: string;
-    submissionDeadline: string;
-    status: "upcoming" | "ongoing" | "completed";
-    participantCount: number;
-    team: Team | null;
-    projects: Project[];
-  }
   const [event, setEvent] = useState<Event | null>(null);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -61,19 +63,32 @@ export default function Event() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEvent = async () => {
       try {
         if (eventId) {
-          const response = await getEventById(eventId);
+          const response = await getEventById(eventId, controller.signal);
           setEvent(response.event);
         }
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching event:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchEvent();
+
+    return () => {
+      controller.abort();
+    };
   }, [eventId, refresh]);
 
   useEffect(() => {

@@ -18,6 +18,7 @@ import SendEmailCustomRecipients from "../../components/SendEmailCustomRecipient
 import OrganizerUserView from "../../components/OrganizerUserView";
 import { getEventById } from "../../utils/EventAPIHandler";
 import { getWorkshopById } from "../../utils/WorkshopAPIHandler";
+import axios from "axios";
 
 export default function OrganizerEvent() {
   const { openOverlay } = useOverlay();
@@ -69,29 +70,47 @@ export default function OrganizerEvent() {
   const [subFilterName, setSubFilterName] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEmail = async () => {
       try {
         if (emailId) {
-          const response = await organizerGetEmailById(emailId);
+          const response = await organizerGetEmailById(
+            emailId,
+            controller.signal,
+          );
           setEmail(response.email);
         }
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching event:", error);
       } finally {
         setLoading(false);
       }
     };
     fetchEmail();
+
+    return () => {
+      controller.abort();
+    };
   }, [emailId, reload]);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchRecipients = async () => {
       if (!email) {
         return;
       }
       try {
         if (email.sendAll) {
-          const response = await getAllRecipients();
+          const response = await getAllRecipients(controller.signal);
           setRecipients(response.allRecipients);
           return;
         }
@@ -102,6 +121,7 @@ export default function OrganizerEvent() {
                 const response = await getRecipientsByFilter(
                   email.filterBy,
                   email.subFilterBy,
+                  controller.signal,
                 );
                 setRecipients(response.recipientData);
                 setSubFilterName(email.subFilterBy);
@@ -116,6 +136,7 @@ export default function OrganizerEvent() {
                 const response = await getRecipientsByFilter(
                   email.filterBy,
                   email.subFilterBy,
+                  controller.signal,
                 );
                 setRecipients(response.recipientData);
                 setSubFilterName(email.subFilterBy);
@@ -130,13 +151,24 @@ export default function OrganizerEvent() {
                 const response = await getRecipientsByFilter(
                   email.filterBy,
                   email.subFilterBy,
+                  controller.signal,
                 );
                 setRecipients(response.recipientData);
 
                 try {
-                  const fetchedEvent = await getEventById(email.subFilterBy);
+                  const fetchedEvent = await getEventById(
+                    email.subFilterBy,
+                    controller.signal,
+                  );
                   setSubFilterName(fetchedEvent.event.name);
                 } catch (error: unknown) {
+                  if (
+                    axios.isCancel(error) ||
+                    (error instanceof Error && error.name === "CanceledError")
+                  ) {
+                    return;
+                  }
+
                   const errorMessage =
                     typeof error === "object" &&
                     error !== null &&
@@ -157,15 +189,24 @@ export default function OrganizerEvent() {
                 const response = await getRecipientsByFilter(
                   email.filterBy,
                   email.subFilterBy,
+                  controller.signal,
                 );
                 setRecipients(response.recipientData);
 
                 try {
                   const fetchedWorkshop = await getWorkshopById(
                     email.subFilterBy,
+                    controller.signal,
                   );
                   setSubFilterName(fetchedWorkshop.name);
                 } catch (error: unknown) {
+                  if (
+                    axios.isCancel(error) ||
+                    (error instanceof Error && error.name === "CanceledError")
+                  ) {
+                    return;
+                  }
+
                   const errorMessage =
                     typeof error === "object" &&
                     error !== null &&
@@ -183,15 +224,21 @@ export default function OrganizerEvent() {
           case "accountType":
             {
               if (email.subFilterBy) {
-                const response = await getRecipientsByFilter(
-                  email.filterBy,
-                  email.subFilterBy,
-                );
-                setRecipients(response.recipientData);
-
                 try {
+                  const response = await getRecipientsByFilter(
+                    email.filterBy,
+                    email.subFilterBy,
+                    controller.signal,
+                  );
+                  setRecipients(response.recipientData);
                   setSubFilterName(email.subFilterBy);
                 } catch (error: unknown) {
+                  if (
+                    axios.isCancel(error) ||
+                    (error instanceof Error && error.name === "CanceledError")
+                  ) {
+                    return;
+                  }
                   const errorMessage =
                     typeof error === "object" &&
                     error !== null &&
@@ -208,10 +255,21 @@ export default function OrganizerEvent() {
             break;
         }
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         console.error("Error fetching event:", error);
       }
     };
     fetchRecipients();
+
+    return () => {
+      controller.abort();
+    };
   }, [reload, email]);
 
   const handleOpenEditEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -241,7 +299,12 @@ export default function OrganizerEvent() {
   ) => {
     e.preventDefault();
     if (emailId && email) {
-      openOverlay(<OrganizerUserView user={recipients[index]} />);
+      openOverlay(
+        <OrganizerUserView
+          user={recipients[index]}
+          setRefreshData={setReload}
+        />,
+      );
     }
   };
 

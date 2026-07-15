@@ -12,42 +12,43 @@ import {
 } from "../utils/ProjectAPIHandler";
 import { IoMenu } from "react-icons/io5";
 import AppNavbar from "../components/AppNavbar";
+import axios from "axios";
+
+interface Team {
+  id: string;
+  joinCode: string;
+  memebers: string[];
+  submittedProject: boolean;
+  project?: string;
+}
+interface Event {
+  id: string;
+  type: "hackathon" | "ctf";
+  name: string;
+  description: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  submissionDeadline: string;
+  status: "upcoming" | "ongoing" | "completed";
+  participantCount: number;
+  team: Team | null;
+}
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+  codeURL: string | null;
+  screenshotURL: string | null;
+  videoURL: string | null;
+  demoURL: string | null;
+  submittedAt: string | null;
+}
 
 export default function EventSubmit() {
   const { eventId } = useParams<{ eventId: string }>();
   const { openOverlay } = useOverlay();
-
-  interface Team {
-    id: string;
-    joinCode: string;
-    memebers: string[];
-    submittedProject: boolean;
-    project?: string;
-  }
-  interface Event {
-    id: string;
-    type: "hackathon" | "ctf";
-    name: string;
-    description: string;
-    location: string;
-    startDate: string;
-    endDate: string;
-    submissionDeadline: string;
-    status: "upcoming" | "ongoing" | "completed";
-    participantCount: number;
-    team: Team | null;
-  }
   const [event, setEvent] = useState<Event | null>(null);
-  interface Project {
-    id: string;
-    name: string;
-    description: string;
-    codeURL: string | null;
-    screenshotURL: string | null;
-    videoURL: string | null;
-    demoURL: string | null;
-    submittedAt: string | null;
-  }
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -60,6 +61,8 @@ export default function EventSubmit() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEventAndProject = async () => {
       if (!eventId) {
         setLoading(false);
@@ -67,12 +70,18 @@ export default function EventSubmit() {
       }
       let eventData;
       try {
-        eventData = (await getEventById(eventId)) as {
+        eventData = (await getEventById(eventId, controller.signal)) as {
           message: string;
           event: Event;
         };
         setEvent(eventData.event);
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
         console.error("Error fetching event:", error);
         setLoading(false);
         return;
@@ -89,7 +98,8 @@ export default function EventSubmit() {
       }
       try {
         const projectData = (await getProjectById(
-          eventData.event.team.project
+          eventData.event.team.project,
+          controller.signal,
         )) as { message: string; project: Project };
         if (!projectData) {
           setLoading(false);
@@ -99,25 +109,46 @@ export default function EventSubmit() {
         setName(projectData.project.name);
         setDescription(projectData.project.description);
         setCodeURL(
-          projectData.project.codeURL ? projectData.project.codeURL : ""
+          projectData.project.codeURL ? projectData.project.codeURL : "",
         );
         setDemoURL(
-          projectData.project.demoURL ? projectData.project.demoURL : ""
+          projectData.project.demoURL ? projectData.project.demoURL : "",
         );
-        setScreenshotURL(projectData.project.screenshotURL ? projectData.project.screenshotURL : "");
-        setVideoURL(projectData.project.videoURL ? projectData.project.videoURL : "");
+        setScreenshotURL(
+          projectData.project.screenshotURL
+            ? projectData.project.screenshotURL
+            : "",
+        );
+        setVideoURL(
+          projectData.project.videoURL ? projectData.project.videoURL : "",
+        );
         setLoading(false);
       } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
         console.error("Error fetching project:", error);
         setLoading(false);
         return;
       }
     };
     fetchEventAndProject();
+
+    return () => {
+      controller.abort();
+    };
   }, [eventId]);
 
   const handleUpload = async (fileType: "screenshot" | "video") => {
-    openOverlay(<UploadFile fileType={fileType} setFileURL={fileType === "screenshot" ? setScreenshotURL : setVideoURL} />);
+    openOverlay(
+      <UploadFile
+        fileType={fileType}
+        setFileURL={fileType === "screenshot" ? setScreenshotURL : setVideoURL}
+      />,
+    );
   };
 
   const handleCreateProject = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -181,7 +212,7 @@ export default function EventSubmit() {
   };
 
   const handleSubmitProject = async (
-    e: React.MouseEvent<HTMLButtonElement>
+    e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     e.preventDefault();
     setError("");

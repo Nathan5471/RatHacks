@@ -4,6 +4,7 @@ import { useOverlay } from "../contexts/OverlayContext";
 import { organizerGetEmailById, updateEmail } from "../utils/EmailAPIHandler";
 import { organizerGetAllEvents } from "../utils/EventAPIHandler";
 import { organizerGetAllWorkshops } from "../utils/WorkshopAPIHandler";
+import axios from "axios";
 
 export default function EditEmail({
   emailId,
@@ -90,9 +91,13 @@ export default function EditEmail({
   }
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchWorkshops = async () => {
       try {
-        const fetchedWorkshops = await organizerGetAllWorkshops();
+        const fetchedWorkshops = await organizerGetAllWorkshops(
+          controller.signal,
+        );
         setWorkshops(
           fetchedWorkshops.workshops.map((workshop: Workshop) => ({
             name: workshop.name,
@@ -100,6 +105,13 @@ export default function EditEmail({
           })),
         ); // array of strings
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -111,12 +123,18 @@ export default function EditEmail({
       }
     };
     fetchWorkshops();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEvents = async () => {
       try {
-        const fetchedEvents = await organizerGetAllEvents();
+        const fetchedEvents = await organizerGetAllEvents(controller.signal);
         setEvents(
           fetchedEvents.events.map((event: Event) => ({
             name: event.name,
@@ -124,6 +142,13 @@ export default function EditEmail({
           })),
         );
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -135,6 +160,10 @@ export default function EditEmail({
       }
     };
     fetchEvents();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   const filterMap = new Map();
@@ -170,6 +199,8 @@ export default function EditEmail({
   ]);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchEmailData = async () => {
       setError("");
       try {
@@ -185,7 +216,10 @@ export default function EditEmail({
           sentTimes: string[];
           createdAt: string;
         }
-        const response = await organizerGetEmailById(emailId);
+        const response = await organizerGetEmailById(
+          emailId,
+          controller.signal,
+        );
         const email = response.email as EmailData;
         setName(email.name);
         setMessageSubject(email.messageSubject);
@@ -195,6 +229,13 @@ export default function EditEmail({
         setSendOnJoin(email.sendOnJoin);
         setSendAll(email.sendAll);
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -208,6 +249,10 @@ export default function EditEmail({
       }
     };
     fetchEmailData();
+
+    return () => {
+      controller.abort();
+    };
   }, [emailId]);
 
   useEffect(() => {

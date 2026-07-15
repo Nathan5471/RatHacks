@@ -4,6 +4,7 @@ import {
   organizerGetWorkshopById,
   updateWorkshop,
 } from "../utils/WorkshopAPIHandler";
+import axios from "axios";
 
 export default function EditWorkshop({
   workshopId,
@@ -28,6 +29,8 @@ export default function EditWorkshop({
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchWorkshopData = async () => {
       setError("");
       try {
@@ -37,13 +40,23 @@ export default function EditWorkshop({
           startDate: string;
           endDate: string;
         }
-        const response = await organizerGetWorkshopById(workshopId);
+        const response = await organizerGetWorkshopById(
+          workshopId,
+          controller.signal,
+        );
         const workshop = response.workshop as WorkshopData;
         setName(workshop.name);
         setDescription(workshop.description);
         setStartDate(formatDateForInput(workshop.startDate));
         setEndDate(formatDateForInput(workshop.endDate));
       } catch (error: unknown) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
         const errorMessage =
           typeof error === "object" &&
           error !== null &&
@@ -57,21 +70,38 @@ export default function EditWorkshop({
       }
     };
     fetchWorkshopData();
+
+    return () => {
+      controller.abort();
+    };
   }, [workshopId]);
 
   const handleUpdateWorkshop = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    const controller = new AbortController();
+
     try {
-      await updateWorkshop(workshopId, {
-        name,
-        description,
-        startDate,
-        endDate,
-      });
+      await updateWorkshop(
+        workshopId,
+        {
+          name,
+          description,
+          startDate,
+          endDate,
+        },
+        controller.signal,
+      );
       setReload((prev) => !prev);
       closeOverlay();
     } catch (error: unknown) {
+      if (
+        axios.isCancel(error) ||
+        (error instanceof Error && error.name === "CanceledError")
+      ) {
+        return;
+      }
+
       const errorMessage =
         typeof error === "object" &&
         error !== null &&
@@ -81,6 +111,10 @@ export default function EditWorkshop({
           : "An unknown error occured";
       setError(errorMessage);
     }
+
+    return () => {
+      controller.abort();
+    };
   };
 
   if (loading) {
