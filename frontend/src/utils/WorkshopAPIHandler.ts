@@ -10,40 +10,51 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     return Promise.reject(
-      error.response ? error.response.data : { message: "Network Error" }
+      error.response ? error.response.data : { message: "Network Error" },
     );
-  }
+  },
 );
 
-export const createWorkshop = async (data: {
-  name: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-}) => {
-  const response = await api.post("/create", data);
+export const createWorkshop = async (
+  data: {
+    name: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+  },
+  signal?: AbortSignal,
+) => {
+  const response = await api.post("/create", data, { signal });
   return response.data;
 };
 
-export const joinWorkshop = async (id: string) => {
-  const response = await api.post(`/join/${id}`);
+export const joinWorkshop = async (id: string, signal?: AbortSignal) => {
+  const response = await api.post(`/join/${id}`, {}, { signal });
   return response.data;
 };
 
-export const leaveWorkshop = async (id: string) => {
-  const response = await api.post(`/leave/${id}`);
+export const leaveWorkshop = async (id: string, signal?: AbortSignal) => {
+  const response = await api.post(`/leave/${id}`, {}, { signal });
   return response.data;
 };
 
-export const addGoogleMeetURL = async (id: string, googleMeetURL: string) => {
-  const response = await api.post(`/add-google-meet-url/${id}`, {
-    googleMeetURL,
-  });
+export const addGoogleMeetURL = async (
+  id: string,
+  googleMeetURL: string,
+  signal?: AbortSignal,
+) => {
+  const response = await api.post(
+    `/add-google-meet-url/${id}`,
+    {
+      googleMeetURL,
+    },
+    { signal },
+  );
   return response.data;
 };
 
-export const endWorkshop = async (id: string) => {
-  const response = await api.post(`/end/${id}`);
+export const endWorkshop = async (id: string, signal?: AbortSignal) => {
+  const response = await api.post(`/end/${id}`, {}, { signal });
   return response.data;
 };
 
@@ -54,33 +65,37 @@ export const updateWorkshop = async (
     description: string;
     startDate: string;
     endDate: string;
-  }
+  },
+  signal?: AbortSignal,
 ) => {
-  const response = await api.put(`/update/${id}`, data);
+  const response = await api.put(`/update/${id}`, data, { signal });
   return response.data;
 };
 
-export const getAllWorkshops = async () => {
-  const response = await api.get("/all");
+export const getAllWorkshops = async (signal?: AbortSignal) => {
+  const response = await api.get("/all", { signal });
   return response.data;
 };
 
-export const organizerGetAllWorkshops = async () => {
-  const response = await api.get("/organizer-all");
+export const organizerGetAllWorkshops = async (signal?: AbortSignal) => {
+  const response = await api.get("/organizer-all", { signal });
   return response.data;
 };
 
-export const getWorkshopById = async (id: string) => {
-  const response = await api.get(`/get/${id}`);
+export const getWorkshopById = async (id: string, signal?: AbortSignal) => {
+  const response = await api.get(`/get/${id}`, { signal });
   return response.data;
 };
 
-export const organizerGetWorkshopById = async (id: string) => {
-  const response = await api.get(`/organizer/${id}`);
+export const organizerGetWorkshopById = async (
+  id: string,
+  signal?: AbortSignal,
+) => {
+  const response = await api.get(`/organizer/${id}`, { signal });
   return response.data;
 };
 
-export const deleteWorkshop = async (id: string) => {
-  const response = await api.delete(`/delete/${id}`);
+export const deleteWorkshop = async (id: string, signal?: AbortSignal) => {
+  const response = await api.delete(`/delete/${id}`, { signal });
   return response.data;
 };

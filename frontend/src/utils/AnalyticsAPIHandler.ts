@@ -15,12 +15,12 @@ api.interceptors.response.use(
   },
 );
 
-export const trackUrl = async (url: string) => {
-  const response = await api.post("/trackUrl", { url });
+export const trackUrl = async (url: string, signal?: AbortSignal) => {
+  const response = await api.post("/trackUrl", { url }, { signal });
   return response.data;
 };
 
-export const sendHeartbeat = async () => {
+export const sendHeartbeat = async (signal?: AbortSignal) => {
   const response = await api.post(
     "/heartbeat",
     {},
@@ -30,45 +30,53 @@ export const sendHeartbeat = async () => {
       fetchOptions: {
         keepalive: true,
       },
+      signal,
     },
   );
   return response.data;
 };
 
-export const getDayAnalytics = async (date: string) => {
-  const response = await api.get(`/day/${date}`);
+export const getDayAnalytics = async (date: string, signal?: AbortSignal) => {
+  const response = await api.get(`/day/${date}`, { signal });
   return response.data;
 };
 
-export const getWeekAnalytics = async (startDate: string) => {
-  const response = await api.get(`/week/${startDate}`);
+export const getWeekAnalytics = async (
+  startDate: string,
+  signal?: AbortSignal,
+) => {
+  const response = await api.get(`/week/${startDate}`, { signal });
   return response.data;
 };
 
 export const getCustomRangeAnalytics = async (
   startDate: string,
   endDate: string,
+  signal?: AbortSignal,
 ) => {
-  const response = await api.get(`/custom/${startDate}/${endDate}`);
+  const response = await api.get(`/custom/${startDate}/${endDate}`, { signal });
   return response.data;
 };
 
-export const getAllAnalytics = async () => {
-  const response = await api.get(`/all`);
+export const getAllAnalytics = async (signal?: AbortSignal) => {
+  const response = await api.get(`/all`, { signal });
   return response.data;
 };
 
-export const getSession = async (sessionId: string) => {
-  const response = await api.get(`/session/${sessionId}`);
+export const getSession = async (sessionId: string, signal?: AbortSignal) => {
+  const response = await api.get(`/session/${sessionId}`, { signal });
   return response.data;
 };
 
-export const getUserSessions = async (userId: string) => {
-  const response = await api.get(`/user/${userId}`);
+export const getUserSessions = async (userId: string, signal?: AbortSignal) => {
+  const response = await api.get(`/user/${userId}`, { signal });
   return response.data;
 };
 
-export const getDeviceSessions = async (deviceId: string) => {
-  const response = await api.get(`/device/${deviceId}`);
+export const getDeviceSessions = async (
+  deviceId: string,
+  signal?: AbortSignal,
+) => {
+  const response = await api.get(`/device/${deviceId}`, { signal });
   return response.data;
 };

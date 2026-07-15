@@ -15,16 +15,19 @@ api.interceptors.response.use(
   },
 );
 
-export const createEmail = async (data: {
-  name: string;
-  messageSubject: string;
-  messageBody: string;
-  sendAll: boolean;
-  filterBy: string | null;
-  subFilterBy: string | null;
-  sendOnJoin: boolean | null;
-}) => {
-  const response = await api.post("/create", data);
+export const createEmail = async (
+  data: {
+    name: string;
+    messageSubject: string;
+    messageBody: string;
+    sendAll: boolean;
+    filterBy: string | null;
+    subFilterBy: string | null;
+    sendOnJoin: boolean | null;
+  },
+  signal?: AbortSignal,
+) => {
+  const response = await api.post("/create", data, { signal });
   return response.data;
 };
 
@@ -39,82 +42,103 @@ export const updateEmail = async (
     subFilterBy: string | null;
     sendOnJoin: boolean | null;
   },
+  signal?: AbortSignal,
 ) => {
-  const response = await api.put(`/update/${id}`, data);
+  const response = await api.put(`/update/${id}`, data, { signal });
   return response.data;
 };
 
-export const getAllEmails = async () => {
-  const response = await api.get("/all");
+export const getAllEmails = async (signal?: AbortSignal) => {
+  const response = await api.get("/all", { signal });
   return response.data;
 };
 
-export const organizerGetAllEmails = async () => {
-  const response = await api.get("/organizer-all");
+export const organizerGetAllEmails = async (signal?: AbortSignal) => {
+  const response = await api.get("/organizer-all", { signal });
   return response.data;
 };
 
-export const getEmailById = async (id: string) => {
-  const response = await api.get(`/get/${id}`);
+export const getEmailById = async (id: string, signal?: AbortSignal) => {
+  const response = await api.get(`/get/${id}`, { signal });
   return response.data;
 };
 
-export const organizerGetEmailById = async (id: string) => {
-  const response = await api.get(`/organizer/${id}`);
+export const organizerGetEmailById = async (
+  id: string,
+  signal?: AbortSignal,
+) => {
+  const response = await api.get(`/organizer/${id}`, { signal });
   return response.data;
 };
 
-export const deleteEmail = async (id: string) => {
-  const response = await api.delete(`/delete/${id}`);
+export const deleteEmail = async (id: string, signal?: AbortSignal) => {
+  const response = await api.delete(`/delete/${id}`, { signal });
   return response.data;
 };
 
-export const sendEmail = async (id: string) => {
-  const response = await api.post(`/send-email/${id}`);
+export const sendEmail = async (id: string, signal?: AbortSignal) => {
+  const response = await api.post(`/send-email/${id}`, {}, { signal });
   return response.data;
 };
 
 export const sendEmailToCustomRecipients = async (
   id: string,
   recipients: { email: string; firstName: string; lastName: string }[],
+  signal?: AbortSignal,
 ) => {
-  const response = await api.post(`/send-email/${id}/customRecipients`, {
-    recipients,
+  const response = await api.post(
+    `/send-email/${id}/customRecipients`,
+    {
+      recipients,
+    },
+    { signal },
+  );
+  return response.data;
+};
+
+export const sendTestEmail = async (id: string, signal?: AbortSignal) => {
+  const response = await api.post(`/send-test/${id}`, {}, { signal });
+  return response.data;
+};
+
+export const activateEmail = async (id: string, signal?: AbortSignal) => {
+  const response = await api.post(`/activate/${id}`, {}, { signal });
+  return response.data;
+};
+
+export const deactivateEmail = async (id: string, signal?: AbortSignal) => {
+  const response = await api.post(`/deactivate/${id}`, {}, { signal });
+  return response.data;
+};
+
+export const getAllRecipients = async (signal?: AbortSignal) => {
+  const response = await api.get("/receipient-all", { signal });
+  return response.data;
+};
+
+export const getRecipientsByEvent = async (
+  id: string,
+  signal?: AbortSignal,
+) => {
+  const response = await api.get(`/receipient-by-event/${id}`, { signal });
+  return response.data;
+};
+
+export const getRecipientsByWorkshop = async (
+  id: string,
+  signal?: AbortSignal,
+) => {
+  const response = await api.get(`/receipient-by-workshop/${id}`, { signal });
+  return response.data;
+};
+
+export const getRecipientsByFilter = async (
+  filter: string,
+  id: string,
+  signal?: AbortSignal,
+) => {
+  const response = await api.get(`/receipient-by-filter/${filter}/${id}`, {
+    signal,
   });
-  return response.data;
-};
-
-export const sendTestEmail = async (id: string) => {
-  const response = await api.post(`/send-test/${id}`);
-  return response.data;
-};
-
-export const activateEmail = async (id: string) => {
-  const response = await api.post(`/activate/${id}`);
-  return response.data;
-};
-
-export const deactivateEmail = async (id: string) => {
-  const response = await api.post(`/deactivate/${id}`);
-  return response.data;
-};
-
-export const getAllRecipients = async () => {
-  const response = await api.get("/receipient-all");
-  return response.data;
-};
-
-export const getRecipientsByEvent = async (id: string) => {
-  const response = await api.get(`/receipient-by-event/${id}`);
-  return response.data;
-};
-
-export const getRecipientsByWorkshop = async (id: string) => {
-  const response = await api.get(`/receipient-by-workshop/${id}`);
-  return response.data;
-};
-
-export const getRecipientsByFilter = async (filter: string, id: string) => {
-  const response = await api.get(`/receipient-by-filter/${filter}/${id}`);
   return response.data;
 };
