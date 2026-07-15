@@ -68,6 +68,7 @@ export const trackUrl = async (req: any, res: any) => {
   res.cookie("deviceId", session.deviceId, {
     httpOnly: true,
     sameSite: "strict",
+    maxAge: 2 * 365 * 24 * 60 * 60 * 1000, // 2 years
   });
 
   return res.status(200).json({ message: "URL tracked successfully" });
@@ -168,11 +169,11 @@ export const getDayAnalytics = async (req: any, res: any) => {
 
 export const getWeekAnalytics = async (req: any, res: any) => {
   const { startDate } = req.params;
+  const [year, month, day] = startDate.split("-").map(Number);
   const user = req.user as User;
-  const startDateObject = new Date(startDate);
-  startDateObject.setHours(0, 0, 0, 0);
-  const endDateObject = new Date(startDateObject);
-  endDateObject.setDate(startDateObject.getDate() + 6);
+  const dateObject = new Date(year, month - 1, day, 0, 0, 0, 0);
+  const endDateObject = new Date(dateObject);
+  endDateObject.setDate(dateObject.getDate() + 6);
   endDateObject.setHours(23, 59, 59, 999);
 
   if (user.accountType !== "organizer") {
@@ -182,7 +183,7 @@ export const getWeekAnalytics = async (req: any, res: any) => {
   const weekPageViews = await prisma.pageView.findMany({
     where: {
       createdAt: {
-        gte: startDateObject,
+        gte: dateObject,
         lt: endDateObject,
       },
     },
@@ -213,10 +214,18 @@ export const getWeekAnalytics = async (req: any, res: any) => {
 export const getCustomRangeAnalytics = async (req: any, res: any) => {
   const { startDate, endDate } = req.params;
   const user = req.user as User;
-  const startDateObject = new Date(startDate);
-  startDateObject.setHours(0, 0, 0, 0);
-  const endDateObject = new Date(endDate);
-  endDateObject.setHours(23, 59, 59, 999);
+  const [year, month, day] = startDate.split("-").map(Number);
+  const startDateObject = new Date(year, month - 1, day, 0, 0, 0, 0);
+  const [endYear, endMonth, endDay] = endDate.split("-").map(Number);
+  const endDateObject = new Date(
+    endYear,
+    endMonth - 1,
+    endDay,
+    23,
+    59,
+    59,
+    999,
+  );
 
   if (user.accountType !== "organizer") {
     return res.status(403).json({ error: "Unauthorized" });
@@ -387,9 +396,17 @@ export const loadSession = async (req: any, res: any) => {
     },
   };
 
+  const sortedPageViews = {
+    ...userCleanedSession,
+    pageViews: session.pageViews.sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    ),
+  };
+
   return res.status(200).json({
     message: "Session loaded successfully",
-    session: userCleanedSession,
+    session: sortedPageViews,
   });
 };
 
@@ -447,9 +464,22 @@ export const loadUserSessions = async (req: any, res: any) => {
     },
   }));
 
+  const sortedSessions = userCleanedSessions.sort(
+    (a, b) =>
+      new Date(b.sessionEnd).getTime() - new Date(a.sessionEnd).getTime(),
+  );
+
+  const pageViewSortedSessions = sortedSessions.map((session) => ({
+    ...session,
+    pageViews: session.pageViews.sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    ),
+  }));
+
   return res.status(200).json({
     message: "User sessions loaded successfully",
-    sessions: userCleanedSessions,
+    sessions: pageViewSortedSessions,
   });
 };
 
@@ -497,8 +527,21 @@ export const loadDeviceSessions = async (req: any, res: any) => {
     },
   }));
 
+  const sortedSessions = userCleanedSessions.sort(
+    (a, b) =>
+      new Date(b.sessionEnd).getTime() - new Date(a.sessionEnd).getTime(),
+  );
+
+  const pageViewSortedSessions = sortedSessions.map((session) => ({
+    ...session,
+    pageViews: session.pageViews.sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    ),
+  }));
+
   return res.status(200).json({
     message: "Device sessions loaded successfully",
-    sessions: userCleanedSessions,
+    sessions: pageViewSortedSessions,
   });
 };

@@ -84,11 +84,12 @@ interface FilteredData {
 
 export default function Analytics() {
   const [filter, setFilter] = useState<"day" | "week" | "custom">("day");
+  const today = new Date();
   const [startDate, setStartDate] = useState(
-    new Date().toISOString().slice(0, 10),
+    `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`,
   );
   const [endDate, setEndDate] = useState<string>(
-    new Date().toISOString().slice(0, 10),
+    `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`,
   ); // Only used for custom range
   const [allTimeData, setAllTimeData] = useState<AllTimeData | null>(null);
   const [filteredData, setFilteredData] = useState<FilteredData | null>(null);
