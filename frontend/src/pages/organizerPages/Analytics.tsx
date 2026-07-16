@@ -204,107 +204,115 @@ export default function Analytics() {
               <p>Loading...</p>
             ) : (
               <div className="flex flex-col">
-                <div className="flex flex-row">
+                <div className="flex flex-wrap justify-center">
                   <div className="flex flex-col m-2 items-center">
                     <div className="flex p-2 rounded-lg bg-surface-a2">
-                      <span className="font-bold text-6xl text-primary-a0">
+                      <span className="font-bold text-2xl sm:text-6xl text-primary-a0">
                         {allTimeData.sessionStats._count.id}
                       </span>
                     </div>
-                    <h3 className="text-xl">Sessions</h3>
+                    <h3 className="text-sm sm:text-xl">Sessions</h3>
                   </div>
                   <div className="flex flex-col m-2 items-center">
                     <div className="flex p-2 rounded-lg bg-surface-a2">
-                      <span className="font-bold text-6xl text-primary-a0">
+                      <span className="font-bold text-2xl sm:text-6xl text-primary-a0">
                         {allTimeData.pageViews._count.id}
                       </span>
                     </div>
-                    <h3 className="text-xl">Page Views</h3>
+                    <h3 className="text-sm sm:text-xl">Page Views</h3>
                   </div>
                   <div className="flex flex-col m-2 items-center">
                     <div className="flex p-2 rounded-lg bg-surface-a2">
-                      <span className="font-bold text-6xl text-primary-a0">
+                      <span className="font-bold text-2xl sm:text-6xl text-primary-a0">
                         {allTimeData.pagesPerSession.toFixed(0)}
                       </span>
                     </div>
-                    <h3 className="text-xl">Views per Session</h3>
+                    <h3 className="text-sm sm:text-xl">Views per Session</h3>
                   </div>
                   <div className="flex flex-col m-2 items-center">
                     <div className="flex p-2 rounded-lg bg-surface-a2">
-                      <span className="font-bold text-6xl text-primary-a0">
+                      <span className="font-bold text-2xl sm:text-6xl text-primary-a0">
                         {allTimeData.activeUsers}
                       </span>
                     </div>
-                    <h3 className="text-xl">Active Users</h3>
+                    <h3 className="text-sm sm:text-xl">Active Users</h3>
                   </div>
                   <div className="flex flex-col m-2 items-center">
                     <div className="flex p-2 rounded-lg bg-surface-a2">
-                      <span className="font-bold text-6xl text-primary-a0">
+                      <span className="font-bold text-2xl sm:text-6xl text-primary-a0">
                         {(
                           allTimeData.sessionStats._avg.sessionLength / 1000
                         ).toFixed(0)}
                       </span>
                     </div>
-                    <h3 className="text-xl">Average Session Length (s)</h3>
+                    <h3 className="text-sm sm:text-xl">
+                      Average Session Length (s)
+                    </h3>
                   </div>
                 </div>
                 <div className="flex flex-row">
                   <div className="w-1/3 p-2 flex flex-col items-center">
-                    <h3>Device Breakdown</h3>
-                    <ResponsiveContainer width="100%" height={150}>
-                      <PieChart>
-                        <Pie
-                          data={allTimeData.deviceBreakdown.map((item) => ({
-                            name: item.deviceType,
-                            value: item._count.id,
-                            fill: pieChartColors[
-                              allTimeData.deviceBreakdown.indexOf(item) %
-                                pieChartColors.length
-                            ],
-                          }))}
-                        />
-                        <Tooltip />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
+                    <h3 className="text-xs sm:text-base">Device Breakdown</h3>
+                    <div className="w-full h-35 sm:h-45 text-xs sm:text-base">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={allTimeData.deviceBreakdown.map((item) => ({
+                              name: item.deviceType,
+                              value: item._count.id,
+                              fill: pieChartColors[
+                                allTimeData.deviceBreakdown.indexOf(item) %
+                                  pieChartColors.length
+                              ],
+                            }))}
+                          />
+                          <Tooltip />
+                          <Legend />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
                   </div>
                   <div className="w-1/3 p-2 flex flex-col items-center">
-                    <h3>OS Breakdown</h3>
-                    <ResponsiveContainer width="100%" height={150}>
-                      <PieChart>
-                        <Pie
-                          data={allTimeData.osBreakdown.map((item) => ({
-                            name: item.operatingSystem,
-                            value: item._count.id,
-                            fill: pieChartColors[
-                              allTimeData.osBreakdown.indexOf(item) %
-                                pieChartColors.length
-                            ],
-                          }))}
-                        />
-                        <Tooltip />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
+                    <h3 className="text-xs sm:text-base">OS Breakdown</h3>
+                    <div className="w-full h-35 sm:h-45 text-xs sm:text-base">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={allTimeData.osBreakdown.map((item) => ({
+                              name: item.operatingSystem,
+                              value: item._count.id,
+                              fill: pieChartColors[
+                                allTimeData.osBreakdown.indexOf(item) %
+                                  pieChartColors.length
+                              ],
+                            }))}
+                          />
+                          <Tooltip />
+                          <Legend />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
                   </div>
                   <div className="w-1/3 p-2 flex flex-col items-center">
-                    <h3>Browser Breakdown</h3>
-                    <ResponsiveContainer width="100%" height={150}>
-                      <PieChart>
-                        <Pie
-                          data={allTimeData.browserBreakdown.map((item) => ({
-                            name: item.browser,
-                            value: item._count.id,
-                            fill: pieChartColors[
-                              allTimeData.browserBreakdown.indexOf(item) %
-                                pieChartColors.length
-                            ],
-                          }))}
-                        />
-                        <Tooltip />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
+                    <h3 className="text-xs sm:text-base">Browser Breakdown</h3>
+                    <div className="w-full h-35 sm:h-45 text-xs sm:text-base">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={allTimeData.browserBreakdown.map((item) => ({
+                              name: item.browser,
+                              value: item._count.id,
+                              fill: pieChartColors[
+                                allTimeData.browserBreakdown.indexOf(item) %
+                                  pieChartColors.length
+                              ],
+                            }))}
+                          />
+                          <Tooltip />
+                          <Legend />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
                   </div>
                 </div>
                 <h3 className="text-xl font-bold mt-4">Page Views Per Day</h3>
@@ -345,7 +353,7 @@ export default function Analytics() {
                 onChange={(e) =>
                   setFilter(e.target.value as "day" | "week" | "custom")
                 }
-                className="bg-surface-a2 rounded-lg p-2"
+                className="bg-surface-a2 rounded-lg text-xs sm:text-base p-2"
               >
                 <option value="day">Day</option>
                 <option value="week">Week</option>
@@ -357,7 +365,7 @@ export default function Analytics() {
                 name="startDate"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="bg-surface-a2 rounded-lg p-2 ml-2"
+                className="bg-surface-a2 rounded-lg text-xs sm:text-base p-2 ml-2"
               />
               {filter === "custom" && (
                 <input
@@ -366,7 +374,7 @@ export default function Analytics() {
                   name="endDate"
                   value={endDate as string}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="bg-surface-a2 rounded-lg p-2 ml-2"
+                  className="bg-surface-a2 rounded-lg text-xs sm:text-base p-2 ml-2"
                 />
               )}
             </div>
@@ -377,11 +385,11 @@ export default function Analytics() {
                 <table className="w-full rounded-lg">
                   <thead>
                     <tr>
-                      <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2"></th>
+                      <th className="hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2"></th>
                       <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2">
                         URL
                       </th>
-                      <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2">
+                      <th className="hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2">
                         Name
                       </th>
                       <th className="py-2 px-4 border-b border-r border-surface-a0 text-left bg-surface-a2">
@@ -396,7 +404,7 @@ export default function Analytics() {
                     {filteredData.pageViews.map((item, index) => (
                       <tr key={item.id}>
                         <td
-                          className={`py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}
+                          className={`hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}
                         >
                           {index + 1}
                         </td>
@@ -406,7 +414,7 @@ export default function Analytics() {
                           {item.url}
                         </td>
                         <td
-                          className={`py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}
+                          className={`hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}
                         >
                           {item.user ? item.user.firstName : "N/A"}
                         </td>

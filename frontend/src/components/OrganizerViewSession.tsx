@@ -120,40 +120,40 @@ export default function OrganizerViewSession({
   }
 
   return (
-    <div className="flex flex-col w-120 sm:w-160">
+    <div className="flex flex-col w-80 sm:w-120 md:w-160">
       {session ? (
         <>
-          <h1 className="text-2xl font-bold text-center">
+          <h1 className="text-lg sm:text-2xl font-bold text-center">
             {new Date(session.sessionStart).toLocaleDateString("en-US", {
               dateStyle: "full",
             }) +
               " - " +
               new Date(session.sessionStart).toLocaleTimeString()}
           </h1>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5">
-            <p className="text-lg">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+            <p className="sm:text-lg">
               <span className="font-bold">User: </span>
               {session.user
                 ? session.user.firstName + " " + session.user.lastName
                 : "None"}
             </p>
-            <p className="text-lg">
+            <p className="sm:text-lg">
               <span className="font-bold">OS: </span>
               {session.operatingSystem || "None"}
             </p>
-            <p className="text-lg">
+            <p className="sm:text-lg">
               <span className="font-bold">Browser: </span>
               {session.browser || "None"}
             </p>
-            <p className="text-lg">
+            <p className="sm:text-lg">
               <span className="font-bold">Device Type: </span>
               {session.deviceType || "None"}
             </p>
           </div>
           <h3 className="text-lg mt-4 font-bold">Page Views</h3>
-          <div className="flex flex-col max-h-100 overflow-y-scroll bg-surface-a2 p-2 rounded-lg">
+          <div className="flex flex-col max-h-50 sm:max-h-100 overflow-y-scroll bg-surface-a2 p-2 rounded-lg">
             {session.pageViews?.map((view, index) => (
-              <div key={view.id} className="flex text-lg w-full">
+              <div key={view.id} className="flex sm:text-lg w-full">
                 {index + 1}) {view.url}{" "}
                 <span className="text-right ml-auto">
                   {new Date(view.createdAt).toLocaleString()}
@@ -164,20 +164,20 @@ export default function OrganizerViewSession({
           <div className="flex flex-row gap-2 mt-4">
             {session.user && (
               <button
-                className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full font-bold"
+                className="bg-primary-a0 hover:bg-primary-a1 sm:p-2 rounded-lg w-full text-sm sm:text-base font-bold"
                 onClick={handleOpenUserSessions}
               >
                 View User Sessions
               </button>
             )}
             <button
-              className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg w-full font-bold"
+              className="bg-primary-a0 hover:bg-primary-a1 sm:p-2 rounded-lg w-full text-sm sm:text-base font-bold"
               onClick={handleOpenDeviceSessions}
             >
               View Device Sessions
             </button>
             <button
-              className="bg-surface-a2 hover:bg-surface-a3 p-2 rounded-lg w-full font-bold"
+              className="bg-surface-a2 hover:bg-surface-a3 sm:p-2 rounded-lg w-full text-sm sm:text-base font-bold"
               onClick={closeOverlay}
             >
               Close

@@ -115,31 +115,31 @@ export default function OrganizerViewDeviceSessions({
   }
 
   return (
-    <div className="flex flex-col w-120 sm:w-160">
+    <div className="flex flex-col w-80 sm:w-120 md:w-160">
       {sessions ? (
         <>
           <h1 className="text-2xl font-bold text-center">Device Sessions</h1>
-          <p className="text-lg text-center">
+          <p className="sm:text-lg text-center">
             {sessions[0]?.operatingSystem || "Unknown OS"} |{" "}
             {sessions[0]?.browser || "Unknown Browser"} |{" "}
             {sessions[0]?.deviceType || "Unknown Device"}
           </p>
           {sessions.length > 0 ? (
-            <div className="flex flex-col max-h-100 overflow-y-auto mt-4">
+            <div className="flex flex-col max-h-60 md:max-h-100 overflow-y-auto mt-4">
               {sessions.map((session) => (
                 <div
                   key={session.id}
                   className="flex flex-row p-2 rounded-lg bg-surface-a2 my-2"
                 >
                   <div className="flex flex-col">
-                    <p className="text-lg font-bold">
+                    <p className="md:text-lg font-bold">
                       {new Date(session.sessionStart).toLocaleString("en-US", {
                         dateStyle: "full",
                       })}
                       , {new Date(session.sessionStart).toLocaleTimeString()} -
                       {">"} {new Date(session.sessionEnd).toLocaleTimeString()}
                     </p>
-                    <p>
+                    <p className="text-sm md:text-base">
                       {session.pageViews.length} page views |{" "}
                       {session.user
                         ? session.user.firstName + " " + session.user.lastName

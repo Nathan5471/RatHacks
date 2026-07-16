@@ -112,35 +112,35 @@ export default function OrganizerViewUserSessions({
   }
 
   return (
-    <div className="flex flex-col w-120 sm:w-160">
+    <div className="flex flex-col w-80 sm:w-120 md:w-160">
       {sessions ? (
         <>
           <h1 className="text-2xl font-bold text-center">
             {sessions[0]?.user.firstName || "User"}'s Sessions
           </h1>
           {sessions.length > 0 ? (
-            <div className="flex flex-col max-h-100 overflow-y-auto mt-4">
+            <div className="flex flex-col max-h-60 md:max-h-100 overflow-y-auto mt-4">
               {sessions.map((session) => (
                 <div
                   key={session.id}
                   className="flex flex-row p-2 rounded-lg bg-surface-a2 my-2"
                 >
                   <div className="flex flex-col">
-                    <p className="text-lg font-bold">
+                    <p className="md:text-lg font-bold">
                       {new Date(session.sessionStart).toLocaleString("en-US", {
                         dateStyle: "full",
                       })}
                       , {new Date(session.sessionStart).toLocaleTimeString()} -
                       {">"} {new Date(session.sessionEnd).toLocaleTimeString()}
                     </p>
-                    <p>
+                    <p className="text-sm md:text-base">
                       {session.pageViews.length} page views |{" "}
                       {session.operatingSystem || "None"} OS |{" "}
                       {session.browser || "None"} Browser
                     </p>
                   </div>
                   <button
-                    className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg ml-auto font-bold"
+                    className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg ml-auto text-sm sm:text-base font-bold"
                     onClick={() => handleOpenSession(session)}
                   >
                     View
