@@ -8,7 +8,7 @@ const nonRequiredAuthenticate = async (req: any, res: any, next: any) => {
   const refreshToken = req.cookies.refreshToken;
   if (!token && !refreshToken) {
     req.user = null;
-    next();
+    return next();
   }
   const JWT_SECRET = process.env.JWT_SECRET;
   if (!JWT_SECRET) {
@@ -78,7 +78,7 @@ const nonRequiredAuthenticate = async (req: any, res: any, next: any) => {
               newToken,
             ],
             validRefreshTokens: user.validRefreshTokens?.concat(
-              newRefreshToken
+              newRefreshToken,
             ) || [newRefreshToken],
           },
         });
@@ -96,7 +96,7 @@ const nonRequiredAuthenticate = async (req: any, res: any, next: any) => {
         return next();
       } catch (error) {
         res.clearCookie("refreshToken");
-        res.user = null;
+        req.user = null;
         return next();
       }
     }
