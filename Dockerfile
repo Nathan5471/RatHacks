@@ -1,14 +1,19 @@
 FROM node:22 AS frontend
 WORKDIR /frontend
-COPY frontend/package*.json ./
-RUN npm install
+RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN apt-get update && apt-get install -y chromium --no-install-recommends && rm -rf /var/lib/apt/lists/*
+COPY frontend/package.json frontend/pnpm-lock.yaml frontend/pnpm-workspace.yaml ./
+RUN pnpm install
 COPY frontend/ ./
-RUN npm run build
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+RUN pnpm run build
 
 FROM node:22 AS backend
 WORKDIR /backend
-COPY backend/package*.json ./
-RUN npm install
+RUN corepack enable && corepack prepare pnpm@latest --activate
+COPY backend/package.json backend/pnpm-lock.yaml backend/pnpm-workspace.yaml ./
+RUN pnpm install
 COPY backend/ ./
 COPY --from=frontend /frontend/dist ./public
 COPY entrypoint.sh ./
@@ -27,7 +32,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y postgresql-client-18 \
     && rm -rf /var/lib/apt/lists/*
 RUN DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder" npx prisma generate
-RUN npm run build
+RUN pnpm run build
 
 EXPOSE 3000
 ENTRYPOINT ["./entrypoint.sh"]

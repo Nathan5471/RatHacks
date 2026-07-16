@@ -27,16 +27,16 @@ export default function PastEvents() {
         </Link>
       </div>
       <div className="flex flex-col items-center w-screen h-full overflow-y-auto">
-        <h2 className="text-3xl sm:text-5xl mt-6 text-center font-bold mb-4">
+        <h1 className="text-3xl sm:text-5xl mt-6 text-center font-bold mb-4">
           Past Events
-        </h2>
+        </h1>
         <div className="flex flex-col bg-surface-a1 w-full p-4">
-          <h3 className="text-xl sm:text-3xl mb-1">
+          <h2 className="text-xl sm:text-3xl mb-1">
             <span className="font-bold text-[#17bd3d]">
               Rat Hacks: CTF 2026
             </span>{" "}
             - May 23, 2026 (10:00 AM - 5:00 PM)
-          </h3>
+          </h2>
           <p className="text-lg sm:text-xl mb-4">
             Rat Hacks: Capture The Flag 2026 is the first Capture The Flag
             hosted by the Rat Hacks team at the Roanoke Valley Governor's
@@ -155,10 +155,10 @@ export default function PastEvents() {
           </div>
         </div>
         <div className="flex flex-col bg-[#53BFFF] w-full p-4">
-          <h3 className="text-2xl sm:text-4xl font-dream-planner mb-1">
+          <h2 className="text-2xl sm:text-4xl font-dream-planner mb-1">
             <span className="font-bold">CAMPFIRE ROANOKE</span> - FEBRUARY 28 -
             MARCH 1, 2026 (12:00 PM - 12:00 PM)
-          </h3>
+          </h2>
           <div className="flex flex-col md:flex-row items-center mb-4">
             <p className="text-xl sm:text-2xl font-ember-fire md:w-1/2">
               Campfire Roanoke was the first overnight high school game jam in
@@ -348,10 +348,10 @@ export default function PastEvents() {
           </div>
         </div>
         <div className="flex flex-col bg-surface-a1 w-full p-4">
-          <h3 className="text-xl sm:text-3xl mb-1">
+          <h2 className="text-xl sm:text-3xl mb-1">
             <span className="font-bold text-[#17bd3d]">Rat Hacks 2025</span> -
             November 22, 2025 (8:00 AM - 8:00 PM)
-          </h3>
+          </h2>
           <div className="flex flex-col md:flex-row items-center mb-4">
             <p className="text-lg sm:text-xl md:w-1/2">
               This is the second hackathon hosted by Rat Hacks at the Roanoke
@@ -501,10 +501,10 @@ export default function PastEvents() {
           </div>
         </div>
         <div className="flex flex-col bg-[#f4f4f4] w-full p-4 text-black font-sans">
-          <h3 className="text-xl sm:text-3xl mb-1">
+          <h2 className="text-xl sm:text-3xl mb-1">
             <span className="font-bold text-[#144922]">Rat Hacks</span> - May
             24, 2025 (8:00 AM - 8:00 PM)
-          </h3>
+          </h2>
           <p className="text-lg sm:text-xl mb-4">
             This was the first Rat Hacks hackathons and it was the first
             hackathon available to high schoolers in the area. Participants

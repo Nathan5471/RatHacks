@@ -61,10 +61,23 @@ if (process.env.IS_DEV) {
 } else {
   app.use(express.static("public"));
 
+  app.use("/past-events", (req: any, res: any) => {
+    res.sendFile(
+      "./public/past-events/index.html",
+      { root: "." },
+      (error: any) => {
+        if (error) {
+          console.error("Error sending past-events/index.html:", error);
+          res.status(500).send("Page not found");
+        }
+      },
+    );
+  });
+
   app.use("/", (req: any, res: any) => {
-    res.sendFile("./public/index.html", { root: "." }, (error: any) => {
+    res.sendFile("./public/spa.html", { root: "." }, (error: any) => {
       if (error) {
-        console.error("Error sending index.html:", error);
+        console.error("Error sending spa.html:", error);
 
         res.status(500).send("Page not found");
       }

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { HashLink } from "react-router-hash-link";
+// import { HashLink } from "react-router-hash-link"; Also saving for page redesign
 import { useAuth } from "../contexts/AuthContext";
+import calculateTimeRemaining from "../utils/calculateTimeRemaining";
 
 export default function Home() {
   const { user } = useAuth();
@@ -10,25 +11,13 @@ export default function Home() {
     hours: number;
     minutes: number;
     seconds: number;
-  } | null>(null);
+  }>(calculateTimeRemaining(new Date("2026-11-21T08:00:00Z")));
 
   useEffect(() => {
-    const calculateTimeRemaining = () => {
-      const now = new Date();
-      const eventDate = new Date("2026-05-23T10:00:00");
-      const difference = eventDate.getTime() - now.getTime();
-
-      if (difference <= 0) return null;
-
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((difference / (1000 * 60)) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
-      return { days, hours, minutes, seconds };
-    };
-
     const updateTimeRemaining = setInterval(() => {
-      setTimeRemaining(calculateTimeRemaining());
+      setTimeRemaining(
+        calculateTimeRemaining(new Date("2026-11-21T08:00:00Z")),
+      );
     }, 1000);
 
     return () => clearInterval(updateTimeRemaining);
@@ -40,6 +29,7 @@ export default function Home() {
         <h1 className="text-lg sm:text-3xl col-span-3 md:col-span-1 font-bold text-center justify-center text-primary-a0 p-4">
           Rat Hacks
         </h1>
+        {/* Save for when the home page is redesigned for next event
         <HashLink
           to="/#about"
           className="ml-auto text-pretty sm:text-lg lg:text-xl p-2 sm:p-4 hover:underline items-center flex font-bold"
@@ -58,9 +48,10 @@ export default function Home() {
         >
           FAQ
         </HashLink>
+        */}
         <Link
           to={user ? "/app" : "/login"}
-          className="text-pretty sm:text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center justify-center items-center flex font-bold m-4 p-2 w-1/6"
+          className="text-pretty sm:text-lg lg:text-xl bg-primary-a0 hover:bg-primary-a1 rounded-lg text-center justify-center items-center flex font-bold m-4 p-2 w-1/6 ml-auto"
         >
           {user ? "Go to App" : "Login"}
         </Link>
