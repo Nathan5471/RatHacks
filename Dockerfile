@@ -16,6 +16,7 @@ COPY backend/package.json backend/pnpm-lock.yaml backend/pnpm-workspace.yaml ./
 RUN pnpm install
 COPY backend/ ./
 COPY --from=frontend /frontend/dist ./public
+COPY ./sitemap.xml ./public
 COPY entrypoint.sh ./
 RUN chmod +x ./entrypoint.sh
 RUN apt-get update && apt-get install -y \
