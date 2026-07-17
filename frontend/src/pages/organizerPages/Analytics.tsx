@@ -39,48 +39,43 @@ interface AllTimeData {
   };
   pagesPerSession: number;
   activeUsers: number;
-  deviceBreakdown: [
-    {
-      _count: {
-        id: number;
-      };
-      deviceType: string;
-    },
-  ];
-  osBreakdown: [
-    {
-      _count: {
-        id: number;
-      };
-      operatingSystem: string;
-    },
-  ];
-  browserBreakdown: [
-    {
-      _count: {
-        id: number;
-      };
-      browser: string;
-    },
-  ];
+  deviceBreakdown: {
+    _count: {
+      id: number;
+    };
+    deviceType: string;
+  }[];
+  osBreakdown: {
+    _count: {
+      id: number;
+    };
+    operatingSystem: string;
+  }[];
+  browserBreakdown: {
+    _count: {
+      id: number;
+    };
+    browser: string;
+  }[];
   pageViewsPerDay: { [key: string]: number };
 }
 
 interface FilteredData {
-  pageViews: [
-    {
-      id: string;
-      userId: string | null;
-      createdAt: string;
-      url: string;
-      sessionId: string;
-      user: {
-        id: string | undefined;
-        firstName: string | undefined;
-        lastName: string | undefined;
-      };
-    },
-  ];
+  pageViews: {
+    id: string;
+    userId: string | null;
+    createdAt: string;
+    url: string;
+    sessionId: string;
+    user: {
+      id: string | undefined;
+      firstName: string | undefined;
+      lastName: string | undefined;
+    };
+    operatingSystem: string | null;
+    browser: string | null;
+    deviceType: string | null;
+  }[];
 }
 
 export default function Analytics() {
@@ -94,6 +89,14 @@ export default function Analytics() {
   ); // Only used for custom range
   const [allTimeData, setAllTimeData] = useState<AllTimeData | null>(null);
   const [filteredData, setFilteredData] = useState<FilteredData | null>(null);
+  const [deviceFilter, setDeviceFilter] = useState<string | null>(null);
+  const [osFilter, setOsFilter] = useState<string | null>(null);
+  const [browserFilter, setBrowserFilter] = useState<string | null>(null);
+  const [loggedInFilter, setLoggedInFilter] = useState<
+    "all" | "loggedIn" | "notLoggedIn"
+  >("all");
+  const [extraFilteredData, setExtraFilteredData] =
+    useState<FilteredData | null>(null);
   const [navbarOpen, setNavbarOpen] = useState(false);
   const pieChartColors = [
     "#e89eb8",
@@ -167,6 +170,30 @@ export default function Analytics() {
       controller.abort();
     };
   }, [filter, startDate, endDate]);
+
+  useEffect(() => {
+    if (!filteredData) return;
+
+    const filteredPageViews = filteredData.pageViews.filter((pageView) => {
+      const deviceMatch = deviceFilter
+        ? pageView.deviceType === deviceFilter
+        : true;
+      const osMatch = osFilter ? pageView.operatingSystem === osFilter : true;
+      const browserMatch = browserFilter
+        ? pageView.browser === browserFilter
+        : true;
+      const loggedInMatch =
+        loggedInFilter === "all" ||
+        (loggedInFilter === "loggedIn" && pageView.userId) ||
+        (loggedInFilter === "notLoggedIn" && !pageView.userId);
+
+      return deviceMatch && osMatch && browserMatch && loggedInMatch;
+    });
+
+    setExtraFilteredData({
+      pageViews: filteredPageViews,
+    });
+  }, [filteredData, deviceFilter, osFilter, browserFilter, loggedInFilter]);
 
   const handleOpenViewSession = (sessionId: string) => {
     openOverlay(<OrganizerViewSession sessionId={sessionId} />);
@@ -378,7 +405,82 @@ export default function Analytics() {
                 />
               )}
             </div>
-            {!filteredData ? (
+            {allTimeData && (
+              <div className="flex flex-row mb-2">
+                <select
+                  name="deviceFilter"
+                  id="deviceFilter"
+                  value={deviceFilter || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setDeviceFilter(value === "" ? null : value);
+                  }}
+                  className="bg-surface-a2 rounded-lg text-xs sm:text-base p-2"
+                >
+                  <option value="">Devices: All</option>
+                  {allTimeData.deviceBreakdown.map((item) => (
+                    <option key={item.deviceType} value={item.deviceType}>
+                      Devices: {item.deviceType}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  name="osFilter"
+                  id="osFilter"
+                  value={osFilter || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setOsFilter(value === "" ? null : value);
+                  }}
+                  className="bg-surface-a2 rounded-lg text-xs sm:text-base p-2 ml-2"
+                >
+                  <option value="">OS: All</option>
+                  {allTimeData.osBreakdown.map((item) => (
+                    <option
+                      key={item.operatingSystem}
+                      value={item.operatingSystem}
+                    >
+                      OS: {item.operatingSystem}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  name="browserFilter"
+                  id="browserFilter"
+                  value={browserFilter || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setBrowserFilter(value === "" ? null : value);
+                  }}
+                  className="bg-surface-a2 rounded-lg text-xs sm:text-base p-2 ml-2"
+                >
+                  <option value="">Browser: All</option>
+                  {allTimeData.browserBreakdown.map((item) => (
+                    <option key={item.browser} value={item.browser}>
+                      Browser: {item.browser}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  name="loggedInFilter"
+                  id="loggedInFilter"
+                  value={loggedInFilter}
+                  onChange={(e) => {
+                    const value = e.target.value as
+                      | "all"
+                      | "loggedIn"
+                      | "notLoggedIn";
+                    setLoggedInFilter(value);
+                  }}
+                  className="bg-surface-a2 rounded-lg text-xs sm:text-base p-2 ml-2"
+                >
+                  <option value="all">All Users</option>
+                  <option value="loggedIn">Logged In Users</option>
+                  <option value="notLoggedIn">Not Logged In Users</option>
+                </select>
+              </div>
+            )}
+            {!extraFilteredData ? (
               <p>Loading...</p>
             ) : (
               <div className="flex w-full overflow-y-auto max-h-100">
@@ -401,7 +503,7 @@ export default function Analytics() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredData.pageViews.map((item, index) => (
+                    {extraFilteredData.pageViews.map((item, index) => (
                       <tr key={item.id}>
                         <td
                           className={`hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a0 ${index % 2 === 0 ? "bg-surface-a3" : "bg-surface-a2"}`}

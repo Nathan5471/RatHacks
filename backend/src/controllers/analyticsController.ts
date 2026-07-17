@@ -46,6 +46,9 @@ export const trackUrl = async (req: any, res: any) => {
         url: url,
         userId: user?.id,
         sessionId: session.id,
+        operatingSystem: req.useragent.os,
+        browser: req.useragent.browser,
+        deviceType: req.useragent.isMobile ? "mobile" : "desktop",
       },
     });
 
