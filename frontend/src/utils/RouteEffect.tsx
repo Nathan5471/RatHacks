@@ -11,6 +11,7 @@ export default function RouteEffect() {
 
     const routeTitles: { [key: string]: string } = {
       "/": "Rat Hacks",
+      "/past-events": "Rat Hacks | Past Events",
       "/login": "Rat Hacks | Login",
       "/register": "Rat Hacks | Register",
       "/reset-password": "Rat Hacks | Reset Password",

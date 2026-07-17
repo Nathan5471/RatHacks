@@ -11,6 +11,30 @@ export default defineConfig({
     react(),
     prerender({
       routes: ["/", "/past-events"],
+      postProcess(renderedRoute) {
+        const baseUrl = "https://rathacks.com";
+        const canonicalUrl = baseUrl + renderedRoute.route;
+
+        let html = renderedRoute.html;
+        html = html.replace(
+          "</head>",
+          ` <link rel="canonical" href="${canonicalUrl}" />\n </head>`,
+        );
+        // Remove that toastify stuff from the outputed html file since it's not needed
+        html = html.replace(
+          /<style>[\s\S]*?--toastify-color-light[\s\S]*?<\/style>/,
+          "",
+        );
+        html = html.replace(/<section class="Toastify"[\s\S]*?<\/section>/, "");
+
+        const descriptionRegex =
+          /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i;
+        const pastEventsDescriptionTag = `<meta name="description" content="Check out past hackathons and CTFs hosted by Rat Hacks, including Campfire Roanoke, at RVGS and the SMWV. View awesome pictures and stats from the events!" />`;
+        if (renderedRoute.route === "/past-events") {
+          html = html.replace(descriptionRegex, pastEventsDescriptionTag);
+        }
+        renderedRoute.html = html;
+      },
     }),
   ],
   build: {
