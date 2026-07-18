@@ -169,12 +169,6 @@ model Email {
   createdAt      DateTime   @default(now())
 }
 
-model EmailList {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
-}
-
 model Session {
   id              String     @id @default(uuid())
   user            User?      @relation(fields: [userId], references: [id])
