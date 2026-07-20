@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import useragent from "express-useragent";
 import migrateUploadedFiles from "./utils/migrateUploadedFiles";
+import migrateToRelationsInDb from "./utils/migrateToRelationsInDb";
 import authRouter from "./routes/authRouter";
 import eventRouter from "./routes/eventRouter";
 import workshopRouter from "./routes/workshopRouter";
@@ -91,5 +92,10 @@ app.listen(3000, () => {
   // Perform file migration
   migrateUploadedFiles().catch((error) => {
     console.error("Error during file migration:", error);
+  });
+
+  // Perform database migration
+  migrateToRelationsInDb().catch((error) => {
+    console.error("Error during database migration:", error);
   });
 });

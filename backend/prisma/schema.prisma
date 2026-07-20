@@ -73,7 +73,7 @@ model User {
   workshops              Workshop[]      @relation("workshopParticipants")
   workshopIds            String[] // Workshop Ids
   organizedWorkshops     Workshop[]      @relation("workshopOrganizer")
-  receivedEmails         Email[]         @relation("emailSentTo")
+  receivedEmails         EmailReceipt[]
   sentEmails             Email[]         @relation("emailSendFrom")
   validAccessTokens      String[]
   validRefreshTokens     String[]
@@ -95,12 +95,12 @@ model Team {
   joinCode         String   @unique
   members          User[]
   memberIds        String[] // User Ids (max 4)
+  event            Event    @relation(fields: [eventId], references: [id])
   eventId          String
   submittedProject Boolean  @default(false)
   project          Project?
   projectId        String? // Project Id
   createdAt        DateTime @default(now())
-  event            Event    @relation(fields: [eventId], references: [id])
 }
 
 model Project {
@@ -179,21 +179,32 @@ model Workshop {
 }
 
 model Email {
-  id             String     @id @default(uuid())
+  id             String         @id @default(uuid())
   name           String
   messageSubject String
   messageBody    String
-  sendFrom       User?      @relation("emailSendFrom", fields: [sendFromId], references: [id])
+  sendFrom       User?          @relation("emailSendFrom", fields: [sendFromId], references: [id])
   sendFromId     String?
   sendAll        Boolean
   filterBy       String?
   subFilterBy    String?
-  sendOnJoin     Boolean    @default(false)
-  active         Boolean    @default(false) // This is for sendOnJoin emails to indicate if they should be used
-  sentTo         User[]     @relation("emailSentTo")
+  sendOnJoin     Boolean        @default(false)
+  active         Boolean        @default(false) // This is for sendOnJoin emails to indicate if they should be used
+  sentTo         EmailReceipt[]
   sentToIds      String[] // User Ids
   sentTimes      DateTime[] // Timestamps of when each email per user was sent (length should match sentTo)
-  createdAt      DateTime   @default(now())
+  createdAt      DateTime       @default(now())
+}
+
+model EmailReceipt {
+  id      String    @id @default(uuid())
+  email   Email     @relation(fields: [emailId], references: [id])
+  emailId String
+  user    User      @relation(fields: [userId], references: [id])
+  userId  String
+  sentAt  DateTime  @default(now())
+  seen    Boolean   @default(false) // Currently not used, but I plan on implementing this later
+  seenAt  DateTime?
 }
 
 model Session {
