@@ -140,6 +140,23 @@ export const organizerGetEmailById = async (req: any, res: any) => {
   try {
     const emailData = await prisma.email.findUnique({
       where: { id },
+      include: {
+        sentTo: {
+          select: {
+            id: true,
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                email: true,
+              },
+            },
+            sentAt: true,
+            seen: true, // These two currently aren't used, but I will be implmenting them later
+            seenAt: true,
+          },
+        },
+      },
     });
 
     if (!emailData) {
@@ -224,22 +241,17 @@ export const getRecipientsByFilter = async (req: any, res: any) => {
         break;
       case "workshop":
         recipientData = await prisma.user.findMany({
-          where: { workshops: { has: id } },
+          where: { workshops: { some: { id } } },
         });
         break;
       case "event":
         recipientData = await prisma.user.findMany({
-          where: { events: { has: id } },
+          where: { events: { some: { id } } },
         });
         break;
       case "accountType":
         recipientData = await prisma.user.findMany({
           where: { accountType: id },
-        });
-        break;
-      case "emailList":
-        recipientData = await prisma.user.findMany({
-          where: { emailLists: { has: id } },
         });
         break;
     }
@@ -270,6 +282,14 @@ export const sendEmail = async (req: any, res: any) => {
   try {
     const email = await prisma.email.findUnique({
       where: { id },
+      include: {
+        sentTo: {
+          select: {
+            id: true,
+            userId: true,
+          },
+        },
+      },
     });
     if (!email) {
       return res.status(404).json({ message: "Workshop not found" });
@@ -288,23 +308,20 @@ export const sendEmail = async (req: any, res: any) => {
         });
         break;
       case "workshop":
+        if (!email.subFilterBy) break;
         recipientData = await prisma.user.findMany({
-          where: { workshops: { has: email.subFilterBy } },
+          where: { workshops: { some: { id: email.subFilterBy } } },
         });
         break;
       case "event":
+        if (!email.subFilterBy) break;
         recipientData = await prisma.user.findMany({
-          where: { events: { has: email.subFilterBy } },
+          where: { events: { some: { id: email.subFilterBy } } },
         });
         break;
       case "accountType":
         recipientData = await prisma.user.findMany({
           where: { accountType: email.subFilterBy as AccountType },
-        });
-        break;
-      case "emailList":
-        recipientData = await prisma.user.findMany({
-          where: { emailLists: { has: email.subFilterBy } },
         });
         break;
       case null:
@@ -322,7 +339,8 @@ export const sendEmail = async (req: any, res: any) => {
       (participant) => participant.emailVerified === true,
     );
     const unsentRecipients = emailVerifiedRecipients.filter(
-      (participant) => !email.sentTo.includes(participant.id),
+      (participant) =>
+        !email.sentTo.some((sent) => sent.userId === participant.id),
     );
     const hasRatHacksEmail = organizer.email.endsWith("@rathacks.com") ?? false;
 
@@ -366,11 +384,10 @@ export const sendEmail = async (req: any, res: any) => {
               ? organizer.email
               : "nathan@rathacks.com",
           });
-          await prisma.email.update({
-            where: { id },
+          await prisma.emailReceipt.create({
             data: {
-              sentTo: { push: participant.id },
-              sentTimes: { push: new Date() },
+              emailId: email.id,
+              userId: participant.id,
             },
           });
         },
@@ -525,6 +542,14 @@ export const activateEmail = async (req: any, res: any) => {
   try {
     const email = await prisma.email.findUnique({
       where: { id },
+      include: {
+        sentTo: {
+          select: {
+            id: true,
+            userId: true,
+          },
+        },
+      },
     });
     if (!email) {
       return res.status(404).json({ message: "Email not found" });
@@ -550,13 +575,15 @@ export const activateEmail = async (req: any, res: any) => {
       email.filterBy // Should only be possible with workshops and events
     ) {
       case "workshop":
+        if (!email.subFilterBy) break;
         recipientData = await prisma.user.findMany({
-          where: { workshops: { has: email.subFilterBy } },
+          where: { workshops: { some: { id: email.subFilterBy } } },
         });
         break;
       case "event":
+        if (!email.subFilterBy) break;
         recipientData = await prisma.user.findMany({
-          where: { events: { has: email.subFilterBy } },
+          where: { events: { some: { id: email.subFilterBy } } },
         });
         break;
     }
@@ -570,7 +597,8 @@ export const activateEmail = async (req: any, res: any) => {
       (participant) => participant.emailVerified === true,
     );
     const unsentRecipients = emailVerifiedRecipients.filter(
-      (participant) => !email.sentTo.includes(participant.id),
+      (participant) =>
+        !email.sentTo.some((sent) => sent.userId === participant.id),
     );
     const hasRatHacksEmail = user.email.endsWith("@rathacks.com") ?? false;
 
@@ -612,11 +640,10 @@ export const activateEmail = async (req: any, res: any) => {
               : "nathan",
             senderEmail: hasRatHacksEmail ? user.email : "nathan@rathacks.com",
           });
-          await prisma.email.update({
-            where: { id },
+          await prisma.emailReceipt.create({
             data: {
-              sentTo: { push: participant.id },
-              sentTimes: { push: new Date() },
+              emailId: email.id,
+              userId: participant.id,
             },
           });
         },

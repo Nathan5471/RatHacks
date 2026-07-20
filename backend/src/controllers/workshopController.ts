@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import prisma from "../prisma/client";
 import sendWorkshopStartingEmail from "../utils/sendWorkshopStartingEmail";
 import sortWorkshops from "../utils/sortWorkshops";
+import type { Workshop1, Workshop2 } from "../utils/sortWorkshops";
 import { marked } from "marked";
 import sendCustomEmail from "../utils/sendCustomEmail";
 
@@ -25,7 +26,7 @@ export const createWorkshop = async (req: any, res: any) => {
         description,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
-        organizer: user.id,
+        organizerId: user.id,
       },
     });
     return res
@@ -44,22 +45,21 @@ export const joinWorkshop = async (req: any, res: any) => {
   try {
     const workshop = await prisma.workshop.findUnique({
       where: { id },
+      include: { participants: true },
     });
     if (!workshop) {
       return res.status(404).json({ message: "Workshop not found" });
     }
 
-    if (workshop.participants.includes(user.id)) {
+    if (
+      workshop.participants.some((participant) => participant.id === user.id)
+    ) {
       return res.status(200).json({ message: "Already joined this workshop" });
     }
 
     await prisma.workshop.update({
       where: { id },
-      data: { participants: workshop.participants.concat([user.id]) },
-    });
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { workshops: user.workshops.concat([workshop.id]) },
+      data: { participants: { connect: { id: user.id } } },
     });
 
     res.status(200).json({ message: "Successfully joined the workshop" });
@@ -71,9 +71,10 @@ export const joinWorkshop = async (req: any, res: any) => {
         sendOnJoin: true,
         active: true,
       },
+      include: { sentTo: { select: { id: true, userId: true } } },
     });
     for (const email of joinEmails) {
-      if (email.sentTo.includes(user.id)) continue;
+      if (email.sentTo.some((sent) => sent.userId === user.id)) continue;
       const renderer = new marked.Renderer();
       renderer.heading = ({ text, depth }) => {
         const sizes = {
@@ -108,15 +109,10 @@ export const joinWorkshop = async (req: any, res: any) => {
         senderName: "nathan",
         senderEmail: "nathan@rathacks.com",
       });
-      await prisma.email.update({
-        where: { id: email.id },
+      await prisma.emailReceipt.create({
         data: {
-          sentTo: {
-            push: user.id,
-          },
-          sentTimes: {
-            push: new Date(),
-          },
+          emailId: email.id,
+          userId: user.id,
         },
       });
     }
@@ -133,12 +129,15 @@ export const leaveWorkshop = async (req: any, res: any) => {
   try {
     const workshop = await prisma.workshop.findUnique({
       where: { id },
+      include: { participants: true },
     });
     if (!workshop) {
       return res.status(404).json({ message: "Workshop not found" });
     }
 
-    if (!workshop.participants.includes(user.id)) {
+    if (
+      !workshop.participants.some((participant) => participant.id === user.id)
+    ) {
       return res
         .status(200)
         .json({ message: "You have not joined this workshop" });
@@ -147,17 +146,7 @@ export const leaveWorkshop = async (req: any, res: any) => {
     await prisma.workshop.update({
       where: { id },
       data: {
-        participants: workshop.participants.filter(
-          (participantId) => participantId !== user.id
-        ),
-      },
-    });
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        workshops: user.workshops.filter(
-          (workshopId) => workshopId !== workshop.id
-        ),
+        participants: { disconnect: { id: user.id } },
       },
     });
 
@@ -180,6 +169,7 @@ export const addGoogleMeetURL = async (req: any, res: any) => {
   try {
     const workshop = await prisma.workshop.findUnique({
       where: { id },
+      include: { participants: true, organizer: true },
     });
     if (!workshop) {
       return res.status(404).json({ message: "Workshop not found" });
@@ -195,38 +185,29 @@ export const addGoogleMeetURL = async (req: any, res: any) => {
     res.status(200).json({ message: "Google Meet URL added successfully" });
 
     // Send notification emails to participants (2 every second)
-    const participants = await Promise.all(
-      workshop.participants.map(async (participantId) => {
-        const participant = await prisma.user.findUnique({
-          where: { id: participantId },
-        });
-        return participant;
-      })
+    const emailVerifiedParticipants = workshop.participants.filter(
+      (participant) => participant.emailVerified === true,
     );
-    const filteredParticipants = participants.filter(
-      (participant) => participant !== null
-    );
-    const emailVerifiedParticipants = filteredParticipants.filter(
-      (participant) => participant.emailVerified === true
-    );
-    const organizer = await prisma.user.findUnique({
-      where: { id: workshop.organizer },
-    });
+
+    const organizer = workshop.organizer;
     if (!organizer) return;
     const hasRatHacksEmail = organizer.email.endsWith("@rathacks.com") ?? false;
     emailVerifiedParticipants.forEach((participant, index) => {
-      setTimeout(() => {
-        sendWorkshopStartingEmail({
-          senderName: `${organizer.firstName} ${organizer.lastName}`,
-          emailName: hasRatHacksEmail
-            ? organizer.firstName.toLowerCase()
-            : "nathan",
-          workshopName: workshop.name,
-          email: participant.email,
-          firstName: participant.firstName,
-          meetingURL: googleMeetURL,
-        });
-      }, (index / 2) * 1000);
+      setTimeout(
+        () => {
+          sendWorkshopStartingEmail({
+            senderName: `${organizer.firstName} ${organizer.lastName}`,
+            emailName: hasRatHacksEmail
+              ? organizer.firstName.toLowerCase()
+              : "nathan",
+            workshopName: workshop.name,
+            email: participant.email,
+            firstName: participant.firstName,
+            meetingURL: googleMeetURL,
+          });
+        },
+        (index / 2) * 1000,
+      );
     });
   } catch (error) {
     console.error("Error adding Google Meet URL:", error);
@@ -304,13 +285,12 @@ export const updateWorkshop = async (req: any, res: any) => {
 
 export const getAllWorkshops = async (req: any, res: any) => {
   try {
-    const allWorkshops = await prisma.workshop.findMany();
-    const sortedWorkshops = sortWorkshops(allWorkshops);
+    const allWorkshops = await prisma.workshop.findMany({
+      include: { _count: { select: { participants: true } }, organizer: true },
+    });
+    const sortedWorkshops = sortWorkshops(allWorkshops) as Workshop1[];
     const workshops = await Promise.all(
       sortedWorkshops.map(async (workshop) => {
-        const organizer = await prisma.user.findUnique({
-          where: { id: workshop.organizer },
-        });
         return {
           id: workshop.id,
           name: workshop.name,
@@ -319,13 +299,13 @@ export const getAllWorkshops = async (req: any, res: any) => {
           startDate: workshop.startDate,
           endDate: workshop.endDate,
           status: workshop.status,
-          participantCount: workshop.participants.length,
+          participantCount: workshop._count.participants,
           organizer:
-            organizer !== null
-              ? `${organizer.firstName} ${organizer.lastName}`
+            workshop.organizer !== null
+              ? `${workshop.organizer.firstName} ${workshop.organizer.lastName}`
               : "Unknown Organizer",
         };
-      })
+      }),
     );
     return res
       .status(200)
@@ -344,47 +324,41 @@ export const organizerGetAllWorkshops = async (req: any, res: any) => {
   }
 
   try {
-    const allWorkshops = await prisma.workshop.findMany();
-    const sortedWorkshops = sortWorkshops(allWorkshops);
+    const allWorkshops = await prisma.workshop.findMany({
+      include: {
+        participants: true,
+        organizer: true,
+      },
+    });
+    const sortedWorkshops = sortWorkshops(allWorkshops) as Workshop2[];
     const workshops = await Promise.all(
       sortedWorkshops.map(async (workshop) => {
         const participants = await Promise.all(
-          workshop.participants.map(async (participantId) => {
-            const participant = await prisma.user.findUnique({
-              where: { id: participantId },
-            });
-            return participant
-              ? {
-                  id: participant.id,
-                  email: participant.email,
-                  emailVerified: participant.emailVerified,
-                  accountType: participant.accountType,
-                  firstName: participant.firstName,
-                  lastName: participant.lastName,
-                  schoolDivision: participant.schoolDivision,
-                  gradeLevel: participant.gradeLevel,
-                  isGovSchool: participant.isGovSchool,
-                  techStack: participant.techStack,
-                  previousHackathon: participant.previousHackathon,
-                  parentFirstName: participant.parentFirstName,
-                  parentLastName: participant.parentLastName,
-                  parentEmail: participant.parentEmail,
-                  parentPhoneNumber: participant.parentPhoneNumber,
-                  contactFirstName: participant.contactFirstName,
-                  contactLastName: participant.contactLastName,
-                  contactRelationship: participant.contactRelationship,
-                  contactPhoneNumber: participant.contactPhoneNumber,
-                  createdAt: participant.createdAt,
-                }
-              : null;
-          })
+          workshop.participants.map((participant) => {
+            return {
+              id: participant.id,
+              email: participant.email,
+              emailVerified: participant.emailVerified,
+              accountType: participant.accountType,
+              firstName: participant.firstName,
+              lastName: participant.lastName,
+              schoolDivision: participant.schoolDivision,
+              gradeLevel: participant.gradeLevel,
+              isGovSchool: participant.isGovSchool,
+              techStack: participant.techStack,
+              previousHackathon: participant.previousHackathon,
+              parentFirstName: participant.parentFirstName,
+              parentLastName: participant.parentLastName,
+              parentEmail: participant.parentEmail,
+              parentPhoneNumber: participant.parentPhoneNumber,
+              contactFirstName: participant.contactFirstName,
+              contactLastName: participant.contactLastName,
+              contactRelationship: participant.contactRelationship,
+              contactPhoneNumber: participant.contactPhoneNumber,
+              createdAt: participant.createdAt,
+            };
+          }),
         );
-        const filteredParticipants = participants.filter(
-          (participant) => participant !== null
-        );
-        const organizer = await prisma.user.findUnique({
-          where: { id: workshop.organizer },
-        });
         return {
           id: workshop.id,
           name: workshop.name,
@@ -393,14 +367,15 @@ export const organizerGetAllWorkshops = async (req: any, res: any) => {
           startDate: workshop.startDate,
           endDate: workshop.endDate,
           status: workshop.status,
-          participants: filteredParticipants,
-          organizer: organizer
-            ? `${organizer.firstName} ${organizer.lastName}`
-            : "Unknown Organizer",
+          participants,
+          organizer:
+            workshop.organizer !== null
+              ? `${workshop.organizer.firstName} ${workshop.organizer.lastName}`
+              : "Unknown Organizer",
           organizerId: workshop.organizer,
           createdAt: workshop.createdAt,
         };
-      })
+      }),
     );
     return res
       .status(200)
@@ -417,14 +392,11 @@ export const getWorkshopById = async (req: any, res: any) => {
   try {
     const workshopData = await prisma.workshop.findUnique({
       where: { id },
+      include: { _count: { select: { participants: true } }, organizer: true },
     });
     if (!workshopData) {
       return res.status(404).json({ message: "Workshop not found" });
     }
-
-    const organizer = await prisma.user.findUnique({
-      where: { id: workshopData.organizer },
-    });
 
     const workshop = {
       id: workshopData.id,
@@ -434,10 +406,11 @@ export const getWorkshopById = async (req: any, res: any) => {
       startDate: workshopData.startDate,
       endDate: workshopData.endDate,
       status: workshopData.status,
-      participantCount: workshopData.participants.length,
-      organizer: organizer
-        ? `${organizer.firstName} ${organizer.lastName}`
-        : "Unknown Organizer",
+      participantCount: workshopData._count.participants,
+      organizer:
+        workshopData.organizer !== null
+          ? `${workshopData.organizer.firstName} ${workshopData.organizer.lastName}`
+          : "Unknown Organizer",
       organizerId: workshopData.organizer,
       createdAt: workshopData.createdAt,
     };
@@ -461,20 +434,15 @@ export const organizerGetWorkshopById = async (req: any, res: any) => {
   try {
     const workshopData = await prisma.workshop.findUnique({
       where: { id },
+      include: { participants: true, organizer: true },
     });
     if (!workshopData) {
       return res.status(404).json({ message: "Workshop not found" });
     }
 
-    const participants = await Promise.all(
-      workshopData.participants.map(async (participantId) => {
-        const participantData = await prisma.user.findUnique({
-          where: { id: participantId },
-        });
-        if (participantData === null) {
-          return null;
-        }
-        const participant = {
+    const participants = workshopData.participants.map(
+      async (participantData) => {
+        return {
           id: participantData.id,
           email: participantData.email,
           emailVerified: participantData.emailVerified,
@@ -496,16 +464,11 @@ export const organizerGetWorkshopById = async (req: any, res: any) => {
           contactPhoneNumber: participantData.contactPhoneNumber,
           createdAt: participantData.createdAt,
         };
-        return participant;
-      })
+      },
     );
     const filteredParticipants = participants.filter(
-      (participant) => participant !== null
+      (participant) => participant !== null,
     );
-
-    const organizer = await prisma.user.findUnique({
-      where: { id: workshopData.organizer },
-    });
 
     const workshop = {
       id: workshopData.id,
@@ -516,8 +479,8 @@ export const organizerGetWorkshopById = async (req: any, res: any) => {
       endDate: workshopData.endDate,
       status: workshopData.status,
       participants: filteredParticipants,
-      organizer: organizer
-        ? `${organizer.firstName} ${organizer.lastName}`
+      organizer: workshopData.organizer
+        ? `${workshopData.organizer.firstName} ${workshopData.organizer.lastName}`
         : "Unknown Organizer",
       createdAt: workshopData.createdAt,
     };
@@ -546,20 +509,6 @@ export const deleteWorkshop = async (req: any, res: any) => {
       return res.status(404).json({ message: "Workshop not found" });
     }
 
-    await workshop.participants.forEach(async (participantId) => {
-      const participant = await prisma.user.findUnique({
-        where: { id: participantId },
-      });
-      if (!participant) return;
-      await prisma.user.update({
-        where: { id: participantId },
-        data: {
-          workshops: participant.workshops.filter(
-            (workshopId) => workshopId !== workshop.id
-          ),
-        },
-      });
-    });
     await prisma.workshop.delete({
       where: { id },
     });

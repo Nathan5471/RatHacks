@@ -1,8 +1,24 @@
-import { Workshop } from "@prisma/client";
+import { Prisma } from "@prisma/client";
+
+export type Workshop1 = Prisma.WorkshopGetPayload<{
+  include: {
+    _count: { select: { participants: true } };
+    organizer: true;
+  };
+}>;
+
+export type Workshop2 = Prisma.WorkshopGetPayload<{
+  include: {
+    participants: true;
+    organizer: true;
+  };
+}>;
+
+type Workshop = Workshop1 | Workshop2;
 
 const sortByStartDate = (workshops: Workshop[]) => {
   return workshops.sort(
-    (a, b) => a.startDate.getTime() - b.startDate.getTime()
+    (a, b) => a.startDate.getTime() - b.startDate.getTime(),
   );
 };
 
@@ -12,13 +28,13 @@ const sortByEndDate = (workshops: Workshop[]) => {
 
 export default function sortWorkshops(workshops: Workshop[]) {
   const upcomingWorkshops = workshops.filter(
-    (workshop) => workshop.status === "upcoming"
+    (workshop) => workshop.status === "upcoming",
   );
   const ongoingWorkshops = workshops.filter(
-    (workshop) => workshop.status === "ongoing"
+    (workshop) => workshop.status === "ongoing",
   );
   const completedWorkshops = workshops.filter(
-    (workshop) => workshop.status === "completed"
+    (workshop) => workshop.status === "completed",
   );
 
   return [
