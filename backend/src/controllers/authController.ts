@@ -82,7 +82,6 @@ export const register = async (req: any, res: any) => {
         contactLastName,
         contactRelationship,
         contactPhoneNumber,
-        events: [],
         validAccessTokens: [],
         validRefreshTokens: [],
       },
@@ -684,45 +683,43 @@ export const getStats = async (req: any, res: any) => {
     const frameworkTheme = await prisma.user.count({
       where: { theme: "framework" },
     });
-    const workshops = await prisma.workshop.findMany();
+    const workshops = await prisma.workshop.findMany({
+      include: { _count: { select: { participants: true } } },
+    });
     const totalWorkshopParticipants = workshops.reduce((acc, workshop) => {
-      return acc + (workshop.participants ? workshop.participants.length : 0);
+      return acc + workshop._count.participants;
     }, 0);
-    const events = await prisma.event.findMany();
+    const events = await prisma.event.findMany({
+      include: {
+        _count: { select: { participants: true, projects: true, teams: true } },
+      },
+    });
     const totalEventParticipants = events.reduce((acc, event) => {
-      return acc + (event.participants ? event.participants.length : 0);
+      return acc + event._count.participants;
     }, 0);
     const averageShipRate =
       events.reduce((acc, event) => {
-        return acc + event.projects.length / (event.teams?.length || 1);
+        return acc + event._count.projects / (event._count.teams || 1);
       }, 0) / events.length;
     const projects = await prisma.project.count();
-    const judgeFeedbacks = await prisma.judgeFeedback.findMany();
-    const averageCreativityScore = (
-      judgeFeedbacks.reduce((acc, feedback) => {
-        return acc + feedback.creativityScore;
-      }, 0) / judgeFeedbacks.length
-    ).toFixed(2);
-    const averageFunctionalityScore = (
-      judgeFeedbacks.reduce((acc, feedback) => {
-        return acc + feedback.functionalityScore;
-      }, 0) / judgeFeedbacks.length
-    ).toFixed(2);
-    const averageTechnicalityScore = (
-      judgeFeedbacks.reduce((acc, feedback) => {
-        return acc + feedback.technicalityScore;
-      }, 0) / judgeFeedbacks.length
-    ).toFixed(2);
-    const averageInterfaceScore = (
-      judgeFeedbacks.reduce((acc, feedback) => {
-        return acc + feedback.interfaceScore;
-      }, 0) / judgeFeedbacks.length
-    ).toFixed(2);
-    const averageScore = (
-      judgeFeedbacks.reduce((acc, feedback) => {
-        return acc + feedback.totalScore;
-      }, 0) / judgeFeedbacks.length
-    ).toFixed(2);
+    const judgeFeedbackStats = await prisma.judgeFeedback.aggregate({
+      _avg: {
+        creativityScore: true,
+        functionalityScore: true,
+        technicalityScore: true,
+        interfaceScore: true,
+        totalScore: true,
+      },
+    });
+    const averageCreativityScore =
+      judgeFeedbackStats._avg.creativityScore?.toFixed(2);
+    const averageFunctionalityScore =
+      judgeFeedbackStats._avg.functionalityScore?.toFixed(2);
+    const averageTechnicalityScore =
+      judgeFeedbackStats._avg.technicalityScore?.toFixed(2);
+    const averageInterfaceScore =
+      judgeFeedbackStats._avg.interfaceScore?.toFixed(2);
+    const averageScore = judgeFeedbackStats._avg.totalScore?.toFixed(2);
 
     return res.status(200).json({
       message: "Stats retrieved successfully",
@@ -908,39 +905,6 @@ export const deleteUser = async (req: any, res: any) => {
   const user = req.user as User;
 
   try {
-    await user.events.forEach(async (eventId) => {
-      const event = await prisma.event.findUnique({
-        where: { id: eventId },
-      });
-      if (!event) {
-        return;
-      }
-      await prisma.event.update({
-        where: { id: eventId },
-        data: {
-          participants: event.participants.filter(
-            (userId) => userId !== user.id,
-          ),
-        },
-      });
-    });
-    await user.workshops.forEach(async (workshopId) => {
-      const workshop = await prisma.workshop.findUnique({
-        where: { id: workshopId },
-      });
-      if (!workshop) {
-        return;
-      }
-      await prisma.workshop.update({
-        where: { id: workshopId },
-        data: {
-          participants: workshop.participants.filter(
-            (userId) => userId !== user.id,
-          ),
-        },
-      });
-    });
-
     await prisma.user.delete({
       where: { id: user.id },
     });
@@ -970,38 +934,6 @@ export const organizerDeleteUser = async (req: any, res: any) => {
     if (!userToDelete) {
       return res.status(404).json({ message: "User not found" });
     }
-    await userToDelete.events.forEach(async (eventId) => {
-      const event = await prisma.event.findUnique({
-        where: { id: eventId },
-      });
-      if (!event) {
-        return;
-      }
-      await prisma.event.update({
-        where: { id: eventId },
-        data: {
-          participants: event.participants.filter(
-            (userId) => userId !== userToDelete.id,
-          ),
-        },
-      });
-    });
-    await userToDelete.workshops.forEach(async (workshopId) => {
-      const workshop = await prisma.workshop.findUnique({
-        where: { id: workshopId },
-      });
-      if (!workshop) {
-        return;
-      }
-      await prisma.workshop.update({
-        where: { id: workshopId },
-        data: {
-          participants: workshop.participants.filter(
-            (userId) => userId !== userToDelete.id,
-          ),
-        },
-      });
-    });
 
     await prisma.user.delete({
       where: { id: userToDelete.id },

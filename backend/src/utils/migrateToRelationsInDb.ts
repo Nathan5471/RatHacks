@@ -81,7 +81,7 @@ const migrateToRelationsInDb = async () => {
           data: {
             emailId: email.id,
             userId: sentToId,
-            sentTime: sentTime,
+            sentAt: sentTime,
           },
         });
       } catch (error) {

@@ -95,7 +95,7 @@ model Team {
   joinCode         String   @unique
   members          User[]
   memberIds        String[] // User Ids (max 4)
-  event            Event    @relation(fields: [eventId], references: [id])
+  event            Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId          String
   submittedProject Boolean  @default(false)
   project          Project?
@@ -111,24 +111,24 @@ model Project {
   screenshotURL    String?
   videoURL         String?
   demoURL          String?
-  event            Event           @relation(fields: [eventId], references: [id])
+  event            Event           @relation(fields: [eventId], references: [id], onDelete: Restrict)
   eventId          String
-  team             Team            @relation(fields: [teamId], references: [id])
+  team             Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId           String          @unique
   judgeFeedback    JudgeFeedback[]
   judgeFeedbackIds String[] // JudgeFeedback Ids
   ranking          Int?
   createdAt        DateTime        @default(now())
-  submittedBy      User?           @relation(fields: [submittedById], references: [id])
+  submittedBy      User?           @relation(fields: [submittedById], references: [id], onDelete: SetNull)
   submittedById    String? // User Id
   submittedAt      DateTime?
 }
 
 model JudgeFeedback {
   id                 String   @id @default(uuid())
-  judge              User     @relation(fields: [judgeId], references: [id])
-  judgeId            String // User Id
-  project            Project  @relation(fields: [projectId], references: [id])
+  judge              User?    @relation(fields: [judgeId], references: [id], onDelete: SetNull)
+  judgeId            String? // User Id
+  project            Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId          String // Project Id
   creativityScore    Int
   functionalityScore Int
@@ -158,8 +158,8 @@ model Event {
   teamIds               String[] // Team Ids
   projects              Project[]
   projectIds            String[] // Project Ids
-  createdBy             User      @relation("eventCreatedBy", fields: [createdById], references: [id])
-  createdById           String // Organizer Id
+  createdBy             User?     @relation("eventCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById           String? // Organizer Id
   createdAt             DateTime  @default(now())
 }
 
@@ -173,8 +173,8 @@ model Workshop {
   status         Status   @default(upcoming)
   participants   User[]   @relation("workshopParticipants")
   participantIds String[] // User Ids
-  organizer      User     @relation("workshopOrganizer", fields: [organizerId], references: [id])
-  organizerId    String // Organizer Id
+  organizer      User?    @relation("workshopOrganizer", fields: [organizerId], references: [id], onDelete: SetNull)
+  organizerId    String? // Organizer Id
   createdAt      DateTime @default(now())
 }
 
@@ -183,7 +183,7 @@ model Email {
   name           String
   messageSubject String
   messageBody    String
-  sendFrom       User?          @relation("emailSendFrom", fields: [sendFromId], references: [id])
+  sendFrom       User?          @relation("emailSendFrom", fields: [sendFromId], references: [id], onDelete: SetNull)
   sendFromId     String?
   sendAll        Boolean
   filterBy       String?
@@ -198,9 +198,9 @@ model Email {
 
 model EmailReceipt {
   id      String    @id @default(uuid())
-  email   Email     @relation(fields: [emailId], references: [id])
+  email   Email     @relation(fields: [emailId], references: [id], onDelete: Cascade)
   emailId String
-  user    User      @relation(fields: [userId], references: [id])
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
   sentAt  DateTime  @default(now())
   seen    Boolean   @default(false) // Currently not used, but I plan on implementing this later
@@ -209,7 +209,7 @@ model EmailReceipt {
 
 model Session {
   id              String     @id @default(uuid())
-  user            User?      @relation(fields: [userId], references: [id])
+  user            User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId          String?
   pageViews       PageView[]
   sessionLength   Int?
@@ -225,10 +225,10 @@ model Session {
 model PageView {
   id              String   @id @default(uuid())
   url             String
-  user            User?    @relation(fields: [userId], references: [id])
+  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId          String?
   createdAt       DateTime @default(now())
-  session         Session  @relation(fields: [sessionId], references: [id])
+  session         Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId       String
   operatingSystem String?
   browser         String?
