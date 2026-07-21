@@ -31,8 +31,11 @@ export const createProject = async (req: any, res: any) => {
     }
     const team = await prisma.team.findFirst({
       where: {
-        members: { has: user.id },
+        members: { some: { id: user.id } },
         eventId: event.id,
+      },
+      include: {
+        project: true,
       },
     });
     if (!team) {
@@ -56,12 +59,6 @@ export const createProject = async (req: any, res: any) => {
         teamId: team.id,
       },
     });
-    await prisma.team.update({
-      where: { id: team.id },
-      data: {
-        project: newProject.id,
-      },
-    });
     return res.status(201).json({
       message: "Project created successfully",
       projectId: newProject.id,
@@ -81,18 +78,19 @@ export const submitProject = async (req: any, res: any) => {
       where: {
         id: projectId,
       },
+      include: {
+        team: {
+          include: {
+            members: true,
+          },
+        },
+      },
     });
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    const team = await prisma.team.findUnique({
-      where: { id: project.teamId },
-    });
-    if (!team) {
-      return res.status(404).json({ message: "Team not found" });
-    }
-    if (!team.members.includes(user.id)) {
+    if (!project.team.members.some((member) => member.id === user.id)) {
       return res
         .status(403)
         .json({ message: "User is not part of the team for this project" });
@@ -111,19 +109,13 @@ export const submitProject = async (req: any, res: any) => {
       where: { id: project.id },
       data: {
         submittedAt: new Date(),
-        submittedBy: user.id,
+        submittedBy: { connect: { id: user.id } },
       },
     });
     await prisma.team.update({
-      where: { id: team.id },
+      where: { id: project.team.id },
       data: {
         submittedProject: true,
-      },
-    });
-    await prisma.event.update({
-      where: { id: project.eventId },
-      data: {
-        projects: { push: project.id },
       },
     });
     return res.status(200).json({ message: "Successfully submitted project" });
@@ -157,33 +149,25 @@ export const leaveFeedback = async (req: any, res: any) => {
   try {
     const project = await prisma.project.findUnique({
       where: { id: projectId },
+      include: {
+        event: true,
+        judgeFeedback: {
+          where: { judgeId: user.id },
+        },
+      },
     });
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
-    const event = await prisma.event.findUnique({
-      where: { id: project.eventId },
-    });
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-    if (event.releasedJudging) {
+    if (project.event.releasedJudging) {
       return res
         .status(400)
         .json({ message: "Judging has already been released" });
     }
-    const existingFeedback = await prisma.judgeFeedback.findMany({
-      where: {
-        judgeId: user.id,
-        projectId,
-      },
-    });
-    if (existingFeedback.length > 0) {
-      existingFeedback.forEach(async (feedback) => {
-        await prisma.judgeFeedback.delete({
-          where: { id: feedback.id },
-        });
-      });
+    if (project.judgeFeedback.length > 0) {
+      return res
+        .status(400)
+        .json({ message: "Feedback already exists for this project" });
     }
     await prisma.judgeFeedback.create({
       data: {
@@ -224,6 +208,13 @@ export const updateProject = async (req: any, res: any) => {
   try {
     const project = await prisma.project.findUnique({
       where: { id: projectId },
+      include: {
+        team: {
+          include: {
+            members: true,
+          },
+        },
+      },
     });
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
@@ -233,13 +224,7 @@ export const updateProject = async (req: any, res: any) => {
         .status(400)
         .json({ message: "Project can't be editted after being submitted" });
     }
-    const team = await prisma.team.findUnique({
-      where: { id: project.teamId },
-    });
-    if (!team) {
-      return res.status(404).json({ message: "Team not found" });
-    }
-    if (!team.members.includes(user.id)) {
+    if (!project.team.members.some((member) => member.id === user.id)) {
       return res
         .status(403)
         .json({ message: "User is not part of the team for this project" });
@@ -283,12 +268,10 @@ export const generateUploadLink = async (req: any, res: any) => {
     const signed = await r2.sign(new Request(url, { method: "PUT" }), {
       aws: { signQuery: true },
     });
-    return res
-      .status(200)
-      .json({
-        uploadURL: signed.url,
-        postUploadURL: `${publicBaseURL}/${filename}`,
-      });
+    return res.status(200).json({
+      uploadURL: signed.url,
+      postUploadURL: `${publicBaseURL}/${filename}`,
+    });
   } catch (error) {
     console.error("Error generating upload link:", error);
     return res.status(500).json({ message: "Failed to generate upload link" });
@@ -304,45 +287,37 @@ export const getProjectById = async (req: any, res: any) => {
       where: {
         id: projectId,
       },
+      include: {
+        event: true,
+        team: {
+          include: {
+            members: true,
+          },
+        },
+        judgeFeedback: {
+          include: {
+            judge: true,
+          },
+        },
+      },
     });
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
-    const event = await prisma.event.findUnique({
-      where: { id: project.eventId },
+    const members = project.team.members.map((member) => {
+      return `${member.firstName} ${member.lastName}`;
     });
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-    const team = await prisma.team.findUnique({
-      where: { id: project.teamId },
-    });
-    if (!team) {
-      return res.status(404).json({ message: "Team not found" });
-    }
-    const members = await Promise.all(
-      team.members.map(async (memberId) => {
-        const member = await prisma.user.findUnique({
-          where: { id: memberId },
-        });
-        if (!member) return null;
-        return `${member.firstName} ${member.lastName}`;
-      }),
-    );
     const filteredMembers = members.filter((member) => member !== null);
     let projectFeedback = [];
-    if (event.releasedJudging && user && team.members.includes(user.id)) {
-      const projectFeedbackData = await prisma.judgeFeedback.findMany({
-        where: { projectId },
-      });
-      for (const feedback of projectFeedbackData) {
-        const judge = await prisma.user.findUnique({
-          where: { id: feedback.judgeId },
-        });
-        if (!judge) continue;
+    if (
+      project.event.releasedJudging &&
+      user &&
+      project.team.members.some((member) => member.id === user.id)
+    ) {
+      for (const feedback of project.judgeFeedback) {
         projectFeedback.push({
           id: feedback.id,
-          judge: `${judge.firstName} ${judge.lastName}`,
+          judge: `${feedback.judge?.firstName} ${feedback.judge?.lastName}`,
           creativityScore: feedback.creativityScore,
           functionalityScore: feedback.functionalityScore,
           technicalityScore: feedback.technicalityScore,
@@ -365,8 +340,8 @@ export const getProjectById = async (req: any, res: any) => {
         demoURL: project.demoURL,
         members: filteredMembers,
         event: {
-          id: event.id,
-          name: event.name,
+          id: project.event.id,
+          name: project.event.name,
         },
         judgeFeedback: projectFeedback,
       },
@@ -390,74 +365,60 @@ export const organizerGetProjectById = async (req: any, res: any) => {
       where: {
         id: projectId,
       },
+      include: {
+        event: true,
+        team: {
+          include: {
+            members: true,
+          },
+        },
+        judgeFeedback: {
+          include: {
+            judge: true,
+          },
+        },
+      },
     });
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
-    const event = await prisma.event.findUnique({
-      where: { id: project.eventId },
+    const members = project.team.members.map((member) => {
+      return {
+        id: member.id,
+        email: member.email,
+        emailVerified: member.emailVerified,
+        accountType: member.accountType,
+        firstName: member.firstName,
+        lastName: member.lastName,
+        schoolDivision: member.schoolDivision,
+        gradeLevel: member.gradeLevel,
+        isGovSchool: member.isGovSchool,
+        techStack: member.techStack,
+        previousHackathon: member.previousHackathon,
+        parentFirstName: member.parentFirstName,
+        parentLastName: member.parentLastName,
+        parentEmail: member.parentEmail,
+        parentPhoneNumber: member.parentPhoneNumber,
+        contactFirstName: member.contactFirstName,
+        contactLastName: member.contactLastName,
+        contactRelationship: member.contactRelationship,
+        contactPhoneNumber: member.contactPhoneNumber,
+        createdAt: member.createdAt,
+      };
     });
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-    const team = await prisma.team.findUnique({
-      where: { id: project.teamId },
+    const judgeFeedback = project.judgeFeedback.map((feedback) => {
+      return {
+        id: feedback.id,
+        judge: `${feedback.judge?.firstName} ${feedback.judge?.lastName}`,
+        creativityScore: feedback.creativityScore,
+        functionalityScore: feedback.functionalityScore,
+        technicalityScore: feedback.technicalityScore,
+        interfaceScore: feedback.interfaceScore,
+        totalScore: feedback.totalScore,
+        feedback: feedback.feedback,
+        createdAt: feedback.createdAt,
+      };
     });
-    if (!team) {
-      return res.status(404).json({ message: "Team not found" });
-    }
-    const members = await Promise.all(
-      team.members.map(async (memberId) => {
-        const member = await prisma.user.findUnique({
-          where: { id: memberId },
-        });
-        if (!member) return null;
-        return {
-          id: member.id,
-          email: member.email,
-          emailVerified: member.emailVerified,
-          accountType: member.accountType,
-          firstName: member.firstName,
-          lastName: member.lastName,
-          schoolDivision: member.schoolDivision,
-          gradeLevel: member.gradeLevel,
-          isGovSchool: member.isGovSchool,
-          techStack: member.techStack,
-          previousHackathon: member.previousHackathon,
-          parentFirstName: member.parentFirstName,
-          parentLastName: member.parentLastName,
-          parentEmail: member.parentEmail,
-          parentPhoneNumber: member.parentPhoneNumber,
-          contactFirstName: member.contactFirstName,
-          contactLastName: member.contactLastName,
-          contactRelationship: member.contactRelationship,
-          contactPhoneNumber: member.contactPhoneNumber,
-          createdAt: member.createdAt,
-        };
-      }),
-    );
-    const filteredMembers = members.filter((member) => member !== null);
-    const judgeFeedback = await prisma.judgeFeedback.findMany({
-      where: { projectId },
-    });
-    const filledJudgeFeedback = await Promise.all(
-      judgeFeedback.map(async (feedback) => {
-        const judge = await prisma.user.findUnique({
-          where: { id: feedback.judgeId },
-        });
-        return {
-          id: feedback.id,
-          judge: `${judge?.firstName} ${judge?.lastName}`,
-          creativityScore: feedback.creativityScore,
-          functionalityScore: feedback.functionalityScore,
-          technicalityScore: feedback.technicalityScore,
-          interfaceScore: feedback.interfaceScore,
-          totalScore: feedback.totalScore,
-          feedback: feedback.feedback,
-          createdAt: feedback.createdAt,
-        };
-      }),
-    );
 
     return res.status(200).json({
       message: "Project loaded succesfully",
@@ -471,15 +432,15 @@ export const organizerGetProjectById = async (req: any, res: any) => {
         demoURL: project.demoURL,
         submittedAt: project.submittedAt,
         team: {
-          id: team.id,
-          joinCode: team.joinCode,
-          members: filteredMembers,
+          id: project.team.id,
+          joinCode: project.team.joinCode,
+          members,
         },
         event: {
-          id: event.id,
-          name: event.name,
+          id: project.event.id,
+          name: project.event.name,
         },
-        judgeFeedback: filledJudgeFeedback,
+        judgeFeedback: judgeFeedback,
       },
     });
   } catch (error) {
@@ -501,34 +462,23 @@ export const judgeGetProjectById = async (req: any, res: any) => {
       where: {
         id: projectId,
       },
+      include: {
+        event: true,
+        team: {
+          include: {
+            members: true,
+          },
+        },
+        judgeFeedback: {
+          where: { judgeId: user.id },
+        },
+      },
     });
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
-    const event = await prisma.event.findUnique({
-      where: { id: project.eventId },
-    });
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-    const team = await prisma.team.findUnique({
-      where: { id: project.teamId },
-    });
-    if (!team) {
-      return res.status(404).json({ message: "Team not found" });
-    }
-    const members = await Promise.all(
-      team.members.map(async (memberId) => {
-        const member = await prisma.user.findUnique({
-          where: { id: memberId },
-        });
-        if (!member) return null;
-        return `${member.firstName} ${member.lastName}`;
-      }),
-    );
-    const filteredMembers = members.filter((member) => member !== null);
-    const judgeFeedback = await prisma.judgeFeedback.findFirst({
-      where: { projectId, judgeId: user.id },
+    const members = project.team.members.map((member) => {
+      return `${member.firstName} ${member.lastName}`;
     });
     return res.status(200).json({
       message: "Project loaded succesfully",
@@ -541,13 +491,13 @@ export const judgeGetProjectById = async (req: any, res: any) => {
         videoURL: project.videoURL,
         demoURL: project.demoURL,
         submittedAt: project.submittedAt,
-        team: filteredMembers,
+        team: members,
         event: {
-          id: event.id,
-          name: event.name,
+          id: project.event.id,
+          name: project.event.name,
         },
-        canBeJudged: !event.releasedJudging,
-        judgeFeedback,
+        canBeJudged: !project.event.releasedJudging,
+        judgeFeedback: project.judgeFeedback.length > 0,
       },
     });
   } catch (error) {

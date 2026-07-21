@@ -4,6 +4,15 @@ const removeUncheckedInUsers = async (eventId: string) => {
   try {
     const event = await prisma.event.findUnique({
       where: { id: eventId },
+      include: {
+        participants: true,
+        checkedInParticipants: true,
+        teams: {
+          include: {
+            members: true,
+          },
+        },
+      },
     });
     if (!event) {
       throw new Error("Event not found");
@@ -11,37 +20,21 @@ const removeUncheckedInUsers = async (eventId: string) => {
     if (event.status !== "completed") {
       throw new Error("Event is not completed");
     }
-    for (const userId of event.participants) {
-      if (!event.checkedIn.includes(userId)) {
-        const user = await prisma.user.findUnique({ where: { id: userId } });
-        if (user) {
-          await prisma.user.update({
-            where: { id: userId },
-            data: {
-              events: user.events.filter((id) => id !== eventId),
-            },
-          });
-        }
-        const team = await prisma.team.findFirst({
-          where: {
-            eventId: eventId,
-            members: { has: userId },
-          },
-        });
+    for (const user of event.participants) {
+      if (
+        !event.checkedInParticipants.some(
+          (checkedInUser) => checkedInUser.id === user.id,
+        )
+      ) {
+        const team = event.teams.find((team) => team.members);
         if (team) {
           if (team.members.length === 1) {
             await prisma.team.delete({ where: { id: team.id } });
-            await prisma.event.update({
-              where: { id: eventId },
-              data: {
-                teams: event.teams.filter((id) => id !== team.id),
-              },
-            });
           } else {
             await prisma.team.update({
               where: { id: team.id },
               data: {
-                members: team.members.filter((id) => id !== userId),
+                members: { disconnect: { id: user.id } },
               },
             });
           }
@@ -49,7 +42,7 @@ const removeUncheckedInUsers = async (eventId: string) => {
         await prisma.event.update({
           where: { id: eventId },
           data: {
-            participants: event.participants.filter((id) => id !== userId),
+            participants: { disconnect: { id: user.id } },
           },
         });
       }

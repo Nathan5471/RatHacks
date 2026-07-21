@@ -9,32 +9,24 @@ const sendJudgingEmails = async (eventId: string) => {
   }
   const event = await prisma.event.findUnique({
     where: { id: eventId },
+    include: {
+      projects: {
+        include: {
+          team: {
+            include: {
+              members: true,
+            },
+          },
+        },
+      },
+    },
   });
   if (!event) {
     throw new Error("Event not found");
   }
-  const projects = await prisma.project.findMany({
-    where: { eventId },
-  });
-  for (const [index, project] of projects.entries()) {
-    const team = await prisma.team.findUnique({
-      where: { id: project.teamId },
-    });
-    if (!team) {
-      console.warn(
-        `Team not found for project: ${project.name} (${project.id})`
-      );
-      continue;
-    }
-    const members = await Promise.all(
-      team.members.map((memberId) => {
-        return prisma.user.findUnique({ where: { id: memberId } });
-      })
-    );
-    const filteredMembers = members.filter((member) => member !== null);
+  for (const [index, project] of event.projects.entries()) {
     if ([1, 2, 3].includes(project.ranking!)) {
-      for (const member of filteredMembers) {
-        if (!member.email) continue;
+      for (const member of project.team.members) {
         setTimeout(async () => {
           // Send email with 1 team per second (up to 4/second)
           await sendPlacingEmail({
@@ -48,8 +40,7 @@ const sendJudgingEmails = async (eventId: string) => {
         }, index * 1000);
       }
     } else {
-      for (const member of filteredMembers) {
-        if (!member.email) continue;
+      for (const member of project.team.members) {
         setTimeout(async () => {
           await sendFeedbackEmail({
             firstName: member.firstName,
