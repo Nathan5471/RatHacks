@@ -64,14 +64,11 @@ model User {
   contactPhoneNumber     String?
   events                 Event[]         @relation("eventParticipants")
   checkedInEvents        Event[]         @relation("eventCheckedInParticipants")
-  eventIds               String[] // Event Ids
   createdEvents          Event[]         @relation("eventCreatedBy")
   teams                  Team[]
-  teamId                 String?
   submittedProjects      Project[]
   judgeFeedbacks         JudgeFeedback[]
   workshops              Workshop[]      @relation("workshopParticipants")
-  workshopIds            String[] // Workshop Ids
   organizedWorkshops     Workshop[]      @relation("workshopOrganizer")
   receivedEmails         EmailReceipt[]
   sentEmails             Email[]         @relation("emailSendFrom")
@@ -94,34 +91,31 @@ model Team {
   id               String   @id @default(uuid())
   joinCode         String   @unique
   members          User[]
-  memberIds        String[] // User Ids (max 4)
   event            Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId          String
   submittedProject Boolean  @default(false)
   project          Project?
-  projectId        String? // Project Id
   createdAt        DateTime @default(now())
 }
 
 model Project {
-  id               String          @id @default(uuid())
-  name             String
-  description      String
-  codeURL          String?
-  screenshotURL    String?
-  videoURL         String?
-  demoURL          String?
-  event            Event           @relation(fields: [eventId], references: [id], onDelete: Restrict)
-  eventId          String
-  team             Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  teamId           String          @unique
-  judgeFeedback    JudgeFeedback[]
-  judgeFeedbackIds String[] // JudgeFeedback Ids
-  ranking          Int?
-  createdAt        DateTime        @default(now())
-  submittedBy      User?           @relation(fields: [submittedById], references: [id], onDelete: SetNull)
-  submittedById    String? // User Id
-  submittedAt      DateTime?
+  id            String          @id @default(uuid())
+  name          String
+  description   String
+  codeURL       String?
+  screenshotURL String?
+  videoURL      String?
+  demoURL       String?
+  event         Event           @relation(fields: [eventId], references: [id], onDelete: Restrict)
+  eventId       String
+  team          Team            @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId        String          @unique
+  judgeFeedback JudgeFeedback[]
+  ranking       Int?
+  createdAt     DateTime        @default(now())
+  submittedBy   User?           @relation(fields: [submittedById], references: [id], onDelete: SetNull)
+  submittedById String? // User Id
+  submittedAt   DateTime?
 }
 
 model JudgeFeedback {
@@ -151,31 +145,26 @@ model Event {
   status                Status    @default(upcoming)
   releasedJudging       Boolean   @default(false)
   participants          User[]    @relation("eventParticipants")
-  participantIds        String[] // User Ids
   checkedInParticipants User[]    @relation("eventCheckedInParticipants")
-  checkedInIds          String[] // User Ids
   teams                 Team[]
-  teamIds               String[] // Team Ids
   projects              Project[]
-  projectIds            String[] // Project Ids
   createdBy             User?     @relation("eventCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   createdById           String? // Organizer Id
   createdAt             DateTime  @default(now())
 }
 
 model Workshop {
-  id             String   @id @default(uuid())
-  name           String
-  description    String
-  googleMeetURL  String?
-  startDate      DateTime
-  endDate        DateTime
-  status         Status   @default(upcoming)
-  participants   User[]   @relation("workshopParticipants")
-  participantIds String[] // User Ids
-  organizer      User?    @relation("workshopOrganizer", fields: [organizerId], references: [id], onDelete: SetNull)
-  organizerId    String? // Organizer Id
-  createdAt      DateTime @default(now())
+  id            String   @id @default(uuid())
+  name          String
+  description   String
+  googleMeetURL String?
+  startDate     DateTime
+  endDate       DateTime
+  status        Status   @default(upcoming)
+  participants  User[]   @relation("workshopParticipants")
+  organizer     User?    @relation("workshopOrganizer", fields: [organizerId], references: [id], onDelete: SetNull)
+  organizerId   String? // Organizer Id
+  createdAt     DateTime @default(now())
 }
 
 model Email {
@@ -191,8 +180,6 @@ model Email {
   sendOnJoin     Boolean        @default(false)
   active         Boolean        @default(false) // This is for sendOnJoin emails to indicate if they should be used
   sentTo         EmailReceipt[]
-  sentToIds      String[] // User Ids
-  sentTimes      DateTime[] // Timestamps of when each email per user was sent (length should match sentTo)
   createdAt      DateTime       @default(now())
 }
 
