@@ -440,35 +440,30 @@ export const organizerGetWorkshopById = async (req: any, res: any) => {
       return res.status(404).json({ message: "Workshop not found" });
     }
 
-    const participants = workshopData.participants.map(
-      async (participantData) => {
-        return {
-          id: participantData.id,
-          email: participantData.email,
-          emailVerified: participantData.emailVerified,
-          accountType: participantData.accountType,
-          firstName: participantData.firstName,
-          lastName: participantData.lastName,
-          schoolDivision: participantData.schoolDivision,
-          gradeLevel: participantData.gradeLevel,
-          isGovSchool: participantData.isGovSchool,
-          techStack: participantData.techStack,
-          previousHackathon: participantData.previousHackathon,
-          parentFirstName: participantData.parentFirstName,
-          parentLastName: participantData.parentLastName,
-          parentEmail: participantData.parentEmail,
-          parentPhoneNumber: participantData.parentPhoneNumber,
-          contactFIrstName: participantData.contactFirstName,
-          contactLastName: participantData.contactLastName,
-          contactRelationship: participantData.contactRelationship,
-          contactPhoneNumber: participantData.contactPhoneNumber,
-          createdAt: participantData.createdAt,
-        };
-      },
-    );
-    const filteredParticipants = participants.filter(
-      (participant) => participant !== null,
-    );
+    const participants = workshopData.participants.map((participantData) => {
+      return {
+        id: participantData.id,
+        email: participantData.email,
+        emailVerified: participantData.emailVerified,
+        accountType: participantData.accountType,
+        firstName: participantData.firstName,
+        lastName: participantData.lastName,
+        schoolDivision: participantData.schoolDivision,
+        gradeLevel: participantData.gradeLevel,
+        isGovSchool: participantData.isGovSchool,
+        techStack: participantData.techStack,
+        previousHackathon: participantData.previousHackathon,
+        parentFirstName: participantData.parentFirstName,
+        parentLastName: participantData.parentLastName,
+        parentEmail: participantData.parentEmail,
+        parentPhoneNumber: participantData.parentPhoneNumber,
+        contactFIrstName: participantData.contactFirstName,
+        contactLastName: participantData.contactLastName,
+        contactRelationship: participantData.contactRelationship,
+        contactPhoneNumber: participantData.contactPhoneNumber,
+        createdAt: participantData.createdAt,
+      };
+    });
 
     const workshop = {
       id: workshopData.id,
@@ -478,7 +473,7 @@ export const organizerGetWorkshopById = async (req: any, res: any) => {
       startDate: workshopData.startDate,
       endDate: workshopData.endDate,
       status: workshopData.status,
-      participants: filteredParticipants,
+      participants,
       organizer: workshopData.organizer
         ? `${workshopData.organizer.firstName} ${workshopData.organizer.lastName}`
         : "Unknown Organizer",

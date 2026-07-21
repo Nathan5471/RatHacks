@@ -12,77 +12,78 @@ import ReleaseJudging from "../../components/ReleaseJudging";
 import LinkDetectedText from "../../components/LinkDetectedText";
 import axios from "axios";
 
+interface Participant {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  accountType: "student" | "organizer" | "judge";
+  firstName: string;
+  lastName: string;
+  schoolDivision: string;
+  gradeLevel: "nine" | "ten" | "eleven" | "twelve";
+  isGovSchool: boolean;
+  techStack: string;
+  previousHackathon: boolean;
+  parentFirstName: string;
+  parentLastName: string;
+  parentEmail: string;
+  parentPhoneNumber: string;
+  contactFirstName: string;
+  contactLastName: string;
+  contactRelationship: string;
+  contactPhoneNumber: string;
+  checkedIn: boolean;
+  createdAt: string;
+}
+interface Team {
+  id: string;
+  joinCode: string;
+  members: string[];
+  eventId: string;
+  submittedProject: boolean;
+  project: string | null;
+  createdAt: string;
+}
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+  codeURL: string | null;
+  screenshotURL: string | null;
+  videoURL: string | null;
+  demoURL: string | null;
+  team: string[];
+  submittedAt: string;
+}
+interface Event {
+  id: string;
+  type: "hackathon" | "ctf";
+  name: string;
+  description: string;
+  location: string;
+  startDate: string;
+  endDate: string;
+  submissionDeadline: string;
+  status: "upcoming" | "ongoing" | "completed";
+  participants: Participant[];
+  checkedInParticipants: number;
+  teams: Team[];
+  projects: Project[];
+  judgedProjects: number;
+  releasedJudging: boolean;
+  averageCreativityScore: number;
+  averageFunctionalityScore: number;
+  averageTechnicalityScore: number;
+  averageInterfaceScore: number;
+  averageScore: number;
+  createdBy: string;
+  createdAt: string;
+}
+
 export default function OrganizerEvent() {
   const { openOverlay } = useOverlay();
   const { eventId } = useParams<{ eventId: string }>();
   const [reload, setReload] = useState(false);
-  interface Participant {
-    id: string;
-    email: string;
-    emailVerified: boolean;
-    accountType: "student" | "organizer" | "judge";
-    firstName: string;
-    lastName: string;
-    schoolDivision: string;
-    gradeLevel: "nine" | "ten" | "eleven" | "twelve";
-    isGovSchool: boolean;
-    techStack: string;
-    previousHackathon: boolean;
-    parentFirstName: string;
-    parentLastName: string;
-    parentEmail: string;
-    parentPhoneNumber: string;
-    contactFirstName: string;
-    contactLastName: string;
-    contactRelationship: string;
-    contactPhoneNumber: string;
-    checkedIn: boolean;
-    createdAt: string;
-  }
-  interface Team {
-    id: string;
-    joinCode: string;
-    members: string[];
-    eventId: string;
-    submittedProject: boolean;
-    project: string | null;
-    createdAt: string;
-  }
-  interface Project {
-    id: string;
-    name: string;
-    description: string;
-    codeURL: string | null;
-    screenshotURL: string | null;
-    videoURL: string | null;
-    demoURL: string | null;
-    team: string[];
-    submittedAt: string;
-  }
-  interface Event {
-    id: string;
-    type: "hackathon" | "ctf";
-    name: string;
-    description: string;
-    location: string;
-    startDate: string;
-    endDate: string;
-    submissionDeadline: string;
-    status: "upcoming" | "ongoing" | "completed";
-    participants: Participant[];
-    checkedInParticipants: number;
-    teams: Team[];
-    projects: Project[];
-    judgedProjects: number;
-    releasedJudging: boolean;
-    averageCreativityScore: number;
-    averageFunctionalityScore: number;
-    averageTechnicalityScore: number;
-    averageInterfaceScore: number;
-    averageScore: number;
-    createdBy: string;
-    createdAt: string;
-  }
   const gradeMap = {
     nine: "9",
     ten: "10",
@@ -425,48 +426,28 @@ export default function OrganizerEvent() {
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {team.members[0]
-                            ? event.participants.find(
-                                (participant) =>
-                                  participant.id === team.members[0],
-                              )?.firstName
-                            : "N/A"}
+                          {team.members[0] || "N/A"}
                         </td>
                         <td
                           className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {team.members[1]
-                            ? event.participants.find(
-                                (participant) =>
-                                  participant.id === team.members[1],
-                              )?.firstName
-                            : "N/A"}
+                          {team.members[1] || "N/A"}
                         </td>
                         <td
                           className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {team.members[2]
-                            ? event.participants.find(
-                                (participant) =>
-                                  participant.id === team.members[2],
-                              )?.firstName
-                            : "N/A"}
+                          {team.members[2] || "N/A"}
                         </td>
                         <td
                           className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {team.members[3]
-                            ? event.participants.find(
-                                (participant) =>
-                                  participant.id === team.members[3],
-                              )?.firstName
-                            : "N/A"}
+                          {team.members[3] || "N/A"}
                         </td>
                         <td
                           className={`py-2 px-4 border-b border-r border-surface-a1 ${

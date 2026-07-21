@@ -4,6 +4,18 @@ import { toast } from "react-toastify";
 import { sendEmailToCustomRecipients } from "../utils/EmailAPIHandler";
 import { useOverlay } from "../contexts/OverlayContext";
 
+interface EmailReceipt {
+  id: string;
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  sentAt: string;
+  seen: boolean;
+  seenAt: string | null;
+}
 interface Email {
   id: string;
   name: string;
@@ -14,8 +26,7 @@ interface Email {
   subFilterBy: string | null;
   sendOnJoin: boolean | null;
   active: boolean;
-  sentTo: string[];
-  sentTimes: string[];
+  sentTo: EmailReceipt[];
   createdAt: string;
 }
 

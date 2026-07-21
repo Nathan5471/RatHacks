@@ -15,45 +15,46 @@ import OrganizerUserView from "../../components/OrganizerUserView";
 import LinkDetectedText from "../../components/LinkDetectedText";
 import axios from "axios";
 
+interface Participant {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  accountType: "student" | "organizer" | "judge";
+  firstName: string;
+  lastName: string;
+  schoolDivision: string;
+  gradeLevel: "nine" | "ten" | "eleven" | "twelve" | "organizer" | "judge";
+  isGovSchool: boolean;
+  techStack: string;
+  previousHackathon: boolean;
+  parentFirstName: string;
+  parentLastName: string;
+  parentEmail: string;
+  parentPhoneNumber: string;
+  contactFirstName: string;
+  contactLastName: string;
+  contactRelationship: string;
+  contactPhoneNumber: string;
+  createdAt: string;
+}
+interface Workshop {
+  id: string;
+  name: string;
+  description: string;
+  googleMeetURL: string;
+  startDate: string;
+  endDate: string;
+  status: "upcoming" | "ongoing" | "completed";
+  participants: Participant[];
+  organizer: string;
+  organizerId: string;
+  createdAt: string;
+}
+
 export default function OrganizerWorkshop() {
   const { openOverlay } = useOverlay();
   const { workshopId } = useParams<{ workshopId: string }>();
   const [reload, setReload] = useState(false);
-  interface Participant {
-    id: string;
-    email: string;
-    emailVerified: boolean;
-    accountType: "student" | "organizer" | "judge";
-    firstName: string;
-    lastName: string;
-    schoolDivision: string;
-    gradeLevel: "nine" | "ten" | "eleven" | "twelve" | "organizer" | "judge";
-    isGovSchool: boolean;
-    techStack: string;
-    previousHackathon: boolean;
-    parentFirstName: string;
-    parentLastName: string;
-    parentEmail: string;
-    parentPhoneNumber: string;
-    contactFirstName: string;
-    contactLastName: string;
-    contactRelationship: string;
-    contactPhoneNumber: string;
-    createdAt: string;
-  }
-  interface Workshop {
-    id: string;
-    name: string;
-    description: string;
-    googleMeetURL: string;
-    startDate: string;
-    endDate: string;
-    status: "upcoming" | "ongoing" | "completed";
-    participants: Participant[];
-    organizer: string;
-    organizerId: string;
-    createdAt: string;
-  }
   const gradeMap = {
     nine: "9",
     ten: "10",

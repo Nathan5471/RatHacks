@@ -146,6 +146,7 @@ export const organizerGetEmailById = async (req: any, res: any) => {
             id: true,
             user: {
               select: {
+                id: true,
                 firstName: true,
                 lastName: true,
                 email: true,

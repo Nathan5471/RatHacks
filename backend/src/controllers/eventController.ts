@@ -783,7 +783,7 @@ export const organizerGetEventById = async (req: any, res: any) => {
       include: {
         participants: true,
         checkedInParticipants: true,
-        teams: true,
+        teams: { include: { members: true } },
         projects: {
           include: {
             team: { include: { members: true } },
@@ -872,7 +872,17 @@ export const organizerGetEventById = async (req: any, res: any) => {
       status: event.status,
       participants: removedUneccesaryFieldsUsers,
       checkedInParticipants: event.checkedInParticipants.length,
-      teams: event.teams,
+      teams: event.teams.map((team) => {
+        const members = team.members.map((member) => {
+          return `${member.firstName} ${member.lastName}`;
+        });
+        return {
+          id: team.id,
+          joinCode: team.joinCode,
+          members: members,
+          submittedProject: team.submittedProject,
+        };
+      }),
       projects: projects,
       judgedProjects: judgedProjects,
       releasedJudging: event.releasedJudging,

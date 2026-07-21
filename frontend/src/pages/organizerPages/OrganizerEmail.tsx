@@ -20,49 +20,58 @@ import { getEventById } from "../../utils/EventAPIHandler";
 import { getWorkshopById } from "../../utils/WorkshopAPIHandler";
 import axios from "axios";
 
+interface EmailReceipt {
+  id: string;
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  sentAt: string;
+  seen: boolean;
+  seenAt: string | null;
+}
+interface Email {
+  id: string;
+  name: string;
+  messageSubject: string;
+  messageBody: string;
+  sendAll: boolean;
+  filterBy: string | null;
+  subFilterBy: string | null;
+  sendOnJoin: boolean | null;
+  active: boolean;
+  sentTo: EmailReceipt[];
+  createdAt: string;
+}
+interface Participant {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  accountType: "student" | "organizer" | "judge";
+  firstName: string;
+  lastName: string;
+  schoolDivision: string;
+  gradeLevel: "nine" | "ten" | "eleven" | "twelve";
+  isGovSchool: boolean;
+  techStack: string;
+  previousHackathon: boolean;
+  parentFirstName: string;
+  parentLastName: string;
+  parentEmail: string;
+  parentPhoneNumber: string;
+  contactFirstName: string;
+  contactLastName: string;
+  contactRelationship: string;
+  contactPhoneNumber: string;
+  createdAt: string;
+}
+
 export default function OrganizerEvent() {
   const { openOverlay } = useOverlay();
   const { emailId } = useParams<{ emailId: string }>();
   const [reload, setReload] = useState(false);
-
-  interface Email {
-    id: string;
-    name: string;
-    messageSubject: string;
-    messageBody: string;
-    sendAll: boolean;
-    filterBy: string | null;
-    subFilterBy: string | null;
-    sendOnJoin: boolean | null;
-    active: boolean;
-    sentTo: string[];
-    sentTimes: string[];
-    createdAt: string;
-  }
-
-  interface Participant {
-    id: string;
-    email: string;
-    emailVerified: boolean;
-    accountType: "student" | "organizer" | "judge";
-    firstName: string;
-    lastName: string;
-    schoolDivision: string;
-    gradeLevel: "nine" | "ten" | "eleven" | "twelve";
-    isGovSchool: boolean;
-    techStack: string;
-    previousHackathon: boolean;
-    parentFirstName: string;
-    parentLastName: string;
-    parentEmail: string;
-    parentPhoneNumber: string;
-    contactFirstName: string;
-    contactLastName: string;
-    contactRelationship: string;
-    contactPhoneNumber: string;
-    createdAt: string;
-  }
-
   const [email, setEmail] = useState<Email | null>(null);
   const [loading, setLoading] = useState(true);
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -295,16 +304,16 @@ export default function OrganizerEvent() {
 
   const handleOpenOrganizerUserView = (
     e: React.MouseEvent<HTMLButtonElement>,
-    index: number,
+    userId: String,
   ) => {
     e.preventDefault();
     if (emailId && email) {
-      openOverlay(
-        <OrganizerUserView
-          user={recipients[index]}
-          setRefreshData={setReload}
-        />,
-      );
+      const user = recipients.find((recipient) => recipient.id === userId);
+      if (!user) {
+        toast.error("User not found");
+        return;
+      }
+      openOverlay(<OrganizerUserView user={user} setRefreshData={setReload} />);
     }
   };
 
@@ -605,41 +614,36 @@ export default function OrganizerEvent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {recipients.map((participant, index) => (
-                      <tr key={participant.id}>
+                    {email.sentTo.map((emailReceipt, index) => (
+                      <tr key={emailReceipt.id}>
                         <td
                           className={`py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {participant.firstName} {participant.lastName}
+                          {emailReceipt.user.firstName}{" "}
+                          {emailReceipt.user.lastName}
                         </td>
                         <td
                           className={`hidden sm:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {participant.email}
+                          {emailReceipt.user.email}
                         </td>
                         <td
                           className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {email.sentTo.includes(participant.id) ? "Yes" : "No"}
+                          {emailReceipt.sentAt ? "Yes" : "No"}
                         </td>
                         <td
                           className={`hidden lg:table-cell py-2 px-4 border-b border-r border-surface-a1 ${
                             index % 2 === 0 ? "bg-surface-a3" : ""
                           }`}
                         >
-                          {email.sentTo.includes(participant.id)
-                            ? new Date(
-                                email.sentTimes[
-                                  email.sentTo.indexOf(participant.id)
-                                ],
-                              ).toLocaleString()
-                            : "N/A"}
+                          {emailReceipt.sentAt || "N/A"}
                         </td>
                         <td
                           className={`py-2 px-4 border-b border-surface-a1 ${
@@ -649,7 +653,10 @@ export default function OrganizerEvent() {
                           <button
                             className="bg-primary-a0 hover:bg-primary-a1 p-2 rounded-lg font-bold"
                             onClick={(e) =>
-                              handleOpenOrganizerUserView(e, index)
+                              handleOpenOrganizerUserView(
+                                e,
+                                emailReceipt.user.id,
+                              )
                             }
                           >
                             View
