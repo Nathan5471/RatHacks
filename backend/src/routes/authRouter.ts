@@ -26,7 +26,7 @@ import {
   organizerDeleteUser,
 } from "../controllers/authController";
 import authenticate from "../middleware/authenticate";
-import { User } from "@prisma/client";
+import type { RequestUser } from "../middleware/authenticate";
 
 const router = express.Router();
 
@@ -325,7 +325,7 @@ router.get("/check/invite/judge", async (req: any, res: any) => {
 router.get("/invites", authenticate, getInvites);
 
 router.get("/current-user", authenticate, (req: any, res: any) => {
-  const reqUser = req.user as User;
+  const reqUser = req.user as RequestUser;
   const user = {
     id: reqUser.id,
     email: reqUser.email,
@@ -346,8 +346,8 @@ router.get("/current-user", authenticate, (req: any, res: any) => {
     contactLastName: reqUser.contactLastName,
     contactRelationship: reqUser.contactRelationship,
     contactPhoneNumber: reqUser.contactPhoneNumber,
-    events: reqUser.events,
-    workshops: reqUser.workshops,
+    events: reqUser.events.map((event) => event.id),
+    workshops: reqUser.workshops.map((workshop) => workshop.id),
     theme: reqUser.theme,
   };
   res.status(200).json(user);

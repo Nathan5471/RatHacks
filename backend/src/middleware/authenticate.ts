@@ -1,7 +1,15 @@
 import jwt from "jsonwebtoken";
 import prisma from "../prisma/client";
+import { Prisma } from "@prisma/client";
 import generateToken from "../utils/generateToken";
 import generateRefreshToken from "../utils/generateRefreshToken";
+
+export type RequestUser = Prisma.UserGetPayload<{
+  include: {
+    events: true;
+    workshops: true;
+  };
+}>;
 
 const authenticate = async (req: any, res: any, next: any) => {
   const token = req.cookies.token;
@@ -28,6 +36,10 @@ const authenticate = async (req: any, res: any, next: any) => {
     }
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
+      include: {
+        events: true,
+        workshops: true,
+      },
     });
     if (!user) {
       res.clearCookie("token");
@@ -54,6 +66,10 @@ const authenticate = async (req: any, res: any, next: any) => {
         }
         const user = await prisma.user.findUnique({
           where: { id: decoded.id },
+          include: {
+            events: true,
+            workshops: true,
+          },
         });
         if (!user) {
           res.clearCookie("refreshToken");
@@ -72,8 +88,12 @@ const authenticate = async (req: any, res: any, next: any) => {
               newToken,
             ],
             validRefreshTokens: user.validRefreshTokens?.concat(
-              newRefreshToken
+              newRefreshToken,
             ) || [newRefreshToken],
+          },
+          include: {
+            events: true,
+            workshops: true,
           },
         });
         res.cookie("token", newToken, {

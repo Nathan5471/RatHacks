@@ -30,6 +30,10 @@ const nonRequiredAuthenticate = async (req: any, res: any, next: any) => {
     }
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
+      include: {
+        events: true,
+        workshops: true,
+      },
     });
     if (!user) {
       res.clearCookie("token");
@@ -58,6 +62,10 @@ const nonRequiredAuthenticate = async (req: any, res: any, next: any) => {
         }
         const user = await prisma.user.findUnique({
           where: { id: decoded.id },
+          include: {
+            events: true,
+            workshops: true,
+          },
         });
         if (!user) {
           res.clearCookie("refreshToken");
@@ -80,6 +88,10 @@ const nonRequiredAuthenticate = async (req: any, res: any, next: any) => {
             validRefreshTokens: user.validRefreshTokens?.concat(
               newRefreshToken,
             ) || [newRefreshToken],
+          },
+          include: {
+            events: true,
+            workshops: true,
           },
         });
         res.cookie("token", newToken, {
