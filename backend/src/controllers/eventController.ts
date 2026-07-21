@@ -1,6 +1,7 @@
-import { User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import prisma from "../prisma/client";
 import sortEvents from "../utils/sortEvents";
+import type { Event1, Event2, Event3 } from "../utils/sortEvents";
 import sendJudgingEmails from "../utils/sendJudgingEmails";
 import { marked } from "marked";
 import sendCustomEmail from "../utils/sendCustomEmail";
@@ -39,10 +40,7 @@ export const createEvent = async (req: any, res: any) => {
         startDate: new Date(startDate),
         endDate: new Date(endDate),
         submissionDeadline: new Date(submissionDeadline),
-        participants: [],
-        teams: [],
-        projects: [],
-        createdBy: user.id,
+        createdById: user.id,
       },
     });
     return res
@@ -61,44 +59,47 @@ export const joinEvent = async (req: any, res: any) => {
   try {
     const event = await prisma.event.findUnique({
       where: { id },
+      include: { participants: true },
     });
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
-    }
-    if (event.participants.includes(user.id)) {
-      return res.status(200).json({ message: "User already joined event" });
     }
     if (event.status !== "upcoming") {
       return res
         .status(400)
         .json({ message: "Cannot join event that has started" });
     }
-
-    const teams = await prisma.team.findMany();
-    const currentJoinCodes = teams.map((team) => team.joinCode);
-    let newJoinCode = Math.random().toString(36).substring(2, 8);
-    while (currentJoinCodes.includes(newJoinCode)) {
-      newJoinCode = Math.random().toString(36).substring(2, 8);
+    if (event.participants.some((participant) => participant.id === user.id)) {
+      return res.status(200).json({ message: "User already joined event" });
     }
-    const newTeam = await prisma.team.create({
-      data: {
-        joinCode: newJoinCode,
-        members: [user.id],
-        eventId: id,
-      },
-    });
+
+    while (true) {
+      try {
+        const newJoinCode = Math.random().toString(36).substring(2, 8);
+        await prisma.team.create({
+          data: {
+            joinCode: newJoinCode,
+            members: { connect: { id: user.id } },
+            eventId: id,
+          },
+        });
+      } catch (error) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === "P2002"
+        ) {
+          continue;
+        }
+        console.error("Error creating team in join event:", error);
+        return res.status(500).json({ message: "Failed to join event" });
+      }
+      break;
+    }
 
     await prisma.event.update({
       where: { id },
       data: {
-        participants: event.participants?.concat(user.id) || [user.id],
-        teams: event.teams?.concat(newTeam.id) || [newTeam.id],
-      },
-    });
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        events: user.events?.concat(id) || [id],
+        participants: { connect: { id: user.id } },
       },
     });
     res.status(200).json({ message: "Joined event successfully" });
@@ -110,9 +111,10 @@ export const joinEvent = async (req: any, res: any) => {
         sendOnJoin: true,
         active: true,
       },
+      include: { sentTo: { select: { id: true, userId: true } } },
     });
     for (const email of joinEmails) {
-      if (email.sentTo.includes(user.id)) continue;
+      if (email.sentTo.some((sentTo) => sentTo.userId === user.id)) continue;
       const renderer = new marked.Renderer();
       renderer.heading = ({ text, depth }) => {
         const sizes = {
@@ -147,15 +149,10 @@ export const joinEvent = async (req: any, res: any) => {
         senderName: "nathan",
         senderEmail: "nathan@rathacks.com",
       });
-      await prisma.email.update({
-        where: { id: email.id },
+      await prisma.emailReceipt.create({
         data: {
-          sentTo: {
-            push: user.id,
-          },
-          sentTimes: {
-            push: new Date(),
-          },
+          emailId: email.id,
+          userId: user.id,
         },
       });
     }
@@ -172,37 +169,34 @@ export const leaveEvent = async (req: any, res: any) => {
   try {
     const event = await prisma.event.findUnique({
       where: { id },
+      include: { participants: true },
     });
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
-    }
-    if (!event.participants.includes(user.id)) {
-      return res.status(200).json({ message: "User has not joined event" });
     }
     if (event.status !== "upcoming") {
       return res
         .status(400)
         .json({ message: "Cannot leave event that has started" });
     }
+    if (!event.participants.some((participant) => participant.id === user.id)) {
+      return res.status(200).json({ message: "User has not joined event" });
+    }
 
-    const teams = await prisma.team.findMany({
-      where: { eventId: id },
+    const userTeam = await prisma.team.findFirst({
+      where: { eventId: id, members: { some: { id: user.id } } },
+      include: { members: true },
     });
-    const userTeam = teams.find((team) => team.members.includes(user.id));
-    let isTeamDeleted = false;
     if (userTeam) {
       if (userTeam.members.length === 1) {
         await prisma.team.delete({
           where: { id: userTeam.id },
         });
-        isTeamDeleted = true;
       } else {
         await prisma.team.update({
           where: { id: userTeam.id },
           data: {
-            members: userTeam.members.filter(
-              (memberId) => memberId !== user.id
-            ),
+            members: { disconnect: { id: user.id } },
           },
         });
       }
@@ -210,18 +204,7 @@ export const leaveEvent = async (req: any, res: any) => {
     await prisma.event.update({
       where: { id },
       data: {
-        participants: event.participants?.filter(
-          (userId) => userId !== user.id
-        ),
-        teams: isTeamDeleted
-          ? event.teams.filter((teamId) => teamId !== userTeam?.id)
-          : event.teams,
-      },
-    });
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        events: user.events.filter((eventId) => eventId !== id),
+        participants: { disconnect: { id: user.id } },
       },
     });
     return res.status(200).json({ message: "Left event successfully" });
@@ -241,24 +224,26 @@ export const joinTeam = async (req: any, res: any) => {
   try {
     const event = await prisma.event.findUnique({
       where: { id: eventId },
+      include: { participants: true },
     });
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
-    if (!event.participants.includes(user.id)) {
-      return res.status(400).json({ message: "User has not joined event" });
-    }
     if (event.status === "completed") {
       return res.status(400).json({ message: "Event has already completed" });
+    }
+    if (!event.participants.some((participant) => participant.id === user.id)) {
+      return res.status(400).json({ message: "User has not joined event" });
     }
 
     const teamToJoin = await prisma.team.findUnique({
       where: { joinCode },
+      include: { members: true },
     });
     if (!teamToJoin || teamToJoin.eventId !== eventId) {
       return res.status(404).json({ message: "Team not found" });
     }
-    if (teamToJoin.members.includes(user.id)) {
+    if (teamToJoin.members.some((member) => member.id === user.id)) {
       return res.status(200).json({ message: "User already in team" });
     }
     if (teamToJoin.members.length >= 4) {
@@ -266,7 +251,8 @@ export const joinTeam = async (req: any, res: any) => {
     }
 
     const userTeam = await prisma.team.findFirst({
-      where: { eventId, members: { has: user.id } },
+      where: { eventId, members: { some: { id: user.id } } },
+      include: { members: true },
     });
     if (userTeam) {
       if (userTeam.submittedProject) {
@@ -278,19 +264,11 @@ export const joinTeam = async (req: any, res: any) => {
         await prisma.team.delete({
           where: { id: userTeam.id },
         });
-        await prisma.event.update({
-          where: { id: eventId },
-          data: {
-            teams: event.teams.filter((teamId) => teamId !== userTeam.id),
-          },
-        });
       } else {
         await prisma.team.update({
           where: { id: userTeam.id },
           data: {
-            members: userTeam.members.filter(
-              (memberId) => memberId !== user.id
-            ),
+            members: { disconnect: { id: user.id } },
           },
         });
       }
@@ -299,7 +277,7 @@ export const joinTeam = async (req: any, res: any) => {
     await prisma.team.update({
       where: { joinCode },
       data: {
-        members: teamToJoin.members.concat(user.id),
+        members: { connect: { id: user.id } },
       },
     });
     return res.status(200).json({ message: "Joined team successfully" });
@@ -316,40 +294,45 @@ export const leaveTeam = async (req: any, res: any) => {
   try {
     const event = await prisma.event.findUnique({
       where: { id: eventId },
+      include: { participants: true },
     });
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
-    if (!event.participants.includes(user.id)) {
-      return res.status(400).json({ message: "User has not joined event" });
-    }
     if (event.status === "completed") {
       return res.status(400).json({ message: "Event has already completed" });
     }
+    if (!event.participants.some((participant) => participant.id === user.id)) {
+      return res.status(400).json({ message: "User has not joined event" });
+    }
 
     const userTeam = await prisma.team.findFirst({
-      where: { eventId, members: { has: user.id } },
+      where: { eventId, members: { some: { id: user.id } } },
+      include: { members: true },
     });
     if (!userTeam) {
-      const teams = await prisma.team.findMany();
-      const currentJoinCodes = teams.map((team) => team.joinCode);
-      let newJoinCode = Math.random().toString(36).substring(2, 8);
-      while (currentJoinCodes.includes(newJoinCode)) {
-        newJoinCode = Math.random().toString(36).substring(2, 8);
+      while (true) {
+        try {
+          const newJoinCode = Math.random().toString(36).substring(2, 8);
+          await prisma.team.create({
+            data: {
+              joinCode: newJoinCode,
+              members: { connect: { id: user.id } },
+              eventId: eventId,
+            },
+          });
+        } catch (error) {
+          if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002"
+          ) {
+            continue;
+          }
+          console.error("Error creating team in join event:", error);
+          return res.status(500).json({ message: "Failed to join event" });
+        }
+        break;
       }
-      const newTeam = await prisma.team.create({
-        data: {
-          joinCode: newJoinCode,
-          members: [user.id],
-          eventId: eventId,
-        },
-      });
-      await prisma.event.update({
-        where: { id: eventId },
-        data: {
-          teams: event.teams?.concat(newTeam.id) || [newTeam.id],
-        },
-      });
       return res.status(200).json({ message: "User is not in a team" });
     }
     if (userTeam.submittedProject) {
@@ -365,28 +348,31 @@ export const leaveTeam = async (req: any, res: any) => {
     await prisma.team.update({
       where: { id: userTeam.id },
       data: {
-        members: userTeam.members.filter((memberId) => memberId !== user.id),
+        members: { disconnect: { id: user.id } },
       },
     });
-    const teams = await prisma.team.findMany();
-    const currentJoinCodes = teams.map((team) => team.joinCode);
-    let newJoinCode = Math.random().toString(36).substring(2, 8);
-    while (currentJoinCodes.includes(newJoinCode)) {
-      newJoinCode = Math.random().toString(36).substring(2, 8);
+    while (true) {
+      try {
+        const newJoinCode = Math.random().toString(36).substring(2, 8);
+        await prisma.team.create({
+          data: {
+            joinCode: newJoinCode,
+            members: { connect: { id: user.id } },
+            eventId: eventId,
+          },
+        });
+      } catch (error) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === "P2002"
+        ) {
+          continue;
+        }
+        console.error("Error creating team in join event:", error);
+        return res.status(500).json({ message: "Failed to join event" });
+      }
+      break;
     }
-    const newTeam = await prisma.team.create({
-      data: {
-        joinCode: newJoinCode,
-        members: [user.id],
-        eventId: eventId,
-      },
-    });
-    await prisma.event.update({
-      where: { id: eventId },
-      data: {
-        teams: event.teams?.concat(newTeam.id) || [newTeam.id],
-      },
-    });
     return res.status(200).json({ message: "Left team successfully" });
   } catch (error) {
     console.error("Error leaving team:", error);
@@ -408,6 +394,7 @@ export const checkInUser = async (req: any, res: any) => {
   try {
     const event = await prisma.event.findUnique({
       where: { id: eventId },
+      include: { participants: true },
     });
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
@@ -419,55 +406,44 @@ export const checkInUser = async (req: any, res: any) => {
       return res.status(404).json({ message: "User not found" });
     }
     if (
-      !event.participants.includes(userId) ||
-      !userToCheckIn.events.includes(eventId)
+      !event.participants.some(
+        (participant) => participant.id === userToCheckIn.id,
+      )
     ) {
-      const existingTeam = await prisma.team.findFirst({
-        where: { eventId, members: { has: userId } },
-      });
-      let newTeam;
-      if (!existingTeam) {
-        const teams = await prisma.team.findMany();
-        const currentJoinCodes = teams.map((team) => team.joinCode);
-        let newJoinCode = Math.random().toString(36).substring(2, 8);
-        while (currentJoinCodes.includes(newJoinCode)) {
-          newJoinCode = Math.random().toString(36).substring(2, 8);
+      while (true) {
+        try {
+          const newJoinCode = Math.random().toString(36).substring(2, 8);
+          await prisma.team.create({
+            data: {
+              joinCode: newJoinCode,
+              members: { connect: { id: user.id } },
+              eventId: eventId,
+            },
+          });
+        } catch (error) {
+          if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002"
+          ) {
+            continue;
+          }
+          console.error("Error creating team in join event:", error);
+          return res.status(500).json({ message: "Failed to join event" });
         }
-        newTeam = await prisma.team.create({
-          data: {
-            joinCode: newJoinCode,
-            members: [userId],
-            eventId: eventId,
-          },
-        });
+        break;
       }
       await prisma.event.update({
         where: { id: eventId },
         data: {
-          participants: event.participants.includes(userId)
-            ? event.participants
-            : event.participants.concat(userId),
-          checkedIn: event.checkedIn.includes(userId)
-            ? event.checkedIn
-            : event.checkedIn.concat(userId),
-          teams: newTeam ? event.teams.concat(newTeam.id) : event.teams,
-        },
-      });
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          events: userToCheckIn.events.includes(eventId)
-            ? userToCheckIn.events
-            : userToCheckIn.events.concat(eventId),
+          participants: { connect: { id: userId } },
+          checkedInParticipants: { connect: { id: userId } },
         },
       });
     } else {
       await prisma.event.update({
         where: { id: eventId },
         data: {
-          checkedIn: event.checkedIn.includes(userId)
-            ? event.checkedIn
-            : event.checkedIn.concat(userId),
+          checkedInParticipants: { connect: { id: userId } },
         },
       });
     }
@@ -496,22 +472,22 @@ export const releaseJudging = async (req: any, res: any) => {
     const projectScores = {} as { [key: string]: number }; // This is the average total score for each project (x/40)
     const projects = await prisma.project.findMany({
       where: { eventId },
+      include: { judgeFeedback: { select: { totalScore: true } } },
     });
-    await Promise.all(
-      projects.map(async (project) => {
-        const judgeFeedbacks = await prisma.judgeFeedback.findMany({
-          where: { projectId: project.id },
-        });
+    for (const project of projects) {
+      if (project.judgeFeedback.length === 0) {
+        projectScores[project.id] = 0;
+      } else {
         const averageScore =
-          judgeFeedbacks.reduce(
-            (acc, feedback) => acc + feedback.totalScore,
-            0
-          ) / judgeFeedbacks.length || 0;
+          project.judgeFeedback.reduce(
+            (acc, score) => acc + score.totalScore,
+            0,
+          ) / project.judgeFeedback.length;
         projectScores[project.id] = averageScore;
-      })
-    );
+      }
+    }
     const rankedProjects = Object.entries(projectScores).sort(
-      (a, b) => b[1] - a[1]
+      (a, b) => b[1] - a[1],
     );
     await Promise.all(
       rankedProjects.map(async ([projectId], index) => {
@@ -519,7 +495,7 @@ export const releaseJudging = async (req: any, res: any) => {
           where: { id: projectId },
           data: { ranking: index + 1 },
         });
-      })
+      }),
     );
     await prisma.event.update({
       where: { id: eventId },
@@ -583,8 +559,10 @@ export const updateEvent = async (req: any, res: any) => {
 
 export const getAllEvents = async (req: any, res: any) => {
   try {
-    const allEvents = await prisma.event.findMany();
-    const sortedEvents = sortEvents(allEvents);
+    const allEvents = await prisma.event.findMany({
+      include: { _count: { select: { participants: true } } },
+    });
+    const sortedEvents = sortEvents(allEvents) as Event1[];
     const events = sortedEvents.map((event) => ({
       id: event.id,
       type: event.type,
@@ -595,7 +573,7 @@ export const getAllEvents = async (req: any, res: any) => {
       endDate: event.endDate,
       submissionDeadline: event.submissionDeadline,
       status: event.status,
-      participantCount: event.participants.length,
+      participantCount: event._count.participants,
     }));
     res.status(200).json({ message: "Events loaded successfully", events });
   } catch (error) {
@@ -612,18 +590,18 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
   }
 
   try {
-    const events = await prisma.event.findMany();
-    const sortedEvents = sortEvents(events);
+    const events = await prisma.event.findMany({
+      include: {
+        participants: true,
+        _count: { select: { checkedInParticipants: true } },
+        teams: true,
+        createdBy: true,
+      },
+    });
+    const sortedEvents = sortEvents(events) as Event2[];
     const filledEvents = await Promise.all(
-      sortedEvents.map(async (event) => {
-        const users = await Promise.all(
-          event.participants.map(async (user) => {
-            const userData = await prisma.user.findUnique({
-              where: { id: user },
-            });
-            return userData;
-          })
-        );
+      sortedEvents.map((event) => {
+        const users = event.participants;
         const filteredUsers = users.filter((user) => user !== null);
         const removedUneccesaryFieldsUsers = filteredUsers.map((user) => ({
           id: user.id,
@@ -647,9 +625,6 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
           contactPhoneNumber: user.contactPhoneNumber,
           createdAt: user.createdAt,
         }));
-        const eventTeams = await prisma.team.findMany({
-          where: { eventId: event.id },
-        });
         return {
           id: event.id,
           type: event.type,
@@ -661,12 +636,12 @@ export const organizerGetAllEvents = async (req: any, res: any) => {
           submissionDeadline: event.submissionDeadline,
           status: event.status,
           participants: removedUneccesaryFieldsUsers,
-          checkedInParticipants: event.checkedIn.length,
-          teams: eventTeams,
+          checkedInParticipants: event._count.checkedInParticipants,
+          teams: event.teams,
           createdBy: event.createdBy,
           createdAt: event.createdAt,
         };
-      })
+      }),
     );
     return res.status(200).json({
       message: "Events loaded successfully",
@@ -688,9 +663,14 @@ export const judgeGetAllEvents = async (req: any, res: any) => {
 
   try {
     const events = await prisma.event.findMany({
-      where: { type: "hackathon", status: { not: "upcoming" }, releasedJudging: false },
+      where: {
+        type: "hackathon",
+        status: { not: "upcoming" },
+        releasedJudging: false,
+      },
+      include: { _count: { select: { participants: true, projects: true } } },
     });
-    const sortedEvents = sortEvents(events);
+    const sortedEvents = sortEvents(events) as Event3[];
     const removedUneccessaryFieldsEvents = sortedEvents.map((event) => ({
       id: event.id,
       name: event.name,
@@ -701,8 +681,8 @@ export const judgeGetAllEvents = async (req: any, res: any) => {
       submissionDeadline: event.submissionDeadline,
       status: event.status,
       releasedJudging: event.releasedJudging,
-      participantCount: event.participants.length,
-      projectCount: event.projects.length,
+      participantCount: event._count.participants,
+      projectCount: event._count.projects,
     }));
     return res.status(200).json({
       message: "Events loaded successfully",
@@ -721,29 +701,27 @@ export const getEventById = async (req: any, res: any) => {
   try {
     const event = await prisma.event.findUnique({
       where: { id },
+      include: {
+        participants: true,
+        projects: true,
+      },
     });
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    const isUserParticipant = event.participants.includes(user.id);
+    const isUserParticipant = event.participants.some(
+      (participant) => participant.id === user.id,
+    );
     let removedUneccesaryFieldsTeam = null;
     if (isUserParticipant) {
       const userTeam = await prisma.team.findFirst({
-        where: { eventId: id, members: { has: user.id } },
+        where: { eventId: id, members: { some: { id: user.id } } },
+        include: { members: true, project: true },
       });
       if (userTeam) {
-        const members = await Promise.all(
-          userTeam?.members.map(async (memeberId) => {
-            const member = await prisma.user.findUnique({
-              where: { id: memeberId },
-            });
-            return member;
-          })
-        );
-        const filteredMembers = members.filter((member) => member !== null);
-        const removedUneccesaryFieldsUsers = filteredMembers.map(
-          (member) => `${member.firstName} ${member.lastName}`
+        const removedUneccesaryFieldsUsers = userTeam.members.map(
+          (member) => `${member.firstName} ${member.lastName}`,
         );
         removedUneccesaryFieldsTeam = {
           id: userTeam.id,
@@ -754,26 +732,19 @@ export const getEventById = async (req: any, res: any) => {
         };
       }
     }
-    const projects = await Promise.all(
-      event.projects.map(async (projectId) => {
-        const project = await prisma.project.findUnique({
-          where: { id: projectId },
-        });
-        if (!project) return null;
-        if (project.eventId !== event.id) return null;
-        if (!project.submittedAt) return null;
-        return {
-          id: project.id,
-          name: project.name,
-          description: project.description,
-          codeURL: project.codeURL,
-          screenshotURL: project.screenshotURL,
-          videoURL: project.videoURL,
-          demoURL: project.demoURL,
-          ranking: event.releasedJudging ? project.ranking : null,
-        };
-      })
-    );
+    const projects = event.projects.map((project) => {
+      if (!project.submittedAt) return null;
+      return {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        codeURL: project.codeURL,
+        screenshotURL: project.screenshotURL,
+        videoURL: project.videoURL,
+        demoURL: project.demoURL,
+        ranking: event.releasedJudging ? project.ranking : null,
+      };
+    });
 
     return res.status(200).json({
       message: "Event loaded successfully",
@@ -809,20 +780,23 @@ export const organizerGetEventById = async (req: any, res: any) => {
   try {
     const event = await prisma.event.findUnique({
       where: { id },
+      include: {
+        participants: true,
+        checkedInParticipants: true,
+        teams: true,
+        projects: {
+          include: {
+            team: { include: { members: true } },
+            judgeFeedback: true,
+          },
+        },
+        createdBy: true,
+      },
     });
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
-    const populatedParticipants = await Promise.all(
-      event.participants.map(async (user) => {
-        const userData = await prisma.user.findUnique({
-          where: { id: user },
-        });
-        return userData;
-      })
-    );
-    const filteredUsers = populatedParticipants.filter((user) => user !== null);
-    const removedUneccesaryFieldsUsers = filteredUsers.map((user) => ({
+    const removedUneccesaryFieldsUsers = event.participants.map((user) => ({
       id: user.id,
       email: user.email,
       emailVerified: user.emailVerified,
@@ -842,47 +816,29 @@ export const organizerGetEventById = async (req: any, res: any) => {
       contactLastName: user.contactLastName,
       contactRelationship: user.contactRelationship,
       contactPhoneNumber: user.contactPhoneNumber,
-      checkedIn: event.checkedIn.includes(user.id),
+      checkedIn: event.checkedInParticipants.some(
+        (checkedInUser) => checkedInUser.id === user.id,
+      ),
       createdAt: user.createdAt,
     }));
-    const teams = await prisma.team.findMany({
-      where: { eventId: event.id },
+    const projects = event.projects.map((project) => {
+      const members = project.team.members.map((member) => {
+        return `${member.firstName} ${member.lastName}`;
+      });
+      return {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        codeURL: project.codeURL,
+        screenshotURL: project.screenshotURL,
+        videoURL: project.videoURL,
+        demoURL: project.demoURL,
+        team: members,
+        judgeFeedback: project.judgeFeedback,
+        ranking: project.ranking,
+        submittedAt: project.submittedAt,
+      };
     });
-    const projects = await Promise.all(
-      event.projects.map(async (projectId) => {
-        const project = await prisma.project.findUnique({
-          where: { id: projectId },
-        });
-        if (!project) return null;
-        if (project.eventId !== event.id) return null;
-        const team = await prisma.team.findUnique({
-          where: { id: project.teamId },
-        });
-        if (!team) return null;
-        const members = await Promise.all(
-          team.members.map(async (memberId) => {
-            const member = await prisma.user.findUnique({
-              where: { id: memberId },
-            });
-            if (!member) return null;
-            return `${member.firstName} ${member.lastName}`;
-          })
-        );
-        const filteredMembers = members.filter((member) => member !== null);
-        return {
-          id: project.id,
-          name: project.name,
-          description: project.description,
-          codeURL: project.codeURL,
-          screenshotURL: project.screenshotURL,
-          videoURL: project.videoURL,
-          demoURL: project.demoURL,
-          team: filteredMembers,
-          submittedAt: project.submittedAt,
-        };
-      })
-    );
-    const filteredProjects = projects.filter((project) => project !== null);
     let judgedProjects = 0;
     let totalFeedbacks = 0;
     let averageCreativityScore = 0;
@@ -890,14 +846,11 @@ export const organizerGetEventById = async (req: any, res: any) => {
     let averageTechnicalityScore = 0;
     let averageInterfaceScore = 0;
     let averageScore = 0;
-    for (const project of filteredProjects) {
-      const judgeFeedbacks = await prisma.judgeFeedback.findMany({
-        where: { projectId: project.id },
-      });
-      if (judgeFeedbacks.length > 0) {
+    for (const project of projects) {
+      if (project.judgeFeedback.length > 0) {
         judgedProjects += 1;
       }
-      for (const feedback of judgeFeedbacks) {
+      for (const feedback of project.judgeFeedback) {
         totalFeedbacks += 1;
         averageCreativityScore += feedback.creativityScore;
         averageFunctionalityScore += feedback.functionalityScore;
@@ -918,9 +871,9 @@ export const organizerGetEventById = async (req: any, res: any) => {
       submissionDeadline: event.submissionDeadline,
       status: event.status,
       participants: removedUneccesaryFieldsUsers,
-      checkedInParticipants: event.checkedIn.length,
-      teams: teams,
-      projects: filteredProjects,
+      checkedInParticipants: event.checkedInParticipants.length,
+      teams: event.teams,
+      projects: projects,
       judgedProjects: judgedProjects,
       releasedJudging: event.releasedJudging,
       averageCreativityScore: totalFeedbacks
@@ -990,6 +943,15 @@ export const judgeGetEventById = async (req: any, res: any) => {
   try {
     const event = await prisma.event.findUnique({
       where: { id },
+      include: {
+        _count: { select: { participants: true } },
+        projects: {
+          include: {
+            team: { include: { members: true } },
+            judgeFeedback: true,
+          },
+        },
+      },
     });
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
@@ -998,51 +960,35 @@ export const judgeGetEventById = async (req: any, res: any) => {
       return res.status(400).json({ message: "Event has not started yet" });
     }
     if (event.type !== "hackathon") {
-      return res.status(400).json({ message: "Judging not available for this event type" });
+      return res
+        .status(400)
+        .json({ message: "Judging not available for this event type" });
     }
     if (event.releasedJudging !== false) {
       return res.status(400).json({ message: "Judging not available" });
     }
 
-    const projects = await Promise.all(
-      event.projects.map(async (projectId) => {
-        const project = await prisma.project.findUnique({
-          where: { id: projectId },
-        });
-        if (!project) return null;
-        if (!project.submittedAt) return null;
-        if (project.eventId !== event.id) return null;
-        const team = await prisma.team.findUnique({
-          where: { id: project.teamId },
-        });
-        if (!team) return null;
-        const members = await Promise.all(
-          team.members.map(async (memberId) => {
-            const member = await prisma.user.findUnique({
-              where: { id: memberId },
-            });
-            if (!member) return null;
-            return `${member.firstName} ${member.lastName}`;
-          })
-        );
-        const filteredMembers = members.filter((member) => member !== null);
-        const judgeFeedback = await prisma.judgeFeedback.findFirst({
-          where: { judgeId: user.id, projectId: project.id },
-        });
-        return {
-          id: project.id,
-          name: project.name,
-          description: project.description,
-          codeURL: project.codeURL,
-          screenshotURL: project.screenshotURL,
-          videoURL: project.videoURL,
-          demoURL: project.demoURL,
-          team: filteredMembers,
-          judged: judgeFeedback ? true : false,
-          submittedAt: project.submittedAt,
-        };
-      })
-    );
+    const projects = event.projects.map((project) => {
+      if (!project.submittedAt) return null;
+      const members = project.team.members.map((member) => {
+        return `${member.firstName} ${member.lastName}`;
+      });
+      const judgeFeedback = project.judgeFeedback.some(
+        (feedback) => feedback.judgeId === user.id,
+      );
+      return {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        codeURL: project.codeURL,
+        screenshotURL: project.screenshotURL,
+        videoURL: project.videoURL,
+        demoURL: project.demoURL,
+        team: members,
+        judged: judgeFeedback,
+        submittedAt: project.submittedAt,
+      };
+    });
     const filteredProjects = projects.filter((project) => project !== null);
 
     const removedUneccessaryFieldsEvent = {
@@ -1055,7 +1001,7 @@ export const judgeGetEventById = async (req: any, res: any) => {
       submissionDeadline: event.submissionDeadline,
       status: event.status,
       releasedJudging: event.releasedJudging,
-      participantCount: event.participants.length,
+      participantCount: event._count.participants,
       projects: filteredProjects,
     };
     return res.status(200).json({
@@ -1084,20 +1030,6 @@ export const deleteEvent = async (req: any, res: any) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    await event.participants.forEach(async (partcipant) => {
-      const user = await prisma.user.findUnique({
-        where: { id: partcipant },
-      });
-      if (!user) {
-        return;
-      }
-      await prisma.user.update({
-        where: { id: partcipant },
-        data: {
-          events: user.events.filter((eventId) => eventId !== id),
-        },
-      });
-    });
     await prisma.event.delete({
       where: { id },
     });
