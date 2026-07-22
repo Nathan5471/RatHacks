@@ -40,6 +40,10 @@ I brought every event in the past events page up to speed with the Campfire Roan
 
 I swtiched from Matomo to using my own custom analytics. Currently it function by tracking page views and sending heartbeats. View sessions contain all page views of that session and can be extended once a heartbeat is sent. There is a page for organizers to view some statistics.
 
+### Other Changes
+
+I switch from storing lists of ids to using relations in everything. I also added pre rendering to the home page and past events page so an html page is served that has all of the page's data in it. All other routes are still a plain html file that is manipulated with React.
+
 ## Technologies
 
 The frontend is build in TypeScript React and uses Axios to make called to the backend's API. The Backend is build in TypeScript ExpressJS. It handle tokens with JWT and sends emails through <https://loops.so>. There is a access token and refresh token system to keep users logged in. The database is PostgreSQL and is interfaced through Prisma.
