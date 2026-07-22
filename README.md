@@ -36,9 +36,16 @@ password - Student@123
 
 I brought every event in the past events page up to speed with the Campfire Roanoke one by adding "Organizers" and "Stats" section to all of them. I also added a "Sponsors" section to everyone as well that shows all of the parterns/sponsors of each event. I also rewrote all of the descriptions/paragraphs about the events to sound a bit better.
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/94542cb1-58b3-453f-ab69-4052b342ed39" />
+
 ### Analytics
 
 I swtiched from Matomo to using my own custom analytics. Currently it function by tracking page views and sending heartbeats. View sessions contain all page views of that session and can be extended once a heartbeat is sent. There is a page for organizers to view some statistics.
+
+<img width="1920" height="1080" alt="Screenshot_20260721_204533" src="https://github.com/user-attachments/assets/69aea64c-9e03-4531-b3bf-5bdd1abe42af" />
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/fda94fd4-c1a1-4262-b796-0d51a5272d46" />
+
 
 ### Other Changes
 
