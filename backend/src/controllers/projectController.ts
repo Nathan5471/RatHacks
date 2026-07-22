@@ -495,9 +495,13 @@ export const judgeGetProjectById = async (req: any, res: any) => {
         event: {
           id: project.event.id,
           name: project.event.name,
+          description: project.event.description,
+          startDate: project.event.startDate,
+          submissionDeadline: project.event.submissionDeadline,
         },
         canBeJudged: !project.event.releasedJudging,
-        judgeFeedback: project.judgeFeedback.length > 0,
+        judgeFeedback:
+          project.judgeFeedback.length > 0 ? project.judgeFeedback[0] : null,
       },
     });
   } catch (error) {

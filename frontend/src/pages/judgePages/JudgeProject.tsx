@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   judgeGetProjectById,
   judgeProject,
@@ -9,36 +9,44 @@ import { toast } from "react-toastify";
 import JudgeNavbar from "../../components/JudgeNavbar";
 import axios from "axios";
 
+interface JudgeFeedback {
+  id: string;
+  judgeId: string;
+  projectId: string;
+  creativityScore: number;
+  functionalityScore: number;
+  technicalityScore: number;
+  interfaceScore: number;
+  feedback: string;
+  totalScore: number;
+  createdAt: string;
+}
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+  codeURL: string | null;
+  screenshotURL: string | null;
+  videoURL: string | null;
+  demoURL: string;
+  team: string[];
+  event: {
+    id: string;
+    name: string;
+    description: string;
+    startDate: string;
+    submissionDeadline: string;
+  };
+  judged: boolean;
+  canBeJudged: boolean;
+  judgeFeedback: JudgeFeedback | null;
+  submittedAt: string;
+}
+
 export default function JudgeProject() {
   const { projectId } = useParams() as {
     projectId: string;
   };
-  interface JudgeFeedback {
-    id: string;
-    judgeId: string;
-    projectId: string;
-    creativityScore: number;
-    functionalityScore: number;
-    technicalityScore: number;
-    interfaceScore: number;
-    feedback: string;
-    totalScore: number;
-    createdAt: string;
-  }
-  interface Project {
-    id: string;
-    name: string;
-    description: string;
-    codeURL: string | null;
-    screenshotURL: string | null;
-    videoURL: string | null;
-    demoURL: string;
-    team: string[];
-    judged: boolean;
-    canBeJudged: boolean;
-    judgeFeedback: JudgeFeedback | null;
-    submittedAt: string;
-  }
   const [project, setProject] = useState<Project | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -307,6 +315,26 @@ export default function JudgeProject() {
               </video>
             </div>
           )}
+          <div className="flex flex-col mt-4 bg-surface-a1 rounded-lg p-4">
+            <h2 className="text-2xl font-bold">
+              {project.event.name} (
+              {(
+                (new Date(project.event.submissionDeadline).getTime() -
+                  new Date(project.event.startDate).getTime()) /
+                1000 /
+                60 /
+                60
+              ).toFixed(0)}{" "}
+              hours)
+            </h2>
+            <p className="text-lg">{project.event.description}</p>
+            <Link
+              to={`/app/judge/event/${project.event.id}`}
+              className="w-1/3 p-2 rounded-lg bg-primary-a0 hover:bg-primary-a1 text-center font-bold mt-2"
+            >
+              View Event
+            </Link>
+          </div>
           {(project.judgeFeedback || project.canBeJudged) && (
             <form
               className="flex flex-col mt-4 bg-surface-a1 rounded-lg p-4"
