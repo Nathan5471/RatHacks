@@ -76,19 +76,27 @@ export default function ThemeOverlay() {
           style={{ left: position.x, top: position.y }}
         >
           {theme === "spooky" && (
-            <img src="/ghost.webp" alt="Spooky Ghost" className="w-24 h-auto" />
+            <img
+              src="https://cdn.rathacks.com/website/ghost.webp"
+              alt="Spooky Ghost"
+              className="w-24 h-auto"
+            />
           )}
           {theme === "space" && (
-            <img src="/alienUFO.webp" alt="Alien UFO" className="w-24 h-auto" />
+            <img
+              src="https://cdn.rathacks.com/website/alienUFO.webp"
+              alt="Alien UFO"
+              className="w-24 h-auto"
+            />
           )}
           {theme === "framework" && (
             <img
               src={
                 frameworkColor === "green"
-                  ? "/framework12Green.webp"
+                  ? "https://cdn.rathacks.com/website/framework12Green.webp"
                   : frameworkColor === "purple"
-                    ? "/framework12Purple.webp"
-                    : "/framework12Pink.webp"
+                    ? "https://cdn.rathacks.com/website/framework12Purple.webp"
+                    : "https://cdn.rathacks.com/website/framework12Pink.webp"
               }
               alt="Framework 12"
               className="w-24 h-auto"
@@ -97,7 +105,7 @@ export default function ThemeOverlay() {
         </div>
         {theme === "space" && (
           <img
-            src="/stars.webp"
+            src="https://cdn.rathacks.com/website/stars.webp"
             alt="Starry Background"
             className="w-screen h-screen object-cover"
           />

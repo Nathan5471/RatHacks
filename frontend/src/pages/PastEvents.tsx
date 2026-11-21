@@ -51,7 +51,7 @@ export default function PastEvents() {
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 items-center mt-2">
                 <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
-                    src="/nathanCloutier.webp"
+                    src="https://cdn.rathacks.com/website/nathanCloutier.webp"
                     alt="Nathan Cloutier"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -62,7 +62,7 @@ export default function PastEvents() {
                 </div>
                 <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
-                    src="/bearTyree.webp"
+                    src="https://cdn.rathacks.com/website/bearTyree.webp"
                     alt="Bear Tyree"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -78,7 +78,7 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#17bd3d] rounded-lg"
                 >
                   <img
-                    src="/calebWang.webp"
+                    src="https://cdn.rathacks.com/website/calebWang.webp"
                     alt="Caleb Wang"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -94,7 +94,7 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#17bd3d] rounded-lg"
                 >
                   <img
-                    src="/eliPeters.webp"
+                    src="https://cdn.rathacks.com/website/eliPeters.webp"
                     alt="Eli Peters"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -105,7 +105,7 @@ export default function PastEvents() {
                 </a>
                 <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
-                    src="/mattoxJalbert.webp"
+                    src="https://cdn.rathacks.com/website/mattoxJalbert.webp"
                     alt="Mattox Jalbert"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -172,7 +172,7 @@ export default function PastEvents() {
             </p>
             <div className="relative flex flex-col items-center w-full md:w-1/2 md:ml-4 h-64">
               <img
-                src={`/CampfireRoanoke/image${campfireRoanokeImageIndex}.webp`}
+                src={`https://cdn.rathacks.com/website/campfire-roanoke/image${campfireRoanokeImageIndex}.webp`}
                 alt="Campfire Roanoke"
                 className="w-full h-full object-cover"
               />
@@ -208,7 +208,7 @@ export default function PastEvents() {
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 items-center mt-2">
                 <div className="flex flex-col p-2 bg-[#FFA23C] rounded-lg">
                   <img
-                    src="/nathanCloutier.webp"
+                    src="https://cdn.rathacks.com/website/nathanCloutier.webp"
                     alt="Nathan Cloutier"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -221,7 +221,7 @@ export default function PastEvents() {
                 </div>
                 <div className="flex flex-col p-2 bg-[#FFA23C] rounded-lg">
                   <img
-                    src="/bearTyree.webp"
+                    src="https://cdn.rathacks.com/website/bearTyree.webp"
                     alt="Bear Tyree"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -237,7 +237,7 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#FFA23C] rounded-lg"
                 >
                   <img
-                    src="/calebWang.webp"
+                    src="https://cdn.rathacks.com/website/calebWang.webp"
                     alt="Caleb Wang"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -253,7 +253,7 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#FFA23C] rounded-lg"
                 >
                   <img
-                    src="/eliPeters.webp"
+                    src="https://cdn.rathacks.com/website/eliPeters.webp"
                     alt="Eli Peters"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -264,7 +264,7 @@ export default function PastEvents() {
                 </a>
                 <div className="flex flex-col p-2 bg-[#FFA23C] rounded-lg">
                   <img
-                    src="/mattoxJalbert.webp"
+                    src="https://cdn.rathacks.com/website/mattoxJalbert.webp"
                     alt="Mattox Jalbert"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -365,7 +365,7 @@ export default function PastEvents() {
             </p>
             <div className="relative flex flex-col items-center w-full md:w-1/2 md:ml-4 h-64">
               <img
-                src={`/RatHacks2025/image${ratHacks2025ImageIndex}.webp`}
+                src={`https://cdn.rathacks.com/website/rat-hacks-2025/image${ratHacks2025ImageIndex}.webp`}
                 alt="Rat Hacks 2025"
                 className="w-full h-full object-cover"
               />
@@ -399,7 +399,7 @@ export default function PastEvents() {
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 items-center mt-2">
                 <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
-                    src="/nathanCloutier.webp"
+                    src="https://cdn.rathacks.com/website/nathanCloutier.webp"
                     alt="Nathan Cloutier"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -410,7 +410,7 @@ export default function PastEvents() {
                 </div>
                 <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
-                    src="/bearTyree.webp"
+                    src="https://cdn.rathacks.com/website/bearTyree.webp"
                     alt="Bear Tyree"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -426,7 +426,7 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#17bd3d] rounded-lg"
                 >
                   <img
-                    src="/calebWang.webp"
+                    src="https://cdn.rathacks.com/website/calebWang.webp"
                     alt="Caleb Wang"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -442,7 +442,7 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#17bd3d] rounded-lg"
                 >
                   <img
-                    src="/eliPeters.webp"
+                    src="https://cdn.rathacks.com/website/eliPeters.webp"
                     alt="Eli Peters"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -453,7 +453,7 @@ export default function PastEvents() {
                 </a>
                 <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
-                    src="/mattoxJalbert.webp"
+                    src="https://cdn.rathacks.com/website/mattoxJalbert.webp"
                     alt="Mattox Jalbert"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -523,7 +523,7 @@ export default function PastEvents() {
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 items-center mt-2 text-[#f4f4f4]">
                 <div className="flex flex-col p-2 bg-[#144922] rounded-lg">
                   <img
-                    src="/nathanCloutier.webp"
+                    src="https://cdn.rathacks.com/website/nathanCloutier.webp"
                     alt="Nathan Cloutier"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -534,7 +534,7 @@ export default function PastEvents() {
                 </div>
                 <div className="flex flex-col p-2 bg-[#144922] rounded-lg">
                   <img
-                    src="/elijahHarl.webp"
+                    src="https://cdn.rathacks.com/website/elijahHarl.webp"
                     alt="Elijah Harl"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -550,7 +550,7 @@ export default function PastEvents() {
                   className="flex flex-col p-2 bg-[#144922] rounded-lg"
                 >
                   <img
-                    src="/eliPeters.webp"
+                    src="https://cdn.rathacks.com/website/eliPeters.webp"
                     alt="Eli Peters"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
@@ -608,7 +608,7 @@ export default function PastEvents() {
               rel="noopener noreferrer"
             >
               <img
-                src="/github.svg"
+                src="https://cdn.rathacks.com/website/github.svg"
                 alt="GitHub"
                 className="w-10 hover:w-12 h-10 hover:h-12 mx-2"
               />
@@ -619,7 +619,7 @@ export default function PastEvents() {
               rel="noopener noreferrer"
             >
               <img
-                src="/discord.svg"
+                src="https://cdn.rathacks.com/website/discord.svg"
                 alt="Discord"
                 className="w-10 hover:w-12 h-10 hover:h-12 mx-2"
               />

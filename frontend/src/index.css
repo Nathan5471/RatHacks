@@ -2,12 +2,13 @@
 
 @font-face {
   font-family: "dream-planner";
-  src: url("/dreamplanner.otf") format("opentype");
+  src: url("https://cdn.rathacks.com/website/dreamplanner.otf")
+    format("opentype");
 }
 
 @font-face {
   font-family: "ember-fire";
-  src: url("/ember-fire.otf") format("opentype");
+  src: url("https://cdn.rathacks.com/website/ember-fire.otf") format("opentype");
 }
 
 @custom-variant spooky (&:where(.spooky, .spooky *));

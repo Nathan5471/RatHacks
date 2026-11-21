@@ -70,7 +70,7 @@ export default function Home() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center">
           <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
             <img
-              src="/nathanCloutier.webp"
+              src="https://cdn.rathacks.com/website/nathanCloutier.webp"
               alt="Nathan Cloutier"
               className="w-full h-56 object-cover rounded-lg mb-2"
             />
@@ -81,7 +81,7 @@ export default function Home() {
           </div>
           <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
             <img
-              src="/bearTyree.webp"
+              src="https://cdn.rathacks.com/website/bearTyree.webp"
               alt="Bear Tyree"
               className="w-full h-56 object-cover rounded-lg mb-2"
             />
@@ -95,7 +95,7 @@ export default function Home() {
             className="flex flex-col p-4 bg-surface-a1 rounded-lg"
           >
             <img
-              src="/calebWang.webp"
+              src="https://cdn.rathacks.com/website/calebWang.webp"
               alt="Caleb Wang"
               className="w-full h-56 object-cover rounded-lg mb-2"
             />
@@ -109,7 +109,7 @@ export default function Home() {
             className="flex flex-col p-4 bg-surface-a1 rounded-lg"
           >
             <img
-              src="/eliPeters.webp"
+              src="https://cdn.rathacks.com/website/eliPeters.webp"
               alt="Eli Peters"
               className="w-full h-56 object-cover rounded-lg mb-2"
             />
@@ -118,7 +118,7 @@ export default function Home() {
           </a>
           <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
             <img
-              src="/mattoxJalbert.webp"
+              src="https://cdn.rathacks.com/website/mattoxJalbert.webp"
               alt="Mattox Jalbert"
               className="w-full h-56 object-cover rounded-lg mb-2"
             />
@@ -137,7 +137,7 @@ export default function Home() {
               rel="noopener noreferrer"
             >
               <img
-                src="/github.svg"
+                src="https://cdn.rathacks.com/website/github.svg"
                 alt="GitHub"
                 className="w-10 hover:w-12 h-10 hover:h-12 mx-2"
               />
@@ -148,7 +148,7 @@ export default function Home() {
               rel="noopener noreferrer"
             >
               <img
-                src="/discord.svg"
+                src="https://cdn.rathacks.com/website/discord.svg"
                 alt="Discord"
                 className="w-10 hover:w-12 h-10 hover:h-12 mx-2"
               />
