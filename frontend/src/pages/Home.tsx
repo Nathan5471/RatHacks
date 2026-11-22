@@ -58,7 +58,7 @@ export default function Home() {
       </div>
       <div className="flex flex-col items-center w-screen h-full overflow-y-auto">
         <h2 className="text-2xl sm:text-5xl mt-6 text-center font-bold">
-          Rat Hacks 2026 is Coming Soon!
+          Rat Hacks 2027 is Coming Soon!
         </h2>
         <p className="text-xl sm:text-3xl mt-4 text-center w-3/4">
           Check out our past events here:{" "}
@@ -67,7 +67,7 @@ export default function Home() {
           </Link>
         </p>
         <h2 className="text-4xl font-bold mt-6 mb-4">Meet the Team</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-center">
           <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
             <img
               src="https://cdn.rathacks.com/website/nathanCloutier.webp"
@@ -79,29 +79,6 @@ export default function Home() {
             </span>
             <span className="sm:text-lg">Rat Hacks Director</span>
           </div>
-          <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
-            <img
-              src="https://cdn.rathacks.com/website/bearTyree.webp"
-              alt="Bear Tyree"
-              className="w-full h-56 object-cover rounded-lg mb-2"
-            />
-            <span className="text-lg sm:text-xl font-bold">Bear Tyree</span>
-            <span className="sm:text-lg">Rat Hacks Organizer</span>
-          </div>
-          <a
-            href="https://cayleb247.github.io/personal-website/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col p-4 bg-surface-a1 rounded-lg"
-          >
-            <img
-              src="https://cdn.rathacks.com/website/calebWang.webp"
-              alt="Caleb Wang"
-              className="w-full h-56 object-cover rounded-lg mb-2"
-            />
-            <span className="text-lg sm:text-xl font-bold">Caleb Wang</span>
-            <span className="sm:text-lg">Rat Hacks Organizer</span>
-          </a>
           <a
             href="https://elipeters.org"
             target="_blank"
@@ -123,6 +100,17 @@ export default function Home() {
               className="w-full h-56 object-cover rounded-lg mb-2"
             />
             <span className="text-lg sm:text-xl font-bold">Mattox Jalbert</span>
+            <span className="sm:text-lg">Rat Hacks Organizer</span>
+          </div>
+          <div className="flex flex-col p-4 bg-surface-a1 rounded-lg">
+            <img
+              src="https://cdn.rathacks.com/website/kolbrinRobertson.webp"
+              alt="Kolbrin Robertson"
+              className="w-full h-56 object-cover rounded-lg mb-2"
+            />
+            <span className="text-lg sm:text-xl font-bold">
+              Kolbrin Robertson
+            </span>
             <span className="sm:text-lg">Rat Hacks Organizer</span>
           </div>
         </div>
