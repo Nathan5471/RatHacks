@@ -847,8 +847,8 @@ export const deleteEmailList = async (req: any, res: any) => {
 };
 
 export const deleteRecipientFromEmailList = async (req: any, res: any) => {
-  const { recipientId } = req.params as {
-    recipientId: string;
+  const { id } = req.params as {
+    id: string;
   };
   const user = req.user as User;
 
@@ -858,7 +858,7 @@ export const deleteRecipientFromEmailList = async (req: any, res: any) => {
 
   try {
     const recipient = await prisma.importedEmail.findUnique({
-      where: { id: recipientId },
+      where: { id },
     });
 
     if (!recipient) {
@@ -866,7 +866,7 @@ export const deleteRecipientFromEmailList = async (req: any, res: any) => {
     }
 
     await prisma.importedEmail.delete({
-      where: { id: recipientId },
+      where: { id },
     });
     const updatedEmailList = await prisma.emailList.findUnique({
       where: { id: recipient.emailListId },
@@ -875,12 +875,10 @@ export const deleteRecipientFromEmailList = async (req: any, res: any) => {
       },
     });
 
-    return res
-      .status(200)
-      .json({
-        message: "Recipient deleted successfully",
-        emailList: updatedEmailList,
-      });
+    return res.status(200).json({
+      message: "Recipient deleted successfully",
+      emailList: updatedEmailList,
+    });
   } catch (error) {
     console.error("Error deleting recipient from email list:", error);
     return res

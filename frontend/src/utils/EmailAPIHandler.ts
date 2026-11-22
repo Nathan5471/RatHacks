@@ -146,3 +146,44 @@ export const getRecipientsByFilter = async (
   });
   return response.data;
 };
+
+export const createEmailList = async (name: string, signal?: AbortSignal) => {
+  const response = await api.post("/create-email-list", { name }, { signal });
+  return response.data;
+};
+
+export const addToEmailList = async (
+  id: string,
+  recipients: { email: string; firstName: string; lastName: string }[],
+  signal?: AbortSignal,
+) => {
+  const response = await api.post(
+    `/add-to-email-list/${id}`,
+    { recipients },
+    { signal },
+  );
+  return response.data;
+};
+
+export const getEmailLists = async (signal?: AbortSignal) => {
+  const response = await api.get("/lists", { signal });
+  return response.data;
+};
+
+export const getEmailListById = async (id: string, signal?: AbortSignal) => {
+  const response = await api.get(`/lists/${id}`, { signal });
+  return response.data;
+};
+
+export const deleteEmailList = async (id: string, signal?: AbortSignal) => {
+  const response = await api.delete(`/email-list/${id}`, { signal });
+  return response.data;
+};
+
+export const deleteRecipientFromEmailList = async (
+  id: string,
+  signal?: AbortSignal,
+) => {
+  const response = await api.delete(`/recipient/${id}`, { signal });
+  return response.data;
+};

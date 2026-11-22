@@ -255,20 +255,16 @@ router.delete("/email-list/:id", authenticate, async (req: any, res: any) => {
   await deleteEmailList(req, res);
 });
 
-router.delete(
-  "/recipient/:recipientId",
-  authenticate,
-  async (req: any, res: any) => {
-    const { recipientId } = req.params as {
-      recipientId: string;
-    };
+router.delete("/recipient/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as {
+    id: string;
+  };
 
-    if (!recipientId) {
-      return res.status(400).json({ message: "Recipient ID is required" });
-    }
+  if (!id) {
+    return res.status(400).json({ message: "Recipient ID is required" });
+  }
 
-    await deleteRecipientFromEmailList(req, res);
-  },
-);
+  await deleteRecipientFromEmailList(req, res);
+});
 
 export default router;
