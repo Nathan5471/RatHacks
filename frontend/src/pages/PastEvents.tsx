@@ -160,7 +160,7 @@ export default function PastEvents() {
             MARCH 1, 2026 (12:00 PM - 12:00 PM)
           </h2>
           <div className="flex flex-col md:flex-row items-center mb-4">
-            <p className="text-xl sm:text-2xl font-ember-fire md:w-1/2">
+            <p className="text-xl sm:text-2xl font-ember-fire md:w-3/5">
               Campfire Roanoke was the first overnight high school game jam in
               Roanoke hosted at the Science Museum of Western Virginia by the
               Rat Hacks team! Participants were allowed to work in groups of up
@@ -170,11 +170,11 @@ export default function PastEvents() {
               Roanoke started out with an awesome opening ceremony in the eye
               planetarium.
             </p>
-            <div className="relative flex flex-col items-center w-full md:w-1/2 md:ml-4 h-64">
+            <div className="relative flex flex-col items-center w-full md:w-2/5 md:ml-4 h-64 bg-black/40">
               <img
                 src={`https://cdn.rathacks.com/website/campfire-roanoke/image${campfireRoanokeImageIndex}.webp`}
                 alt="Campfire Roanoke"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
               <IoArrowBackCircle
                 className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white cursor-pointer hover:text-gray-300"
@@ -353,7 +353,7 @@ export default function PastEvents() {
             November 22, 2025 (8:00 AM - 8:00 PM)
           </h2>
           <div className="flex flex-col md:flex-row items-center mb-4">
-            <p className="text-lg sm:text-xl md:w-1/2">
+            <p className="text-lg sm:text-xl md:w-3/5">
               This is the second hackathon hosted by Rat Hacks at the Roanoke
               Valley Governor's School. Participants worked in groups of up to 4
               to make a coding project in 12 hours around the theme "Something
@@ -363,11 +363,11 @@ export default function PastEvents() {
               Domino's! By the end, every team had submitted a project and
               created something really cool!
             </p>
-            <div className="relative flex flex-col items-center w-full md:w-1/2 md:ml-4 h-64">
+            <div className="relative flex flex-col items-center w-full md:w-2/5 md:ml-4 h-64 bg-black/40">
               <img
                 src={`https://cdn.rathacks.com/website/rat-hacks-2025/image${ratHacks2025ImageIndex}.webp`}
                 alt="Rat Hacks 2025"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
               <IoArrowBackCircle
                 className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white cursor-pointer hover:text-gray-300"
