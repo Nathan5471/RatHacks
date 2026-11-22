@@ -5,6 +5,8 @@ import { IoArrowForwardCircle, IoArrowBackCircle } from "react-icons/io5";
 
 export default function PastEvents() {
   const { user } = useAuth();
+  const havenRoanokeImageCount = 16;
+  const [havenRoanokeImageIndex, setHavenRoanokeImageIndex] = useState(1);
   const campfireRoanokeImageCount = 9;
   const [campfireRoanokeImageIndex, setCampfireRoanokeImageIndex] = useState(1);
   const ratHacks2025ImageCount = 5;
@@ -30,6 +32,204 @@ export default function PastEvents() {
         <h1 className="text-3xl sm:text-5xl mt-6 text-center font-bold mb-4">
           Past Events
         </h1>
+        <div
+          className="flex flex-col w-full p-4 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('https://cdn.rathacks.com/website/haven-roanoke/haven-background.png')`,
+          }}
+        >
+          <h2 className="text-2xl sm:text-4xl font-darumadrop-one mb-1">
+            <span className="font-bold">Haven Roanoke</span> - November
+            14th-15th (11:00 AM - 2:30 PM)
+          </h2>
+          <div className="flex flex-col md:flex-row items-center mb-4">
+            <p className="text-xl sm:text-2xl font-ember-fire md:w-3/5">
+              Campfire Roanoke was the first overnight high school game jam in
+              Roanoke hosted at the Science Museum of Western Virginia by the
+              Rat Hacks team! Participants were allowed to work in groups of up
+              to 3 to make a game around the theme "Beneath the Surface". Every
+              team was able to submit a game, while eating awesome food from
+              Jersey Mikes, Chick-fil-A, Domino's, and Sam's Club! Campfire
+              Roanoke started out with an awesome opening ceremony in the eye
+              planetarium.
+            </p>
+            <div className="relative flex flex-col items-center w-full md:w-2/5 md:ml-4 h-64 bg-black/40">
+              <img
+                src={`https://cdn.rathacks.com/website/haven-roanoke/image${havenRoanokeImageIndex}.webp`}
+                alt="Haven Roanoke"
+                className="w-full h-full object-contain"
+              />
+              <IoArrowBackCircle
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white cursor-pointer hover:text-gray-300"
+                size={40}
+                onClick={() =>
+                  setHavenRoanokeImageIndex(
+                    havenRoanokeImageIndex === 1
+                      ? havenRoanokeImageCount
+                      : havenRoanokeImageIndex - 1,
+                  )
+                }
+              />
+              <IoArrowForwardCircle
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white cursor-pointer hover:text-gray-300"
+                size={40}
+                onClick={() =>
+                  setHavenRoanokeImageIndex(
+                    havenRoanokeImageIndex === havenRoanokeImageCount
+                      ? 1
+                      : havenRoanokeImageIndex + 1,
+                  )
+                }
+              />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row items-center mb-4">
+            <div className="flex flex-col md:w-3/4">
+              <h4 className="text-2xl font-bold font-dream-planner">
+                ORGANIZERS
+              </h4>
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 pr-3 items-center mt-2">
+                <div className="flex flex-col p-2 bg-[#783D2B] rounded-lg">
+                  <img
+                    src="https://cdn.rathacks.com/website/nathanCloutier.webp"
+                    alt="Nathan Cloutier"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-xl font-bold font-dream-planner">
+                    NATHAN CLOUTIER
+                  </span>
+                  <span className="font-ember-fire text-lg">
+                    Lead Organizer
+                  </span>
+                </div>
+                <div className="flex flex-col p-2 bg-[#783D2B] rounded-lg">
+                  <img
+                    src="https://cdn.rathacks.com/website/bearTyree.webp"
+                    alt="Bear Tyree"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-xl font-bold font-dream-planner">
+                    BEAR TYREE
+                  </span>
+                  <span className="font-ember-fire text-lg">Organizer</span>
+                </div>
+                <a
+                  href="https://cayleb247.github.io/personal-website/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col p-2 bg-[#783D2B] rounded-lg"
+                >
+                  <img
+                    src="https://cdn.rathacks.com/website/calebWang.webp"
+                    alt="Caleb Wang"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-xl font-bold font-dream-planner">
+                    CALEB WANG
+                  </span>
+                  <span className="font-ember-fire text-lg">Organizer</span>
+                </a>
+                <a
+                  href="https://elipeters.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col p-2 bg-[#783D2B] rounded-lg"
+                >
+                  <img
+                    src="https://cdn.rathacks.com/website/eliPeters.webp"
+                    alt="Eli Peters"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-xl font-bold font-dream-planner">
+                    ELI PETERS
+                  </span>
+                  <span className="font-ember-fire text-lg">Organizer</span>
+                </a>
+                <div className="flex flex-col p-2 bg-[#783D2B] rounded-lg">
+                  <img
+                    src="https://cdn.rathacks.com/website/mattoxJalbert.webp"
+                    alt="Mattox Jalbert"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-xl font-bold font-dream-planner">
+                    MATTOX JALBERT
+                  </span>
+                  <span className="font-ember-fire text-lg">Organizer</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col w-full h-full md:w-1/4">
+              <h4 className="text-2xl font-bold font-dream-planner mt-2 sm:mt-0">
+                Stats
+              </h4>
+              <div className="flex w-full h-10 md:h-15 bg-[#783D2B] rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-3xl font-ember-fire">
+                  <span className="font-bold">11</span> Participants
+                </p>
+              </div>
+              <div className="flex w-full h-10 md:h-15 bg-[#783D2B] rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-3xl font-ember-fire">
+                  <span className="font-bold">7</span> Games Submitted
+                </p>
+              </div>
+              <div className="flex w-full h-10 md:h-15 bg-[#783D2B] rounded-lg justify-center items-center text-center mx-1 my-1">
+                <p className="text-3xl font-ember-fire">
+                  "Beneath the Surface"
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <h4 className="text-2xl font-bold font-dream-planner">SPONSORS</h4>
+            <div className="flex flex-wrap gap-4">
+              <a
+                className="flex flex-col items-center bg-[#783D2B] p-2 rounded-lg"
+                href="https://hackclub.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://assets.hackclub.com/flag-standalone.png"
+                  alt="Hack Club Flag"
+                  className="w-36 h-24 sm:w-42 sm:h-28 md:w-48 md:h-32 object-contain"
+                />
+                <span className="text-lg sm:text-xl font-ember-fire">
+                  Hack Club
+                </span>
+              </a>
+              <a
+                className="flex flex-col items-center bg-[#783D2B] p-2 rounded-lg"
+                href="https://smwv.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://smwv.org/wp-content/uploads/2021/01/cropped-SMWV-Logo-large.png"
+                  alt="Science Museum of Western Virginia Logo"
+                  className="w-36 h-24 sm:w-42 sm:h-28 md:w-48 md:h-32 object-contain"
+                />
+                <span className="text-lg sm:text-xl font-ember-fire">
+                  Science Museum of Western Virginia
+                </span>
+              </a>
+              <a
+                className="flex flex-col items-center bg-[#783D2B] p-2 rounded-lg"
+                href="https://www.ferrum.edu/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://www.ferrum.edu/wp-content/themes/ferrum-theme/dist/img/ferrum_college_logo_2C.png"
+                  alt="Ferrum College Logo"
+                  className="w-36 h-24 sm:w-42 sm:h-28 md:w-48 md:h-32 object-contain"
+                />
+                <span className="text-lg sm:text-xl font-ember-fire">
+                  Ferrum College
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
         <div className="flex flex-col bg-surface-a1 w-full p-4">
           <h2 className="text-xl sm:text-3xl mb-1">
             <span className="font-bold text-[#17bd3d]">
@@ -48,7 +248,7 @@ export default function PastEvents() {
               <h4 className="text-xl sm:text-2xl font-bold text-[#17bd3d]">
                 Organizers
               </h4>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 items-center mt-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 pr-3 items-center mt-2">
                 <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
                     src="https://cdn.rathacks.com/website/nathanCloutier.webp"
@@ -157,7 +357,7 @@ export default function PastEvents() {
         <div className="flex flex-col bg-[#53BFFF] w-full p-4">
           <h2 className="text-2xl sm:text-4xl font-dream-planner mb-1">
             <span className="font-bold">CAMPFIRE ROANOKE</span> - FEBRUARY 28 -
-            MARCH 1, 2026 (12:00 PM - 12:00 PM)
+            MARCH 1, 2026 (11:00 AM - 2:00 PM)
           </h2>
           <div className="flex flex-col md:flex-row items-center mb-4">
             <p className="text-xl sm:text-2xl font-ember-fire md:w-3/5">
@@ -205,7 +405,7 @@ export default function PastEvents() {
               <h4 className="text-2xl font-bold font-dream-planner">
                 ORGANIZERS
               </h4>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 items-center mt-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 pr-3 items-center mt-2">
                 <div className="flex flex-col p-2 bg-[#FFA23C] rounded-lg">
                   <img
                     src="https://cdn.rathacks.com/website/nathanCloutier.webp"
@@ -396,7 +596,7 @@ export default function PastEvents() {
           <div className="flex flex-col md:flex-row items-center mb-4">
             <div className="flex flex-col md:w-3/4">
               <h4 className="text-2xl font-bold text-[#17bd3d]">Organizers</h4>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 items-center mt-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 pr-3 items-center mt-2">
                 <div className="flex flex-col p-2 bg-[#17bd3d] rounded-lg">
                   <img
                     src="https://cdn.rathacks.com/website/nathanCloutier.webp"
@@ -520,7 +720,7 @@ export default function PastEvents() {
           <div className="flex flex-col md:flex-row items-center mb-4">
             <div className="flex flex-col md:w-3/4">
               <h4 className="text-2xl font-bold text-[#144922]">Organizers</h4>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 items-center mt-2 text-[#f4f4f4]">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 pr-3 items-center mt-2 text-[#f4f4f4]">
                 <div className="flex flex-col p-2 bg-[#144922] rounded-lg">
                   <img
                     src="https://cdn.rathacks.com/website/nathanCloutier.webp"
