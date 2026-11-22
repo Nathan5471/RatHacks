@@ -693,6 +693,85 @@ export const deactivateEmail = async (req: any, res: any) => {
   }
 };
 
+export const createEmailList = async (req: any, res: any) => {
+  const user = req.user as User;
+  const { name } = req.body as { name: string };
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const emailList = await prisma.emailList.create({
+      data: {
+        name,
+      },
+    });
+    return res
+      .status(201)
+      .json({ message: "Email list created successfully", id: emailList.id });
+  } catch (error) {
+    console.error("Error creating email list:", error);
+    return res.status(500).json({ message: "Failed to create email list" });
+  }
+};
+
+export const addToEmailList = async (req: any, res: any) => {
+  const user = req.user as User;
+  const { id } = req.params as { id: string };
+  const { recipients } = req.body as {
+    recipients: { email: string; firstName: string; lastName: string }[];
+  };
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const emailList = await prisma.emailList.findUnique({
+      where: { id },
+      include: {
+        emails: true,
+      },
+    });
+
+    if (!emailList) {
+      return res.status(404).json({ message: "Email list not found" });
+    }
+
+    const existingEmails = emailList.emails.map((email) => email.email);
+    for (const recipient of recipients) {
+      if (existingEmails.includes(recipient.email)) {
+        continue;
+      }
+      await prisma.importedEmail.create({
+        data: {
+          emailListId: emailList.id,
+          email: recipient.email,
+          firstName: recipient.firstName,
+          lastName: recipient.lastName,
+        },
+      });
+    }
+
+    const updatedEmailList = await prisma.emailList.findUnique({
+      where: { id },
+      include: {
+        emails: true,
+      },
+    });
+    return res.status(200).json({
+      message: " Successfully added recipients to email list",
+      emailList: updatedEmailList,
+    });
+  } catch (error) {
+    console.error("Error adding recipients to email list:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to add recipients to email list" });
+  }
+};
+
 export const getEmailLists = async (req: any, res: any) => {
   const user = req.user as User;
 
@@ -739,5 +818,73 @@ export const getEmailListById = async (req: any, res: any) => {
   } catch (error) {
     console.error("Error loading email list:", error);
     return res.status(500).json({ message: "Failed to load email list" });
+  }
+};
+
+export const deleteEmailList = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const emailList = await prisma.emailList.findUnique({
+      where: { id },
+    });
+    if (!emailList) {
+      return res.status(404).json({ message: "Email list not found" });
+    }
+
+    await prisma.emailList.delete({
+      where: { id },
+    });
+    return res.status(200).json({ message: "Email list deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to delete email list" });
+  }
+};
+
+export const deleteRecipientFromEmailList = async (req: any, res: any) => {
+  const { recipientId } = req.params as {
+    recipientId: string;
+  };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const recipient = await prisma.importedEmail.findUnique({
+      where: { id: recipientId },
+    });
+
+    if (!recipient) {
+      return res.status(404).json({ message: "Recipient not found" });
+    }
+
+    await prisma.importedEmail.delete({
+      where: { id: recipientId },
+    });
+    const updatedEmailList = await prisma.emailList.findUnique({
+      where: { id: recipient.emailListId },
+      include: {
+        emails: true,
+      },
+    });
+
+    return res
+      .status(200)
+      .json({
+        message: "Recipient deleted successfully",
+        emailList: updatedEmailList,
+      });
+  } catch (error) {
+    console.error("Error deleting recipient from email list:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to delete recipient from email list" });
   }
 };

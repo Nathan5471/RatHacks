@@ -13,8 +13,12 @@ import {
   sendTestEmail,
   activateEmail,
   deactivateEmail,
+  createEmailList,
+  addToEmailList,
   getEmailLists,
   getEmailListById,
+  deleteEmailList,
+  deleteRecipientFromEmailList,
 } from "../controllers/emailController";
 
 const router = express.Router();
@@ -168,6 +172,47 @@ router.post("/deactivate/:id", authenticate, async (req: any, res: any) => {
   await deactivateEmail(req, res);
 });
 
+router.post("/create-email-list", authenticate, async (req: any, res: any) => {
+  const { name } = req.body as { name: string };
+
+  if (!name) {
+    return res.status(400).json({ message: "List name is required" });
+  }
+
+  await createEmailList(req, res);
+});
+
+router.post(
+  "/add-to-email-list/:id",
+  authenticate,
+  async (req: any, res: any) => {
+    const { id } = req.params as { id: string };
+    const { recipients } = req.body as {
+      recipients: { email: string; firstName: string; lastName: string }[];
+    };
+
+    if (!id) {
+      return res.status(400).json({ message: "Email List ID is required" });
+    }
+
+    if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
+      return res.status(400).json({ message: "Recipients are required" });
+    }
+
+    let invalidRecipients = recipients.filter(
+      (recipient) =>
+        !recipient.email || !recipient.firstName || !recipient.lastName,
+    );
+    if (invalidRecipients.length > 0) {
+      return res.status(400).json({
+        message: "Each recipient must have an email, first name, and last name",
+      });
+    }
+
+    await addToEmailList(req, res);
+  },
+);
+
 router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
   const { id } = req.params as { id: string };
 
@@ -199,5 +244,31 @@ router.delete("/delete/:id", authenticate, async (req: any, res: any) => {
 
   await deleteEmail(req, res);
 });
+
+router.delete("/email-list/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "Email List ID is required" });
+  }
+
+  await deleteEmailList(req, res);
+});
+
+router.delete(
+  "/recipient/:recipientId",
+  authenticate,
+  async (req: any, res: any) => {
+    const { recipientId } = req.params as {
+      recipientId: string;
+    };
+
+    if (!recipientId) {
+      return res.status(400).json({ message: "Recipient ID is required" });
+    }
+
+    await deleteRecipientFromEmailList(req, res);
+  },
+);
 
 export default router;
