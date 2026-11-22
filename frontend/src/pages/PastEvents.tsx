@@ -43,15 +43,13 @@ export default function PastEvents() {
             14th-15th (11:00 AM - 2:30 PM)
           </h2>
           <div className="flex flex-col md:flex-row items-center mb-4">
-            <p className="text-xl sm:text-2xl font-ember-fire md:w-3/5">
-              Campfire Roanoke was the first overnight high school game jam in
+            <p className="text-xl sm:text-2xl font-jua md:w-3/5 bg-[#783D2B] p-2 rounded-lg">
+              Haven Roanoke was the second overnight high school game jam in
               Roanoke hosted at the Science Museum of Western Virginia by the
               Rat Hacks team! Participants were allowed to work in groups of up
-              to 3 to make a game around the theme "Beneath the Surface". Every
-              team was able to submit a game, while eating awesome food from
-              Jersey Mikes, Chick-fil-A, Domino's, and Sam's Club! Campfire
-              Roanoke started out with an awesome opening ceremony in the eye
-              planetarium.
+              to 3 to make a game around the theme "Bounce Back". We gave out
+              free food (from Chick-fil-A, Domino's, and Jersey Mike's), prizes,
+              and loads of merch!
             </p>
             <div className="relative flex flex-col items-center w-full md:w-2/5 md:ml-4 h-64 bg-black/40">
               <img
@@ -85,8 +83,8 @@ export default function PastEvents() {
           </div>
           <div className="flex flex-col md:flex-row items-center mb-4">
             <div className="flex flex-col md:w-3/4">
-              <h4 className="text-2xl font-bold font-dream-planner">
-                ORGANIZERS
+              <h4 className="text-3xl font-bold font-darumadrop-one">
+                Organizers
               </h4>
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 pr-3 items-center mt-2">
                 <div className="flex flex-col p-2 bg-[#783D2B] rounded-lg">
@@ -95,40 +93,11 @@ export default function PastEvents() {
                     alt="Nathan Cloutier"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
-                  <span className="text-xl font-bold font-dream-planner">
-                    NATHAN CLOUTIER
+                  <span className="text-xl font-bold font-darumadrop-one">
+                    Nathan Cloutier
                   </span>
-                  <span className="font-ember-fire text-lg">
-                    Lead Organizer
-                  </span>
+                  <span className="font-jua text-lg">Lead Organizer</span>
                 </div>
-                <div className="flex flex-col p-2 bg-[#783D2B] rounded-lg">
-                  <img
-                    src="https://cdn.rathacks.com/website/bearTyree.webp"
-                    alt="Bear Tyree"
-                    className="w-full h-36 object-cover rounded-lg mb-2"
-                  />
-                  <span className="text-xl font-bold font-dream-planner">
-                    BEAR TYREE
-                  </span>
-                  <span className="font-ember-fire text-lg">Organizer</span>
-                </div>
-                <a
-                  href="https://cayleb247.github.io/personal-website/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-col p-2 bg-[#783D2B] rounded-lg"
-                >
-                  <img
-                    src="https://cdn.rathacks.com/website/calebWang.webp"
-                    alt="Caleb Wang"
-                    className="w-full h-36 object-cover rounded-lg mb-2"
-                  />
-                  <span className="text-xl font-bold font-dream-planner">
-                    CALEB WANG
-                  </span>
-                  <span className="font-ember-fire text-lg">Organizer</span>
-                </a>
                 <a
                   href="https://elipeters.org"
                   target="_blank"
@@ -140,10 +109,10 @@ export default function PastEvents() {
                     alt="Eli Peters"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
-                  <span className="text-xl font-bold font-dream-planner">
-                    ELI PETERS
+                  <span className="text-xl font-bold font-darumadrop-one">
+                    Eli Peters
                   </span>
-                  <span className="font-ember-fire text-lg">Organizer</span>
+                  <span className="font-jua text-lg">Organizer</span>
                 </a>
                 <div className="flex flex-col p-2 bg-[#783D2B] rounded-lg">
                   <img
@@ -151,36 +120,45 @@ export default function PastEvents() {
                     alt="Mattox Jalbert"
                     className="w-full h-36 object-cover rounded-lg mb-2"
                   />
-                  <span className="text-xl font-bold font-dream-planner">
-                    MATTOX JALBERT
+                  <span className="text-xl font-bold font-darumadrop-one">
+                    Mattox Jalbert
                   </span>
-                  <span className="font-ember-fire text-lg">Organizer</span>
+                  <span className="font-jua text-lg">Organizer</span>
+                </div>
+                <div className="flex flex-col p-2 bg-[#783D2B] rounded-lg">
+                  <img
+                    src="https://cdn.rathacks.com/website/kolbrinRobertson.webp"
+                    alt="Kolbrin Robertson"
+                    className="w-full h-36 object-cover rounded-lg mb-2"
+                  />
+                  <span className="text-xl font-bold font-darumadrop-one">
+                    Kolbrin Robertson
+                  </span>
+                  <span className="font-jua text-lg">Organizer</span>
                 </div>
               </div>
             </div>
             <div className="flex flex-col w-full h-full md:w-1/4">
-              <h4 className="text-2xl font-bold font-dream-planner mt-2 sm:mt-0">
+              <h4 className="text-3xl font-bold font-darumadrop-one mt-2 sm:mt-0">
                 Stats
               </h4>
               <div className="flex w-full h-10 md:h-15 bg-[#783D2B] rounded-lg justify-center items-center text-center mx-1 my-1">
-                <p className="text-3xl font-ember-fire">
-                  <span className="font-bold">11</span> Participants
+                <p className="text-3xl font-jua">
+                  <span className="font-bold">18</span> Participants
                 </p>
               </div>
               <div className="flex w-full h-10 md:h-15 bg-[#783D2B] rounded-lg justify-center items-center text-center mx-1 my-1">
-                <p className="text-3xl font-ember-fire">
-                  <span className="font-bold">7</span> Games Submitted
+                <p className="text-3xl font-jua">
+                  <span className="font-bold">8</span> Games Submitted
                 </p>
               </div>
               <div className="flex w-full h-10 md:h-15 bg-[#783D2B] rounded-lg justify-center items-center text-center mx-1 my-1">
-                <p className="text-3xl font-ember-fire">
-                  "Beneath the Surface"
-                </p>
+                <p className="text-3xl font-jua">"Bounce Back"</p>
               </div>
             </div>
           </div>
           <div className="flex flex-col">
-            <h4 className="text-2xl font-bold font-dream-planner">SPONSORS</h4>
+            <h4 className="text-3xl font-bold font-darumadrop-one">Sponsors</h4>
             <div className="flex flex-wrap gap-4">
               <a
                 className="flex flex-col items-center bg-[#783D2B] p-2 rounded-lg"
@@ -193,9 +171,7 @@ export default function PastEvents() {
                   alt="Hack Club Flag"
                   className="w-36 h-24 sm:w-42 sm:h-28 md:w-48 md:h-32 object-contain"
                 />
-                <span className="text-lg sm:text-xl font-ember-fire">
-                  Hack Club
-                </span>
+                <span className="text-lg sm:text-xl font-jua">Hack Club</span>
               </a>
               <a
                 className="flex flex-col items-center bg-[#783D2B] p-2 rounded-lg"
@@ -208,23 +184,38 @@ export default function PastEvents() {
                   alt="Science Museum of Western Virginia Logo"
                   className="w-36 h-24 sm:w-42 sm:h-28 md:w-48 md:h-32 object-contain"
                 />
-                <span className="text-lg sm:text-xl font-ember-fire">
+                <span className="text-lg sm:text-xl font-jua">
                   Science Museum of Western Virginia
                 </span>
               </a>
               <a
                 className="flex flex-col items-center bg-[#783D2B] p-2 rounded-lg"
-                href="https://www.ferrum.edu/"
+                href="https://www.lynchburg.edu/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <img
-                  src="https://www.ferrum.edu/wp-content/themes/ferrum-theme/dist/img/ferrum_college_logo_2C.png"
-                  alt="Ferrum College Logo"
+                  src="https://cdn.rathacks.com/website/03%20U%20Lynchburg%20logo%202c%20compact.png"
+                  alt="University of Lynchburg Logo"
                   className="w-36 h-24 sm:w-42 sm:h-28 md:w-48 md:h-32 object-contain"
                 />
-                <span className="text-lg sm:text-xl font-ember-fire">
-                  Ferrum College
+                <span className="text-lg sm:text-xl font-jua">
+                  University of Lynchburg
+                </span>
+              </a>
+              <a
+                className="flex flex-col items-center bg-[#783D2B] p-2 rounded-lg"
+                href="https://www.virginiawestern.edu/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://www.virginiawestern.edu/wp-content/uploads/2020/04/vw-logo-stacked-web.png"
+                  alt="Virginia Western Logo"
+                  className="w-36 h-24 sm:w-42 sm:h-28 md:w-48 md:h-32 object-contain"
+                />
+                <span className="text-lg sm:text-xl font-jua">
+                  Virginia Western
                 </span>
               </a>
             </div>
@@ -317,7 +308,7 @@ export default function PastEvents() {
               </div>
             </div>
             <div className="flex flex-col w-full h-full md:w-1/4 mt-2 md:mt-0">
-              <h4 className="text-2xl font-bold font-dream-planner">Stats</h4>
+              <h4 className="text-2xl font-bold text-[#17bd3d]">Stats</h4>
               <div className="flex w-full h-10 md:h-15 bg-[#17bd3d] rounded-lg justify-center items-center text-center mx-1 my-1">
                 <p className="text-3xl">
                   <span className="font-bold">5</span> Participants
@@ -665,7 +656,7 @@ export default function PastEvents() {
               </div>
             </div>
             <div className="flex flex-col w-full h-full md:w-1/4 mt-2 md:mt-0">
-              <h4 className="text-2xl font-bold font-dream-planner">Stats</h4>
+              <h4 className="text-2xl font-bold text-[#17bd3d]">Stats</h4>
               <div className="flex w-full h-10 md:h-15 bg-[#17bd3d] rounded-lg justify-center items-center text-center mx-1 my-1">
                 <p className="text-3xl">
                   <span className="font-bold">17</span> Participants
