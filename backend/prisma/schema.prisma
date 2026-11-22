@@ -194,6 +194,21 @@ model EmailReceipt {
   seenAt  DateTime?
 }
 
+model EmailList {
+  id String @id @default(uuid())
+  name String
+  emails ImportedEmail[]
+}
+
+model ImportedEmail {
+  id String @id @default(uuid())
+  email String
+  firstName String
+  lastName String
+  emailList EmailList @relation(fields: [emailListId], references: [id], onDelete: Cascade)
+  emailListId String
+}
+
 model Session {
   id              String     @id @default(uuid())
   user            User?      @relation(fields: [userId], references: [id], onDelete: SetNull)

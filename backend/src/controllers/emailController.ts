@@ -692,3 +692,52 @@ export const deactivateEmail = async (req: any, res: any) => {
     return res.status(500).json({ message: "Failed to deactivate email" });
   }
 };
+
+export const getEmailLists = async (req: any, res: any) => {
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const emailLists = await prisma.emailList.findMany({
+      include: {
+        _count: {
+          select: { emails: true },
+        },
+      },
+    });
+    return res.status(200).json({ emailLists });
+  } catch (error) {
+    console.error("Error loading email lists:", error);
+    return res.status(500).json({ message: "Failed to load email lists" });
+  }
+};
+
+export const getEmailListById = async (req: any, res: any) => {
+  const user = req.user as User;
+  const { id } = req.params as { id: string };
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const emailList = await prisma.emailList.findUnique({
+      where: { id },
+      include: {
+        emails: true,
+      },
+    });
+
+    if (!emailList) {
+      return res.status(404).json({ message: "Email list not found" });
+    }
+
+    return res.status(200).json({ emailList });
+  } catch (error) {
+    console.error("Error loading email list:", error);
+    return res.status(500).json({ message: "Failed to load email list" });
+  }
+};

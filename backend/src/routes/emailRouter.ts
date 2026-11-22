@@ -13,6 +13,8 @@ import {
   sendTestEmail,
   activateEmail,
   deactivateEmail,
+  getEmailLists,
+  getEmailListById,
 } from "../controllers/emailController";
 
 const router = express.Router();
@@ -174,6 +176,18 @@ router.get("/organizer/:id", authenticate, async (req: any, res: any) => {
   }
 
   await organizerGetEmailById(req, res);
+});
+
+router.get("/lists", authenticate, getEmailLists);
+
+router.get("/lists/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+
+  if (!id) {
+    return res.status(400).json({ message: "List ID is required" });
+  }
+
+  await getEmailListById(req, res);
 });
 
 router.delete("/delete/:id", authenticate, async (req: any, res: any) => {
