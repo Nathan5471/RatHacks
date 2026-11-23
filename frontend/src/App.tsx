@@ -24,7 +24,6 @@ import CheckIn from "./pages/organizerPages/CheckIn";
 import OrganizerProject from "./pages/organizerPages/OrganizerProject";
 import OrganizerEmails from "./pages/organizerPages/OrganizerEmails";
 import OrganizerEmail from "./pages/organizerPages/OrganizerEmail";
-import OrganizerStats from "./pages/organizerPages/OrganizerStats";
 import Analytics from "./pages/organizerPages/Analytics";
 import JudgeDashboard from "./pages/judgePages/JudgeDashboard";
 import JudgeEvents from "./pages/judgePages/JudgeEvents";
@@ -113,7 +112,6 @@ function App() {
               path="/app/organizer/email/:emailId"
               element={<OrganizerEmail />}
             />
-            <Route path="/app/organizer/stats" element={<OrganizerStats />} />
             <Route
               path="/app/organizer/backups"
               element={<OrganizerBackups />}

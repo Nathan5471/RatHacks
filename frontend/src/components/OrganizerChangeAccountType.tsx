@@ -13,11 +13,11 @@ export default function OrganizerChangeAccountType({
   id: string;
   firstName: string;
   lastName: string;
-  currentAccountType: "student" | "judge" | "organizer";
+  currentAccountType: "student" | "judge" | "organizer" | "formerOrganizer";
   setRefreshData?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [newAccountType, setNewAccountType] = useState<
-    "student" | "judge" | "organizer"
+    "student" | "judge" | "organizer" | "formerOrganizer"
   >(currentAccountType);
   const { closeOverlay } = useOverlay();
 
@@ -57,6 +57,7 @@ export default function OrganizerChangeAccountType({
         <option value="student">Student</option>
         <option value="judge">Judge</option>
         <option value="organizer">Organizer</option>
+        <option value="formerOrganizer">Former Organizer</option>
       </select>
       <p className="text-lg sm:text-xl">
         Are you sure you want to change {firstName} {lastName}'s account type

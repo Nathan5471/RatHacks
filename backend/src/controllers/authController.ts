@@ -668,6 +668,9 @@ export const getStats = async (req: any, res: any) => {
     const organizerUsers = await prisma.user.count({
       where: { accountType: "organizer" },
     });
+    const formerOrganizerUsers = await prisma.user.count({
+      where: { accountType: "formerOrganizer" },
+    });
     const judgeUsers = await prisma.user.count({
       where: { accountType: "judge" },
     });
@@ -732,6 +735,7 @@ export const getStats = async (req: any, res: any) => {
         govSchoolUsers,
         studentUsers,
         organizerUsers,
+        formerOrganizerUsers,
         judgeUsers,
         regularTheme,
         spookyTheme,
@@ -870,7 +874,12 @@ export const updateTheme = async (req: any, res: any) => {
 export const updateAccountType = async (req: any, res: any) => {
   const { id, accountType } = req.body as {
     id: string;
-    accountType: "student" | "judge" | "organizer";
+    accountType:
+      | "student"
+      | "judge"
+      | "organizer"
+      | "formerOrganizer"
+      | "formerOrganizer";
   };
   const user = req.user as User;
 

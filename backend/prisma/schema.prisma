@@ -10,6 +10,7 @@ enum AccountType {
   student
   judge
   organizer
+  formerOrganizer
 }
 
 enum GradeLevel {

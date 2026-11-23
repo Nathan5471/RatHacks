@@ -465,10 +465,17 @@ router.put(
         .json({ message: "ID and account type are required" });
     }
 
-    if (!["student", "judge", "organizer"].includes(accountType)) {
+    if (
+      !["student", "judge", "organizer", "formerOrganizer"].includes(
+        accountType,
+      )
+    ) {
       return res
         .status(400)
-        .json({ message: "Account type must be student, judge, or organizer" });
+        .json({
+          message:
+            "Account type must be student, judge, organizer, or formerOrganizer",
+        });
     }
 
     await updateAccountType(req, res);

@@ -19,6 +19,7 @@ interface Stats {
   govSchoolUsers: number;
   studentUsers: number;
   organizerUsers: number;
+  formerOrganizerUsers: number;
   judgeUsers: number;
   regularTheme: number;
   spookyTheme: number;
@@ -311,30 +312,36 @@ export default function OrganizerDashboard() {
         </div>
         <div className="bg-surface-a1 p-4 rounded-lg w-full flex flex-col mt-4">
           <h2 className="text-xl font-bold">User Stats</h2>
-          <div className="grid grid-cols-4 gap-4 mt-2">
+          <div className="grid grid-cols-5 gap-4 mt-2">
             <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
               <span className="text-3xl sm:text-4xl md:text-5xl text-primary-a0 font-bold">
                 {stats?.totalUsers || 0}
               </span>
-              <span className="sm:text-lg md:text-xl">Users</span>
+              <span className="text-sm sm:text-lg md:text-xl">Users</span>
             </div>
             <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
               <span className="text-3xl sm:text-4xl md:text-5xl text-primary-a0 font-bold">
                 {stats?.studentUsers || 0}
               </span>
-              <span className="sm:text-lg md:text-xl">Students</span>
+              <span className="text-sm sm:text-lg md:text-xl">Students</span>
             </div>
             <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
               <span className="text-3xl sm:text-4xl md:text-5xl text-primary-a0 font-bold">
                 {stats?.organizerUsers || 0}
               </span>
-              <span className="sm:text-lg md:text-xl">Organizer</span>
+              <span className="text-sm sm:text-lg md:text-xl">Organizer</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-3xl sm:text-4xl md:text-5xl text-primary-a0 font-bold">
+                {stats?.formerOrganizerUsers || 0}
+              </span>
+              <span className="text-sm sm:text-lg md:text-xl">Former</span>
             </div>
             <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
               <span className="text-3xl sm:text-4xl md:text-5xl text-primary-a0 font-bold">
                 {stats?.judgeUsers || 0}
               </span>
-              <span className="sm:text-lg md:text-xl">Judges</span>
+              <span className="text-sm sm:text-lg md:text-xl">Judges</span>
             </div>
           </div>
           <div className="grid grid-cols-6 gap-4 mt-4">

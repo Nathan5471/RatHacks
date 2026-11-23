@@ -6,7 +6,7 @@ interface User {
   id: string;
   email: string;
   emailVerified: boolean;
-  accountType: "student" | "judge" | "organizer";
+  accountType: "student" | "judge" | "organizer" | "formerOrganizer";
   theme?: "default" | "spooky" | "space" | "framework";
   firstName: string;
   lastName: string;
@@ -41,6 +41,7 @@ export default function OrganizerUserView({
     eleven: "11",
     twelve: "12",
     organizer: "Organizer",
+    formerOrganizer: "Former Organizer",
     judge: "Judge",
   };
 

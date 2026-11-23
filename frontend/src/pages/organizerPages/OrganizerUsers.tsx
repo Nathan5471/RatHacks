@@ -18,7 +18,7 @@ export default function OrganizerUsers() {
     id: string;
     email: string;
     emailVerified: boolean;
-    accountType: "student" | "organizer" | "judge";
+    accountType: "student" | "organizer" | "judge" | "formerOrganizer";
     theme: "default" | "spooky" | "space" | "framework";
     firstName: string;
     lastName: string;
@@ -56,7 +56,7 @@ export default function OrganizerUsers() {
     "all" | "yes" | "no"
   >("all");
   const [accountTypeFilter, setAccountTypeFilter] = useState<
-    "all" | "student" | "organizer" | "judge"
+    "all" | "student" | "organizer" | "judge" | "formerOrganizer"
   >("all");
   const [emailVerifiedFilter, setEmailVerifiedFilter] = useState<
     "all" | "yes" | "no"
@@ -446,6 +446,9 @@ export default function OrganizerUsers() {
                 <option value="all">Account Type: All</option>
                 <option value="student">Account Type: Student</option>
                 <option value="organizer">Account Type: Organizer</option>
+                <option value="formerOrganizer">
+                  Account Type: Former Org
+                </option>
                 <option value="judge">Account Type: Judge</option>
               </select>
               <select

@@ -256,7 +256,7 @@ export const updateTheme = async (
 
 export const changeAccountType = async (
   id: string,
-  newAccountType: "student" | "judge" | "organizer",
+  newAccountType: "student" | "judge" | "organizer" | "formerOrganizer",
   signal?: AbortSignal,
 ) => {
   const response = await api.put(

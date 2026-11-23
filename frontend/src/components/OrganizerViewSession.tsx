@@ -9,7 +9,7 @@ interface User {
   id: string;
   email: string;
   emailVerified: boolean;
-  accountType: "student" | "judge" | "organizer";
+  accountType: "student" | "judge" | "organizer" | "formerOrganizer";
   theme?: "default" | "spooky" | "space" | "framework";
   firstName: string;
   lastName: string;
