@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import { getEmailLists, createEmailList } from "../../utils/EmailAPIHandler";
@@ -56,7 +57,7 @@ export default function OrganizerEmailLists() {
 
   const handleCreateEmailList = async () => {
     if (!newListName.trim()) {
-      // toast the error
+      toast.error("Email list name cannot be empty.");
       return;
     }
 
@@ -71,7 +72,7 @@ export default function OrganizerEmailLists() {
         typeof error.message === "string"
           ? error.message
           : "An unknown error occurred";
-      // toast this one too
+      toast.error(errorMessage);
     }
     setNewListName("");
   };

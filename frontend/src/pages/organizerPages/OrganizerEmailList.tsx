@@ -6,6 +6,7 @@ import {
   deleteRecipientFromEmailList,
   deleteEmailList,
 } from "../../utils/EmailAPIHandler";
+import { toast } from "react-toastify";
 import { IoMenu } from "react-icons/io5";
 import OrganizerNavbar from "../../components/OrganizerNavbar";
 import axios from "axios";
@@ -54,6 +55,15 @@ export default function OrganizerEmailList() {
         ) {
           return;
         }
+
+        const errorMessage =
+          typeof error === "object" &&
+          error !== null &&
+          "message" in error &&
+          typeof error.message === "string"
+            ? error.message
+            : "An unknown error occurred";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
