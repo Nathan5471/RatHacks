@@ -787,7 +787,12 @@ export const getEmailLists = async (req: any, res: any) => {
         },
       },
     });
-    return res.status(200).json({ emailLists });
+    const cleanedEmailLists = emailLists.map((list) => ({
+      id: list.id,
+      name: list.name,
+      recipientCount: list._count.emails,
+    }));
+    return res.status(200).json(cleanedEmailLists);
   } catch (error) {
     console.error("Error loading email lists:", error);
     return res.status(500).json({ message: "Failed to load email lists" });

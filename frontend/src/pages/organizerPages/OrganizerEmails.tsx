@@ -10,20 +10,20 @@ import DeleteEmail from "../../components/DeleteEmail";
 import { organizerGetAllEmails } from "../../utils/EmailAPIHandler";
 import axios from "axios";
 
+interface Email {
+  id: string;
+  name: string;
+  messageSubject: string;
+  messageBody: string;
+  sendAll: boolean;
+  filterBy: string | null;
+  subFilterBy: string | null;
+  sent: boolean;
+}
+
 export default function OrganizerEmails() {
   const { openOverlay } = useOverlay();
   const [reload, setReload] = useState(false);
-
-  interface Email {
-    id: string;
-    name: string;
-    messageSubject: string;
-    messageBody: string;
-    sendAll: boolean;
-    filterBy: string | null;
-    subFilterBy: string | null;
-    sent: boolean;
-  }
   const [emails, setEmails] = useState<Email[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
