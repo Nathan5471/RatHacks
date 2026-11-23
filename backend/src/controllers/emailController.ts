@@ -819,7 +819,7 @@ export const getEmailListById = async (req: any, res: any) => {
       return res.status(404).json({ message: "Email list not found" });
     }
 
-    return res.status(200).json({ emailList });
+    return res.status(200).json(emailList);
   } catch (error) {
     console.error("Error loading email list:", error);
     return res.status(500).json({ message: "Failed to load email list" });
