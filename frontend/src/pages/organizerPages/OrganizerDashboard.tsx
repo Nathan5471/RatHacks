@@ -5,6 +5,7 @@ import {
   inviteJudge,
   getInvites,
 } from "../../utils/AuthAPIHandler";
+import { getStats } from "../../utils/AuthAPIHandler";
 import { useOverlay } from "../../contexts/OverlayContext";
 import { formatDate } from "date-fns";
 import { IoMenu, IoTrash } from "react-icons/io5";
@@ -12,15 +13,40 @@ import OrganizerNavbar from "../../components/OrganizerNavbar";
 import CancelInvite from "../../components/CancelInvite";
 import axios from "axios";
 
+interface Stats {
+  totalUsers: number;
+  verifiedEmailUsers: number;
+  govSchoolUsers: number;
+  studentUsers: number;
+  organizerUsers: number;
+  judgeUsers: number;
+  regularTheme: number;
+  spookyTheme: number;
+  spaceTheme: number;
+  frameworkTheme: number;
+  workshops: number;
+  totalWorkshopParticipants: number;
+  events: number;
+  totalEventParticipants: number;
+  averageShipRate: number;
+  projects: number;
+  averageCreativityScore: number;
+  averageFunctionalityScore: number;
+  averageTechnicalityScore: number;
+  averageInterfaceScore: number;
+  averageScore: number;
+}
+
+interface Invite {
+  email: string;
+  role: "organizer" | "judge";
+  expires: string;
+}
+
 export default function OrganizerDashboard() {
   const { openOverlay } = useOverlay();
   const [inviteOrganizerEmail, setInviteOrganizerEmail] = useState("");
   const [inviteOrganizerError, setInviteOrganizerError] = useState("");
-  interface Invite {
-    email: string;
-    role: "organizer" | "judge";
-    expires: string;
-  }
   const [outgoingOrganizerInvites, setOutgoingOrganizerInvites] = useState<
     Invite[]
   >([]);
@@ -30,6 +56,7 @@ export default function OrganizerDashboard() {
     [],
   );
   const [refreshInvites, setRefreshInvites] = useState(false);
+  const [stats, setStats] = useState<Stats | null>(null);
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   useEffect(() => {
@@ -66,6 +93,31 @@ export default function OrganizerDashboard() {
       controller.abort();
     };
   }, [refreshInvites]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchStats = async () => {
+      try {
+        const data = await getStats(controller.signal);
+        setStats(data.stats);
+      } catch (error) {
+        if (
+          axios.isCancel(error) ||
+          (error instanceof Error && error.name === "CanceledError")
+        ) {
+          return;
+        }
+
+        console.error("Error fetching stats:", error);
+      }
+    };
+    fetchStats();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   const handleInviteOrganizer = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -255,6 +307,186 @@ export default function OrganizerDashboard() {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+        <div className="bg-surface-a1 p-4 rounded-lg w-full flex flex-col mt-4">
+          <h2 className="text-xl font-bold">User Stats</h2>
+          <div className="grid grid-cols-4 gap-4 mt-2">
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-3xl sm:text-4xl md:text-5xl text-primary-a0 font-bold">
+                {stats?.totalUsers || 0}
+              </span>
+              <span className="sm:text-lg md:text-xl">Users</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-3xl sm:text-4xl md:text-5xl text-primary-a0 font-bold">
+                {stats?.studentUsers || 0}
+              </span>
+              <span className="sm:text-lg md:text-xl">Students</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-3xl sm:text-4xl md:text-5xl text-primary-a0 font-bold">
+                {stats?.organizerUsers || 0}
+              </span>
+              <span className="sm:text-lg md:text-xl">Organizer</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-3xl sm:text-4xl md:text-5xl text-primary-a0 font-bold">
+                {stats?.judgeUsers || 0}
+              </span>
+              <span className="sm:text-lg md:text-xl">Judges</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-6 gap-4 mt-4">
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats
+                  ? Math.round(
+                      (stats.verifiedEmailUsers / stats.totalUsers) * 100,
+                    )
+                  : 0}
+                %
+              </span>
+              <span className="text-sm sm:text-lg md:text-xl">Verified</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats
+                  ? Math.round((stats.govSchoolUsers / stats.totalUsers) * 100)
+                  : 0}
+                %
+              </span>
+              <span className="text-sm sm:text-lg md:text-xl">Gov</span>{" "}
+              {/* I shortened Gov School to Gov so I didn't have to change all the sizing just for this one work, if you have a problem with this I'm sorry, but it's not changing */}
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.regularTheme || 0}
+              </span>
+              <span className="text-sm sm:text-lg md:text-xl">Regular</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.spookyTheme || 0}
+              </span>
+              <span className="text-sm sm:text-lg md:text-xl">Spooky</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.spaceTheme || 0}
+              </span>
+              <span className="text-sm sm:text-lg md:text-xl">Space</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.frameworkTheme || 0}
+              </span>
+              <span className="text-sm sm:text-lg md:text-xl">Framework</span>
+            </div>
+          </div>
+        </div>
+        <div className="bg-surface-a1 p-4 rounded-lg w-full flex flex-col mt-4">
+          <h2 className="text-xl font-bold">Workshop Stats</h2>
+          <div className="grid grid-cols-3 gap-4 mt-2">
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-4xl text-primary-a0 font-bold">
+                {stats?.workshops || 0}
+              </span>
+              <span className="text-lg">Workshops</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-4xl text-primary-a0 font-bold">
+                {stats?.totalWorkshopParticipants || 0}
+              </span>
+              <span className="text-lg">Participants</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-4xl text-primary-a0 font-bold">
+                {stats
+                  ? Math.round(
+                      stats.totalWorkshopParticipants / stats.workshops,
+                    )
+                  : 0}
+              </span>
+              <span className="text-lg">Average</span>
+            </div>
+          </div>
+        </div>
+        <div className="bg-surface-a1 p-4 rounded-lg w-full flex flex-col mt-4 mb-4">
+          <h2 className="text-xl font-bold">Event Stats</h2>
+          <div className="grid grid-cols-4 gap-4 mt-2">
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.events || 0}
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">Events</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.totalEventParticipants || 0}
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">
+                Participants
+              </span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats
+                  ? Math.round(stats.totalEventParticipants / stats.events)
+                  : 0}
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">Average</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats ? Math.round(stats.averageShipRate * 100) : 0}%
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">Ship Rate</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4 mt-4">
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.projects || 0}
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">Projects</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.averageCreativityScore || 0}
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">
+                Creativity
+              </span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.averageFunctionalityScore || 0}
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">
+                Functionality
+              </span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.averageTechnicalityScore || 0}
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">
+                Technicality
+              </span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.averageInterfaceScore || 0}
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">Interface</span>
+            </div>
+            <div className="flex flex-col p-2 bg-surface-a2 rounded-lg items-center">
+              <span className="text-2xl sm:text-3xl md:text-4xl text-primary-a0 font-bold">
+                {stats?.averageScore || 0}
+              </span>
+              <span className="text-sm sm:text-base md:text-lg">Overall</span>
+            </div>
           </div>
         </div>
       </div>
