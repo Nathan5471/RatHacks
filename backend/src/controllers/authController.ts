@@ -697,10 +697,13 @@ export const getStats = async (req: any, res: any) => {
     const totalEventParticipants = events.reduce((acc, event) => {
       return acc + event._count.participants;
     }, 0);
+    const hackathonEvents = events.filter(
+      (event) => event.type === "hackathon",
+    );
     const averageShipRate =
-      events.reduce((acc, event) => {
+      hackathonEvents.reduce((acc, event) => {
         return acc + event._count.projects / (event._count.teams || 1);
-      }, 0) / events.length;
+      }, 0) / hackathonEvents.length;
     const projects = await prisma.project.count();
     const judgeFeedbackStats = await prisma.judgeFeedback.aggregate({
       _avg: {
