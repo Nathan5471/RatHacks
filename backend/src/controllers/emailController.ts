@@ -891,3 +891,52 @@ export const deleteRecipientFromEmailList = async (req: any, res: any) => {
       .json({ message: "Failed to delete recipient from email list" });
   }
 };
+
+export const updateRecipientInEmailList = async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
+  const { email, firstName, lastName } = req.body as {
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+  const user = req.user as User;
+
+  if (user.accountType !== "organizer") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+
+  if (!email || !firstName || !lastName) {
+    return res
+      .status(400)
+      .json({ message: "Email, first name, and last name are required" });
+  }
+
+  try {
+    const recipient = await prisma.importedEmail.findUnique({
+      where: { id },
+    });
+
+    if (!recipient) {
+      return res.status(404).json({ message: "Recipient not found" });
+    }
+
+    const updatedRecipient = await prisma.importedEmail.update({
+      where: { id },
+      data: {
+        email,
+        firstName,
+        lastName,
+      },
+    });
+
+    return res.status(200).json({
+      message: "Recipient updated successfully",
+      recipient: updatedRecipient,
+    });
+  } catch (error) {
+    console.error("Error updating recipient in email list:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to update recipient in email list" });
+  }
+};

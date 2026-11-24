@@ -19,6 +19,7 @@ import {
   getEmailListById,
   deleteEmailList,
   deleteRecipientFromEmailList,
+  updateRecipientInEmailList,
 } from "../controllers/emailController";
 
 const router = express.Router();
@@ -265,6 +266,18 @@ router.delete("/recipient/:id", authenticate, async (req: any, res: any) => {
   }
 
   await deleteRecipientFromEmailList(req, res);
+});
+
+router.put("/recipient/:id", authenticate, async (req: any, res: any) => {
+  const { id } = req.params as {
+    id: string;
+  };
+
+  if (!id) {
+    return res.status(400).json({ message: "Recipient ID is required" });
+  }
+
+  await updateRecipientInEmailList(req, res);
 });
 
 export default router;

@@ -187,3 +187,12 @@ export const deleteRecipientFromEmailList = async (
   const response = await api.delete(`/recipient/${id}`, { signal });
   return response.data;
 };
+
+export const updateRecipientInEmailList = async (
+  id: string,
+  data: { email: string; firstName: string; lastName: string },
+  signal?: AbortSignal,
+) => {
+  const response = await api.put(`/recipient/${id}`, data, { signal });
+  return response.data;
+};
