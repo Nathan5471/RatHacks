@@ -14,42 +14,23 @@ You can test this out yourself at <https://demo.rathacks.com> by using the follo
 
 Organizer:
 
-email - <4g5hfj@hack.af>
+email - <demo.rathacks.com.putdown972@passinbox.com>
 
 password - Organizer@123
 
-Judge:
+## Hack Club Terra
 
-email - <0imwsn@rushilchopra.com>
+### Email List
 
-password - Judge@123
+I added a pretty simple email list features that allows you to easily import external emails. This is so I can import emails from events like Haven Roanoke. It currently doesn't do much, but soon it'll be an option to send to people!
 
-Student:
+<img width="1920" height="878" alt="image" src="https://github.com/user-attachments/assets/70f27272-8b68-4275-b28c-bc27d8fc3a62" />
 
-email - <kjccr0@hack.af>
+### Past Events Page
 
-password - Student@123
+I added Haven Roanoke and made it look a bit better and display the whole photos instead of zooming in.
 
-## Horizons Nexus
-
-### Improved Past Events Page
-
-I brought every event in the past events page up to speed with the Campfire Roanoke one by adding "Organizers" and "Stats" section to all of them. I also added a "Sponsors" section to everyone as well that shows all of the parterns/sponsors of each event. I also rewrote all of the descriptions/paragraphs about the events to sound a bit better.
-
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/94542cb1-58b3-453f-ab69-4052b342ed39" />
-
-### Analytics
-
-I swtiched from Matomo to using my own custom analytics. Currently it function by tracking page views and sending heartbeats. View sessions contain all page views of that session and can be extended once a heartbeat is sent. There is a page for organizers to view some statistics.
-
-<img width="1920" height="1080" alt="Screenshot_20260721_204533" src="https://github.com/user-attachments/assets/69aea64c-9e03-4531-b3bf-5bdd1abe42af" />
-
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/fda94fd4-c1a1-4262-b796-0d51a5272d46" />
-
-
-### Other Changes
-
-I switch from storing lists of ids to using relations in everything. I also added pre rendering to the home page and past events page so an html page is served that has all of the page's data in it. All other routes are still a plain html file that is manipulated with React.
+<img width="1915" height="1080" alt="image" src="https://github.com/user-attachments/assets/618d2482-926d-4a50-96b8-5cb8d79e401a" />
 
 ## Technologies
 
