@@ -38,6 +38,15 @@ enum EventType {
   ctf
 }
 
+enum FilterBy {
+  Event
+  Workshop
+  GradeLevel
+  School
+  AccountType
+  EmailList
+}
+
 model User {
   id                     String          @id @default(uuid())
   email                  String          @unique
@@ -135,37 +144,39 @@ model JudgeFeedback {
 }
 
 model Event {
-  id                    String    @id @default(uuid())
-  type                  EventType @default(hackathon)
+  id                    String        @id @default(uuid())
+  type                  EventType     @default(hackathon)
   name                  String
   description           String
   location              String
   startDate             DateTime
   endDate               DateTime
   submissionDeadline    DateTime
-  status                Status    @default(upcoming)
-  releasedJudging       Boolean   @default(false)
-  participants          User[]    @relation("eventParticipants")
-  checkedInParticipants User[]    @relation("eventCheckedInParticipants")
+  status                Status        @default(upcoming)
+  releasedJudging       Boolean       @default(false)
+  participants          User[]        @relation("eventParticipants")
+  checkedInParticipants User[]        @relation("eventCheckedInParticipants")
   teams                 Team[]
   projects              Project[]
-  createdBy             User?     @relation("eventCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdBy             User?         @relation("eventCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   createdById           String? // Organizer Id
-  createdAt             DateTime  @default(now())
+  createdAt             DateTime      @default(now())
+  emailFilters          EmailFilter[]
 }
 
 model Workshop {
-  id            String   @id @default(uuid())
+  id            String        @id @default(uuid())
   name          String
   description   String
   googleMeetURL String?
   startDate     DateTime
   endDate       DateTime
-  status        Status   @default(upcoming)
-  participants  User[]   @relation("workshopParticipants")
-  organizer     User?    @relation("workshopOrganizer", fields: [organizerId], references: [id], onDelete: SetNull)
+  status        Status        @default(upcoming)
+  participants  User[]        @relation("workshopParticipants")
+  organizer     User?         @relation("workshopOrganizer", fields: [organizerId], references: [id], onDelete: SetNull)
   organizerId   String? // Organizer Id
-  createdAt     DateTime @default(now())
+  createdAt     DateTime      @default(now())
+  emailFilters  EmailFilter[]
 }
 
 model Email {
@@ -178,10 +189,25 @@ model Email {
   sendAll        Boolean
   filterBy       String?
   subFilterBy    String?
+  filter         EmailFilter[]
   sendOnJoin     Boolean        @default(false)
   active         Boolean        @default(false) // This is for sendOnJoin emails to indicate if they should be used
   sentTo         EmailReceipt[]
   createdAt      DateTime       @default(now())
+}
+
+model EmailFilter {
+  id          String     @id @default(uuid())
+  filterBy    FilterBy
+  event       Event?     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId     String?
+  workshop    Workshop?  @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  workshopId  String?
+  emailList   EmailList? @relation(fields: [emailListId], references: [id], onDelete: Cascade)
+  emailListId String?
+  subFilterBy String?
+  email       Email      @relation(fields: [emailId], references: [id], onDelete: Cascade)
+  emailId     String     @unique
 }
 
 model EmailReceipt {
@@ -196,17 +222,18 @@ model EmailReceipt {
 }
 
 model EmailList {
-  id String @id @default(uuid())
-  name String
-  emails ImportedEmail[]
+  id           String          @id @default(uuid())
+  name         String
+  emails       ImportedEmail[]
+  emailFilters EmailFilter[]
 }
 
 model ImportedEmail {
-  id String @id @default(uuid())
-  email String
-  firstName String
-  lastName String
-  emailList EmailList @relation(fields: [emailListId], references: [id], onDelete: Cascade)
+  id          String    @id @default(uuid())
+  email       String
+  firstName   String
+  lastName    String
+  emailList   EmailList @relation(fields: [emailListId], references: [id], onDelete: Cascade)
   emailListId String
 }
 
